@@ -1797,11 +1797,9 @@ export default function App() {
           items={navItems}
           bottomItems={[
             { id: '_source', icon: 'code', label: 'Source code' },
-            { id: '_figma', icon: 'design_services', label: 'Figma file' },
           ]}
           onNavigate={(id) => {
             if (id === '_source') { window.open('https://github.com/NameisVivek/modern-harmony-ds', '_blank'); return }
-            if (id === '_figma')  { window.open('https://www.figma.com', '_blank'); return }
             setActiveSection(id as SectionId)
           }}
           userName="Design Team"

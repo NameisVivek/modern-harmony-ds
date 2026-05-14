@@ -14,6 +14,7 @@ import {
   Drawer,
   Tooltip,
   ActionSheet,
+  CommandBar,
   Input,
   Select,
   Checkbox,
@@ -32,6 +33,8 @@ import {
   Pagination,
   Segments,
   Breadcrumbs,
+  TreeView,
+  TreeNode,
   DataGrid,
   Column,
   KPIWidget,
@@ -41,6 +44,12 @@ import {
   Card,
   Well,
   SectionHeading,
+  PingPong,
+  PingPongItem,
+  SearchBar,
+  SearchResult,
+  FilterChip,
+  PageFooter,
   Avatar,
   Notification,
   NotificationList,
@@ -583,10 +592,36 @@ function FeedbackSection() {
 
 // ── Section: Navigation ────────────────────────────────────────────────────────
 
+const treeNodes: TreeNode[] = [
+  {
+    id: 'region-apac', label: 'APAC Region', icon: 'public', iconColor: '#027B44',
+    children: [
+      { id: 'wh-shanghai', label: 'Shanghai DC', icon: 'warehouse', meta: '1,240 SKUs', badge: 3, badgeVariant: 'default' },
+      { id: 'wh-singapore', label: 'Singapore Hub', icon: 'warehouse', meta: '890 SKUs' },
+      { id: 'wh-sydney', label: 'Sydney DC', icon: 'warehouse', meta: '420 SKUs', badge: 1, badgeVariant: 'default' },
+    ],
+  },
+  {
+    id: 'region-na', label: 'North America', icon: 'public', iconColor: '#8342BB',
+    children: [
+      { id: 'wh-la', label: 'Los Angeles DC', icon: 'warehouse', meta: '2,100 SKUs' },
+      {
+        id: 'wh-chicago', label: 'Chicago Hub', icon: 'warehouse', meta: '1,450 SKUs',
+        children: [
+          { id: 'zone-a', label: 'Zone A — Cold Storage', icon: 'ac_unit', meta: '120 SKUs' },
+          { id: 'zone-b', label: 'Zone B — Dry Goods', icon: 'inventory_2', meta: '830 SKUs' },
+        ],
+      },
+    ],
+  },
+  { id: 'region-emea', label: 'EMEA', icon: 'public', iconColor: '#E89A00' },
+]
+
 function NavigationSection() {
   const [tabId, setTabId] = useState('overview')
   const [page, setPage] = useState(3)
   const [segment, setSegment] = useState('week')
+  const [treeSelected, setTreeSelected] = useState('wh-shanghai')
 
   return (
     <div>
@@ -672,6 +707,16 @@ function NavigationSection() {
         <div style={SL}>Pagination</div>
         <Pagination total={248} page={page} pageSize={25} onChange={(p) => setPage(p)} />
       </div>
+
+      <div style={{ ...EC, marginTop: 12 }}>
+        <div style={SL}>Tree View</div>
+        <TreeView
+          selected={treeSelected}
+          onSelect={setTreeSelected}
+          defaultExpanded={['region-apac', 'region-na']}
+          nodes={treeNodes}
+        />
+      </div>
     </div>
   )
 }
@@ -682,11 +727,12 @@ function OverlaysSection() {
   const [modalOpen, setModalOpen] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [actionSheetOpen, setActionSheetOpen] = useState(false)
+  const [cmdOpen, setCmdOpen] = useState(false)
 
   return (
     <div>
       <div style={PAGE_TITLE}>Overlays</div>
-      <div style={PAGE_SUB}>Modals, drawers, tooltips, and action sheets</div>
+      <div style={PAGE_SUB}>Modals, drawers, tooltips, command bar, and action sheets</div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         <div style={EC}>
@@ -779,6 +825,49 @@ function OverlaysSection() {
             ]}
             onAction={() => setActionSheetOpen(false)}
           />
+        </div>
+
+        <div style={{ ...EC, gridColumn: '1 / -1' }}>
+          <div style={SL}>Command Bar</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+            <Button variant="default" iconLeft="search" onClick={() => setCmdOpen(true)}>Open Command Bar</Button>
+            <span style={{ fontSize: 12, color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>Or press ⌘K</span>
+          </div>
+          <CommandBar
+            open={cmdOpen}
+            onClose={() => setCmdOpen(false)}
+            onSelect={() => setCmdOpen(false)}
+          />
+          <div style={{ border: '1px solid #EBEBEB', borderRadius: 10, overflow: 'hidden', pointerEvents: 'none' }}>
+            <div style={{ padding: '10px 14px', borderBottom: '1px solid #F0F0F4', display: 'flex', alignItems: 'center', gap: 8, background: '#fff' }}>
+              <span className="material-icons" style={{ fontSize: 20, color: '#8C8C8C', fontFamily: 'Material Icons' }}>search</span>
+              <span style={{ flex: 1, fontSize: 15, color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>Search or type a command…</span>
+              <span style={{ fontSize: 10, color: '#8C8C8C', border: '1px solid #DDDDE5', borderRadius: 4, padding: '2px 5px', fontFamily: 'var(--font-ui)' }}>Esc</span>
+            </div>
+            {[
+              { icon: 'assessment', label: 'S&OP Planning — December cycle', hint: 'Opened 2 hours ago', group: 'Recent' },
+              { icon: 'local_shipping', label: 'Shipments — APAC region', hint: 'Opened yesterday', group: 'Recent' },
+              { icon: 'add', label: 'New planning scenario', shortcut: '⌘N', group: 'Actions' },
+              { icon: 'cloud_download', label: 'Export current view', shortcut: '⌘E', group: 'Actions' },
+            ].map((item, i, arr) => (
+              <div key={item.label}>
+                {(i === 0 || arr[i - 1].group !== item.group) && (
+                  <div style={{ padding: '8px 14px 4px', fontSize: 9, fontWeight: 500, color: '#8C8C8C', textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'var(--font-ui)' }}>{item.group}</div>
+                )}
+                {i === 2 && <div style={{ height: 1, background: '#F0F0F4', margin: '4px 0' }} />}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 14px', background: i === 0 ? 'rgba(131,66,187,0.06)' : 'transparent' }}>
+                  <div style={{ width: 28, height: 28, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', background: i === 0 ? 'rgba(131,66,187,0.1)' : '#F0F0F4' }}>
+                    <span className="material-icons" style={{ fontSize: 15, color: i === 0 ? '#8342BB' : '#5E5C75', fontFamily: 'Material Icons' }}>{item.icon}</span>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 13, color: i === 0 ? '#7239A4' : '#282828', fontFamily: 'var(--font-ui)' }}>{item.label}</div>
+                    {item.hint && <div style={{ fontSize: 11, color: '#8C8C8C', marginTop: 1, fontFamily: 'var(--font-ui)' }}>{item.hint}</div>}
+                  </div>
+                  {item.shortcut && <span style={{ fontSize: 9, color: '#8C8C8C', border: '1px solid #DDDDE5', borderRadius: 4, padding: '1px 5px', background: '#FBFBFB', fontFamily: 'var(--font-ui)' }}>{item.shortcut}</span>}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -1126,6 +1215,143 @@ function CompositesSection() {
   )
 }
 
+// ── Section: Advanced Components ─────────────────────────────────────────────
+
+function AdvancedSection() {
+  const [ppAvail, setPpAvail] = useState<PingPongItem[]>([
+    { id: 'apple', label: 'Apple' },
+    { id: 'banana', label: 'Banana' },
+    { id: 'peach', label: 'Peach' },
+    { id: 'apricot', label: 'Apricot' },
+    { id: 'plum', label: 'Plum' },
+    { id: 'mango', label: 'Mango' },
+    { id: 'kiwi', label: 'Kiwi' },
+  ])
+  const [ppSel, setPpSel] = useState<PingPongItem[]>([
+    { id: 'pineapple', label: 'Pineapple' },
+    { id: 'grapes', label: 'Grapes' },
+    { id: 'orange', label: 'Orange' },
+  ])
+  const [searchVal, setSearchVal] = useState('')
+  const [activeFilters, setActiveFilters] = useState<FilterChip[]>([
+    { id: 'region', label: 'Region', value: 'APAC' },
+    { id: 'status', label: 'Status', value: 'Delayed, Warning' },
+  ])
+  const [footerPage, setFooterPage] = useState(3)
+
+  const searchResults: SearchResult[] = searchVal.length > 0 ? [
+    { id: 'r1', label: 'APAC shipments — January 2025', meta: '842 records', icon: 'local_shipping', group: 'Shipments' },
+    { id: 'r2', label: 'APAC inbound shipments', meta: '290 records', icon: 'local_shipping', group: 'Shipments' },
+    { id: 'r3', label: 'ORD-48201 — APAC', meta: 'Shanghai → LA', icon: 'assignment', group: 'Orders' },
+  ] : []
+
+  return (
+    <div>
+      <div style={PAGE_TITLE}>Advanced</div>
+      <div style={PAGE_SUB}>Ping-pong transfer, search bar, and page footer</div>
+
+      <div style={EC}>
+        <div style={SL}>Ping-Pong — Dual List Transfer</div>
+        <PingPong
+          availableLabel="Available SKUs"
+          selectedLabel="Selected SKUs"
+          available={ppAvail}
+          selected={ppSel}
+          onChange={(avail, sel) => { setPpAvail(avail); setPpSel(sel) }}
+          height={340}
+        />
+        <div style={{ marginTop: 6, fontSize: 10, color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>
+          Click items to highlight · Use arrows to transfer · Drag items between lists
+        </div>
+      </div>
+
+      <div style={{ ...EC, marginTop: 12 }}>
+        <div style={SL}>Ping-Pong — Disabled State</div>
+        <PingPong
+          availableLabel="Available"
+          selectedLabel="Selected"
+          available={[{ id: 'a', label: 'Option A' }, { id: 'b', label: 'Option B' }, { id: 'c', label: 'Option C' }]}
+          selected={[{ id: 'd', label: 'Option D' }, { id: 'e', label: 'Option E' }]}
+          onChange={() => {}}
+          height={200}
+          disabled
+        />
+      </div>
+
+      <div style={{ ...EC, marginTop: 12 }}>
+        <div style={SL}>Search Bar — with Results Dropdown</div>
+        <SearchBar
+          placeholder="Search orders, shipments, SKUs…"
+          value={searchVal}
+          onChange={setSearchVal}
+          results={searchResults}
+          onSelect={(r) => { setSearchVal(r.label) }}
+        />
+        <div style={{ marginTop: 8, fontSize: 10, color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>
+          Type anything to see results dropdown
+        </div>
+      </div>
+
+      <div style={{ ...EC, marginTop: 12 }}>
+        <div style={SL}>Search Bar — with Active Filter Chips</div>
+        <SearchBar
+          placeholder="Search…"
+          showFilters
+          activeFilters={activeFilters}
+          filters={[
+            { id: 'date', label: 'Date range', icon: 'calendar_today' },
+            { id: 'assignee', label: 'Assigned to', icon: 'person' },
+          ]}
+          onFilterRemove={(id) => setActiveFilters((f) => f.filter((c) => c.id !== id))}
+          onClearAll={() => setActiveFilters([])}
+          onAddFilter={() => {}}
+        />
+      </div>
+
+      <div style={{ ...EC, marginTop: 12, padding: 0, overflow: 'hidden' }}>
+        <div style={{ padding: '12px 16px 10px' }}>
+          <div style={SL}>Page Footer — with Actions and Pagination</div>
+          <div style={{ padding: '20px 0', color: '#8C8C8C', fontSize: 12, fontFamily: 'var(--font-ui)', textAlign: 'center' }}>
+            Page content area
+          </div>
+        </div>
+        <PageFooter
+          actions={[
+            { id: 'save', label: 'Save changes', variant: 'primary', icon: 'save', onClick: () => {} },
+            { id: 'export', label: 'Export', variant: 'default', icon: 'cloud_download', onClick: () => {} },
+            { id: 'discard', label: 'Discard', variant: 'ghost', onClick: () => {} },
+          ]}
+          recordCount={248}
+          recordLabel="records"
+          showPagination
+          page={footerPage}
+          pageSize={25}
+          total={248}
+          onPageChange={setFooterPage}
+        />
+      </div>
+
+      <div style={{ ...EC, marginTop: 12, padding: 0, overflow: 'hidden' }}>
+        <div style={{ padding: '12px 16px 10px' }}>
+          <div style={SL}>Page Footer — Danger Action Variant</div>
+          <div style={{ padding: '16px 0', color: '#8C8C8C', fontSize: 12, fontFamily: 'var(--font-ui)', textAlign: 'center' }}>
+            Review form content
+          </div>
+        </div>
+        <PageFooter
+          actions={[
+            { id: 'approve', label: 'Approve', variant: 'primary', icon: 'check_circle', onClick: () => {} },
+            { id: 'reject', label: 'Reject', variant: 'destructive', icon: 'cancel', onClick: () => {} },
+            { id: 'back', label: 'Back', variant: 'default', onClick: () => {} },
+          ]}
+          recordCount={12}
+          recordLabel="items pending review"
+        />
+      </div>
+    </div>
+  )
+}
+
 // ── Section registry ───────────────────────────────────────────────────────────
 
 type SectionId =
@@ -1139,6 +1365,7 @@ type SectionId =
   | 'data'
   | 'layout'
   | 'composites'
+  | 'advanced'
 
 const sectionMeta: Record<SectionId, { label: string; icon: string }> = {
   colors:     { label: 'Colors & Tokens',  icon: 'palette' },
@@ -1151,11 +1378,12 @@ const sectionMeta: Record<SectionId, { label: string; icon: string }> = {
   data:       { label: 'Data',              icon: 'table_chart' },
   layout:     { label: 'Layout',            icon: 'dashboard' },
   composites: { label: 'Composites',        icon: 'widgets' },
+  advanced:   { label: 'Advanced',          icon: 'tune' },
 }
 
 const sectionOrder: SectionId[] = [
   'colors', 'typography', 'buttons', 'forms',
-  'feedback', 'navigation', 'overlays', 'data', 'layout', 'composites',
+  'feedback', 'navigation', 'overlays', 'data', 'layout', 'composites', 'advanced',
 ]
 
 function SectionContent({ id }: { id: SectionId }) {
@@ -1170,6 +1398,7 @@ function SectionContent({ id }: { id: SectionId }) {
     case 'data':       return <DataSection />
     case 'layout':     return <LayoutSection />
     case 'composites': return <CompositesSection />
+    case 'advanced':   return <AdvancedSection />
   }
 }
 

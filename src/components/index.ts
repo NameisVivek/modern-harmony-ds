@@ -41,6 +41,7 @@ export type { BreadcrumbsProps, BreadcrumbItem as NavBreadcrumbItem } from './Br
 export { Pagination } from './Pagination'
 export { Tabs, Tab, TabList, TabPanel } from './Tabs'
 export { TreeView } from './TreeView'
+export type { TreeViewProps, TreeNode } from './TreeView'
 
 // Data display
 export { DataGrid } from './DataGrid'
@@ -58,6 +59,15 @@ export { Well } from './Well'
 export { Segments } from './Segments'
 export { SectionHeading } from './SectionHeading'
 export { CommandBar } from './CommandBar'
+export type { CommandBarProps, CommandItem } from './CommandBar'
+
+// Composite / advanced
+export { PingPong } from './PingPong'
+export type { PingPongProps, PingPongItem } from './PingPong'
+export { SearchBar } from './SearchBar'
+export type { SearchBarProps, SearchResult, FilterChip } from './SearchBar'
+export { PageFooter } from './PageFooter'
+export type { PageFooterProps, FooterAction } from './PageFooter'
 
 // User / people
 export { Avatar } from './Avatar'

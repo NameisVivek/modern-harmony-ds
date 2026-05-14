@@ -1,0 +1,478 @@
+/**
+ * Modern Harmony Design System — CSS Variables
+ * e2open / WiseTech Global Group
+ *
+ * Three-level token hierarchy:
+ *   core_*   → raw values (hex, px, number)
+ *   dec_*    → decision tokens (point to core)
+ *   comp_*   → component tokens (point to dec or core)
+ *
+ * Switzer is self-hosted from fonts/ (brand font — full weight range included).
+ * Other fonts still loaded from Google Fonts:
+ *   Roboto Mono: https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap
+ *   Roboto:      https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap
+ *   Inter:       https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap
+ *   Material Icons: https://fonts.googleapis.com/icon?family=Material+Icons
+ *
+ * When referencing this file from a subdirectory (e.g. preview/ or ui_kits/app/),
+ * use: <link rel="stylesheet" href="../../colors_and_type.css"> (adjust depth as needed).
+ */
+
+/* ================================================================
+   SWITZER — Self-hosted brand font (OTF)
+   ================================================================ */
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-Thin.otf') format('opentype'); font-weight: 100; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-ThinItalic.otf') format('opentype'); font-weight: 100; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-Extralight.otf') format('opentype'); font-weight: 200; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-ExtralightItalic.otf') format('opentype'); font-weight: 200; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-Light.otf') format('opentype'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-LightItalic.otf') format('opentype'); font-weight: 300; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-Italic.otf') format('opentype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-Medium.otf') format('opentype'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-MediumItalic.otf') format('opentype'); font-weight: 500; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-SemiboldItalic.otf') format('opentype'); font-weight: 600; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-BoldItalic.otf') format('opentype'); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-Extrabold.otf') format('opentype'); font-weight: 800; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-ExtraboldItalic.otf') format('opentype'); font-weight: 800; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-Black.otf') format('opentype'); font-weight: 900; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('../../public/fonts/Switzer-BlackItalic.otf') format('opentype'); font-weight: 900; font-style: italic; font-display: swap; }
+
+:root {
+
+  /* ================================================================
+     CORE COLOR TOKENS  (source: Modern Components.fig color palette)
+     ================================================================ */
+
+  /* ── Carbon (pure neutral gray scale) ── */
+  --core-carbon-10:   #F6F6F6;
+  --core-carbon-25:   #EAEAEA;
+  --core-carbon-50:   #DEDEDE;
+  --core-carbon-75:   #D2D2D2;
+  --core-carbon-100:  #C6C6C6;
+  --core-carbon-200:  #BABABA;
+  --core-carbon-225:  #AEAEAE;   /* Violet reference step */
+  --core-carbon-300:  #A2A2A2;
+  --core-carbon-400:  #969696;
+  --core-carbon-500:  #8A8A8A;
+  --core-carbon-600:  #7E7E7E;
+  --core-carbon-675:  #727272;   /* Medium Violet reference */
+  --core-carbon-700:  #666666;
+  --core-carbon-775:  #5A5A5A;   /* Dark Violet reference */
+  --core-carbon-800:  #3F3F3F;
+  --core-carbon-900:  #282828;
+
+  /* ── Violet (brand accent — full scale) ── */
+  --core-violet-10:   #FCFCFF;
+  --core-violet-25:   #F9F6FE;
+  --core-violet-50:   #F2ECF8;
+  --core-violet-75:   #ECE4F5;
+  --core-violet-100:  #CABAEF;
+  --core-violet-200:  #C0B4E8;
+  --core-violet-225:  #B4A4E0;   /* "Violet" — standard brand step */
+  --core-violet-300:  #B49AD6;
+  --core-violet-400:  #A27CCF;
+  --core-violet-500:  #8863D2;
+  --core-violet-600:  #8342BB;   /* ★ Primary brand accent */
+  --core-violet-675:  #7239A4;   /* ★ Medium Violet */
+  --core-violet-700:  #68349C;
+  --core-violet-775:  #4D3075;   /* ★ Dark Violet */
+  --core-violet-800:  #4E2975;
+  --core-violet-900:  #37174E;   /* Also used as shadow base */
+
+  /* ── Red / Error ── */
+  --core-red-25:   #FEF7F4;
+  --core-red-50:   #FBECE9;
+  --core-red-75:   #F9E3DF;
+  --core-red-100:  #F6D7D6;
+  --core-red-200:  #F0B0AE;
+  --core-red-300:  #ED8885;
+  --core-red-400:  #EA5F5B;
+  --core-red-500:  #E02F3A;   /* ★ Error strong */
+  --core-red-600:  #C0172D;
+  --core-red-700:  #9A112C;
+  --core-red-800:  #760824;
+  --core-red-900:  #420519;
+
+  /* ── Amber / Warning & High-risk ── */
+  --core-amber-25:   #FFFDEF;
+  --core-amber-50:   #FFF4DC;
+  --core-amber-75:   #FDECC0;
+  --core-amber-100:  #FDD880;
+  --core-amber-200:  #FDCC50;
+  --core-amber-300:  #FDBF14;   /* ★ Warning strong */
+  --core-amber-400:  #F0A008;
+  --core-amber-500:  #C44F09;
+  --core-amber-600:  #AA3D07;   /* ★ High-risk strong */
+  --core-amber-700:  #753A05;
+  --core-amber-800:  #443703;
+  --core-amber-900:  #441501;
+
+  /* ── Green / Success ── */
+  --core-green-25:   #EEFEF9;
+  --core-green-50:   #DDFAEE;   /* ★ Forecast: present week */
+  --core-green-75:   #C5F3DF;   /* ★ Forecast: present month */
+  --core-green-100:  #A1EECC;   /* ★ Forecast: present quarter */
+  --core-green-200:  #5BD6A0;   /* ★ Success strong */
+  --core-green-300:  #02A15A;
+  --core-green-400:  #027B44;
+  --core-green-500:  #27854D;   /* ★ Success foreground */
+  --core-green-600:  #1A6B39;
+  --core-green-700:  #12512A;
+  --core-green-800:  #0B3A1E;
+  --core-green-900:  #072411;
+
+  /* ── Blue / Info ── */
+  --core-blue-25:   #F4F9FE;
+  --core-blue-50:   #EAF3FC;
+  --core-blue-75:   #CEECFC;
+  --core-blue-100:  #C3E3FC;
+  --core-blue-200:  #97C0FA;
+  --core-blue-300:  #68ACEB;
+  --core-blue-400:  #3999E4;   /* ★ Info strong / interactive */
+  --core-blue-500:  #1376D8;
+  --core-blue-600:  #0D5FB8;
+  --core-blue-700:  #0D4C89;   /* ★ Info foreground */
+  --core-blue-800:  #002D68;
+  --core-blue-900:  #002448;
+
+  /* ── Gray (neutral, no color cast) ── */
+  --core-gray-25:   #FBFBFB;
+  --core-gray-50:   #F7F7F7;
+  --core-gray-75:   #EBEBEB;   /* Light Carbon */
+  --core-gray-100:  #DDDDDD;
+  --core-gray-150:  #CCCCCC;   /* Medium Carbon */
+  --core-gray-200:  #BFBFBF;
+  --core-gray-300:  #A4A4A4;
+  --core-gray-400:  #8C8C8C;   /* ★ Hint / disabled text */
+  --core-gray-600:  #767676;   /* ★ Label / secondary text */
+  --core-gray-700:  #4D4D4D;
+  --core-gray-800:  #3A3A3A;
+  --core-gray-875:  #282828;   /* ★ Carbon — brand near-black / app header */
+  --core-gray-900:  #252525;
+  --core-white:     #FFFFFF;
+  --core-black:     #000000;
+  --core-transparent: transparent;
+
+  /* ── Cool Gray (purple-tinted neutrals) ── */
+  --core-cool-25:   #F8F8FA;
+  --core-cool-50:   #F0F0F4;   /* ★ Alt row / subtle surface */
+  --core-cool-75:   #E5E5EC;
+  --core-cool-100:  #DDDDE5;   /* ★ Default border */
+  --core-cool-150:  #C6C7D2;   /* ★ Grid border */
+  --core-cool-200:  #BFBECE;   /* ★ Secondary border */
+  --core-cool-300:  #A4A3B9;
+  --core-cool-400:  #8B8AA5;   /* ★ Neutral foreground icons */
+  --core-cool-500:  #797390;
+  --core-cool-600:  #5E5C75;   /* ★ Neutral strong text */
+  --core-cool-700:  #757390;   /* ← kept for compat; use 600 for new work */
+  --core-cool-800:  #474557;
+
+  /* ================================================================
+     DECISION COLOR TOKENS
+     ================================================================ */
+
+  /* Brand */
+  --dec-color-brand-base:        var(--core-violet-600);   /* #8342BB */
+  --dec-color-brand-subtle:      var(--core-violet-75);    /* #ECE4F5 */
+  --dec-color-brand-foreground:  var(--core-gray-875);     /* #282828 */
+  --dec-color-on-dark:           var(--core-white);
+
+  /* Secondary / Violet UI */
+  --dec-color-secondary-strong:       var(--core-violet-600);           /* #8342BB */
+  --dec-color-secondary-foreground:   var(--core-violet-675);           /* #7239A4 */
+  --dec-color-secondary-inverse:      var(--core-violet-775);           /* #4D3075 */
+  --dec-color-secondary-subtle:       transparent;
+  --dec-color-secondary-transparent:  rgba(131, 66, 187, 0.08);
+  --dec-color-secondary-border:       var(--core-cool-200);             /* #BFBECE */
+
+  /* Neutral / Gray */
+  --dec-color-neutral-foreground:  var(--core-cool-600);   /* #5E5C75 */
+  --dec-color-neutral-border:      var(--core-gray-400);   /* #8C8C8C */
+  --dec-color-neutral-base:        var(--core-cool-100);   /* #DDDDE5 */
+  --dec-color-neutral-strong:      var(--core-gray-875);   /* #282828 */
+
+  /* Surfaces */
+  --dec-color-surface:           var(--core-white);
+  --dec-color-surface-subtle:    var(--core-cool-50);      /* #F0F0F4 */
+  --dec-color-panel:             var(--core-white);
+  --dec-color-panel-alt:         var(--core-gray-25);      /* #FBFBFB */
+
+  /* Text */
+  --dec-color-text-body:      var(--core-gray-875);        /* #282828 */
+  --dec-color-text-label:     var(--core-gray-600);        /* #767676 */
+  --dec-color-text-hint:      var(--core-gray-400);        /* #8C8C8C */
+  --dec-color-text-on-dark:   var(--core-white);
+  --dec-color-text-disabled:  var(--core-gray-400);
+
+  /* Semantic — Error */
+  --dec-color-error-strong:      var(--core-red-500);   /* #E02F3A */
+  --dec-color-error-foreground:  var(--core-red-700);
+  --dec-color-error-subtle:      var(--core-red-25);
+  --dec-color-error-base:        var(--core-red-100);
+
+  /* Semantic — Success */
+  --dec-color-success-strong:      var(--core-green-200);  /* #5BD6A0 */
+  --dec-color-success-foreground:  var(--core-green-500);  /* #27854D */
+  --dec-color-success-subtle:      var(--core-green-25);
+  --dec-color-success-base:        var(--core-green-75);
+
+  /* Semantic — Warning */
+  --dec-color-warning-strong:      var(--core-amber-300);  /* #FDBF14 */
+  --dec-color-warning-foreground:  var(--core-amber-700);  /* #753A05 */
+  --dec-color-warning-subtle:      var(--core-amber-25);
+  --dec-color-warning-base:        var(--core-amber-75);
+
+  /* Semantic — High Risk */
+  --dec-color-high-risk-strong:    var(--core-amber-600);  /* #AA3D07 */
+  --dec-color-high-risk-subtle:    var(--core-amber-50);
+
+  /* Semantic — Info */
+  --dec-color-info-strong:      var(--core-blue-400);    /* #3999E4 */
+  --dec-color-info-foreground:  var(--core-blue-700);    /* #0D4C89 */
+  --dec-color-info-subtle:      var(--core-blue-25);
+  --dec-color-info-base:        var(--core-blue-100);
+
+  /* Grid / Table cell fills */
+  --dec-color-grid-alt-row:        var(--core-cool-50);      /* #F0F0F4 */
+  --dec-color-grid-header-fill:    var(--core-cool-100);     /* #DDDDE5 */
+  --dec-color-grid-border:         var(--core-cool-150);     /* #C6C7D2 */
+  --dec-color-grid-selected:       rgba(131, 66, 187, 0.08);
+  --dec-color-grid-error-fill:     var(--core-red-25);
+  --dec-color-grid-success-fill:   var(--core-green-25);
+  --dec-color-grid-warning-fill:   var(--core-amber-25);
+  --dec-color-grid-info-fill:      var(--core-blue-25);
+
+  /* Overlays / State layers */
+  --dec-overlay-hover-light:    rgba(40, 40, 40, 0.08);
+  --dec-overlay-pressed-light:  rgba(40, 40, 40, 0.16);
+  --dec-overlay-hover-dark:     rgba(164, 163, 185, 0.12);
+  --dec-overlay-pressed-dark:   rgba(191, 190, 206, 0.16);
+
+  /* Glow (primary button inner effect) */
+  --dec-color-glow:  rgba(221, 221, 229, 0.16);
+
+  /* Forecast calendar color coding */
+  --dec-forecast-past-50:     var(--core-cool-50);    /* #F0F0F4 oldest historical */
+  --dec-forecast-past-100:    var(--core-cool-100);   /* #DDDDE5 */
+  --dec-forecast-past-150:    var(--core-cool-150);   /* #C6C7D2 */
+  --dec-forecast-past-200:    var(--core-cool-200);   /* #BFBECE */
+  --dec-forecast-past-400:    var(--core-cool-400);   /* #8B8AA5 most recent historical */
+  --dec-forecast-present-50:  var(--core-green-50);   /* #DDFAEE week */
+  --dec-forecast-present-75:  var(--core-green-75);   /* #C5F3DF month */
+  --dec-forecast-present-100: var(--core-green-100);  /* #A1EECC quarter */
+  --dec-forecast-present-200: var(--core-green-200);  /* #5BD6A0 year */
+  --dec-forecast-future-75:   var(--core-violet-75);  /* #ECE4F5 near future */
+  --dec-forecast-future-100:  var(--core-violet-100); /* #CABAEF */
+  --dec-forecast-future-225:  var(--core-violet-225); /* #B4A4E0 */
+  --dec-forecast-future-300:  var(--core-violet-300); /* #B49AD6 far future */
+
+  /* ================================================================
+     SPACING TOKENS
+     ================================================================ */
+
+  --core-sp-0:   0px;
+  --core-sp-2:   2px;
+  --core-sp-4:   4px;
+  --core-sp-8:   8px;
+  --core-sp-12:  12px;
+  --core-sp-14:  14px;
+  --core-sp-rem: 16px;   /* 1 REM — base unit */
+  --core-sp-20:  20px;
+  --core-sp-24:  24px;
+  --core-sp-32:  32px;
+  --core-sp-48:  48px;
+  --core-sp-64:  64px;
+
+  /* Decision spacing (density-responsive) — Comfy [default] */
+  --dec-sp-element-padding:   var(--core-sp-8);
+  --dec-sp-element-spacing:   var(--core-sp-4);
+  --dec-sp-element-crn:       4px;
+
+  --dec-sp-base-padding:      var(--core-sp-rem);   /* 16px */
+  --dec-sp-base-spacing:      var(--core-sp-8);
+  --dec-sp-base-crn:          8px;
+
+  --dec-sp-panel-padding:     var(--core-sp-24);
+  --dec-sp-panel-spacing:     var(--core-sp-rem);
+  --dec-sp-panel-crn:         12px;
+
+  --dec-sp-container-padding: var(--core-sp-24);
+  --dec-sp-container-crn:     24px;
+
+  --dec-sp-page-padding:      var(--core-sp-32);
+
+  /* ================================================================
+     BORDER RADIUS TOKENS
+     ================================================================ */
+
+  --dec-crn-element:    4px;     /* badges, pills inside components */
+  --dec-crn-base:       8px;     /* buttons, inputs, small components */
+  --dec-crn-base-sm:    6px;     /* inline button variant */
+  --dec-crn-panel:      12px;    /* panels, large chips */
+  --dec-crn-container:  24px;    /* cards, modals, drawers */
+  --dec-crn-full:       9999px;  /* full pills */
+
+  /* ================================================================
+     SHADOW / ELEVATION TOKENS
+     ================================================================ */
+
+  /* Violet-tinted shadows (rgba(55, 23, 78, ...)) */
+  --elevation-0:      none;
+  --elevation-1:      0px 1px 2px rgba(55, 23, 78, 0.08),
+                      0px 1px 3px rgba(55, 23, 78, 0.12);
+  --elevation-2:      0px 2px 4px rgba(55, 23, 78, 0.06),
+                      0px 4px 8px -2px rgba(55, 23, 78, 0.12);
+  --elevation-3:      0px 4px 6px rgba(55, 23, 78, 0.05),
+                      0px 10px 15px -3px rgba(55, 23, 78, 0.12);
+  --elevation-4:      0px 20px 25px -5px rgba(55, 23, 78, 0.10),
+                      0px 8px 10px -6px rgba(55, 23, 78, 0.10);
+
+  /* Component-specific shadows */
+  --shadow-sidebar:   0px 2px 4px rgba(55, 23, 78, 0.06),
+                      0px 4px 8px -2px rgba(55, 23, 78, 0.12);
+  --shadow-dropdown:  0px 4px 4px rgba(0, 0, 0, 0.25);
+  --shadow-modal:     0px 20px 60px rgba(20, 16, 41, 0.24);
+
+  /* Focus ring */
+  --focus-ring:  0 0 0 2px var(--core-white),
+                 0 0 0 4px var(--core-violet-600);
+  --focus-ring-inset: inset 0 0 0 2px var(--core-violet-600);
+
+  /* Violet glow on primary button */
+  --shadow-brand-glow: 0px 0px 0px 4px rgba(131, 66, 187, 0.24);
+
+  /* ================================================================
+     TYPOGRAPHY TOKENS
+     ================================================================ */
+
+  /* Font families */
+  --font-ui:       'Switzer', 'Plus Jakarta Sans', sans-serif;
+  --font-display:  'Roboto Mono', monospace;
+  --font-body:     'Roboto', 'Plus Jakarta Sans', sans-serif;
+  --font-data:     'Inter', sans-serif;
+  --font-mono:     'Roboto Mono', 'Courier New', monospace;
+  --font-icons:    'Material Icons';
+
+  /* Font sizes */
+  --text-xs:    10px;
+  --text-sm:    12px;
+  --text-base:  14px;
+  --text-md:    16px;
+  --text-lg:    18px;
+  --text-xl:    20px;
+  --text-2xl:   24px;
+  --text-3xl:   32px;
+  --text-4xl:   48px;
+
+  /* Line heights */
+  --leading-tight:   1.1;
+  --leading-snug:    1.2;
+  --leading-base:    1.4;
+  --leading-relaxed: 1.5;
+  --leading-loose:   1.75;
+
+  /* Letter spacing */
+  --tracking-tight:  -0.025em;
+  --tracking-normal:  0.005em;
+  --tracking-wide:    0.05em;
+
+  /* Font weights */
+  --weight-regular:   400;
+  --weight-medium:    500;
+  --weight-bold:      700;
+
+  /* Component heights */
+  --comp-button-height:     32px;
+  --comp-input-height:      32px;
+  --comp-sidebar-collapsed: 48px;
+  --comp-header-height:     48px;
+  --comp-tab-height:        40px;
+  --comp-row-height:        32px;
+  --comp-row-height-alt:    28px;
+}
+
+/* ================================================================
+   SEMANTIC ELEMENT STYLES
+   ================================================================ */
+
+body {
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  color: var(--dec-color-text-body);
+  background: var(--dec-color-surface);
+  line-height: var(--leading-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+}
+
+h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+}
+
+h3 {
+  font-family: var(--font-ui);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-tight);
+}
+
+h4 {
+  font-family: var(--font-ui);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-medium);
+}
+
+h5 {
+  font-family: var(--font-ui);
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+}
+
+p {
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-normal);
+}
+
+code, pre {
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+}
+
+small {
+  font-size: var(--text-sm);
+  color: var(--dec-color-text-label);
+}
+
+/* ================================================================
+   MOTION TOKENS
+   ================================================================ */
+:root {
+  --motion-instant:      0ms;
+  --motion-fast:         100ms;
+  --motion-base:         200ms;
+  --motion-slow:         300ms;
+  --motion-slower:       400ms;
+
+  --ease-in:             cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:            cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:         cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:         cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Buttons: instant state transition (by design) */
+  --motion-button-state: var(--motion-instant);
+}

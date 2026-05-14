@@ -86,6 +86,10 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
 
+  // Height adapts to item count: AM/PM shows 2 rows, hours/minutes show DRUM_VISIBLE
+  const visibleRows = Math.min(DRUM_VISIBLE, items.length);
+  const drumHeight = visibleRows * DRUM_ITEM_H;
+
   const stateRef = useRef({
     offset: 0,
     snapAnim: 0,
@@ -220,11 +224,20 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
       updateHighlight(s.offset);
     };
 
-    const endDrag = () => {
+    const endDrag = (e: PointerEvent) => {
       if (!s.drag) return;
       s.drag = false;
-      const momentum = Math.max(-6, Math.min(6, s.vel * 160));
-      snapTo(s.offset + momentum);
+      const totalDy = Math.abs(e.clientY - s.startY);
+      if (totalDy < 5) {
+        // Tap — snap the tapped item to the top (selected) position
+        const rect = wrap.getBoundingClientRect();
+        const clickY = e.clientY - rect.top;
+        snapTo(s.offset + clickY / DRUM_ITEM_H);
+      } else {
+        // Drag — apply momentum
+        const momentum = Math.max(-6, Math.min(6, s.vel * 160));
+        snapTo(s.offset + momentum);
+      }
     };
 
     const onPointerCancel = () => {
@@ -256,7 +269,7 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
       style={{
         position: 'relative',
         width: `${width}px`,
-        height: `${DRUM_ITEM_H * DRUM_VISIBLE}px`,
+        height: `${drumHeight}px`,
         overflow: 'hidden',
         cursor: 'ns-resize',
         touchAction: 'none',
@@ -284,15 +297,17 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
           zIndex: 2,
         }}
       />
-      {/* Bottom fade — dims items scrolling off the bottom */}
-      <div style={{
-        position: 'absolute',
-        bottom: 0, left: 0, right: 0,
-        height: '80px',
-        background: 'linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)',
-        pointerEvents: 'none',
-        zIndex: 3,
-      }} />
+      {/* Bottom fade — only for drums taller than 2 rows */}
+      {visibleRows > 2 && (
+        <div style={{
+          position: 'absolute',
+          bottom: 0, left: 0, right: 0,
+          height: '80px',
+          background: 'linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)',
+          pointerEvents: 'none',
+          zIndex: 3,
+        }} />
+      )}
     </div>
   );
 }
@@ -632,7 +647,7 @@ function CalendarPanel({
       {showTime && (
         <div style={{
           borderLeft: '1px solid #F0F0F4',
-          display: 'flex', flexDirection: 'row', alignItems: 'center',
+          display: 'flex', flexDirection: 'row', alignItems: 'flex-start',
           padding: '10px 8px', gap: '4px',
         }}>
           <DrumWheelColumn

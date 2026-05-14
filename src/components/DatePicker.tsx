@@ -66,6 +66,11 @@ function startOfDay(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 }
 
+// Stable item arrays defined at module level to avoid effect re-runs
+const HOUR_ITEMS   = ['1','2','3','4','5','6','7','8','9','10','11','12'];
+const MINUTE_ITEMS = ['00','05','10','15','20','25','30','35','40','45','50','55'];
+const AMPM_ITEMS   = ['AM','PM'];
+
 // ─── Drum Wheel ───────────────────────────────────────────────────────────────
 interface DrumWheelProps {
   items: string[];
@@ -77,6 +82,10 @@ interface DrumWheelProps {
 function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const drumRef = useRef<HTMLDivElement>(null);
+  // Always-current ref for onSelect so the effect closure never goes stale
+  const onSelectRef = useRef(onSelect);
+  onSelectRef.current = onSelect;
+
   const stateRef = useRef({
     offset: 0,
     snapAnim: 0,
@@ -89,6 +98,7 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
     vel: 0,
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const wrap = wrapRef.current;
     const drumEl = drumRef.current;
@@ -125,6 +135,7 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
       return ((Math.round(o) % n) + n) % n;
     }
 
+    // Only updates visual styling — never triggers React state changes
     function updateHighlight(o: number) {
       const li = logicalIdx(o);
       const els = drum.querySelectorAll('.tw-item');
@@ -133,10 +144,9 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
         (el as HTMLElement).style.color = isSelected ? '#fff' : '#8C8C8C';
         (el as HTMLElement).style.fontWeight = isSelected ? '600' : '400';
         (el as HTMLElement).style.fontSize = isSelected ? '13px' : '12px';
-        if (isSelected) {
-          onSelect?.(items[li]);
-        }
+        (el as HTMLElement).style.letterSpacing = isSelected ? '-0.01em' : '0';
       });
+      return li;
     }
 
     function normalize(o: number) {
@@ -157,7 +167,9 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
         if (Math.abs(diff) < 0.012) {
           s.offset = normalize(target);
           applyRaw(s.offset);
-          updateHighlight(s.offset);
+          const li = updateHighlight(s.offset);
+          // Fire onSelect only once when the drum settles — avoids re-render loops
+          onSelectRef.current?.(items[li]);
           return;
         }
         s.offset += diff * 0.24;
@@ -235,8 +247,8 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
       if (s.snapAnim) cancelAnimationFrame(s.snapAnim);
       clearTimeout(s.wheelTimer);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items, initialValue]);
+  // Run only on mount — items and initialValue are stable at construction time
+  }, []);
 
   return (
     <div
@@ -634,19 +646,19 @@ function CalendarPanel({
           padding: '10px 8px', gap: '4px',
         }}>
           <DrumWheelColumn
-            items={['1','2','3','4','5','6','7','8','9','10','11','12']}
+            items={HOUR_ITEMS}
             initialValue={timeHour || '10'}
             width={48}
             onSelect={onTimeHourChange}
           />
           <DrumWheelColumn
-            items={['00','05','10','15','20','25','30','35','40','45','50','55']}
+            items={MINUTE_ITEMS}
             initialValue={timeMinute || '00'}
             width={48}
             onSelect={onTimeMinuteChange}
           />
           <DrumWheelColumn
-            items={['AM','PM']}
+            items={AMPM_ITEMS}
             initialValue={timeAmpm || 'AM'}
             width={44}
             onSelect={onTimeAmpmChange}

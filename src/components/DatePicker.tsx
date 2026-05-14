@@ -9,8 +9,8 @@ const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'S
 const WEEKDAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
 const DRUM_ITEM_H = 32;
-const DRUM_VISIBLE = 7;
-const DRUM_CENTER_PX = Math.floor(DRUM_VISIBLE / 2) * DRUM_ITEM_H; // 96px
+const DRUM_VISIBLE = 6;
+const DRUM_CENTER_PX = 0; // selected item pinned at top
 
 type CalView = 'days' | 'years';
 
@@ -263,26 +263,16 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
         flexShrink: 0,
       }}
     >
-      {/* Violet highlight band at center */}
+      {/* Violet highlight band at top — selected item */}
       <div style={{
         position: 'absolute',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        width: '100%',
+        top: 0,
+        left: 0, right: 0,
         height: `${DRUM_ITEM_H}px`,
         background: '#8342BB',
         borderRadius: '7px',
         pointerEvents: 'none',
         zIndex: 1,
-      }} />
-      {/* Top fade */}
-      <div style={{
-        position: 'absolute',
-        top: 0, left: 0, right: 0,
-        height: '72px',
-        background: 'linear-gradient(to bottom, rgba(255,255,255,0.96) 0%, transparent 100%)',
-        pointerEvents: 'none',
-        zIndex: 3,
       }} />
       {/* Drum strip */}
       <div
@@ -294,12 +284,12 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
           zIndex: 2,
         }}
       />
-      {/* Bottom fade */}
+      {/* Bottom fade — dims items scrolling off the bottom */}
       <div style={{
         position: 'absolute',
         bottom: 0, left: 0, right: 0,
-        height: '72px',
-        background: 'linear-gradient(to top, rgba(255,255,255,0.96) 0%, transparent 100%)',
+        height: '80px',
+        background: 'linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)',
         pointerEvents: 'none',
         zIndex: 3,
       }} />

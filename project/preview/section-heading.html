@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; display: flex; flex-direction: column; gap: 0; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; margin-top: 14px; }
+  .lbl:first-child { margin-top: 0; }
+  .divider { height: 1px; background: #F0F0F4; margin: 14px 0; }
+
+  /* Section heading base */
+  .section-heading {
+    display: flex; align-items: center; gap: 10px; padding: 10px 0;
+    border-bottom: 1px solid #EBEBEB;
+  }
+  .sh-icon .material-icons { font-size: 18px; color: #8342BB; }
+  .sh-title { font-size: 14px; font-weight: 500; color: #282828; flex: 1; line-height: 1.3; }
+  .sh-count { font-size: 12px; color: #8C8C8C; }
+  .sh-actions { display: flex; gap: 4px; align-items: center; }
+  .sh-btn { height: 26px; padding: 0 10px; border-radius: 6px; font-family: 'Switzer', sans-serif; font-size: 11px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; }
+  .sh-btn .material-icons { font-size: 13px; }
+  .sh-btn-primary { background: #8342BB; color: #fff; border: none; }
+  .sh-btn-default { background: #fff; color: #282828; border: 1px solid #DDDDE5; }
+  .sh-btn-text    { background: transparent; color: #7239A4; border: none; font-weight: 400; }
+  .sh-icon-btn { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; border-radius: 5px; cursor: pointer; color: #8C8C8C; }
+  .sh-icon-btn:hover { background: #F0F0F4; color: #282828; }
+  .sh-icon-btn .material-icons { font-size: 16px; }
+
+  /* Content placeholder */
+  .content-block { background: #F0F0F4; border-radius: 6px; height: 32px; margin: 8px 0; }
+
+  /* Badge on section heading */
+  .sh-badge { display: inline-flex; align-items: center; padding: 1px 7px; border-radius: 9999px; font-size: 10px; font-weight: 500; }
+</style>
+</head>
+<body>
+  <div class="lbl">Section headings — variants</div>
+
+  <!-- Title only -->
+  <div class="section-heading">
+    <div class="sh-title">Order management</div>
+  </div>
+  <div class="content-block"></div>
+
+  <!-- With icon -->
+  <div class="section-heading">
+    <div class="sh-icon"><span class="material-icons">assessment</span></div>
+    <div class="sh-title">Demand forecasting</div>
+  </div>
+  <div class="content-block"></div>
+
+  <!-- With action button -->
+  <div class="section-heading">
+    <div class="sh-icon"><span class="material-icons">local_shipping</span></div>
+    <div class="sh-title">Active shipments</div>
+    <div class="sh-count">1,240 records</div>
+    <div class="sh-actions">
+      <button class="sh-btn sh-btn-primary"><span class="material-icons">add</span>New</button>
+    </div>
+  </div>
+  <div class="content-block"></div>
+
+  <!-- With multiple actions + icon buttons -->
+  <div class="section-heading">
+    <div class="sh-icon"><span class="material-icons">bar_chart</span></div>
+    <div class="sh-title">Reports &amp; analytics</div>
+    <span class="sh-badge" style="background:#C5F3DF;color:#27854D">Updated</span>
+    <div class="sh-actions">
+      <button class="sh-btn sh-btn-default"><span class="material-icons">filter_list</span>Filter</button>
+      <button class="sh-btn sh-btn-primary"><span class="material-icons">cloud_download</span>Export</button>
+      <button class="sh-icon-btn"><span class="material-icons">more_vert</span></button>
+    </div>
+  </div>
+  <div class="content-block"></div>
+
+  <!-- Text link action -->
+  <div class="section-heading">
+    <div class="sh-title">Recent activity</div>
+    <button class="sh-btn sh-btn-text">View all</button>
+  </div>
+  <div class="content-block"></div>
+
+  <div class="divider"></div>
+
+  <!-- Page title variants -->
+  <div class="lbl">Page title — display heading</div>
+  <div style="display:flex;flex-direction:column;gap:14px">
+    <!-- Simple -->
+    <div>
+      <div style="font-family:'Roboto Mono',monospace;font-size:22px;font-weight:500;color:#282828;line-height:1.2">S&amp;OP Planning</div>
+      <div style="font-size:12px;color:#767676;margin-top:3px">Sales &amp; Operations Planning · Demand / Supply Balancing</div>
+    </div>
+    <!-- With badge + actions -->
+    <div style="display:flex;align-items:flex-start;justify-content:space-between">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="font-family:'Roboto Mono',monospace;font-size:22px;font-weight:500;color:#282828;line-height:1.2">Optimistic Q1 2025</div>
+          <span class="sh-badge" style="background:rgba(131,66,187,0.1);color:#7239A4">Scenario</span>
+          <span class="sh-badge" style="background:#FDECC0;color:#753A05">Draft</span>
+        </div>
+        <div style="font-size:12px;color:#767676;margin-top:3px">Created by Jane Doe · 14 Jan 2025</div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="sh-btn sh-btn-default" style="height:30px">Edit</button>
+        <button class="sh-btn sh-btn-primary" style="height:30px"><span class="material-icons">send</span>Submit</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

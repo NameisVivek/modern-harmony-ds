@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; display: flex; flex-direction: column; gap: 14px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .row { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+  .divider { height: 1px; background: #F0F0F4; }
+
+  /* Segment group */
+  .seg-group {
+    display: inline-flex; background: #F0F0F4; border-radius: 8px; padding: 3px; gap: 2px;
+  }
+  .seg-item {
+    display: inline-flex; align-items: center; gap: 5px;
+    height: 28px; padding: 0 12px; border-radius: 6px; cursor: pointer;
+    font-family: 'Switzer', sans-serif; font-size: 13px; font-weight: 400; color: #5E5C75;
+    user-select: none; transition: all 0.1s; white-space: nowrap;
+  }
+  .seg-item .material-icons { font-size: 15px; }
+  .seg-item:hover { background: rgba(40,40,40,0.06); color: #282828; }
+  .seg-item.active {
+    background: #fff; color: #282828; font-weight: 500;
+    box-shadow: 0 1px 3px rgba(55,23,78,0.12), 0 0 0 1px rgba(55,23,78,0.06);
+  }
+  .seg-item.disabled { opacity: 0.4; cursor: not-allowed; }
+  .seg-item.disabled:hover { background: transparent; color: #5E5C75; }
+
+  /* Compact size */
+  .seg-group.sm .seg-item { height: 24px; padding: 0 10px; font-size: 12px; }
+  .seg-group.sm .seg-item .material-icons { font-size: 13px; }
+
+  /* Violet accent active */
+  .seg-group.violet .seg-item.active { background: #8342BB; color: #fff; }
+</style>
+</head>
+<body>
+  <div>
+    <div class="lbl">Default — text labels</div>
+    <div class="seg-group" id="seg1">
+      <div class="seg-item active" onclick="selectSeg('seg1',this)">All</div>
+      <div class="seg-item" onclick="selectSeg('seg1',this)">Active</div>
+      <div class="seg-item" onclick="selectSeg('seg1',this)">In transit</div>
+      <div class="seg-item" onclick="selectSeg('seg1',this)">Completed</div>
+      <div class="seg-item disabled">Archived</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="lbl">With icons</div>
+    <div class="row">
+      <div class="seg-group" id="seg2">
+        <div class="seg-item active" onclick="selectSeg('seg2',this)"><span class="material-icons">view_list</span>List</div>
+        <div class="seg-item" onclick="selectSeg('seg2',this)"><span class="material-icons">grid_view</span>Grid</div>
+        <div class="seg-item" onclick="selectSeg('seg2',this)"><span class="material-icons">calendar_today</span>Calendar</div>
+      </div>
+
+      <div class="seg-group" id="seg3">
+        <div class="seg-item active" onclick="selectSeg('seg3',this)"><span class="material-icons">view_list</span></div>
+        <div class="seg-item" onclick="selectSeg('seg3',this)"><span class="material-icons">grid_view</span></div>
+        <div class="seg-item" onclick="selectSeg('seg3',this)"><span class="material-icons">bar_chart</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="lbl">Compact size</div>
+    <div class="seg-group sm" id="seg4">
+      <div class="seg-item active" onclick="selectSeg('seg4',this)">Week</div>
+      <div class="seg-item" onclick="selectSeg('seg4',this)">Month</div>
+      <div class="seg-item" onclick="selectSeg('seg4',this)">Quarter</div>
+      <div class="seg-item" onclick="selectSeg('seg4',this)">Year</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div class="lbl">Violet accent active variant</div>
+    <div class="seg-group violet" id="seg5">
+      <div class="seg-item active" onclick="selectSeg('seg5',this)">Demand</div>
+      <div class="seg-item" onclick="selectSeg('seg5',this)">Supply</div>
+      <div class="seg-item" onclick="selectSeg('seg5',this)">Inventory</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div class="lbl">In context — data grid toolbar</div>
+    <div style="background:#F0F0F4; border-radius:8px; padding:8px 12px; display:flex; align-items:center; gap:10px; justify-content:space-between">
+      <div class="seg-group sm" id="seg6">
+        <div class="seg-item active" onclick="selectSeg('seg6',this)">All orders</div>
+        <div class="seg-item" onclick="selectSeg('seg6',this)">Open</div>
+        <div class="seg-item" onclick="selectSeg('seg6',this)">Delayed</div>
+        <div class="seg-item" onclick="selectSeg('seg6',this)">Completed</div>
+      </div>
+      <span style="font-size:11px;color:#767676">12,847 records</span>
+    </div>
+  </div>
+
+<script>
+function selectSeg(groupId, el) {
+  if (el.classList.contains('disabled')) return;
+  document.querySelectorAll('#' + groupId + ' .seg-item').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

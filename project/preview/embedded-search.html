@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; display: flex; flex-direction: column; gap: 14px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #5E5C75; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .panel { background: #fff; border-radius: 10px; border: 1px solid #EBEBEB; padding: 12px; }
+  .divider { height: 1px; background: #F0F0F4; }
+
+  /* Search bar */
+  .search-bar {
+    display: flex; align-items: center; gap: 0; height: 34px;
+    border: 1px solid #DDDDE5; border-radius: 8px; background: #fff; overflow: hidden;
+  }
+  .search-bar:focus-within { border-color: #8342BB; box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(131,66,187,0.25); }
+  .search-icon { display: flex; align-items: center; padding: 0 10px; flex-shrink: 0; }
+  .search-icon .material-icons { font-size: 17px; color: #8C8C8C; }
+  .search-input { flex: 1; border: none; outline: none; font-family: 'Switzer', sans-serif; font-size: 13px; color: #282828; background: transparent; }
+  .search-input::placeholder { color: #8C8C8C; }
+  .search-clear { display: flex; align-items: center; padding: 0 8px; flex-shrink: 0; cursor: pointer; color: #8C8C8C; }
+  .search-clear .material-icons { font-size: 16px; }
+  .search-clear:hover { color: #282828; }
+
+  /* Filter chips */
+  .filter-bar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .filter-chip {
+    display: inline-flex; align-items: center; gap: 4px; height: 28px; padding: 0 10px 0 10px;
+    border: 1px solid #DDDDE5; border-radius: 6px; background: #fff; font-size: 12px; color: #282828;
+    cursor: pointer; white-space: nowrap; font-family: 'Switzer', sans-serif; font-weight: 500;
+    transition: all 0.1s;
+  }
+  .filter-chip .material-icons { font-size: 14px; color: #8C8C8C; }
+  .filter-chip:hover { border-color: #BFBECE; background: #FBFBFB; }
+  .filter-chip.active { background: rgba(131,66,187,0.08); border-color: #8342BB; color: #7239A4; }
+  .filter-chip.active .material-icons { color: #7239A4; }
+  .filter-chip.active .chip-close { color: #7239A4; cursor: pointer; }
+
+  /* Active filter with value */
+  .filter-chip-val { display: inline-flex; align-items: center; gap: 0; height: 28px; border: 1px solid #8342BB; border-radius: 6px; overflow: hidden; background: rgba(131,66,187,0.06); font-family: 'Switzer', sans-serif; font-size: 12px; }
+  .chip-label { padding: 0 8px; color: #5E5C75; font-weight: 400; border-right: 1px solid #B4A4E0; }
+  .chip-value { padding: 0 8px; color: #7239A4; font-weight: 500; }
+  .chip-remove { display: flex; align-items: center; padding: 0 6px; cursor: pointer; color: #7239A4; }
+  .chip-remove:hover { background: rgba(131,66,187,0.15); }
+  .chip-remove .material-icons { font-size: 13px; }
+
+  /* Divider between chips and add */
+  .chip-divider { width: 1px; height: 20px; background: #DDDDE5; flex-shrink: 0; }
+
+  /* More filters button */
+  .more-filters { display: inline-flex; align-items: center; gap: 4px; height: 28px; padding: 0 10px; border: 1px dashed #DDDDE5; border-radius: 6px; background: transparent; font-family: 'Switzer', sans-serif; font-size: 12px; color: #767676; cursor: pointer; }
+  .more-filters:hover { border-color: #8342BB; color: #7239A4; }
+  .more-filters .material-icons { font-size: 14px; }
+
+  /* Search results dropdown */
+  .search-results { border: 1px solid #DDDDE5; border-radius: 8px; background: #fff; box-shadow: 0 4px 12px rgba(55,23,78,0.1); overflow: hidden; }
+  .result-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; cursor: pointer; }
+  .result-item:hover { background: #F0F0F4; }
+  .result-item.focused { background: rgba(131,66,187,0.06); }
+  .result-icon { width: 24px; height: 24px; border-radius: 6px; background: #F0F0F4; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .result-icon .material-icons { font-size: 14px; color: #5E5C75; }
+  .result-label { font-size: 13px; color: #282828; flex: 1; }
+  .result-meta  { font-size: 10px; color: #8C8C8C; }
+  .result-section { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.07em; text-transform: uppercase; padding: 8px 12px 3px; }
+  .result-divider { height: 1px; background: #F0F0F4; }
+  mark { background: rgba(131,66,187,0.14); color: #7239A4; border-radius: 2px; }
+</style>
+</head>
+<body>
+  <div>
+    <div class="lbl">Search bar — empty + with value + results</div>
+    <div class="panel" style="display:flex;flex-direction:column;gap:10px">
+      <div class="search-bar">
+        <div class="search-icon"><span class="material-icons">search</span></div>
+        <input class="search-input" type="text" placeholder="Search orders, shipments, SKUs…">
+      </div>
+      <div class="search-bar" style="border-color:#8342BB;box-shadow:0 0 0 2px #fff,0 0 0 4px rgba(131,66,187,0.25)">
+        <div class="search-icon"><span class="material-icons">search</span></div>
+        <input class="search-input" type="text" value="APAC ship">
+        <div class="search-clear"><span class="material-icons">close</span></div>
+      </div>
+      <div class="search-results">
+        <div class="result-section">Shipments</div>
+        <div class="result-item focused">
+          <div class="result-icon"><span class="material-icons">local_shipping</span></div>
+          <div class="result-label"><mark>APAC</mark> <mark>ship</mark>ments — January 2025</div>
+          <div class="result-meta">842 records</div>
+        </div>
+        <div class="result-item">
+          <div class="result-icon"><span class="material-icons">local_shipping</span></div>
+          <div class="result-label"><mark>APAC</mark> inbound <mark>ship</mark>ments</div>
+          <div class="result-meta">290 records</div>
+        </div>
+        <div class="result-divider"></div>
+        <div class="result-section">Orders</div>
+        <div class="result-item">
+          <div class="result-icon"><span class="material-icons">assignment</span></div>
+          <div class="result-label">ORD-48201 — <mark>APAC</mark></div>
+          <div class="result-meta">Shanghai → LA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="lbl">Filter bar — no active filters</div>
+    <div class="panel">
+      <div class="filter-bar">
+        <div class="filter-chip"><span class="material-icons">calendar_today</span>Date range</div>
+        <div class="filter-chip"><span class="material-icons">public</span>Region</div>
+        <div class="filter-chip"><span class="material-icons">inventory_2</span>Status</div>
+        <div class="filter-chip"><span class="material-icons">person</span>Assigned to</div>
+        <div class="chip-divider"></div>
+        <button class="more-filters"><span class="material-icons">add</span>More filters</button>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="lbl">Filter bar — active filters applied</div>
+    <div class="panel">
+      <div class="filter-bar">
+        <div class="filter-chip-val">
+          <div class="chip-label">Region</div>
+          <div class="chip-value">APAC</div>
+          <div class="chip-remove"><span class="material-icons">close</span></div>
+        </div>
+        <div class="filter-chip-val">
+          <div class="chip-label">Status</div>
+          <div class="chip-value">Delayed, Warning</div>
+          <div class="chip-remove"><span class="material-icons">close</span></div>
+        </div>
+        <div class="filter-chip-val">
+          <div class="chip-label">Date</div>
+          <div class="chip-value">Jan 2025</div>
+          <div class="chip-remove"><span class="material-icons">close</span></div>
+        </div>
+        <div class="chip-divider"></div>
+        <button class="more-filters"><span class="material-icons">add</span>Add filter</button>
+        <div style="flex:1"></div>
+        <button style="height:26px;padding:0 8px;background:transparent;border:none;color:#7239A4;font-family:'Switzer',sans-serif;font-size:11px;font-weight:500;cursor:pointer">Clear all</button>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="lbl">Inline search within a panel</div>
+    <div class="panel">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <div style="font-size:13px;font-weight:500;color:#282828;flex:1">Order lines</div>
+        <div class="search-bar" style="width:200px;height:28px">
+          <div class="search-icon" style="padding:0 8px"><span class="material-icons" style="font-size:14px">search</span></div>
+          <input class="search-input" style="font-size:12px" type="text" placeholder="Filter rows…">
+        </div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <div class="filter-chip active" style="height:24px;font-size:11px"><span class="material-icons" style="font-size:13px">check</span>Delayed</div>
+        <div class="filter-chip" style="height:24px;font-size:11px">In transit</div>
+        <div class="filter-chip" style="height:24px;font-size:11px">Completed</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

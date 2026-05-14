@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; display: flex; flex-direction: column; gap: 16px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .divider { height: 1px; background: #F0F0F4; }
+
+  /* ── Horizontal stepper ── */
+  .stepper-h { display: flex; align-items: flex-start; }
+  .step-h { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
+  .step-h:not(:last-child)::after {
+    content: ''; position: absolute; top: 16px; left: 50%; width: 100%; height: 2px;
+    background: #DDDDE5; z-index: 0;
+  }
+  .step-h.completed:not(:last-child)::after { background: #8342BB; }
+
+  .step-circle {
+    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-family: 'Switzer', sans-serif; font-size: 13px; font-weight: 500;
+    position: relative; z-index: 1; flex-shrink: 0;
+    border: 2px solid; transition: all 0.15s;
+  }
+  .step-h .step-circle { border: 2px solid; }
+  .step-circle.pending  { background: #fff; border-color: #DDDDE5; color: #8C8C8C; }
+  .step-circle.active   { background: #fff; border-color: #8342BB; color: #8342BB; box-shadow: 0 0 0 3px rgba(131,66,187,0.15); }
+  .step-circle.completed{ background: #8342BB; border-color: #8342BB; color: #fff; }
+  .step-circle.error    { background: #E02F3A; border-color: #E02F3A; color: #fff; }
+  .step-circle .material-icons { font-size: 16px; }
+
+  .step-label { font-size: 11px; font-weight: 500; color: #282828; margin-top: 6px; text-align: center; }
+  .step-sublabel { font-size: 10px; color: #8C8C8C; text-align: center; margin-top: 1px; }
+  .step-h .step-label-active { color: #8342BB; }
+  .step-h .step-label-pending { color: #8C8C8C; font-weight: 400; }
+
+  /* ── Vertical stepper ── */
+  .stepper-v { display: flex; flex-direction: column; gap: 0; }
+  .step-v { display: flex; gap: 12px; position: relative; padding-bottom: 16px; }
+  .step-v:last-child { padding-bottom: 0; }
+  .step-v-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .step-v-line { width: 2px; flex: 1; min-height: 16px; background: #DDDDE5; margin: 4px 0; }
+  .step-v.completed .step-v-line { background: #8342BB; }
+  .step-v:last-child .step-v-line { display: none; }
+  .step-v-body { padding-top: 4px; flex: 1; }
+  .step-v-title { font-size: 13px; font-weight: 500; color: #282828; line-height: 1.3; }
+  .step-v-title.active-title { color: #8342BB; }
+  .step-v-title.pending-title { color: #8C8C8C; font-weight: 400; }
+  .step-v-desc { font-size: 12px; color: #5E5C75; margin-top: 4px; line-height: 1.4; }
+  .step-v-content { background: #F0F0F4; border-radius: 8px; padding: 10px 12px; margin-top: 8px; font-size: 12px; color: #282828; }
+
+  .btn { height: 28px; padding: 0 12px; border-radius: 6px; font-family: 'Switzer', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+  .btn .material-icons { font-size: 14px; }
+  .btn-primary { background: #8342BB; color: #fff; border: none; }
+  .btn-default { background: #fff; color: #282828; border: 1px solid #DDDDE5; }
+  .btn-text    { background: transparent; color: #7239A4; border: none; font-weight: 400; }
+</style>
+</head>
+<body>
+  <div>
+    <div class="lbl">Horizontal stepper — workflow progress</div>
+    <div class="stepper-h">
+      <div class="step-h completed">
+        <div class="step-circle completed"><span class="material-icons">check</span></div>
+        <div class="step-label">Configure</div>
+        <div class="step-sublabel">Done</div>
+      </div>
+      <div class="step-h completed">
+        <div class="step-circle completed"><span class="material-icons">check</span></div>
+        <div class="step-label">Review data</div>
+        <div class="step-sublabel">Done</div>
+      </div>
+      <div class="step-h">
+        <div class="step-circle active">3</div>
+        <div class="step-label step-label-active">Approve</div>
+        <div class="step-sublabel" style="color:#8342BB">Current step</div>
+      </div>
+      <div class="step-h">
+        <div class="step-circle pending">4</div>
+        <div class="step-label step-label-pending">Publish</div>
+        <div class="step-sublabel">Pending</div>
+      </div>
+      <div class="step-h">
+        <div class="step-circle pending">5</div>
+        <div class="step-label step-label-pending">Complete</div>
+        <div class="step-sublabel">Pending</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="lbl">With error state</div>
+    <div class="stepper-h">
+      <div class="step-h completed">
+        <div class="step-circle completed"><span class="material-icons">check</span></div>
+        <div class="step-label">Upload</div>
+        <div class="step-sublabel">Done</div>
+      </div>
+      <div class="step-h">
+        <div class="step-circle error"><span class="material-icons">close</span></div>
+        <div class="step-label" style="color:#9A112C">Validation</div>
+        <div class="step-sublabel" style="color:#9A112C">Failed</div>
+      </div>
+      <div class="step-h">
+        <div class="step-circle pending">3</div>
+        <div class="step-label step-label-pending">Import</div>
+        <div class="step-sublabel">Blocked</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div class="lbl">Vertical stepper — with content panels</div>
+    <div class="stepper-v" id="vstep" style="max-width:420px">
+      <div class="step-v completed">
+        <div class="step-v-left">
+          <div class="step-circle completed" style="width:28px;height:28px;font-size:12px"><span class="material-icons" style="font-size:14px">check</span></div>
+          <div class="step-v-line"></div>
+        </div>
+        <div class="step-v-body">
+          <div class="step-v-title">Select planning scenario</div>
+          <div class="step-v-desc">Optimistic Q1 2025 selected.</div>
+        </div>
+      </div>
+      <div class="step-v completed">
+        <div class="step-v-left">
+          <div class="step-circle completed" style="width:28px;height:28px;font-size:12px"><span class="material-icons" style="font-size:14px">check</span></div>
+          <div class="step-v-line"></div>
+        </div>
+        <div class="step-v-body">
+          <div class="step-v-title">Review demand data</div>
+          <div class="step-v-desc">All 847 SKUs reviewed.</div>
+        </div>
+      </div>
+      <div class="step-v">
+        <div class="step-v-left">
+          <div class="step-circle active" style="width:28px;height:28px;font-size:12px">3</div>
+          <div class="step-v-line"></div>
+        </div>
+        <div class="step-v-body">
+          <div class="step-v-title active-title">Submit for approval</div>
+          <div class="step-v-desc">Send the cycle to the planning team for sign-off.</div>
+          <div class="step-v-content">
+            <div style="margin-bottom:8px;font-weight:500">Approvers: <span style="color:#7239A4;font-weight:400">J. Smith, M. Tanaka</span></div>
+            <div style="display:flex;gap:6px;margin-top:8px">
+              <button class="btn btn-primary"><span class="material-icons">send</span>Submit</button>
+              <button class="btn btn-default">Save draft</button>
+              <button class="btn btn-text">Back</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="step-v">
+        <div class="step-v-left">
+          <div class="step-circle pending" style="width:28px;height:28px;font-size:12px">4</div>
+          <div class="step-v-line"></div>
+        </div>
+        <div class="step-v-body">
+          <div class="step-v-title pending-title">Publish to teams</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

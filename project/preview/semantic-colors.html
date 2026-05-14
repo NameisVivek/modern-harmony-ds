@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; }
+  .groups { display: flex; gap: 10px; }
+  .group { flex: 1; }
+  .group-label { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .ramp { display: flex; gap: 3px; margin-bottom: 8px; }
+  .ramp-sw { flex: 1; height: 28px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.06); }
+  .key-row { display: flex; flex-direction: column; gap: 3px; }
+  .key { display: flex; align-items: center; gap: 6px; padding: 5px 7px; border-radius: 5px; border: 1px solid rgba(0,0,0,0.06); }
+  .key-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .key-name { font-size: 9px; font-weight: 500; flex: 1; }
+  .key-hex { font-size: 8px; color: #8C8C8C; }
+</style>
+</head>
+<body>
+<div class="groups">
+  <!-- Error -->
+  <div class="group">
+    <div class="group-label">Error</div>
+    <div class="ramp">
+      <div class="ramp-sw" style="background:#FEF7F4"></div>
+      <div class="ramp-sw" style="background:#FBECE9"></div>
+      <div class="ramp-sw" style="background:#F9E3DF"></div>
+      <div class="ramp-sw" style="background:#F6D7D6"></div>
+      <div class="ramp-sw" style="background:#F0B0AE"></div>
+      <div class="ramp-sw" style="background:#ED8885"></div>
+      <div class="ramp-sw" style="background:#EA5F5B"></div>
+      <div class="ramp-sw" style="background:#E02F3A"></div>
+      <div class="ramp-sw" style="background:#C0172D"></div>
+      <div class="ramp-sw" style="background:#9A112C"></div>
+      <div class="ramp-sw" style="background:#760824"></div>
+      <div class="ramp-sw" style="background:#420519"></div>
+    </div>
+    <div class="key-row">
+      <div class="key" style="background:#FEF7F4"><div class="key-dot" style="background:#E02F3A"></div><div class="key-name">subtle</div><div class="key-hex">#FEF7F4</div></div>
+      <div class="key" style="background:#F6D7D6"><div class="key-dot" style="background:#E02F3A"></div><div class="key-name">base</div><div class="key-hex">#F6D7D6</div></div>
+      <div class="key" style="background:#E02F3A"><div class="key-dot" style="background:#fff"></div><div class="key-name" style="color:#fff">strong</div><div class="key-hex" style="color:rgba(255,255,255,.7)">#E02F3A</div></div>
+      <div class="key" style="background:#9A112C"><div class="key-dot" style="background:#fff"></div><div class="key-name" style="color:#fff">fg</div><div class="key-hex" style="color:rgba(255,255,255,.7)">#9A112C</div></div>
+    </div>
+  </div>
+  <!-- Success -->
+  <div class="group">
+    <div class="group-label">Success</div>
+    <div class="ramp">
+      <div class="ramp-sw" style="background:#EEFEF9"></div>
+      <div class="ramp-sw" style="background:#DDFAEE"></div>
+      <div class="ramp-sw" style="background:#C5F3DF"></div>
+      <div class="ramp-sw" style="background:#A1EECC"></div>
+      <div class="ramp-sw" style="background:#5BD6A0"></div>
+      <div class="ramp-sw" style="background:#02A15A"></div>
+      <div class="ramp-sw" style="background:#027B44"></div>
+      <div class="ramp-sw" style="background:#27854D"></div>
+      <div class="ramp-sw" style="background:#1A6B39"></div>
+      <div class="ramp-sw" style="background:#12512A"></div>
+      <div class="ramp-sw" style="background:#0B3A1E"></div>
+      <div class="ramp-sw" style="background:#072411"></div>
+    </div>
+    <div class="key-row">
+      <div class="key" style="background:#EEFEF9"><div class="key-dot" style="background:#5BD6A0"></div><div class="key-name">subtle</div><div class="key-hex">#EEFEF9</div></div>
+      <div class="key" style="background:#C5F3DF"><div class="key-dot" style="background:#5BD6A0"></div><div class="key-name">base</div><div class="key-hex">#C5F3DF</div></div>
+      <div class="key" style="background:#5BD6A0"><div class="key-dot" style="background:#fff"></div><div class="key-name">strong</div><div class="key-hex">#5BD6A0</div></div>
+      <div class="key" style="background:#27854D"><div class="key-dot" style="background:#fff"></div><div class="key-name" style="color:#fff">fg</div><div class="key-hex" style="color:rgba(255,255,255,.7)">#27854D</div></div>
+    </div>
+  </div>
+  <!-- Warning -->
+  <div class="group">
+    <div class="group-label">Warning</div>
+    <div class="ramp">
+      <div class="ramp-sw" style="background:#FFFDEF"></div>
+      <div class="ramp-sw" style="background:#FFF4DC"></div>
+      <div class="ramp-sw" style="background:#FDECC0"></div>
+      <div class="ramp-sw" style="background:#FDD880"></div>
+      <div class="ramp-sw" style="background:#FDCC50"></div>
+      <div class="ramp-sw" style="background:#FDBF14"></div>
+      <div class="ramp-sw" style="background:#F0A008"></div>
+      <div class="ramp-sw" style="background:#C44F09"></div>
+      <div class="ramp-sw" style="background:#AA3D07"></div>
+      <div class="ramp-sw" style="background:#753A05"></div>
+      <div class="ramp-sw" style="background:#443703"></div>
+      <div class="ramp-sw" style="background:#441501"></div>
+    </div>
+    <div class="key-row">
+      <div class="key" style="background:#FFFDEF"><div class="key-dot" style="background:#FDBF14"></div><div class="key-name">subtle</div><div class="key-hex">#FFFDEF</div></div>
+      <div class="key" style="background:#FDECC0"><div class="key-dot" style="background:#FDBF14"></div><div class="key-name">base</div><div class="key-hex">#FDECC0</div></div>
+      <div class="key" style="background:#FDBF14"><div class="key-dot" style="background:#fff"></div><div class="key-name">strong</div><div class="key-hex">#FDBF14</div></div>
+      <div class="key" style="background:#753A05"><div class="key-dot" style="background:#fff"></div><div class="key-name" style="color:#fff">fg</div><div class="key-hex" style="color:rgba(255,255,255,.7)">#753A05</div></div>
+    </div>
+  </div>
+  <!-- High Risk -->
+  <div class="group">
+    <div class="group-label">High Risk</div>
+    <div class="ramp">
+      <div class="ramp-sw" style="background:#FFFDEF"></div>
+      <div class="ramp-sw" style="background:#FFF4DC"></div>
+      <div class="ramp-sw" style="background:#FDD880"></div>
+      <div class="ramp-sw" style="background:#FDCC50"></div>
+      <div class="ramp-sw" style="background:#FDBF14"></div>
+      <div class="ramp-sw" style="background:#F0A008"></div>
+      <div class="ramp-sw" style="background:#C44F09"></div>
+      <div class="ramp-sw" style="background:#AA3D07"></div>
+      <div class="ramp-sw" style="background:#753A05"></div>
+      <div class="ramp-sw" style="background:#443703"></div>
+      <div class="ramp-sw" style="background:#441501"></div>
+    </div>
+    <div class="key-row">
+      <div class="key" style="background:#FFF4DC"><div class="key-dot" style="background:#AA3D07"></div><div class="key-name">subtle</div><div class="key-hex">#FFF4DC</div></div>
+      <div class="key" style="background:#FDD880"><div class="key-dot" style="background:#AA3D07"></div><div class="key-name">base</div><div class="key-hex">#FDD880</div></div>
+      <div class="key" style="background:#AA3D07"><div class="key-dot" style="background:#fff"></div><div class="key-name" style="color:#fff">strong</div><div class="key-hex" style="color:rgba(255,255,255,.7)">#AA3D07</div></div>
+      <div class="key" style="background:#441501"><div class="key-dot" style="background:#fff"></div><div class="key-name" style="color:#fff">fg</div><div class="key-hex" style="color:rgba(255,255,255,.7)">#441501</div></div>
+    </div>
+  </div>
+  <!-- Info -->
+  <div class="group">
+    <div class="group-label">Info</div>
+    <div class="ramp">
+      <div class="ramp-sw" style="background:#F4F9FE"></div>
+      <div class="ramp-sw" style="background:#EAF3FC"></div>
+      <div class="ramp-sw" style="background:#CEECFC"></div>
+      <div class="ramp-sw" style="background:#C3E3FC"></div>
+      <div class="ramp-sw" style="background:#97C0FA"></div>
+      <div class="ramp-sw" style="background:#68ACEB"></div>
+      <div class="ramp-sw" style="background:#3999E4"></div>
+      <div class="ramp-sw" style="background:#1376D8"></div>
+      <div class="ramp-sw" style="background:#0D5FB8"></div>
+      <div class="ramp-sw" style="background:#0D4C89"></div>
+      <div class="ramp-sw" style="background:#002D68"></div>
+      <div class="ramp-sw" style="background:#002448"></div>
+    </div>
+    <div class="key-row">
+      <div class="key" style="background:#F4F9FE"><div class="key-dot" style="background:#3999E4"></div><div class="key-name">subtle</div><div class="key-hex">#F4F9FE</div></div>
+      <div class="key" style="background:#C3E3FC"><div class="key-dot" style="background:#3999E4"></div><div class="key-name">base</div><div class="key-hex">#C3E3FC</div></div>
+      <div class="key" style="background:#3999E4"><div class="key-dot" style="background:#fff"></div><div class="key-name" style="color:#fff">strong</div><div class="key-hex" style="color:rgba(255,255,255,.7)">#3999E4</div></div>
+      <div class="key" style="background:#0D4C89"><div class="key-dot" style="background:#fff"></div><div class="key-name" style="color:#fff">fg</div><div class="key-hex" style="color:rgba(255,255,255,.7)">#0D4C89</div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

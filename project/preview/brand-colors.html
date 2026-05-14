@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 16px 18px; width: 900px; display: flex; flex-direction: column; gap: 18px; }
+
+  .section-label {
+    font-size: 9px; font-weight: 600; color: #8C8C8C;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .row { display: flex; gap: 4px; flex-wrap: nowrap; }
+  .sw { flex: 1; min-width: 0; }
+  .sw-color {
+    height: 40px; border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .sw-name {
+    margin-top: 4px; font-size: 8px; font-weight: 600;
+    color: #282828; line-height: 1.2;
+  }
+  .sw-hex { font-size: 7.5px; color: #767676; margin-top: 1px; }
+  .star { color: #8342BB; }
+
+  /* Semantic row */
+  .sem-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;
+  }
+  .sem-card {
+    display: flex; flex-direction: column; border-radius: 8px;
+    overflow: hidden; border: 1px solid rgba(0,0,0,0.06);
+  }
+  .sem-swatch { height: 52px; }
+  .sem-body { padding: 7px 8px; background: #fff; }
+  .sem-name { font-size: 10px; font-weight: 600; color: #282828; }
+  .sem-hex  { font-size: 8px; color: #767676; margin-top: 1px; }
+  .sem-role { font-size: 7.5px; color: #8C8C8C; margin-top: 3px; line-height: 1.3; }
+
+  .divider { height: 1px; background: #F0F0F4; }
+</style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════ VIOLET ═══════════ -->
+  <div>
+    <div class="section-label">Violet — Brand Accent</div>
+    <div class="row">
+      <div class="sw"><div class="sw-color" style="background:#FCFCFF"></div><div class="sw-name">10</div><div class="sw-hex">#FCFCFF</div></div>
+      <div class="sw"><div class="sw-color" style="background:#F9F6FE"></div><div class="sw-name">25</div><div class="sw-hex">#F9F6FE</div></div>
+      <div class="sw"><div class="sw-color" style="background:#F2ECF8"></div><div class="sw-name">50</div><div class="sw-hex">#F2ECF8</div></div>
+      <div class="sw"><div class="sw-color" style="background:#ECE4F5"></div><div class="sw-name">75</div><div class="sw-hex">#ECE4F5</div></div>
+      <div class="sw"><div class="sw-color" style="background:#CABAEF"></div><div class="sw-name">100</div><div class="sw-hex">#CABAEF</div></div>
+      <div class="sw"><div class="sw-color" style="background:#C0B4E8"></div><div class="sw-name">200</div><div class="sw-hex">#C0B4E8</div></div>
+      <div class="sw"><div class="sw-color" style="background:#B4A4E0"></div><div class="sw-name">225</div><div class="sw-hex">#B4A4E0</div></div>
+      <div class="sw"><div class="sw-color" style="background:#B49AD6"></div><div class="sw-name">300</div><div class="sw-hex">#B49AD6</div></div>
+      <div class="sw"><div class="sw-color" style="background:#A27CCF"></div><div class="sw-name">400</div><div class="sw-hex">#A27CCF</div></div>
+      <div class="sw"><div class="sw-color" style="background:#8863D2"></div><div class="sw-name">500</div><div class="sw-hex">#8863D2</div></div>
+      <div class="sw"><div class="sw-color" style="background:#8342BB"></div><div class="sw-name">600</div><div class="sw-hex">#8342BB</div></div>
+      <div class="sw"><div class="sw-color" style="background:#7239A4"></div><div class="sw-name">675</div><div class="sw-hex">#7239A4</div></div>
+      <div class="sw"><div class="sw-color" style="background:#68349C"></div><div class="sw-name">700</div><div class="sw-hex">#68349C</div></div>
+      <div class="sw"><div class="sw-color" style="background:#4D3075"></div><div class="sw-name">775</div><div class="sw-hex">#4D3075</div></div>
+      <div class="sw"><div class="sw-color" style="background:#4E2975"></div><div class="sw-name">800</div><div class="sw-hex">#4E2975</div></div>
+      <div class="sw"><div class="sw-color" style="background:#37174E"></div><div class="sw-name">900</div><div class="sw-hex">#37174E</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════ CARBON ═══════════ -->
+  <div>
+    <div class="section-label">Carbon — Brand near-black &amp; neutral gray</div>
+    <div class="row">
+      <div class="sw"><div class="sw-color" style="background:#F6F6F6"></div><div class="sw-name">10</div><div class="sw-hex">#F6F6F6</div></div>
+      <div class="sw"><div class="sw-color" style="background:#EAEAEA"></div><div class="sw-name">25</div><div class="sw-hex">#EAEAEA</div></div>
+      <div class="sw"><div class="sw-color" style="background:#DEDEDE"></div><div class="sw-name">50</div><div class="sw-hex">#DEDEDE</div></div>
+      <div class="sw"><div class="sw-color" style="background:#D2D2D2"></div><div class="sw-name">75</div><div class="sw-hex">#D2D2D2</div></div>
+      <div class="sw"><div class="sw-color" style="background:#C6C6C6"></div><div class="sw-name">100</div><div class="sw-hex">#C6C6C6</div></div>
+      <div class="sw"><div class="sw-color" style="background:#BABABA"></div><div class="sw-name">200</div><div class="sw-hex">#BABABA</div></div>
+      <div class="sw"><div class="sw-color" style="background:#AEAEAE"></div><div class="sw-name">225</div><div class="sw-hex">#AEAEAE</div></div>
+      <div class="sw"><div class="sw-color" style="background:#A2A2A2"></div><div class="sw-name">300</div><div class="sw-hex">#A2A2A2</div></div>
+      <div class="sw"><div class="sw-color" style="background:#969696"></div><div class="sw-name">400</div><div class="sw-hex">#969696</div></div>
+      <div class="sw"><div class="sw-color" style="background:#8A8A8A"></div><div class="sw-name">500</div><div class="sw-hex">#8A8A8A</div></div>
+      <div class="sw"><div class="sw-color" style="background:#7E7E7E"></div><div class="sw-name">600</div><div class="sw-hex">#7E7E7E</div></div>
+      <div class="sw"><div class="sw-color" style="background:#727272"></div><div class="sw-name">675</div><div class="sw-hex">#727272</div></div>
+      <div class="sw"><div class="sw-color" style="background:#666666"></div><div class="sw-name">700</div><div class="sw-hex">#666666</div></div>
+      <div class="sw"><div class="sw-color" style="background:#5A5A5A"></div><div class="sw-name">775</div><div class="sw-hex">#5A5A5A</div></div>
+      <div class="sw"><div class="sw-color" style="background:#3F3F3F"></div><div class="sw-name">800</div><div class="sw-hex">#3F3F3F</div></div>
+      <div class="sw"><div class="sw-color" style="background:#282828"></div><div class="sw-name">900</div><div class="sw-hex">#282828</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════ COOL GRAY ═══════════ -->
+  <div>
+    <div class="section-label">Cool Gray — Purple-tinted neutrals (UI surfaces &amp; borders)</div>
+    <div class="row">
+      <div class="sw"><div class="sw-color" style="background:#F8F8FA"></div><div class="sw-name">25</div><div class="sw-hex">#F8F8FA</div></div>
+      <div class="sw"><div class="sw-color" style="background:#F0F0F4"></div><div class="sw-name">50</div><div class="sw-hex">#F0F0F4</div></div>
+      <div class="sw"><div class="sw-color" style="background:#E5E5EC"></div><div class="sw-name">75</div><div class="sw-hex">#E5E5EC</div></div>
+      <div class="sw"><div class="sw-color" style="background:#DDDDE5"></div><div class="sw-name">100</div><div class="sw-hex">#DDDDE5</div></div>
+      <div class="sw"><div class="sw-color" style="background:#C6C7D2"></div><div class="sw-name">150</div><div class="sw-hex">#C6C7D2</div></div>
+      <div class="sw"><div class="sw-color" style="background:#BFBECE"></div><div class="sw-name">200</div><div class="sw-hex">#BFBECE</div></div>
+      <div class="sw"><div class="sw-color" style="background:#A4A3B9"></div><div class="sw-name">300</div><div class="sw-hex">#A4A3B9</div></div>
+      <div class="sw"><div class="sw-color" style="background:#8B8AA5"></div><div class="sw-name">400</div><div class="sw-hex">#8B8AA5</div></div>
+      <div class="sw"><div class="sw-color" style="background:#797390"></div><div class="sw-name">500</div><div class="sw-hex">#797390</div></div>
+      <div class="sw"><div class="sw-color" style="background:#5E5C75"></div><div class="sw-name">600</div><div class="sw-hex">#5E5C75</div></div>
+      <div class="sw"><div class="sw-color" style="background:#757390"></div><div class="sw-name">700</div><div class="sw-hex">#757390</div></div>
+      <div class="sw"><div class="sw-color" style="background:#474557"></div><div class="sw-name">800</div><div class="sw-hex">#474557</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════ RED ═══════════ -->
+  <div>
+    <div class="section-label">Red — Error &amp; Destructive</div>
+    <div class="row">
+      <div class="sw"><div class="sw-color" style="background:#FEF7F4"></div><div class="sw-name">25</div><div class="sw-hex">#FEF7F4</div></div>
+      <div class="sw"><div class="sw-color" style="background:#FBECE9"></div><div class="sw-name">50</div><div class="sw-hex">#FBECE9</div></div>
+      <div class="sw"><div class="sw-color" style="background:#F9E3DF"></div><div class="sw-name">75</div><div class="sw-hex">#F9E3DF</div></div>
+      <div class="sw"><div class="sw-color" style="background:#F6D7D6"></div><div class="sw-name">100</div><div class="sw-hex">#F6D7D6</div></div>
+      <div class="sw"><div class="sw-color" style="background:#F0B0AE"></div><div class="sw-name">200</div><div class="sw-hex">#F0B0AE</div></div>
+      <div class="sw"><div class="sw-color" style="background:#ED8885"></div><div class="sw-name">300</div><div class="sw-hex">#ED8885</div></div>
+      <div class="sw"><div class="sw-color" style="background:#EA5F5B"></div><div class="sw-name">400</div><div class="sw-hex">#EA5F5B</div></div>
+      <div class="sw"><div class="sw-color" style="background:#E02F3A"></div><div class="sw-name">500</div><div class="sw-hex">#E02F3A</div></div>
+      <div class="sw"><div class="sw-color" style="background:#C0172D"></div><div class="sw-name">600</div><div class="sw-hex">#C0172D</div></div>
+      <div class="sw"><div class="sw-color" style="background:#9A112C"></div><div class="sw-name">700</div><div class="sw-hex">#9A112C</div></div>
+      <div class="sw"><div class="sw-color" style="background:#760824"></div><div class="sw-name">800</div><div class="sw-hex">#760824</div></div>
+      <div class="sw"><div class="sw-color" style="background:#420519"></div><div class="sw-name">900</div><div class="sw-hex">#420519</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════ AMBER ═══════════ -->
+  <div>
+    <div class="section-label">Amber — Warning &amp; High-risk</div>
+    <div class="row">
+      <div class="sw"><div class="sw-color" style="background:#FFFDEF"></div><div class="sw-name">25</div><div class="sw-hex">#FFFDEF</div></div>
+      <div class="sw"><div class="sw-color" style="background:#FFF4DC"></div><div class="sw-name">50</div><div class="sw-hex">#FFF4DC</div></div>
+      <div class="sw"><div class="sw-color" style="background:#FDECC0"></div><div class="sw-name">75</div><div class="sw-hex">#FDECC0</div></div>
+      <div class="sw"><div class="sw-color" style="background:#FDD880"></div><div class="sw-name">100</div><div class="sw-hex">#FDD880</div></div>
+      <div class="sw"><div class="sw-color" style="background:#FDCC50"></div><div class="sw-name">200</div><div class="sw-hex">#FDCC50</div></div>
+      <div class="sw"><div class="sw-color" style="background:#FDBF14"></div><div class="sw-name">300</div><div class="sw-hex">#FDBF14</div></div>
+      <div class="sw"><div class="sw-color" style="background:#F0A008"></div><div class="sw-name">400</div><div class="sw-hex">#F0A008</div></div>
+      <div class="sw"><div class="sw-color" style="background:#C44F09"></div><div class="sw-name">500</div><div class="sw-hex">#C44F09</div></div>
+      <div class="sw"><div class="sw-color" style="background:#AA3D07"></div><div class="sw-name">600</div><div class="sw-hex">#AA3D07</div></div>
+      <div class="sw"><div class="sw-color" style="background:#753A05"></div><div class="sw-name">700</div><div class="sw-hex">#753A05</div></div>
+      <div class="sw"><div class="sw-color" style="background:#443703"></div><div class="sw-name">800</div><div class="sw-hex">#443703</div></div>
+      <div class="sw"><div class="sw-color" style="background:#441501"></div><div class="sw-name">900</div><div class="sw-hex">#441501</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════ GREEN ═══════════ -->
+  <div>
+    <div class="section-label">Green — Success &amp; Forecast Present</div>
+    <div class="row">
+      <div class="sw"><div class="sw-color" style="background:#EEFEF9"></div><div class="sw-name">25</div><div class="sw-hex">#EEFEF9</div></div>
+      <div class="sw"><div class="sw-color" style="background:#DDFAEE"></div><div class="sw-name">50</div><div class="sw-hex">#DDFAEE</div></div>
+      <div class="sw"><div class="sw-color" style="background:#C5F3DF"></div><div class="sw-name">75</div><div class="sw-hex">#C5F3DF</div></div>
+      <div class="sw"><div class="sw-color" style="background:#A1EECC"></div><div class="sw-name">100</div><div class="sw-hex">#A1EECC</div></div>
+      <div class="sw"><div class="sw-color" style="background:#5BD6A0"></div><div class="sw-name">200</div><div class="sw-hex">#5BD6A0</div></div>
+      <div class="sw"><div class="sw-color" style="background:#02A15A"></div><div class="sw-name">300</div><div class="sw-hex">#02A15A</div></div>
+      <div class="sw"><div class="sw-color" style="background:#027B44"></div><div class="sw-name">400</div><div class="sw-hex">#027B44</div></div>
+      <div class="sw"><div class="sw-color" style="background:#27854D"></div><div class="sw-name">500</div><div class="sw-hex">#27854D</div></div>
+      <div class="sw"><div class="sw-color" style="background:#1A6B39"></div><div class="sw-name">600</div><div class="sw-hex">#1A6B39</div></div>
+      <div class="sw"><div class="sw-color" style="background:#12512A"></div><div class="sw-name">700</div><div class="sw-hex">#12512A</div></div>
+      <div class="sw"><div class="sw-color" style="background:#0B3A1E"></div><div class="sw-name">800</div><div class="sw-hex">#0B3A1E</div></div>
+      <div class="sw"><div class="sw-color" style="background:#072411"></div><div class="sw-name">900</div><div class="sw-hex">#072411</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════ BLUE ═══════════ -->
+  <div>
+    <div class="section-label">Blue — Info &amp; Interactive</div>
+    <div class="row">
+      <div class="sw"><div class="sw-color" style="background:#F4F9FE"></div><div class="sw-name">25</div><div class="sw-hex">#F4F9FE</div></div>
+      <div class="sw"><div class="sw-color" style="background:#EAF3FC"></div><div class="sw-name">50</div><div class="sw-hex">#EAF3FC</div></div>
+      <div class="sw"><div class="sw-color" style="background:#CEECFC"></div><div class="sw-name">75</div><div class="sw-hex">#CEECFC</div></div>
+      <div class="sw"><div class="sw-color" style="background:#C3E3FC"></div><div class="sw-name">100</div><div class="sw-hex">#C3E3FC</div></div>
+      <div class="sw"><div class="sw-color" style="background:#97C0FA"></div><div class="sw-name">200</div><div class="sw-hex">#97C0FA</div></div>
+      <div class="sw"><div class="sw-color" style="background:#68ACEB"></div><div class="sw-name">300</div><div class="sw-hex">#68ACEB</div></div>
+      <div class="sw"><div class="sw-color" style="background:#3999E4"></div><div class="sw-name">400</div><div class="sw-hex">#3999E4</div></div>
+      <div class="sw"><div class="sw-color" style="background:#1376D8"></div><div class="sw-name">500</div><div class="sw-hex">#1376D8</div></div>
+      <div class="sw"><div class="sw-color" style="background:#0D5FB8"></div><div class="sw-name">600</div><div class="sw-hex">#0D5FB8</div></div>
+      <div class="sw"><div class="sw-color" style="background:#0D4C89"></div><div class="sw-name">700</div><div class="sw-hex">#0D4C89</div></div>
+      <div class="sw"><div class="sw-color" style="background:#002D68"></div><div class="sw-name">800</div><div class="sw-hex">#002D68</div></div>
+      <div class="sw"><div class="sw-color" style="background:#002448"></div><div class="sw-name">900</div><div class="sw-hex">#002448</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════ GRAY ═══════════ -->
+  <div>
+    <div class="section-label">Gray — Pure neutral (no color cast)</div>
+    <div class="row">
+      <div class="sw"><div class="sw-color" style="background:#FBFBFB"></div><div class="sw-name">25</div><div class="sw-hex">#FBFBFB</div></div>
+      <div class="sw"><div class="sw-color" style="background:#F7F7F7"></div><div class="sw-name">50</div><div class="sw-hex">#F7F7F7</div></div>
+      <div class="sw"><div class="sw-color" style="background:#EBEBEB"></div><div class="sw-name">75</div><div class="sw-hex">#EBEBEB</div></div>
+      <div class="sw"><div class="sw-color" style="background:#DDDDDD"></div><div class="sw-name">100</div><div class="sw-hex">#DDDDDD</div></div>
+      <div class="sw"><div class="sw-color" style="background:#CCCCCC"></div><div class="sw-name">150</div><div class="sw-hex">#CCCCCC</div></div>
+      <div class="sw"><div class="sw-color" style="background:#BFBFBF"></div><div class="sw-name">200</div><div class="sw-hex">#BFBFBF</div></div>
+      <div class="sw"><div class="sw-color" style="background:#A4A4A4"></div><div class="sw-name">300</div><div class="sw-hex">#A4A4A4</div></div>
+      <div class="sw"><div class="sw-color" style="background:#8C8C8C"></div><div class="sw-name">400</div><div class="sw-hex">#8C8C8C</div></div>
+      <div class="sw"><div class="sw-color" style="background:#767676"></div><div class="sw-name">600</div><div class="sw-hex">#767676</div></div>
+      <div class="sw"><div class="sw-color" style="background:#4D4D4D"></div><div class="sw-name">700</div><div class="sw-hex">#4D4D4D</div></div>
+      <div class="sw"><div class="sw-color" style="background:#3A3A3A"></div><div class="sw-name">800</div><div class="sw-hex">#3A3A3A</div></div>
+      <div class="sw"><div class="sw-color" style="background:#282828"></div><div class="sw-name">875</div><div class="sw-hex">#282828</div></div>
+      <div class="sw"><div class="sw-color" style="background:#252525"></div><div class="sw-name">900</div><div class="sw-hex">#252525</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════ SEMANTIC DECISION TOKENS ═══════════ -->
+  <div>
+    <div class="section-label">Semantic decision tokens — key usage roles</div>
+    <div class="sem-grid">
+
+      <div class="sem-card">
+        <div class="sem-swatch" style="background:#8342BB"></div>
+        <div class="sem-body">
+          <div class="sem-name">Brand base</div>
+          <div class="sem-hex">#8342BB</div>
+          <div class="sem-role">Buttons, focus rings, selected states</div>
+        </div>
+      </div>
+
+      <div class="sem-card">
+        <div class="sem-swatch" style="background:#282828"></div>
+        <div class="sem-body">
+          <div class="sem-name">Brand foreground</div>
+          <div class="sem-hex">#282828</div>
+          <div class="sem-role">App header, body text, dark UI</div>
+        </div>
+      </div>
+
+      <div class="sem-card">
+        <div class="sem-swatch" style="background:#E02F3A"></div>
+        <div class="sem-body">
+          <div class="sem-name">Error strong</div>
+          <div class="sem-hex">#E02F3A</div>
+          <div class="sem-role">Destructive actions, error borders</div>
+        </div>
+      </div>
+
+      <div class="sem-card">
+        <div class="sem-swatch" style="background:#FDBF14"></div>
+        <div class="sem-body">
+          <div class="sem-name">Warning strong</div>
+          <div class="sem-hex">#FDBF14</div>
+          <div class="sem-role">Warning alerts, caution states</div>
+        </div>
+      </div>
+
+      <div class="sem-card">
+        <div class="sem-swatch" style="background:#AA3D07"></div>
+        <div class="sem-body">
+          <div class="sem-name">High risk strong</div>
+          <div class="sem-hex">#AA3D07</div>
+          <div class="sem-role">High-risk flags, urgent warnings</div>
+        </div>
+      </div>
+
+      <div class="sem-card">
+        <div class="sem-swatch" style="background:#5BD6A0"></div>
+        <div class="sem-body">
+          <div class="sem-name">Success strong</div>
+          <div class="sem-hex">#5BD6A0</div>
+          <div class="sem-role">Confirmations, positive states</div>
+        </div>
+      </div>
+
+      <div class="sem-card">
+        <div class="sem-swatch" style="background:#27854D"></div>
+        <div class="sem-body">
+          <div class="sem-name">Success foreground</div>
+          <div class="sem-hex">#27854D</div>
+          <div class="sem-role">Success text, icon color</div>
+        </div>
+      </div>
+
+      <div class="sem-card">
+        <div class="sem-swatch" style="background:#3999E4"></div>
+        <div class="sem-body">
+          <div class="sem-name">Info strong</div>
+          <div class="sem-hex">#3999E4</div>
+          <div class="sem-role">Info alerts, interactive elements</div>
+        </div>
+      </div>
+
+      <div class="sem-card">
+        <div class="sem-swatch" style="background:#0D4C89"></div>
+        <div class="sem-body">
+          <div class="sem-name">Info foreground</div>
+          <div class="sem-hex">#0D4C89</div>
+          <div class="sem-role">Info text, link color</div>
+        </div>
+      </div>
+
+      <div class="sem-card">
+        <div class="sem-swatch" style="background:#F0F0F4;border:1px solid #EBEBEB"></div>
+        <div class="sem-body">
+          <div class="sem-name">Surface subtle</div>
+          <div class="sem-hex">#F0F0F4</div>
+          <div class="sem-role">Alt rows, sidebar bg, panels</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

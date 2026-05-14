@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 16px 18px; width: 820px; display: flex; flex-direction: column; gap: 20px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .card { background: #fff; border-radius: 10px; border: 1px solid #EBEBEB; padding: 16px 18px; }
+  .row { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; }
+
+  /* ══════════════════════════════════
+     SCROLL ELEMENT COMPONENT
+     eto-scrollbar__light / __dark
+     Width: 3x = 12px  |  Track radius: 2x = 8px
+  ══════════════════════════════════ */
+
+  /* Light variant tokens */
+  /* Track: rgba(#8A8A8A, 0.16) ≈ #E3E3E3 translucent */
+  /* Thumb: core-gray-25 ≈ #F5F5F5 ... actually #BFBFBF range */
+
+  /* ── Scroll element anatomy (standalone) ── */
+  .scroll-el {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+  .scroll-el-label {
+    font-size: 10px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.04em;
+  }
+
+  /* Vertical track */
+  .scroll-track-v {
+    width: 12px; height: 120px; border-radius: 8px;
+    position: relative; flex-shrink: 0;
+  }
+  /* Light track */
+  .scroll-track-v.light { background: rgba(138,138,138,0.16); }
+  /* Dark track */
+  .scroll-track-v.dark  { background: rgba(138,138,138,0.4); }
+
+  /* Thumb */
+  .scroll-thumb-v {
+    position: absolute; left: 2px; right: 2px;
+    border-radius: 6px; cursor: pointer;
+    transition: background 0.15s;
+  }
+  /* Light thumb — default */
+  .scroll-thumb-v.light { background: rgba(138,138,138,0.45); }
+  .scroll-thumb-v.light:hover { background: rgba(138,138,138,0.65); }
+  /* Light thumb — hover state shown */
+  .scroll-thumb-v.light-hover { background: rgba(138,138,138,0.65); }
+  /* Dark thumb */
+  .scroll-thumb-v.dark { background: rgba(221,221,229,0.4); }
+  .scroll-thumb-v.dark:hover { background: rgba(221,221,229,0.65); }
+  /* Dark thumb — hover */
+  .scroll-thumb-v.dark-hover { background: rgba(221,221,229,0.65); }
+
+  /* Horizontal track */
+  .scroll-track-h {
+    height: 12px; width: 200px; border-radius: 8px; position: relative; flex-shrink: 0;
+  }
+  .scroll-track-h.light { background: rgba(138,138,138,0.16); }
+  .scroll-track-h.dark  { background: rgba(138,138,138,0.4); }
+
+  .scroll-thumb-h {
+    position: absolute; top: 2px; bottom: 2px; border-radius: 6px; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .scroll-thumb-h.light { background: rgba(138,138,138,0.45); }
+  .scroll-thumb-h.light:hover { background: rgba(138,138,138,0.65); }
+  .scroll-thumb-h.dark { background: rgba(221,221,229,0.4); }
+  .scroll-thumb-h.dark:hover { background: rgba(221,221,229,0.65); }
+
+  /* ══════════════════════════════════
+     SCROLLBAR UTILITY CLASSES
+     (applied on containers)
+  ══════════════════════════════════ */
+  .eto-scrollbar-light::-webkit-scrollbar { width: 12px; height: 12px; }
+  .eto-scrollbar-light::-webkit-scrollbar-track { border-radius: 8px; background: rgba(138,138,138,0.16); }
+  .eto-scrollbar-light::-webkit-scrollbar-thumb { border-radius: 6px; background: rgba(138,138,138,0.45); border: 2px solid transparent; background-clip: padding-box; }
+  .eto-scrollbar-light::-webkit-scrollbar-thumb:hover { background: rgba(138,138,138,0.65); background-clip: padding-box; }
+  .eto-scrollbar-light::-webkit-scrollbar-corner { background: transparent; }
+
+  .eto-scrollbar-dark::-webkit-scrollbar { width: 12px; height: 12px; }
+  .eto-scrollbar-dark::-webkit-scrollbar-track { border-radius: 8px; background: rgba(138,138,138,0.4); }
+  .eto-scrollbar-dark::-webkit-scrollbar-thumb { border-radius: 6px; background: rgba(221,221,229,0.4); border: 2px solid transparent; background-clip: padding-box; }
+  .eto-scrollbar-dark::-webkit-scrollbar-thumb:hover { background: rgba(221,221,229,0.65); background-clip: padding-box; }
+  .eto-scrollbar-dark::-webkit-scrollbar-corner { background: transparent; }
+
+  /* List rows inside scroll boxes */
+  .scroll-box { border-radius: 8px; overflow: auto; }
+  .scroll-row { padding: 8px 12px; border-bottom: 1px solid #F0F0F4; font-size: 12px; color: #282828; display: flex; gap: 12px; }
+  .scroll-row:last-child { border-bottom: none; }
+  .scroll-row-id { color: #7239A4; font-weight: 500; width: 80px; flex-shrink: 0; }
+
+  /* Token table */
+  .tok { display: flex; flex-direction: column; gap: 4px; }
+  .tok-row { display: flex; gap: 8px; align-items: center; font-size: 11px; }
+  .tok-name { color: #8C8C8C; width: 180px; flex-shrink: 0; }
+  .tok-val { color: #282828; font-family: 'Roboto Mono', monospace; font-size: 10px; }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════
+       1. SCROLL ELEMENT — standalone variant
+  ═══════════════════════════════ -->
+  <div>
+    <div class="lbl">Scroll element — eto-scrollbar (standalone variants)</div>
+    <div class="card">
+      <div class="row">
+
+        <!-- Light vertical — default -->
+        <div class="scroll-el">
+          <div class="scroll-el-label">Light · Default</div>
+          <div style="display:flex;gap:4px;align-items:flex-start">
+            <div class="scroll-track-v light">
+              <div class="scroll-thumb-v light" style="height:44px;top:16px"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Light vertical — hover -->
+        <div class="scroll-el">
+          <div class="scroll-el-label">Light · Hover</div>
+          <div class="scroll-track-v light">
+            <div class="scroll-thumb-v light-hover" style="height:44px;top:16px"></div>
+          </div>
+        </div>
+
+        <!-- Light vertical — top position -->
+        <div class="scroll-el">
+          <div class="scroll-el-label">Light · Top</div>
+          <div class="scroll-track-v light">
+            <div class="scroll-thumb-v light" style="height:44px;top:2px"></div>
+          </div>
+        </div>
+
+        <!-- Light vertical — bottom position -->
+        <div class="scroll-el">
+          <div class="scroll-el-label">Light · Bottom</div>
+          <div class="scroll-track-v light">
+            <div class="scroll-thumb-v light" style="height:44px;bottom:2px;top:auto"></div>
+          </div>
+        </div>
+
+        <div style="width:1px;background:#F0F0F4;align-self:stretch"></div>
+
+        <!-- Dark vertical — default -->
+        <div class="scroll-el">
+          <div class="scroll-el-label">Dark · Default</div>
+          <div style="background:#282828;padding:8px;border-radius:8px">
+            <div class="scroll-track-v dark">
+              <div class="scroll-thumb-v dark" style="height:44px;top:16px"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dark vertical — hover -->
+        <div class="scroll-el">
+          <div class="scroll-el-label">Dark · Hover</div>
+          <div style="background:#282828;padding:8px;border-radius:8px">
+            <div class="scroll-track-v dark">
+              <div class="scroll-thumb-v dark-hover" style="height:44px;top:16px"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Horizontal variants -->
+      <div style="margin-top:20px;padding-top:16px;border-top:1px solid #F0F0F4">
+        <div class="lbl" style="margin-bottom:12px">Horizontal</div>
+        <div class="row">
+          <div class="scroll-el" style="align-items:flex-start">
+            <div class="scroll-el-label">Light · Default</div>
+            <div class="scroll-track-h light" style="width:200px">
+              <div class="scroll-thumb-h light" style="width:80px;left:30px"></div>
+            </div>
+          </div>
+          <div class="scroll-el" style="align-items:flex-start">
+            <div class="scroll-el-label">Light · Hover</div>
+            <div class="scroll-track-h light" style="width:200px">
+              <div class="scroll-thumb-h" style="width:80px;left:30px;background:rgba(138,138,138,0.65);border-radius:6px;"></div>
+            </div>
+          </div>
+          <div class="scroll-el" style="align-items:flex-start">
+            <div class="scroll-el-label" style="color:#282828">Dark · Default</div>
+            <div style="background:#282828;padding:8px;border-radius:8px">
+              <div class="scroll-track-h dark" style="width:200px">
+                <div class="scroll-thumb-h dark" style="width:80px;left:30px"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       2. IN CONTEXT — light surface
+  ═══════════════════════════════ -->
+  <div>
+    <div class="lbl">In context — eto-scrollbar__light</div>
+    <div class="row">
+
+      <!-- Vertical scroll -->
+      <div>
+        <div style="font-size:9px;color:#8C8C8C;margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em">Vertical</div>
+        <div class="scroll-box eto-scrollbar-light" style="height:200px;width:300px;border:1px solid #EBEBEB">
+          <div class="scroll-row"><span class="scroll-row-id">ORD-48201</span><span>Shanghai → Los Angeles</span></div>
+          <div class="scroll-row"><span class="scroll-row-id">ORD-48199</span><span>Hamburg → New York</span></div>
+          <div class="scroll-row"><span class="scroll-row-id">ORD-48198</span><span>Singapore → Sydney</span></div>
+          <div class="scroll-row"><span class="scroll-row-id">ORD-48195</span><span>Rotterdam → Montreal</span></div>
+          <div class="scroll-row"><span class="scroll-row-id">ORD-48192</span><span>Tokyo → Seattle</span></div>
+          <div class="scroll-row"><span class="scroll-row-id">ORD-48190</span><span>Dubai → London</span></div>
+          <div class="scroll-row"><span class="scroll-row-id">ORD-48188</span><span>Mumbai → Chicago</span></div>
+          <div class="scroll-row"><span class="scroll-row-id">ORD-48184</span><span>Oslo → Toronto</span></div>
+        </div>
+      </div>
+
+      <!-- Horizontal scroll -->
+      <div style="flex:1">
+        <div style="font-size:9px;color:#8C8C8C;margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em">Horizontal</div>
+        <div class="scroll-box eto-scrollbar-light" style="width:100%;border:1px solid #EBEBEB">
+          <div style="min-width:800px">
+            <div style="background:#F0F0F4;padding:6px 12px;border-bottom:1px solid #DDDDE5;display:flex;gap:16px;font-size:10px;font-weight:500;color:#5E5C75;text-transform:uppercase;letter-spacing:0.04em">
+              <span style="width:90px;flex-shrink:0">Order ID</span>
+              <span style="width:140px;flex-shrink:0">Origin</span>
+              <span style="width:140px;flex-shrink:0">Destination</span>
+              <span style="width:80px;flex-shrink:0">SKU</span>
+              <span style="width:70px;flex-shrink:0">Qty</span>
+              <span style="width:100px;flex-shrink:0">ETA</span>
+              <span style="width:90px;flex-shrink:0">Status</span>
+            </div>
+            <div class="scroll-row">
+              <span style="width:90px;flex-shrink:0;color:#7239A4;font-weight:500">ORD-48201</span>
+              <span style="width:140px;flex-shrink:0">Shanghai, CN</span>
+              <span style="width:140px;flex-shrink:0">Los Angeles, US</span>
+              <span style="width:80px;flex-shrink:0;font-family:monospace;font-size:11px">SKU-9483</span>
+              <span style="width:70px;flex-shrink:0">1,240</span>
+              <span style="width:100px;flex-shrink:0">15 Jan 2025</span>
+              <span style="width:90px;flex-shrink:0;color:#0D4C89">In transit</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       3. IN CONTEXT — dark surface
+  ═══════════════════════════════ -->
+  <div>
+    <div class="lbl">In context — eto-scrollbar__dark</div>
+    <div class="scroll-box eto-scrollbar-dark" style="height:200px;width:300px;background:#282828;border:1px solid #3F3F3F;border-radius:8px">
+      <div class="scroll-row" style="border-color:#3F3F3F;color:rgba(255,255,255,0.8)"><span class="scroll-row-id" style="color:#C0B4E8">ORD-48201</span><span>Shanghai → LA</span></div>
+      <div class="scroll-row" style="border-color:#3F3F3F;color:rgba(255,255,255,0.8)"><span class="scroll-row-id" style="color:#C0B4E8">ORD-48199</span><span>Hamburg → NY</span></div>
+      <div class="scroll-row" style="border-color:#3F3F3F;color:rgba(255,255,255,0.8)"><span class="scroll-row-id" style="color:#C0B4E8">ORD-48198</span><span>Singapore → Sydney</span></div>
+      <div class="scroll-row" style="border-color:#3F3F3F;color:rgba(255,255,255,0.8)"><span class="scroll-row-id" style="color:#C0B4E8">ORD-48195</span><span>Rotterdam → CA</span></div>
+      <div class="scroll-row" style="border-color:#3F3F3F;color:rgba(255,255,255,0.8)"><span class="scroll-row-id" style="color:#C0B4E8">ORD-48192</span><span>Tokyo → Seattle</span></div>
+      <div class="scroll-row" style="border-color:#3F3F3F;color:rgba(255,255,255,0.8)"><span class="scroll-row-id" style="color:#C0B4E8">ORD-48190</span><span>Dubai → London</span></div>
+      <div class="scroll-row" style="border-color:transparent;color:rgba(255,255,255,0.8)"><span class="scroll-row-id" style="color:#C0B4E8">ORD-48188</span><span>Mumbai → Chicago</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       4. TOKEN REFERENCE
+  ═══════════════════════════════ -->
+  <div>
+    <div class="lbl">Token reference — eto-scrollbar</div>
+    <div class="card">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div>
+          <div style="font-size:10px;font-weight:600;color:#282828;margin-bottom:8px">Light variant</div>
+          <div class="tok">
+            <div class="tok-row"><span class="tok-name">Track background</span><span class="tok-val">rgba(138,138,138, 0.16)</span></div>
+            <div class="tok-row"><span class="tok-name">Thumb background</span><span class="tok-val">rgba(138,138,138, 0.45)</span></div>
+            <div class="tok-row"><span class="tok-name">Thumb hover</span><span class="tok-val">rgba(138,138,138, 0.65)</span></div>
+            <div class="tok-row"><span class="tok-name">Thumb border</span><span class="tok-val">2px solid transparent</span></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:600;color:#282828;margin-bottom:8px">Dark variant</div>
+          <div class="tok">
+            <div class="tok-row"><span class="tok-name">Track background</span><span class="tok-val">rgba(138,138,138, 0.4)</span></div>
+            <div class="tok-row"><span class="tok-name">Thumb background</span><span class="tok-val">rgba(221,221,229, 0.4)</span></div>
+            <div class="tok-row"><span class="tok-name">Thumb hover</span><span class="tok-val">rgba(221,221,229, 0.65)</span></div>
+            <div class="tok-row"><span class="tok-name">Thumb border</span><span class="tok-val">2px solid transparent</span></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:600;color:#282828;margin-bottom:8px">Dimensions</div>
+          <div class="tok">
+            <div class="tok-row"><span class="tok-name">Width / height</span><span class="tok-val">12px (3x token)</span></div>
+            <div class="tok-row"><span class="tok-name">Track border-radius</span><span class="tok-val">8px (2x token)</span></div>
+            <div class="tok-row"><span class="tok-name">Thumb border-radius</span><span class="tok-val">6px</span></div>
+            <div class="tok-row"><span class="tok-name">Class light</span><span class="tok-val">eto-scrollbar__light</span></div>
+            <div class="tok-row"><span class="tok-name">Class dark</span><span class="tok-val">eto-scrollbar__dark</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

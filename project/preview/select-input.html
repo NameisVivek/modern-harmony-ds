@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 16px 18px; width: 820px; display: flex; flex-direction: column; gap: 20px; }
+
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .row { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-start; }
+  .divider { height: 1px; background: #F0F0F4; }
+
+  /* ── Field wrapper ── */
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field-label {
+    font-size: 12px; font-weight: 500; color: #282828; display: flex; align-items: center; gap: 3px;
+  }
+  .field-label .req { color: #E02F3A; }
+  .field-hint  { font-size: 10px; color: #8C8C8C; margin-top: 1px; }
+  .field-error { font-size: 10px; color: #E02F3A; display: flex; align-items: center; gap: 3px; margin-top: 1px; }
+  .field-error .material-icons { font-size: 12px; }
+
+  /* ══════════════════════════════════════
+     NATIVE SELECT  —  eto-select
+     ══════════════════════════════════════ */
+  .native-select-wrap {
+    position: relative; display: flex; align-items: center;
+  }
+  .native-select {
+    width: 100%; height: 32px;
+    padding: 0 32px 0 10px;
+    border: 1px solid #DDDDE5; border-radius: 8px;
+    background: #fff; color: #282828;
+    font-family: 'Switzer', sans-serif; font-size: 13px;
+    appearance: none; -webkit-appearance: none;
+    cursor: pointer; outline: none;
+    transition: border-color 0.1s, box-shadow 0.1s;
+  }
+  .native-select:hover:not(:disabled) { border-color: #BFBECE; }
+  .native-select:focus { border-color: #8342BB; box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(131,66,187,0.25); }
+  .native-select:disabled { background: #F0F0F4; color: #8C8C8C; cursor: not-allowed; border-color: #EBEBEB; }
+  .native-select.error { border-color: #E02F3A; }
+  .native-select.error:focus { box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(224,47,58,0.25); }
+  /* Caret icon */
+  .native-select-wrap::after {
+    content: 'expand_more'; font-family: 'Material Icons'; font-size: 18px;
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    color: #8C8C8C; pointer-events: none; line-height: 1;
+  }
+  .native-select-wrap.disabled::after { color: #BFBECE; }
+
+  /* optgroup styling */
+  optgroup { font-family: 'Switzer', sans-serif; font-size: 11px; color: #8C8C8C; }
+  option   { font-family: 'Switzer', sans-serif; font-size: 13px; color: #282828; }
+
+  /* ══════════════════════════════════════
+     CUSTOM SELECT  (e2select / single-select-list-menu)
+     ══════════════════════════════════════ */
+  .sel-wrap { position: relative; }
+
+  /* ── Trigger button ── */
+  .sel-trigger {
+    display: flex; align-items: center; min-height: 32px;
+    border: 1px solid #DDDDE5; border-radius: 8px;
+    padding: 4px 8px 4px 10px; background: #fff;
+    cursor: pointer; gap: 6px; user-select: none;
+    font-family: 'Switzer', sans-serif; font-size: 13px; color: #282828;
+    transition: border-color 0.1s, box-shadow 0.1s;
+  }
+  .sel-trigger:hover:not(.disabled) { border-color: #BFBECE; }
+  .sel-trigger.open   { border-color: #8342BB; box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(131,66,187,0.25); }
+  .sel-trigger.error  { border-color: #E02F3A; }
+  .sel-trigger.error.open { box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(224,47,58,0.25); }
+  .sel-trigger.disabled { background: #F0F0F4; color: #8C8C8C; cursor: not-allowed; border-color: #EBEBEB; pointer-events: none; }
+
+  /* Placeholder text */
+  .sel-placeholder { color: #8C8C8C; flex: 1; }
+  .sel-value { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* Leading icon in trigger */
+  .sel-lead-icon { display: flex; align-items: center; color: #8C8C8C; flex-shrink: 0; }
+  .sel-lead-icon .material-icons { font-size: 16px; }
+
+  /* Clear button */
+  .sel-clear {
+    display: flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px; border-radius: 50%; background: #DDDDE5;
+    cursor: pointer; flex-shrink: 0; opacity: 0; transition: opacity 0.1s;
+  }
+  .sel-trigger:hover .sel-clear,
+  .sel-trigger.open .sel-clear { opacity: 1; }
+  .sel-clear .material-icons { font-size: 12px; color: #5E5C75; }
+
+  /* Caret */
+  .sel-caret { color: #8C8C8C; flex-shrink: 0; transition: transform 0.15s; }
+  .sel-caret .material-icons { font-size: 18px; }
+  .sel-trigger.open .sel-caret { transform: rotate(180deg); }
+
+  /* Multi-select pills */
+  .sel-pills { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
+  .sel-pill {
+    display: inline-flex; align-items: center; gap: 3px;
+    height: 20px; padding: 0 6px;
+    background: rgba(131,66,187,0.1); border-radius: 9999px;
+    font-size: 11px; font-weight: 500; color: #7239A4; cursor: default;
+  }
+  .sel-pill-x {
+    display: flex; align-items: center; cursor: pointer;
+    width: 14px; height: 14px; border-radius: 50%;
+    justify-content: center; margin-left: 1px;
+  }
+  .sel-pill-x:hover { background: rgba(131,66,187,0.2); }
+  .sel-pill-x .material-icons { font-size: 11px; color: #7239A4; }
+
+  /* Count badge */
+  .sel-count {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 20px; min-width: 20px; padding: 0 5px;
+    background: #8342BB; border-radius: 9999px;
+    font-size: 10px; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+
+  /* ── Dropdown panel ── */
+  .sel-panel {
+    position: absolute; top: calc(100% + 4px); left: 0; min-width: 100%;
+    background: #fff; border: 1px solid #DDDDE5; border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(55,23,78,0.12), 0 2px 4px rgba(55,23,78,0.06);
+    z-index: 200; display: none; overflow: hidden;
+  }
+  .sel-panel.open { display: block; }
+
+  /* Search within panel */
+  .sel-search {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 10px; border-bottom: 1px solid #F0F0F4;
+  }
+  .sel-search .material-icons { font-size: 15px; color: #8C8C8C; flex-shrink: 0; }
+  .sel-search input {
+    flex: 1; border: none; outline: none; background: transparent;
+    font-family: 'Switzer', sans-serif; font-size: 13px; color: #282828;
+  }
+  .sel-search input::placeholder { color: #8C8C8C; }
+
+  /* Clear-all footer */
+  .sel-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 10px; border-top: 1px solid #F0F0F4;
+    font-size: 12px;
+  }
+  .sel-footer-count { color: #8C8C8C; }
+  .sel-footer-clear {
+    color: #7239A4; font-weight: 500; cursor: pointer;
+    background: none; border: none; font-family: 'Switzer', sans-serif;
+    font-size: 12px; padding: 0;
+  }
+  .sel-footer-clear:hover { text-decoration: underline; }
+
+  /* Option list */
+  .sel-list { max-height: 220px; overflow-y: auto; padding: 4px 0; }
+  .sel-list::-webkit-scrollbar { width: 4px; }
+  .sel-list::-webkit-scrollbar-thumb { background: #DDDDE5; border-radius: 2px; }
+
+  /* Group header */
+  .sel-group-label {
+    font-size: 9px; font-weight: 500; color: #8C8C8C;
+    letter-spacing: 0.07em; text-transform: uppercase;
+    padding: 8px 10px 3px;
+  }
+  .sel-group-sep { height: 1px; background: #F0F0F4; margin: 4px 0; }
+
+  /* Option item */
+  .sel-option {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 10px; cursor: pointer; font-size: 13px; color: #282828;
+    transition: background 0.08s; position: relative;
+  }
+  .sel-option:hover { background: #F8F8FB; }
+  .sel-option.focused { background: #F0F0F4; }
+  .sel-option.selected { background: rgba(131,66,187,0.06); color: #7239A4; font-weight: 500; }
+  .sel-option.disabled-opt { color: #BFBECE; cursor: not-allowed; }
+  .sel-option.disabled-opt:hover { background: transparent; }
+
+  /* Checkmark for selected */
+  .sel-check {
+    width: 15px; height: 15px; border-radius: 3px; border: 1.5px solid #BFBECE;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    transition: all 0.1s;
+  }
+  .sel-option.selected .sel-check { background: #8342BB; border-color: #8342BB; }
+  .sel-option.selected .sel-check::after {
+    content: ''; width: 8px; height: 4.5px;
+    border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translateY(-1px); display: block;
+  }
+
+  /* Leading icon in option */
+  .opt-icon { display: flex; align-items: center; flex-shrink: 0; }
+  .opt-icon .material-icons { font-size: 16px; color: #5E5C75; }
+
+  /* Avatar in option */
+  .opt-avatar {
+    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 600; color: #fff;
+  }
+
+  /* Option description */
+  .opt-desc { font-size: 11px; color: #8C8C8C; margin-top: 1px; }
+
+  /* Highlight match */
+  .opt-match { background: rgba(131,66,187,0.15); border-radius: 2px; }
+
+  /* Empty state */
+  .sel-empty {
+    padding: 14px 10px; text-align: center;
+    font-size: 12px; color: #8C8C8C;
+  }
+
+  /* ── State-demo rows ── */
+  .states-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     1. NATIVE SELECT — eto-select
+     ═══════════════════════════════════════════ -->
+<div>
+  <div class="lbl">Native select — eto-select (all states)</div>
+  <div class="states-row">
+
+    <div class="field">
+      <label class="field-label">Default</label>
+      <div class="native-select-wrap">
+        <select class="native-select">
+          <option value="">— Select —</option>
+          <option>All regions</option>
+          <option>APAC</option>
+          <option>EMEA</option>
+          <option>Americas</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Pre-selected / filled</label>
+      <div class="native-select-wrap">
+        <select class="native-select">
+          <option>All regions</option>
+          <option selected>APAC</option>
+          <option>EMEA</option>
+          <option>Americas</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Required <span class="req">*</span></label>
+      <div class="native-select-wrap">
+        <select class="native-select" required>
+          <option value="">— Select —</option>
+          <option>Supply Planner</option>
+          <option>Demand Analyst</option>
+          <option>Administrator</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Disabled</label>
+      <div class="native-select-wrap disabled">
+        <select class="native-select" disabled>
+          <option selected>APAC</option>
+          <option>EMEA</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Error state</label>
+      <div class="native-select-wrap">
+        <select class="native-select error">
+          <option value="">— Select —</option>
+          <option>Option A</option>
+        </select>
+      </div>
+      <div class="field-error"><span class="material-icons">error_outline</span>This field is required</div>
+    </div>
+
+    <div class="field" style="grid-column: span 3">
+      <label class="field-label">With optgroups</label>
+      <div class="native-select-wrap">
+        <select class="native-select" style="width:260px">
+          <option value="">— Select module —</option>
+          <optgroup label="Order Collaboration">
+            <option>Purchase Orders</option>
+            <option>Advance Ship Notices</option>
+            <option>Invoices</option>
+          </optgroup>
+          <optgroup label="Supply Collaboration">
+            <option>Forecast Collaboration</option>
+            <option>Replenishment</option>
+          </optgroup>
+          <optgroup label="Logistics">
+            <option>Shipment Tracking</option>
+            <option>Freight Management</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     2. CUSTOM SINGLE SELECT — e2select (searchable)
+     ═══════════════════════════════════════════ -->
+<div>
+  <div class="lbl">Custom single select — e2select / single-select-list-menu (searchable)</div>
+  <div class="row">
+
+    <!-- Default -->
+    <div class="field" style="width:200px">
+      <label class="field-label">Region</label>
+      <div class="sel-wrap">
+        <div class="sel-trigger" id="t-ss1" tabindex="0">
+          <span class="sel-placeholder" id="v-ss1">All regions</span>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-ss1">
+          <div class="sel-search"><span class="material-icons">search</span><input type="text" placeholder="Search…" oninput="filterOpts('p-ss1',this.value)" autocomplete="off"></div>
+          <div class="sel-list">
+            <div class="sel-option selected" data-val="All regions" onclick="pickSingle('t-ss1','v-ss1','p-ss1',this)"><span class="material-icons" style="font-size:15px;color:#8342BB;flex-shrink:0">check</span>All regions</div>
+            <div class="sel-option" data-val="APAC" onclick="pickSingle('t-ss1','v-ss1','p-ss1',this)">APAC</div>
+            <div class="sel-option" data-val="EMEA" onclick="pickSingle('t-ss1','v-ss1','p-ss1',this)">EMEA</div>
+            <div class="sel-option" data-val="Americas" onclick="pickSingle('t-ss1','v-ss1','p-ss1',this)">Americas</div>
+            <div class="sel-option" data-val="Global" onclick="pickSingle('t-ss1','v-ss1','p-ss1',this)">Global</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- With clear button -->
+    <div class="field" style="width:220px">
+      <label class="field-label">Density mode</label>
+      <div class="sel-wrap">
+        <div class="sel-trigger" id="t-ss2" tabindex="0">
+          <span class="sel-value" id="v-ss2">Comfy (default)</span>
+          <div class="sel-clear" onclick="clearSingle('t-ss2','v-ss2','Density mode…');event.stopPropagation()"><span class="material-icons">close</span></div>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-ss2">
+          <div class="sel-list">
+            <div class="sel-option selected" data-val="Comfy (default)" onclick="pickSingle('t-ss2','v-ss2','p-ss2',this)"><span class="material-icons" style="font-size:15px;color:#8342BB;flex-shrink:0">check</span>Comfy (default)</div>
+            <div class="sel-option" data-val="Cozy" onclick="pickSingle('t-ss2','v-ss2','p-ss2',this)">Cozy</div>
+            <div class="sel-option" data-val="Condensed" onclick="pickSingle('t-ss2','v-ss2','p-ss2',this)">Condensed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Required -->
+    <div class="field" style="width:200px">
+      <label class="field-label">Assigned to <span class="req">*</span></label>
+      <div class="sel-wrap">
+        <div class="sel-trigger" id="t-ss3" tabindex="0">
+          <span class="sel-placeholder" id="v-ss3">Select user…</span>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-ss3">
+          <div class="sel-search"><span class="material-icons">search</span><input type="text" placeholder="Search users…" oninput="filterOpts('p-ss3',this.value)" autocomplete="off"></div>
+          <div class="sel-list">
+            <div class="sel-option" data-val="Burton Guster" onclick="pickSingle('t-ss3','v-ss3','p-ss3',this)">Burton Guster</div>
+            <div class="sel-option" data-val="Juliet O'Hara" onclick="pickSingle('t-ss3','v-ss3','p-ss3',this)">Juliet O'Hara</div>
+            <div class="sel-option" data-val="Carlton Lassiter" onclick="pickSingle('t-ss3','v-ss3','p-ss3',this)">Carlton Lassiter</div>
+            <div class="sel-option" data-val="Shawn Spencer" onclick="pickSingle('t-ss3','v-ss3','p-ss3',this)">Shawn Spencer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div class="field" style="width:200px">
+      <label class="field-label">Base forecast</label>
+      <div class="sel-wrap">
+        <div class="sel-trigger error" id="t-ss4" tabindex="0">
+          <span class="sel-placeholder" id="v-ss4">Select model…</span>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-ss4">
+          <div class="sel-list">
+            <div class="sel-option" data-val="Standard demand" onclick="pickSingle('t-ss4','v-ss4','p-ss4',this)">Standard demand</div>
+            <div class="sel-option" data-val="AI-assisted forecast" onclick="pickSingle('t-ss4','v-ss4','p-ss4',this)">AI-assisted forecast</div>
+            <div class="sel-option" data-val="Manual baseline" onclick="pickSingle('t-ss4','v-ss4','p-ss4',this)">Manual baseline</div>
+          </div>
+        </div>
+      </div>
+      <div class="field-error"><span class="material-icons">error_outline</span>Please select a forecast model</div>
+    </div>
+
+    <!-- Disabled -->
+    <div class="field" style="width:200px">
+      <label class="field-label">Currency (locked)</label>
+      <div class="sel-wrap">
+        <div class="sel-trigger disabled" tabindex="-1">
+          <span class="sel-value">USD — US Dollar</span>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     3. SELECT WITH LEADING ICONS
+     ═══════════════════════════════════════════ -->
+<div>
+  <div class="lbl">With leading icons in options</div>
+  <div class="row">
+
+    <div class="field" style="width:220px">
+      <label class="field-label">Module</label>
+      <div class="sel-wrap">
+        <div class="sel-trigger" id="t-ic1" tabindex="0">
+          <div class="sel-lead-icon" id="i-ic1"><span class="material-icons">local_shipping</span></div>
+          <span class="sel-value" id="v-ic1">Supply Management</span>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-ic1">
+          <div class="sel-search"><span class="material-icons">search</span><input type="text" placeholder="Search…" oninput="filterOpts('p-ic1',this.value)" autocomplete="off"></div>
+          <div class="sel-list">
+            <div class="sel-option selected" data-val="Supply Management" data-icon="local_shipping" onclick="pickWithIcon('t-ic1','v-ic1','i-ic1','p-ic1',this)"><div class="opt-icon"><span class="material-icons">local_shipping</span></div>Supply Management</div>
+            <div class="sel-option" data-val="Order Collaboration" data-icon="assignment" onclick="pickWithIcon('t-ic1','v-ic1','i-ic1','p-ic1',this)"><div class="opt-icon"><span class="material-icons">assignment</span></div>Order Collaboration</div>
+            <div class="sel-option" data-val="Demand Forecasting" data-icon="assessment" onclick="pickWithIcon('t-ic1','v-ic1','i-ic1','p-ic1',this)"><div class="opt-icon"><span class="material-icons">assessment</span></div>Demand Forecasting</div>
+            <div class="sel-option" data-val="S&OP Planning" data-icon="insert_chart_outlined" onclick="pickWithIcon('t-ic1','v-ic1','i-ic1','p-ic1',this)"><div class="opt-icon"><span class="material-icons">insert_chart_outlined</span></div>S&amp;OP Planning</div>
+            <div class="sel-option" data-val="Trade Compliance" data-icon="verified_user" onclick="pickWithIcon('t-ic1','v-ic1','i-ic1','p-ic1',this)"><div class="opt-icon"><span class="material-icons">verified_user</span></div>Trade Compliance</div>
+            <div class="sel-option" data-val="Reports" data-icon="bar_chart" onclick="pickWithIcon('t-ic1','v-ic1','i-ic1','p-ic1',this)"><div class="opt-icon"><span class="material-icons">bar_chart</span></div>Reports</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status with coloured dots -->
+    <div class="field" style="width:200px">
+      <label class="field-label">Status filter</label>
+      <div class="sel-wrap">
+        <div class="sel-trigger" id="t-ic2" tabindex="0">
+          <div class="sel-lead-icon" id="i-ic2"><span style="width:8px;height:8px;border-radius:50%;background:#3399FF;display:inline-block"></span></div>
+          <span class="sel-value" id="v-ic2">In transit</span>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-ic2">
+          <div class="sel-list">
+            <div class="sel-option" data-val="All statuses" onclick="pickSingle('t-ic2','v-ic2','p-ic2',this)"><span style="width:8px;height:8px;border-radius:50%;background:#8C8C8C;display:inline-block;flex-shrink:0"></span>All statuses</div>
+            <div class="sel-option selected" data-val="In transit" onclick="pickSingle('t-ic2','v-ic2','p-ic2',this)"><span style="width:8px;height:8px;border-radius:50%;background:#3399FF;display:inline-block;flex-shrink:0"></span>In transit</div>
+            <div class="sel-option" data-val="On track" onclick="pickSingle('t-ic2','v-ic2','p-ic2',this)"><span style="width:8px;height:8px;border-radius:50%;background:#5BD6A0;display:inline-block;flex-shrink:0"></span>On track</div>
+            <div class="sel-option" data-val="Delayed" onclick="pickSingle('t-ic2','v-ic2','p-ic2',this)"><span style="width:8px;height:8px;border-radius:50%;background:#E02F3A;display:inline-block;flex-shrink:0"></span>Delayed</div>
+            <div class="sel-option" data-val="Warning" onclick="pickSingle('t-ic2','v-ic2','p-ic2',this)"><span style="width:8px;height:8px;border-radius:50%;background:#FFB84D;display:inline-block;flex-shrink:0"></span>Warning</div>
+            <div class="sel-option" data-val="Completed" onclick="pickSingle('t-ic2','v-ic2','p-ic2',this)"><span style="width:8px;height:8px;border-radius:50%;background:#8C8C8C;display:inline-block;flex-shrink:0"></span>Completed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     4. SELECT WITH GROUPED OPTIONS (optgroups)
+     ═══════════════════════════════════════════ -->
+<div>
+  <div class="lbl">Grouped options — custom optgroups</div>
+  <div class="row">
+    <div class="field" style="width:260px">
+      <label class="field-label">Select module</label>
+      <div class="sel-wrap">
+        <div class="sel-trigger" id="t-gr1" tabindex="0">
+          <span class="sel-placeholder" id="v-gr1">Choose a module…</span>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-gr1">
+          <div class="sel-search"><span class="material-icons">search</span><input type="text" placeholder="Search modules…" oninput="filterOpts('p-gr1',this.value)" autocomplete="off"></div>
+          <div class="sel-list">
+            <div class="sel-group-label">Order Collaboration</div>
+            <div class="sel-option" data-val="Purchase Orders" onclick="pickSingle('t-gr1','v-gr1','p-gr1',this)">Purchase Orders</div>
+            <div class="sel-option" data-val="Advance Ship Notices" onclick="pickSingle('t-gr1','v-gr1','p-gr1',this)">Advance Ship Notices</div>
+            <div class="sel-option" data-val="Invoices" onclick="pickSingle('t-gr1','v-gr1','p-gr1',this)">Invoices</div>
+            <div class="sel-option" data-val="Receipts" onclick="pickSingle('t-gr1','v-gr1','p-gr1',this)">Receipts</div>
+            <div class="sel-group-sep"></div>
+            <div class="sel-group-label">Supply Collaboration</div>
+            <div class="sel-option" data-val="Forecast Collaboration" onclick="pickSingle('t-gr1','v-gr1','p-gr1',this)">Forecast Collaboration</div>
+            <div class="sel-option" data-val="Replenishment" onclick="pickSingle('t-gr1','v-gr1','p-gr1',this)">Replenishment</div>
+            <div class="sel-group-sep"></div>
+            <div class="sel-group-label">Logistics</div>
+            <div class="sel-option" data-val="Shipment Tracking" onclick="pickSingle('t-gr1','v-gr1','p-gr1',this)">Shipment Tracking</div>
+            <div class="sel-option" data-val="Freight Management" onclick="pickSingle('t-gr1','v-gr1','p-gr1',this)">Freight Management</div>
+            <div class="sel-option" data-val="Customs & Compliance" onclick="pickSingle('t-gr1','v-gr1','p-gr1',this)">Customs &amp; Compliance</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- With disabled options -->
+    <div class="field" style="width:240px">
+      <label class="field-label">Planning horizon</label>
+      <div class="sel-wrap">
+        <div class="sel-trigger" id="t-gr2" tabindex="0">
+          <span class="sel-value" id="v-gr2">Rolling 13 weeks</span>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-gr2">
+          <div class="sel-list">
+            <div class="sel-group-label">Short term</div>
+            <div class="sel-option selected" data-val="Rolling 13 weeks" onclick="pickSingle('t-gr2','v-gr2','p-gr2',this)"><span class="material-icons" style="font-size:15px;color:#8342BB;flex-shrink:0">check</span>Rolling 13 weeks</div>
+            <div class="sel-option" data-val="Rolling 26 weeks" onclick="pickSingle('t-gr2','v-gr2','p-gr2',this)">Rolling 26 weeks</div>
+            <div class="sel-group-sep"></div>
+            <div class="sel-group-label">Medium term</div>
+            <div class="sel-option" data-val="Rolling 52 weeks" onclick="pickSingle('t-gr2','v-gr2','p-gr2',this)">Rolling 52 weeks</div>
+            <div class="sel-option" data-val="18 months" onclick="pickSingle('t-gr2','v-gr2','p-gr2',this)">18 months</div>
+            <div class="sel-group-sep"></div>
+            <div class="sel-group-label">Long term</div>
+            <div class="sel-option" data-val="3 years" onclick="pickSingle('t-gr2','v-gr2','p-gr2',this)">3 years</div>
+            <div class="sel-option disabled-opt">5 years (Enterprise only)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     5. MULTI-SELECT  with pills + checkboxes
+     ═══════════════════════════════════════════ -->
+<div>
+  <div class="lbl">Multi-select — pills, checkboxes, select-all, clear-all</div>
+  <div class="row">
+
+    <!-- Tags as pills -->
+    <div class="field" style="width:320px">
+      <label class="field-label">Filter by status</label>
+      <div class="sel-wrap" id="ms1-wrap">
+        <div class="sel-trigger" id="t-ms1" tabindex="0" style="flex-wrap:wrap;min-height:32px;padding:4px 6px;gap:4px;align-items:center">
+          <div class="sel-pills" id="pills-ms1">
+            <span class="sel-pill">In transit<span class="sel-pill-x" onclick="removePill('ms1','In transit');event.stopPropagation()"><span class="material-icons">close</span></span></span>
+            <span class="sel-pill">Delayed<span class="sel-pill-x" onclick="removePill('ms1','Delayed');event.stopPropagation()"><span class="material-icons">close</span></span></span>
+          </div>
+          <div class="sel-caret" style="margin-left:auto"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-ms1">
+          <div class="sel-search"><span class="material-icons">search</span><input type="text" placeholder="Search…" oninput="filterOpts('p-ms1',this.value)" autocomplete="off"></div>
+          <div class="sel-list" id="l-ms1">
+            <div class="sel-option" data-val="All statuses" onclick="toggleMulti('ms1',this,'pills-ms1')"><div class="sel-check"></div>All statuses</div>
+            <div class="sel-option selected" data-val="In transit" onclick="toggleMulti('ms1',this,'pills-ms1')"><div class="sel-check"></div>In transit</div>
+            <div class="sel-option selected" data-val="Delayed" onclick="toggleMulti('ms1',this,'pills-ms1')"><div class="sel-check"></div>Delayed</div>
+            <div class="sel-option" data-val="On track" onclick="toggleMulti('ms1',this,'pills-ms1')"><div class="sel-check"></div>On track</div>
+            <div class="sel-option" data-val="Warning" onclick="toggleMulti('ms1',this,'pills-ms1')"><div class="sel-check"></div>Warning</div>
+            <div class="sel-option" data-val="Completed" onclick="toggleMulti('ms1',this,'pills-ms1')"><div class="sel-check"></div>Completed</div>
+            <div class="sel-option" data-val="Cancelled" onclick="toggleMulti('ms1',this,'pills-ms1')"><div class="sel-check"></div>Cancelled</div>
+          </div>
+          <div class="sel-footer">
+            <span class="sel-footer-count" id="cnt-ms1">2 selected</span>
+            <button class="sel-footer-clear" onclick="clearMulti('ms1','pills-ms1')">Clear all</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Count badge variant -->
+    <div class="field" style="width:280px">
+      <label class="field-label">Regions</label>
+      <div class="sel-wrap" id="ms2-wrap">
+        <div class="sel-trigger" id="t-ms2" tabindex="0">
+          <span class="sel-value" id="v-ms2" style="flex:1">3 regions selected</span>
+          <span class="sel-count" id="cnt-badge-ms2">3</span>
+          <div class="sel-clear" onclick="clearMultiBadge('ms2');event.stopPropagation()"><span class="material-icons">close</span></div>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-ms2">
+          <div class="sel-search"><span class="material-icons">search</span><input type="text" placeholder="Search regions…" oninput="filterOpts('p-ms2',this.value)" autocomplete="off"></div>
+          <div class="sel-list" id="l-ms2">
+            <div class="sel-option" data-val="All" onclick="toggleMultiBadge('ms2',this)"><div class="sel-check"></div>All regions</div>
+            <div class="sel-option selected" data-val="APAC" onclick="toggleMultiBadge('ms2',this)"><div class="sel-check"></div>APAC</div>
+            <div class="sel-option selected" data-val="EMEA" onclick="toggleMultiBadge('ms2',this)"><div class="sel-check"></div>EMEA</div>
+            <div class="sel-option selected" data-val="Americas" onclick="toggleMultiBadge('ms2',this)"><div class="sel-check"></div>Americas</div>
+            <div class="sel-option" data-val="MEA" onclick="toggleMultiBadge('ms2',this)"><div class="sel-check"></div>MEA</div>
+            <div class="sel-option" data-val="Global" onclick="toggleMultiBadge('ms2',this)"><div class="sel-check"></div>Global</div>
+          </div>
+          <div class="sel-footer">
+            <span class="sel-footer-count" id="cnt-ms2">3 selected</span>
+            <button class="sel-footer-clear" onclick="clearMultiBadge('ms2')">Clear all</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     6. AUTOCOMPLETE — live filter as you type
+     ═══════════════════════════════════════════ -->
+<div>
+  <div class="lbl">Autocomplete — e2select with live search + async pattern</div>
+  <div class="row">
+
+    <div class="field" style="width:300px">
+      <label class="field-label">Search &amp; select country</label>
+      <div class="sel-wrap">
+        <div class="sel-trigger" id="t-ac1" style="padding:0">
+          <div style="display:flex;align-items:center;gap:6px;flex:1;padding:0 8px 0 10px;height:32px">
+            <span class="material-icons" style="font-size:15px;color:#8C8C8C;flex-shrink:0">search</span>
+            <input id="ac1-input" type="text" placeholder="Type to search…" autocomplete="off"
+              style="flex:1;border:none;outline:none;font-family:'Switzer',sans-serif;font-size:13px;color:#282828;background:transparent;"
+              oninput="acFilter('ac1',this.value)"
+              onfocus="openPanel('t-ac1','p-ac1')"
+              onkeydown="acKeydown('ac1',event)">
+            <div class="sel-clear" id="ac1-clear" onclick="clearAc('ac1');event.stopPropagation()" style="opacity:0"><span class="material-icons">close</span></div>
+          </div>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-ac1">
+          <div class="sel-list" id="l-ac1">
+            <div class="sel-option" data-val="Australia" onclick="pickAc('ac1','Australia')">Australia</div>
+            <div class="sel-option" data-val="Belgium" onclick="pickAc('ac1','Belgium')">Belgium</div>
+            <div class="sel-option" data-val="Canada" onclick="pickAc('ac1','Canada')">Canada</div>
+            <div class="sel-option" data-val="China" onclick="pickAc('ac1','China')">China</div>
+            <div class="sel-option" data-val="France" onclick="pickAc('ac1','France')">France</div>
+            <div class="sel-option" data-val="Germany" onclick="pickAc('ac1','Germany')">Germany</div>
+            <div class="sel-option" data-val="India" onclick="pickAc('ac1','India')">India</div>
+            <div class="sel-option" data-val="Japan" onclick="pickAc('ac1','Japan')">Japan</div>
+            <div class="sel-option" data-val="Netherlands" onclick="pickAc('ac1','Netherlands')">Netherlands</div>
+            <div class="sel-option" data-val="Singapore" onclick="pickAc('ac1','Singapore')">Singapore</div>
+            <div class="sel-option" data-val="United Kingdom" onclick="pickAc('ac1','United Kingdom')">United Kingdom</div>
+            <div class="sel-option" data-val="United States" onclick="pickAc('ac1','United States')">United States</div>
+          </div>
+          <div class="sel-empty" id="empty-ac1" style="display:none">No results match your search</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- With avatar options -->
+    <div class="field" style="width:280px">
+      <label class="field-label">Assign to user</label>
+      <div class="sel-wrap">
+        <div class="sel-trigger" id="t-av1" style="padding:0">
+          <div style="display:flex;align-items:center;gap:8px;flex:1;padding:0 8px 0 10px;height:32px">
+            <div id="av1-avatar" style="display:none;width:20px;height:20px;border-radius:50%;background:#8342BB;align-items:center;justify-content:center;font-size:8px;font-weight:600;color:#fff;flex-shrink:0"></div>
+            <input id="av1-input" type="text" placeholder="Search users…" autocomplete="off"
+              style="flex:1;border:none;outline:none;font-family:'Switzer',sans-serif;font-size:13px;color:#282828;background:transparent;"
+              oninput="avFilter('av1',this.value)"
+              onfocus="openPanel('t-av1','p-av1')">
+          </div>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-av1">
+          <div class="sel-list" id="l-av1">
+            <div class="sel-option" data-val="Burton Guster" data-initials="BG" data-color="#8342BB" onclick="pickAv('av1',this)">
+              <div class="opt-avatar" style="background:#8342BB">BG</div>
+              <div><div>Burton Guster</div><div class="opt-desc">Supply Planner</div></div>
+            </div>
+            <div class="sel-option" data-val="Juliet O'Hara" data-initials="JO" data-color="#27854D" onclick="pickAv('av1',this)">
+              <div class="opt-avatar" style="background:#27854D">JO</div>
+              <div><div>Juliet O'Hara</div><div class="opt-desc">Demand Analyst</div></div>
+            </div>
+            <div class="sel-option" data-val="Carlton Lassiter" data-initials="CL" data-color="#0066CC" onclick="pickAv('av1',this)">
+              <div class="opt-avatar" style="background:#0066CC">CL</div>
+              <div><div>Carlton Lassiter</div><div class="opt-desc">Administrator</div></div>
+            </div>
+            <div class="sel-option" data-val="Shawn Spencer" data-initials="SS" data-color="#C47A00" onclick="pickAv('av1',this)">
+              <div class="opt-avatar" style="background:#C47A00">SS</div>
+              <div><div>Shawn Spencer</div><div class="opt-desc">Logistics Manager</div></div>
+            </div>
+          </div>
+          <div class="sel-empty" id="empty-av1" style="display:none">No users found</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     7. MULTI-SELECT — Select All / Clear All header
+        + show-selected-only toggle (single-select-list-menu style)
+     ═══════════════════════════════════════════ -->
+<div class="divider"></div>
+
+<div>
+  <div class="lbl">Multi-select — Select All / Clear All header + show selected toggle</div>
+  <div class="row">
+
+    <!-- Select All / Clear All in panel header -->
+    <div class="field" style="width:300px">
+      <label class="field-label">Notify on event</label>
+      <div class="sel-wrap" id="sa1-wrap">
+        <div class="sel-trigger" id="t-sa1" tabindex="0">
+          <span id="v-sa1" class="sel-placeholder">Choose events…</span>
+          <span class="sel-count" id="cnt-badge-sa1" style="display:none">0</span>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-sa1">
+          <!-- Select All / Clear All header bar -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #F0F0F4;background:#F8F8FB">
+            <button class="sel-footer-clear" onclick="selectAllOpts('sa1')">Select all</button>
+            <button class="sel-footer-clear" onclick="clearAllOpts('sa1')">Clear all</button>
+          </div>
+          <div class="sel-search"><span class="material-icons">search</span><input type="text" placeholder="Search events…" oninput="filterOpts('p-sa1',this.value)" autocomplete="off"></div>
+          <div class="sel-list" id="l-sa1">
+            <div class="sel-option selected" data-val="Shipment delayed" onclick="toggleSA('sa1',this)"><div class="sel-check"></div>Shipment delayed</div>
+            <div class="sel-option selected" data-val="Forecast deviation" onclick="toggleSA('sa1',this)"><div class="sel-check"></div>Forecast deviation</div>
+            <div class="sel-option" data-val="S&OP approved" onclick="toggleSA('sa1',this)"><div class="sel-check"></div>S&amp;OP approved</div>
+            <div class="sel-option" data-val="Order created" onclick="toggleSA('sa1',this)"><div class="sel-check"></div>Order created</div>
+            <div class="sel-option" data-val="Order cancelled" onclick="toggleSA('sa1',this)"><div class="sel-check"></div>Order cancelled</div>
+            <div class="sel-option" data-val="New AI forecast" onclick="toggleSA('sa1',this)"><div class="sel-check"></div>New AI forecast</div>
+            <div class="sel-option" data-val="System maintenance" onclick="toggleSA('sa1',this)"><div class="sel-check"></div>System maintenance</div>
+          </div>
+          <div class="sel-footer">
+            <span class="sel-footer-count" id="cnt-sa1">2 selected</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Show selected only toggle -->
+    <div class="field" style="width:300px">
+      <label class="field-label">Columns visible</label>
+      <div class="sel-wrap" id="so1-wrap">
+        <div class="sel-trigger" id="t-so1" tabindex="0">
+          <span id="v-so1" class="sel-placeholder" style="flex:1">Choose columns…</span>
+          <span class="sel-count" id="cnt-badge-so1" style="display:none">0</span>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-so1" style="min-width:260px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #F0F0F4;background:#F8F8FB">
+            <button class="sel-footer-clear" onclick="selectAllOpts('so1')">Select all</button>
+            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-family:'Switzer',sans-serif;font-size:11px;color:#5E5C75">
+              <input type="checkbox" id="chk-so1" style="accent-color:#8342BB;width:13px;height:13px" onchange="toggleShowSelected('so1',this.checked)">
+              Show selected only
+            </label>
+            <button class="sel-footer-clear" onclick="clearAllOpts('so1')">Clear all</button>
+          </div>
+          <div class="sel-search"><span class="material-icons">search</span><input type="text" placeholder="Search columns…" oninput="filterOpts('p-so1',this.value)" autocomplete="off"></div>
+          <div class="sel-list" id="l-so1">
+            <div class="sel-option selected" data-val="Order ID" onclick="toggleSA('so1',this)"><div class="sel-check"></div>Order ID</div>
+            <div class="sel-option selected" data-val="Origin" onclick="toggleSA('so1',this)"><div class="sel-check"></div>Origin</div>
+            <div class="sel-option selected" data-val="Destination" onclick="toggleSA('so1',this)"><div class="sel-check"></div>Destination</div>
+            <div class="sel-option" data-val="SKU" onclick="toggleSA('so1',this)"><div class="sel-check"></div>SKU</div>
+            <div class="sel-option selected" data-val="Quantity" onclick="toggleSA('so1',this)"><div class="sel-check"></div>Quantity</div>
+            <div class="sel-option" data-val="ETA" onclick="toggleSA('so1',this)"><div class="sel-check"></div>ETA</div>
+            <div class="sel-option selected" data-val="Status" onclick="toggleSA('so1',this)"><div class="sel-check"></div>Status</div>
+            <div class="sel-option" data-val="Carrier" onclick="toggleSA('so1',this)"><div class="sel-check"></div>Carrier</div>
+            <div class="sel-option" data-val="Last updated" onclick="toggleSA('so1',this)"><div class="sel-check"></div>Last updated</div>
+          </div>
+          <div class="sel-footer">
+            <span class="sel-footer-count" id="cnt-so1">5 selected</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     8. MULTI-SELECT — Grouped options
+     ═══════════════════════════════════════════ -->
+<div class="divider"></div>
+
+<div>
+  <div class="lbl">Multi-select — grouped options with select-all per group</div>
+  <div class="row">
+
+    <div class="field" style="width:340px">
+      <label class="field-label">Modules to include in export</label>
+      <div class="sel-wrap" id="mg1-wrap">
+        <div class="sel-trigger" id="t-mg1" tabindex="0" style="flex-wrap:wrap;min-height:32px;padding:4px 6px;gap:4px;align-items:center">
+          <div class="sel-pills" id="pills-mg1">
+            <span class="sel-pill">Purchase Orders<span class="sel-pill-x" onclick="removePillG('mg1','Purchase Orders');event.stopPropagation()"><span class="material-icons">close</span></span></span>
+            <span class="sel-pill">Shipment Tracking<span class="sel-pill-x" onclick="removePillG('mg1','Shipment Tracking');event.stopPropagation()"><span class="material-icons">close</span></span></span>
+          </div>
+          <div class="sel-caret" style="margin-left:auto"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-mg1">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #F0F0F4;background:#F8F8FB">
+            <button class="sel-footer-clear" onclick="selectAllOpts('mg1')">Select all</button>
+            <button class="sel-footer-clear" onclick="clearAllMultiG('mg1','pills-mg1')">Clear all</button>
+          </div>
+          <div class="sel-search"><span class="material-icons">search</span><input type="text" placeholder="Search modules…" oninput="filterOpts('p-mg1',this.value)" autocomplete="off"></div>
+          <div class="sel-list" id="l-mg1">
+            <div class="sel-group-label">Order Collaboration</div>
+            <div class="sel-option selected" data-val="Purchase Orders" onclick="toggleMultiG('mg1',this,'pills-mg1')"><div class="sel-check"></div>Purchase Orders</div>
+            <div class="sel-option" data-val="Advance Ship Notices" onclick="toggleMultiG('mg1',this,'pills-mg1')"><div class="sel-check"></div>Advance Ship Notices</div>
+            <div class="sel-option" data-val="Invoices" onclick="toggleMultiG('mg1',this,'pills-mg1')"><div class="sel-check"></div>Invoices</div>
+            <div class="sel-group-sep"></div>
+            <div class="sel-group-label">Logistics</div>
+            <div class="sel-option selected" data-val="Shipment Tracking" onclick="toggleMultiG('mg1',this,'pills-mg1')"><div class="sel-check"></div>Shipment Tracking</div>
+            <div class="sel-option" data-val="Freight Management" onclick="toggleMultiG('mg1',this,'pills-mg1')"><div class="sel-check"></div>Freight Management</div>
+            <div class="sel-group-sep"></div>
+            <div class="sel-group-label">Analytics</div>
+            <div class="sel-option" data-val="S&OP Reports" onclick="toggleMultiG('mg1',this,'pills-mg1')"><div class="sel-check"></div>S&amp;OP Reports</div>
+            <div class="sel-option" data-val="Forecast Summary" onclick="toggleMultiG('mg1',this,'pills-mg1')"><div class="sel-check"></div>Forecast Summary</div>
+          </div>
+          <div class="sel-footer">
+            <span class="sel-footer-count" id="cnt-mg1">2 selected</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compact grouped — badge count only -->
+    <div class="field" style="width:260px">
+      <label class="field-label">Report columns</label>
+      <div class="sel-wrap" id="mg2-wrap">
+        <div class="sel-trigger" id="t-mg2" tabindex="0">
+          <span id="v-mg2" class="sel-value" style="flex:1">4 columns selected</span>
+          <span class="sel-count" id="cnt-badge-mg2">4</span>
+          <div class="sel-clear" onclick="clearAllMultiG('mg2',null);event.stopPropagation()"><span class="material-icons">close</span></div>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-mg2">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #F0F0F4;background:#F8F8FB">
+            <button class="sel-footer-clear" onclick="selectAllOpts('mg2')">Select all</button>
+            <button class="sel-footer-clear" onclick="clearAllMultiG('mg2',null)">Clear all</button>
+          </div>
+          <div class="sel-list" id="l-mg2">
+            <div class="sel-group-label">Identifiers</div>
+            <div class="sel-option selected" data-val="Order ID" onclick="toggleMultiG('mg2',this,null)"><div class="sel-check"></div>Order ID</div>
+            <div class="sel-option selected" data-val="SKU" onclick="toggleMultiG('mg2',this,null)"><div class="sel-check"></div>SKU</div>
+            <div class="sel-group-sep"></div>
+            <div class="sel-group-label">Dates</div>
+            <div class="sel-option selected" data-val="Created date" onclick="toggleMultiG('mg2',this,null)"><div class="sel-check"></div>Created date</div>
+            <div class="sel-option selected" data-val="ETA" onclick="toggleMultiG('mg2',this,null)"><div class="sel-check"></div>ETA</div>
+            <div class="sel-option" data-val="Updated date" onclick="toggleMultiG('mg2',this,null)"><div class="sel-check"></div>Updated date</div>
+            <div class="sel-group-sep"></div>
+            <div class="sel-group-label">Values</div>
+            <div class="sel-option" data-val="Quantity" onclick="toggleMultiG('mg2',this,null)"><div class="sel-check"></div>Quantity</div>
+            <div class="sel-option" data-val="Unit price" onclick="toggleMultiG('mg2',this,null)"><div class="sel-check"></div>Unit price</div>
+          </div>
+          <div class="sel-footer">
+            <span class="sel-footer-count" id="cnt-mg2">4 selected</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     9. MULTI-SELECT — Avatar / user options
+     ═══════════════════════════════════════════ -->
+<div class="divider"></div>
+
+<div>
+  <div class="lbl">Multi-select — avatar options (user assignment)</div>
+  <div class="row">
+
+    <div class="field" style="width:340px">
+      <label class="field-label">Assign reviewers</label>
+      <div class="sel-wrap" id="mav1-wrap">
+        <div class="sel-trigger" id="t-mav1" tabindex="0" style="flex-wrap:wrap;min-height:32px;padding:4px 6px;gap:4px;align-items:center">
+          <div class="sel-pills" id="pills-mav1">
+            <span class="sel-pill" style="background:rgba(39,133,77,0.1);color:#27854D">JO<span class="sel-pill-x" onclick="removePillG('mav1','Juliet O\'Hara');event.stopPropagation()"><span class="material-icons">close</span></span></span>
+          </div>
+          <div class="sel-caret" style="margin-left:auto"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-mav1">
+          <div class="sel-search"><span class="material-icons">search</span><input type="text" placeholder="Search users…" oninput="filterOpts('p-mav1',this.value)" autocomplete="off"></div>
+          <div class="sel-list" id="l-mav1">
+            <div class="sel-option" data-val="Burton Guster" onclick="toggleMultiAvatar('mav1',this,'pills-mav1')" style="gap:8px">
+              <div class="sel-check"></div>
+              <div class="opt-avatar" style="background:#8342BB">BG</div>
+              <div><div style="font-size:13px">Burton Guster</div><div class="opt-desc">Supply Planner</div></div>
+            </div>
+            <div class="sel-option selected" data-val="Juliet O'Hara" data-color="rgba(39,133,77,0.1)" data-pill-color="#27854D" data-initials="JO" onclick="toggleMultiAvatar('mav1',this,'pills-mav1')" style="gap:8px">
+              <div class="sel-check"></div>
+              <div class="opt-avatar" style="background:#27854D">JO</div>
+              <div><div style="font-size:13px">Juliet O'Hara</div><div class="opt-desc">Demand Analyst</div></div>
+            </div>
+            <div class="sel-option" data-val="Carlton Lassiter" onclick="toggleMultiAvatar('mav1',this,'pills-mav1')" style="gap:8px">
+              <div class="sel-check"></div>
+              <div class="opt-avatar" style="background:#0066CC">CL</div>
+              <div><div style="font-size:13px">Carlton Lassiter</div><div class="opt-desc">Administrator</div></div>
+            </div>
+            <div class="sel-option" data-val="Shawn Spencer" onclick="toggleMultiAvatar('mav1',this,'pills-mav1')" style="gap:8px">
+              <div class="sel-check"></div>
+              <div class="opt-avatar" style="background:#C47A00">SS</div>
+              <div><div style="font-size:13px">Shawn Spencer</div><div class="opt-desc">Logistics Manager</div></div>
+            </div>
+            <div class="sel-option" data-val="Henry Spencer" onclick="toggleMultiAvatar('mav1',this,'pills-mav1')" style="gap:8px">
+              <div class="sel-check"></div>
+              <div class="opt-avatar" style="background:#B02530">HS</div>
+              <div><div style="font-size:13px">Henry Spencer</div><div class="opt-desc">Director, Operations</div></div>
+            </div>
+          </div>
+          <div class="sel-footer">
+            <span class="sel-footer-count" id="cnt-mav1">1 selected</span>
+            <button class="sel-footer-clear" onclick="clearMultiAv('mav1','pills-mav1')">Clear all</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     10. COMBOBOX — eto-combobox (free text + suggestions)
+     ═══════════════════════════════════════════ -->
+<div class="divider"></div>
+
+<div>
+  <div class="lbl">Combobox — eto-combobox (free-text input + filtered suggestions)</div>
+  <div class="row">
+
+    <!-- Default -->
+    <div class="field" style="width:240px">
+      <label class="field-label">SKU code</label>
+      <div class="sel-wrap">
+        <div class="sel-trigger" id="t-cb1" style="padding:0">
+          <input id="cb1-input" type="text" placeholder="Type or search…" autocomplete="off"
+            style="flex:1;height:32px;padding:0 8px 0 10px;border:none;outline:none;font-family:'Switzer',sans-serif;font-size:13px;color:#282828;background:transparent;"
+            oninput="cbFilter('cb1',this.value)"
+            onfocus="openPanel('t-cb1','p-cb1')">
+          <div class="sel-clear" id="cb1-clear" onclick="cbClear('cb1');event.stopPropagation()" style="opacity:0;margin-right:6px"><span class="material-icons">close</span></div>
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-cb1">
+          <div class="sel-list" id="l-cb1">
+            <div class="sel-option" data-val="SKU-9483" onclick="cbPick('cb1','SKU-9483')">SKU-9483</div>
+            <div class="sel-option" data-val="SKU-2917" onclick="cbPick('cb1','SKU-2917')">SKU-2917</div>
+            <div class="sel-option" data-val="SKU-6641" onclick="cbPick('cb1','SKU-6641')">SKU-6641</div>
+            <div class="sel-option" data-val="SKU-1182" onclick="cbPick('cb1','SKU-1182')">SKU-1182</div>
+            <div class="sel-option" data-val="SKU-7720" onclick="cbPick('cb1','SKU-7720')">SKU-7720</div>
+            <div class="sel-option" data-val="SKU-4401" onclick="cbPick('cb1','SKU-4401')">SKU-4401</div>
+          </div>
+          <div class="sel-empty" id="empty-cb1" style="display:none">No matches — press Enter to add</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Required -->
+    <div class="field" style="width:240px">
+      <label class="field-label">Carrier <span class="req">*</span></label>
+      <div class="sel-wrap">
+        <div class="sel-trigger" id="t-cb2" style="padding:0">
+          <input id="cb2-input" type="text" placeholder="Search carrier…" autocomplete="off"
+            style="flex:1;height:32px;padding:0 8px 0 10px;border:none;outline:none;font-family:'Switzer',sans-serif;font-size:13px;color:#282828;background:transparent;"
+            oninput="cbFilter('cb2',this.value)"
+            onfocus="openPanel('t-cb2','p-cb2')">
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-cb2">
+          <div class="sel-list" id="l-cb2">
+            <div class="sel-option" data-val="DHL Express" onclick="cbPick('cb2','DHL Express')">DHL Express</div>
+            <div class="sel-option" data-val="FedEx" onclick="cbPick('cb2','FedEx')">FedEx</div>
+            <div class="sel-option" data-val="UPS" onclick="cbPick('cb2','UPS')">UPS</div>
+            <div class="sel-option" data-val="Maersk Line" onclick="cbPick('cb2','Maersk Line')">Maersk Line</div>
+            <div class="sel-option" data-val="MSC" onclick="cbPick('cb2','MSC')">MSC</div>
+            <div class="sel-option" data-val="Evergreen" onclick="cbPick('cb2','Evergreen')">Evergreen</div>
+          </div>
+          <div class="sel-empty" id="empty-cb2" style="display:none">No matches</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div class="field" style="width:240px">
+      <label class="field-label">Warehouse</label>
+      <div class="sel-wrap">
+        <div class="sel-trigger error" id="t-cb3" style="padding:0">
+          <input id="cb3-input" type="text" placeholder="Search warehouse…" autocomplete="off"
+            style="flex:1;height:32px;padding:0 8px 0 10px;border:none;outline:none;font-family:'Switzer',sans-serif;font-size:13px;color:#282828;background:transparent;"
+            oninput="cbFilter('cb3',this.value)"
+            onfocus="openPanel('t-cb3','p-cb3')">
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-cb3">
+          <div class="sel-list" id="l-cb3">
+            <div class="sel-option" data-val="Hamburg EU-01" onclick="cbPick('cb3','Hamburg EU-01')">Hamburg EU-01</div>
+            <div class="sel-option" data-val="Singapore APAC-02" onclick="cbPick('cb3','Singapore APAC-02')">Singapore APAC-02</div>
+            <div class="sel-option" data-val="Los Angeles US-03" onclick="cbPick('cb3','Los Angeles US-03')">Los Angeles US-03</div>
+          </div>
+          <div class="sel-empty" id="empty-cb3" style="display:none">No matches</div>
+        </div>
+      </div>
+      <div class="field-error"><span class="material-icons">error_outline</span>Select a valid warehouse</div>
+    </div>
+
+    <!-- Disabled -->
+    <div class="field" style="width:200px">
+      <label class="field-label">Incoterm (locked)</label>
+      <div class="sel-wrap">
+        <div class="sel-trigger disabled" tabindex="-1" style="padding:0">
+          <input type="text" value="FOB — Free on Board" disabled
+            style="flex:1;height:32px;padding:0 8px 0 10px;border:none;outline:none;font-family:'Switzer',sans-serif;font-size:13px;color:#8C8C8C;background:transparent;cursor:not-allowed;">
+          <div class="sel-caret"><span class="material-icons">expand_more</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     11. MULTI COMBOBOX — tags from free-text input
+     ═══════════════════════════════════════════ -->
+<div class="divider"></div>
+
+<div>
+  <div class="lbl">Multi combobox — type &amp; press Enter (or comma) to add tags; pick from suggestions</div>
+  <div class="row">
+
+    <div class="field" style="width:400px">
+      <label class="field-label">Email recipients</label>
+      <div class="sel-wrap" id="mcb1-wrap">
+        <div class="sel-trigger" id="t-mcb1" style="flex-wrap:wrap;min-height:32px;padding:4px 6px;gap:4px;align-items:center" tabindex="0">
+          <div class="sel-pills" id="pills-mcb1">
+            <span class="sel-pill">supply-team@leo.com<span class="sel-pill-x" onclick="removeCbTag('mcb1','supply-team@leo.com');event.stopPropagation()"><span class="material-icons">close</span></span></span>
+          </div>
+          <input id="mcb1-input" type="text" placeholder="Type email or name…" autocomplete="off"
+            style="flex:1;min-width:120px;border:none;outline:none;font-family:'Switzer',sans-serif;font-size:13px;color:#282828;background:transparent;"
+            oninput="cbFilterMulti('mcb1',this.value)"
+            onfocus="openPanel('t-mcb1','p-mcb1')"
+            onkeydown="cbKeyMulti('mcb1',event)">
+        </div>
+        <div class="sel-panel" id="p-mcb1" style="min-width:300px">
+          <div class="sel-list" id="l-mcb1">
+            <div class="sel-option" data-val="demand-planning@leo.com" onclick="addCbTag('mcb1','demand-planning@leo.com')">demand-planning@leo.com</div>
+            <div class="sel-option" data-val="logistics@leo.com" onclick="addCbTag('mcb1','logistics@leo.com')">logistics@leo.com</div>
+            <div class="sel-option" data-val="finance@leo.com" onclick="addCbTag('mcb1','finance@leo.com')">finance@leo.com</div>
+            <div class="sel-option" data-val="compliance@leo.com" onclick="addCbTag('mcb1','compliance@leo.com')">compliance@leo.com</div>
+          </div>
+          <div class="sel-empty" id="empty-mcb1" style="display:none">Press Enter to add as recipient</div>
+        </div>
+      </div>
+      <div class="field-hint">Type an address and press Enter or comma to add · Click suggestion to add</div>
+    </div>
+
+    <!-- SKU tags -->
+    <div class="field" style="width:360px">
+      <label class="field-label">SKU filter list</label>
+      <div class="sel-wrap" id="mcb2-wrap">
+        <div class="sel-trigger" id="t-mcb2" style="flex-wrap:wrap;min-height:32px;padding:4px 6px;gap:4px;align-items:center" tabindex="0">
+          <div class="sel-pills" id="pills-mcb2">
+            <span class="sel-pill">SKU-9483<span class="sel-pill-x" onclick="removeCbTag('mcb2','SKU-9483');event.stopPropagation()"><span class="material-icons">close</span></span></span>
+            <span class="sel-pill">SKU-2917<span class="sel-pill-x" onclick="removeCbTag('mcb2','SKU-2917');event.stopPropagation()"><span class="material-icons">close</span></span></span>
+          </div>
+          <input id="mcb2-input" type="text" placeholder="Type SKU or search…" autocomplete="off"
+            style="flex:1;min-width:100px;border:none;outline:none;font-family:'Switzer',sans-serif;font-size:13px;color:#282828;background:transparent;"
+            oninput="cbFilterMulti('mcb2',this.value)"
+            onfocus="openPanel('t-mcb2','p-mcb2')"
+            onkeydown="cbKeyMulti('mcb2',event)">
+        </div>
+        <div class="sel-panel" id="p-mcb2" style="min-width:280px">
+          <div class="sel-list" id="l-mcb2">
+            <div class="sel-option" data-val="SKU-9483" onclick="addCbTag('mcb2','SKU-9483')">SKU-9483</div>
+            <div class="sel-option" data-val="SKU-2917" onclick="addCbTag('mcb2','SKU-2917')">SKU-2917</div>
+            <div class="sel-option" data-val="SKU-6641" onclick="addCbTag('mcb2','SKU-6641')">SKU-6641</div>
+            <div class="sel-option" data-val="SKU-1182" onclick="addCbTag('mcb2','SKU-1182')">SKU-1182</div>
+            <div class="sel-option" data-val="SKU-7720" onclick="addCbTag('mcb2','SKU-7720')">SKU-7720</div>
+          </div>
+          <div class="sel-empty" id="empty-mcb2" style="display:none">Press Enter to add custom SKU</div>
+        </div>
+      </div>
+      <div class="field-hint">Type and press Enter or comma · Click suggestion to add</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     12. COMPLEX SELECT — rich results (icon + title + description)
+     ═══════════════════════════════════════════ -->
+<div class="divider"></div>
+
+<div>
+  <div class="lbl">Complex autocomplete — rich results with icon, title &amp; description</div>
+  <div class="row">
+
+    <div class="field" style="width:340px">
+      <label class="field-label">Navigate to module</label>
+      <div class="sel-wrap">
+        <div class="sel-trigger" id="t-cx1" style="padding:0">
+          <div style="display:flex;align-items:center;gap:8px;flex:1;padding:0 8px 0 10px;height:32px">
+            <span class="material-icons" style="font-size:15px;color:#8C8C8C;flex-shrink:0">search</span>
+            <input id="cx1-input" type="text" placeholder="Search modules, pages…" autocomplete="off"
+              style="flex:1;border:none;outline:none;font-family:'Switzer',sans-serif;font-size:13px;color:#282828;background:transparent;"
+              oninput="cxFilter('cx1',this.value)"
+              onfocus="openPanel('t-cx1','p-cx1')">
+          </div>
+          <div class="sel-clear" id="cx1-clear" style="opacity:0;margin-right:6px" onclick="cxClear('cx1');event.stopPropagation()"><span class="material-icons">close</span></div>
+        </div>
+        <div class="sel-panel" id="p-cx1" style="min-width:340px">
+          <div class="sel-group-label">Modules</div>
+          <div class="sel-list" id="l-cx1" style="max-height:280px">
+            <div class="sel-option" data-val="S&OP Planning" data-icon="insert_chart_outlined" data-desc="Sales &amp; Operations Planning · Demand / Supply" onclick="cxPick('cx1',this)">
+              <div class="opt-icon"><span class="material-icons" style="font-size:20px;color:#8342BB">insert_chart_outlined</span></div>
+              <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:#282828">S&amp;OP Planning</div><div class="opt-desc">Sales &amp; Operations Planning · Demand / Supply</div></div>
+            </div>
+            <div class="sel-option" data-val="Order Collaboration" data-icon="assignment" data-desc="Purchase Orders · ASN · Invoices · Receipts" onclick="cxPick('cx1',this)">
+              <div class="opt-icon"><span class="material-icons" style="font-size:20px;color:#0066CC">assignment</span></div>
+              <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:#282828">Order Collaboration</div><div class="opt-desc">Purchase Orders · ASN · Invoices · Receipts</div></div>
+            </div>
+            <div class="sel-option" data-val="Demand Forecasting" data-icon="assessment" data-desc="AI-assisted demand signals · Planning parameters" onclick="cxPick('cx1',this)">
+              <div class="opt-icon"><span class="material-icons" style="font-size:20px;color:#27854D">assessment</span></div>
+              <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:#282828">Demand Forecasting</div><div class="opt-desc">AI-assisted demand signals · Planning parameters</div></div>
+            </div>
+            <div class="sel-option" data-val="Shipment Tracking" data-icon="local_shipping" data-desc="Real-time carrier updates · ETA · Exceptions" onclick="cxPick('cx1',this)">
+              <div class="opt-icon"><span class="material-icons" style="font-size:20px;color:#C47A00">local_shipping</span></div>
+              <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:#282828">Shipment Tracking</div><div class="opt-desc">Real-time carrier updates · ETA · Exceptions</div></div>
+            </div>
+            <div class="sel-option" data-val="Trade Compliance" data-icon="verified_user" data-desc="Customs · Sanctions screening · Documentation" onclick="cxPick('cx1',this)">
+              <div class="opt-icon"><span class="material-icons" style="font-size:20px;color:#7239A4">verified_user</span></div>
+              <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:#282828">Trade Compliance</div><div class="opt-desc">Customs · Sanctions screening · Documentation</div></div>
+            </div>
+            <div class="sel-option" data-val="Reports &amp; Analytics" data-icon="bar_chart" data-desc="Ad-hoc · Scheduled · KPI dashboards" onclick="cxPick('cx1',this)">
+              <div class="opt-icon"><span class="material-icons" style="font-size:20px;color:#5E5C75">bar_chart</span></div>
+              <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:#282828">Reports &amp; Analytics</div><div class="opt-desc">Ad-hoc · Scheduled · KPI dashboards</div></div>
+            </div>
+          </div>
+          <div class="sel-empty" id="empty-cx1" style="display:none">No modules match your search</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Complex multi-select with rich options -->
+    <div class="field" style="width:360px">
+      <label class="field-label">Workflow steps to include</label>
+      <div class="sel-wrap" id="cx2-wrap">
+        <div class="sel-trigger" id="t-cx2" style="flex-wrap:wrap;min-height:32px;padding:4px 6px;gap:4px;align-items:center">
+          <div class="sel-pills" id="pills-cx2">
+            <span class="sel-pill">Demand Review<span class="sel-pill-x" onclick="removePillG('cx2','Demand Review');event.stopPropagation()"><span class="material-icons">close</span></span></span>
+          </div>
+          <div class="sel-caret" style="margin-left:auto"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="sel-panel" id="p-cx2" style="min-width:360px">
+          <div class="sel-search"><span class="material-icons">search</span><input type="text" placeholder="Search steps…" oninput="filterOpts('p-cx2',this.value)" autocomplete="off"></div>
+          <div class="sel-list" id="l-cx2" style="max-height:260px">
+            <div class="sel-option" data-val="Demand Review" onclick="toggleMultiG('cx2',this,'pills-cx2')" style="align-items:flex-start;padding:9px 10px">
+              <div class="sel-check" style="margin-top:2px"></div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;font-weight:500;color:#282828">Demand Review</div>
+                <div class="opt-desc">Statistical baseline · Market intelligence · Consensus</div>
+              </div>
+              <span style="font-size:10px;font-weight:500;padding:2px 6px;border-radius:4px;background:rgba(131,66,187,0.1);color:#7239A4;flex-shrink:0;align-self:center">Step 1</span>
+            </div>
+            <div class="sel-option selected" data-val="Demand Review" onclick="toggleMultiG('cx2',this,'pills-cx2')" style="align-items:flex-start;padding:9px 10px;display:none"><!-- dup prevention --></div>
+            <div class="sel-option" data-val="Supply Review" onclick="toggleMultiG('cx2',this,'pills-cx2')" style="align-items:flex-start;padding:9px 10px">
+              <div class="sel-check"></div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;font-weight:500;color:#282828">Supply Review</div>
+                <div class="opt-desc">Capacity constraints · Lead times · Supplier review</div>
+              </div>
+              <span style="font-size:10px;font-weight:500;padding:2px 6px;border-radius:4px;background:rgba(0,102,204,0.1);color:#0066CC;flex-shrink:0;align-self:center">Step 2</span>
+            </div>
+            <div class="sel-option" data-val="Pre-S&amp;OP" onclick="toggleMultiG('cx2',this,'pills-cx2')" style="align-items:flex-start;padding:9px 10px">
+              <div class="sel-check"></div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;font-weight:500;color:#282828">Pre-S&amp;OP</div>
+                <div class="opt-desc">Gap analysis · Scenario modelling · Recommendations</div>
+              </div>
+              <span style="font-size:10px;font-weight:500;padding:2px 6px;border-radius:4px;background:rgba(39,133,77,0.1);color:#27854D;flex-shrink:0;align-self:center">Step 3</span>
+            </div>
+            <div class="sel-option" data-val="Executive S&amp;OP" onclick="toggleMultiG('cx2',this,'pills-cx2')" style="align-items:flex-start;padding:9px 10px">
+              <div class="sel-check"></div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;font-weight:500;color:#282828">Executive S&amp;OP</div>
+                <div class="opt-desc">Financial alignment · Business decisions · Sign-off</div>
+              </div>
+              <span style="font-size:10px;font-weight:500;padding:2px 6px;border-radius:4px;background:rgba(176,37,48,0.1);color:#B02530;flex-shrink:0;align-self:center">Step 4</span>
+            </div>
+          </div>
+          <div class="sel-footer">
+            <span class="sel-footer-count" id="cnt-cx2">1 selected</span>
+            <button class="sel-footer-clear" onclick="clearAllMultiG('cx2','pills-cx2')">Clear all</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────
+   OPEN / CLOSE PANEL
+───────────────────────────────────────────────── */
+function openPanel(triggerId, panelId) {
+  const t = document.getElementById(triggerId);
+  const p = document.getElementById(panelId);
+  if (!t || !p) return;
+  if (t.classList.contains('disabled')) return;
+  t.classList.add('open');
+  p.classList.add('open');
+}
+
+function closeAll() {
+  document.querySelectorAll('.sel-panel.open').forEach(p => {
+    p.classList.remove('open');
+    const t = p.previousElementSibling;
+    if (t) t.classList.remove('open');
+  });
+}
+
+// Toggle on trigger click
+document.querySelectorAll('.sel-trigger').forEach(trigger => {
+  trigger.addEventListener('click', function(e) {
+    if (this.classList.contains('disabled')) return;
+    const panel = this.nextElementSibling;
+    if (!panel || !panel.classList.contains('sel-panel')) return;
+    const isOpen = panel.classList.contains('open');
+    closeAll();
+    if (!isOpen) {
+      this.classList.add('open');
+      panel.classList.add('open');
+      const inp = panel.querySelector('input');
+      if (inp) setTimeout(() => inp.focus(), 50);
+    }
+    e.stopPropagation();
+  });
+});
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.sel-wrap')) closeAll();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeAll();
+});
+
+/* ─────────────────────────────────────────────────
+   SINGLE SELECT — pick option
+───────────────────────────────────────────────── */
+function pickSingle(triggerId, valId, panelId, opt) {
+  const val = opt.dataset.val;
+  const valEl = document.getElementById(valId);
+  if (!val) return;
+  // Update trigger display
+  valEl.textContent = val;
+  valEl.className = 'sel-value';
+  // Mark selected
+  document.querySelectorAll('#' + panelId + ' .sel-option').forEach(o => {
+    o.classList.remove('selected');
+    // Remove any check icon
+    const chk = o.querySelector('.material-icons.chk-mark');
+    if (chk) chk.remove();
+  });
+  opt.classList.add('selected');
+  // Add check icon at start
+  const icon = document.createElement('span');
+  icon.className = 'material-icons chk-mark';
+  icon.style.cssText = 'font-size:15px;color:#8342BB;flex-shrink:0';
+  icon.textContent = 'check';
+  opt.prepend(icon);
+  closeAll();
+}
+
+/* ─────────────────────────────────────────────────
+   PICK WITH LEADING ICON
+───────────────────────────────────────────────── */
+function pickWithIcon(triggerId, valId, iconId, panelId, opt) {
+  pickSingle(triggerId, valId, panelId, opt);
+  const iconContainer = document.getElementById(iconId);
+  if (iconContainer && opt.dataset.icon) {
+    iconContainer.innerHTML = '<span class="material-icons">' + opt.dataset.icon + '</span>';
+  }
+}
+
+/* ─────────────────────────────────────────────────
+   CLEAR SINGLE
+───────────────────────────────────────────────── */
+function clearSingle(triggerId, valId, placeholder) {
+  const valEl = document.getElementById(valId);
+  valEl.textContent = placeholder;
+  valEl.className = 'sel-placeholder';
+  closeAll();
+}
+
+/* ─────────────────────────────────────────────────
+   MULTI SELECT — toggle option + pills
+───────────────────────────────────────────────── */
+function toggleMulti(msId, opt, pillsId) {
+  opt.classList.toggle('selected');
+  updatePills(msId, pillsId);
+  updateMultiCount(msId);
+}
+
+function updatePills(msId, pillsId) {
+  const pillsEl = document.getElementById(pillsId);
+  const opts = document.querySelectorAll('#p-' + msId + ' .sel-option.selected');
+  // Keep caret at end
+  const caret = pillsEl.parentElement.querySelector('.sel-caret');
+  pillsEl.innerHTML = '';
+  opts.forEach(o => {
+    const val = o.dataset.val;
+    const pill = document.createElement('span');
+    pill.className = 'sel-pill';
+    pill.dataset.val = val;
+    pill.innerHTML = val + '<span class="sel-pill-x" onclick="removePill(\'' + msId + '\',\'' + val + '\');event.stopPropagation()"><span class="material-icons">close</span></span>';
+    pillsEl.appendChild(pill);
+  });
+}
+
+function removePill(msId, val) {
+  const opt = document.querySelector('#p-' + msId + ' .sel-option[data-val="' + val + '"]');
+  if (opt) opt.classList.remove('selected');
+  updatePills(msId, 'pills-' + msId);
+  updateMultiCount(msId);
+}
+
+function updateMultiCount(msId) {
+  const count = document.querySelectorAll('#p-' + msId + ' .sel-option.selected').length;
+  const countEl = document.getElementById('cnt-' + msId);
+  if (countEl) countEl.textContent = count + ' selected';
+}
+
+function clearMulti(msId, pillsId) {
+  document.querySelectorAll('#p-' + msId + ' .sel-option').forEach(o => o.classList.remove('selected'));
+  document.getElementById(pillsId).innerHTML = '';
+  const valEl = document.getElementById('v-' + msId);
+  if (valEl) { valEl.textContent = 'Select…'; valEl.className = 'sel-placeholder'; }
+  updateMultiCount(msId);
+  closeAll();
+}
+
+/* ─────────────────────────────────────────────────
+   MULTI SELECT — badge count variant
+───────────────────────────────────────────────── */
+function toggleMultiBadge(msId, opt) {
+  opt.classList.toggle('selected');
+  updateBadge(msId);
+}
+
+function updateBadge(msId) {
+  const count = document.querySelectorAll('#p-' + msId + ' .sel-option.selected').length;
+  const badge = document.getElementById('cnt-badge-' + msId);
+  const label = document.getElementById('v-' + msId);
+  const cntEl = document.getElementById('cnt-' + msId);
+  if (badge) badge.textContent = count;
+  if (label) label.textContent = count === 0 ? 'No regions selected' : count + ' region' + (count !== 1 ? 's' : '') + ' selected';
+  if (cntEl) cntEl.textContent = count + ' selected';
+}
+
+function clearMultiBadge(msId) {
+  document.querySelectorAll('#p-' + msId + ' .sel-option').forEach(o => o.classList.remove('selected'));
+  updateBadge(msId);
+  closeAll();
+}
+
+/* ─────────────────────────────────────────────────
+   AUTOCOMPLETE — live filter
+───────────────────────────────────────────────── */
+function acFilter(acId, query) {
+  const q = query.toLowerCase().trim();
+  const list = document.getElementById('l-' + acId);
+  const empty = document.getElementById('empty-' + acId);
+  const clearBtn = document.getElementById(acId + '-clear');
+  let visible = 0;
+  list.querySelectorAll('.sel-option').forEach(opt => {
+    const label = opt.dataset.val.toLowerCase();
+    const match = q === '' || label.includes(q);
+    opt.style.display = match ? '' : 'none';
+    if (match) visible++;
+    // Highlight matching text
+    if (q && match) {
+      const idx = opt.dataset.val.toLowerCase().indexOf(q);
+      const before = opt.dataset.val.slice(0, idx);
+      const matchStr = opt.dataset.val.slice(idx, idx + q.length);
+      const after = opt.dataset.val.slice(idx + q.length);
+      opt.innerHTML = before + '<span class="opt-match">' + matchStr + '</span>' + after;
+      opt.dataset.val = opt.dataset.val; // keep val
+    } else {
+      if (q === '') opt.textContent = opt.dataset.val;
+    }
+  });
+  empty.style.display = visible === 0 ? '' : 'none';
+  if (clearBtn) clearBtn.style.opacity = query ? '1' : '0';
+  openPanel('t-' + acId, 'p-' + acId);
+}
+
+function pickAc(acId, val) {
+  document.getElementById(acId + '-input').value = val;
+  const clearBtn = document.getElementById(acId + '-clear');
+  if (clearBtn) clearBtn.style.opacity = '1';
+  // Reset option texts and highlight selected
+  document.querySelectorAll('#p-' + acId + ' .sel-option').forEach(o => {
+    o.textContent = o.dataset.val;
+    o.style.display = '';
+    o.classList.toggle('selected', o.dataset.val === val);
+  });
+  document.getElementById('empty-' + acId).style.display = 'none';
+  closeAll();
+}
+
+function clearAc(acId) {
+  document.getElementById(acId + '-input').value = '';
+  const clearBtn = document.getElementById(acId + '-clear');
+  if (clearBtn) clearBtn.style.opacity = '0';
+  document.querySelectorAll('#p-' + acId + ' .sel-option').forEach(o => {
+    o.classList.remove('selected'); o.style.display = ''; o.textContent = o.dataset.val;
+  });
+  document.getElementById('empty-' + acId).style.display = 'none';
+}
+
+function acKeydown(acId, e) {
+  const panel = document.getElementById('p-' + acId);
+  const opts = [...panel.querySelectorAll('.sel-option:not([style*="none"])')];
+  const focused = panel.querySelector('.sel-option.focused');
+  let idx = focused ? opts.indexOf(focused) : -1;
+  if (e.key === 'ArrowDown') { e.preventDefault(); idx = Math.min(idx + 1, opts.length - 1); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); idx = Math.max(idx - 1, 0); }
+  else if (e.key === 'Enter' && focused) { e.preventDefault(); pickAc(acId, focused.dataset.val); return; }
+  else return;
+  opts.forEach(o => o.classList.remove('focused'));
+  if (opts[idx]) opts[idx].classList.add('focused');
+}
+
+/* ─────────────────────────────────────────────────
+   AVATAR SELECT
+───────────────────────────────────────────────── */
+function avFilter(avId, query) {
+  const q = query.toLowerCase();
+  const list = document.getElementById('l-' + avId);
+  const empty = document.getElementById('empty-' + avId);
+  let visible = 0;
+  list.querySelectorAll('.sel-option').forEach(opt => {
+    const match = q === '' || opt.dataset.val.toLowerCase().includes(q);
+    opt.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+  empty.style.display = visible === 0 ? '' : 'none';
+  openPanel('t-' + avId, 'p-' + avId);
+}
+
+function pickAv(avId, opt) {
+  const val = opt.dataset.val;
+  const initials = opt.dataset.initials;
+  const color = opt.dataset.color;
+  const input = document.getElementById(avId + '-input');
+  const avatarEl = document.getElementById(avId + '-avatar');
+  if (input) input.value = val;
+  if (avatarEl) {
+    avatarEl.style.display = 'flex';
+    avatarEl.style.background = color;
+    avatarEl.textContent = initials;
+  }
+  document.querySelectorAll('#p-' + avId + ' .sel-option').forEach(o => o.classList.toggle('selected', o === opt));
+  document.querySelectorAll('#l-' + avId + ' .sel-option').forEach(o => o.style.display = '');
+  document.getElementById('empty-' + avId).style.display = 'none';
+  closeAll();
+}
+
+/* ─────────────────────────────────────────────────
+   FILTER OPTIONS (search within list)
+───────────────────────────────────────────────── */
+function filterOpts(panelId, query) {
+  const q = query.toLowerCase();
+  document.querySelectorAll('#' + panelId + ' .sel-option').forEach(opt => {
+    const label = (opt.dataset.val || opt.textContent).toLowerCase();
+    opt.style.display = label.includes(q) ? '' : 'none';
+  });
+}
+
+/* ─────────────────────────────────────────────────
+   KEYBOARD NAV — arrow keys on trigger
+───────────────────────────────────────────────── */
+document.querySelectorAll('.sel-trigger').forEach(trigger => {
+  trigger.addEventListener('keydown', function(e) {
+    const panel = this.nextElementSibling;
+    if (!panel || !panel.classList.contains('sel-panel')) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (!panel.classList.contains('open')) {
+        closeAll(); this.classList.add('open'); panel.classList.add('open');
+        const inp = panel.querySelector('input');
+        if (inp) inp.focus();
+      }
+    }
+    if (e.key === 'Escape') { closeAll(); this.focus(); }
+    if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && panel.classList.contains('open')) {
+      e.preventDefault();
+      const opts = [...panel.querySelectorAll('.sel-option:not([style*="none"]):not(.disabled-opt)')];
+      const focused = panel.querySelector('.sel-option.focused');
+      let idx = focused ? opts.indexOf(focused) : -1;
+      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, opts.length - 1) : Math.max(idx - 1, 0);
+      opts.forEach(o => o.classList.remove('focused'));
+      if (opts[idx]) opts[idx].classList.add('focused');
+    }
+  });
+});
+
+/* ─────────────────────────────────────────────────
+   SELECT ALL / CLEAR ALL  (sections 7+)
+───────────────────────────────────────────────── */
+function toggleSA(msId, opt) {
+  opt.classList.toggle('selected');
+  updateSACount(msId);
+  updateSABadge(msId);
+}
+
+function selectAllOpts(msId) {
+  document.querySelectorAll('#l-' + msId + ' .sel-option:not([style*="display: none"]):not(.disabled-opt)').forEach(o => o.classList.add('selected'));
+  updateSACount(msId);
+  updateSABadge(msId);
+}
+
+function clearAllOpts(msId) {
+  document.querySelectorAll('#l-' + msId + ' .sel-option').forEach(o => o.classList.remove('selected'));
+  updateSACount(msId);
+  updateSABadge(msId);
+  const v = document.getElementById('v-' + msId);
+  if (v) { v.textContent = 'Choose…'; v.className = 'sel-placeholder'; }
+}
+
+function updateSACount(msId) {
+  const count = document.querySelectorAll('#l-' + msId + ' .sel-option.selected').length;
+  const cnt = document.getElementById('cnt-' + msId);
+  if (cnt) cnt.textContent = count + ' selected';
+}
+
+function updateSABadge(msId) {
+  const count = document.querySelectorAll('#l-' + msId + ' .sel-option.selected').length;
+  const badge = document.getElementById('cnt-badge-' + msId);
+  const v = document.getElementById('v-' + msId);
+  if (badge) {
+    badge.textContent = count;
+    badge.style.display = count > 0 ? '' : 'none';
+  }
+  if (v) {
+    v.textContent = count === 0 ? 'Choose…' : count + ' selected';
+    v.className = count === 0 ? 'sel-placeholder' : 'sel-value';
+  }
+}
+
+function toggleShowSelected(msId, show) {
+  document.querySelectorAll('#l-' + msId + ' .sel-option').forEach(opt => {
+    if (show) opt.style.display = opt.classList.contains('selected') ? '' : 'none';
+    else opt.style.display = '';
+  });
+}
+
+/* ─────────────────────────────────────────────────
+   MULTI-SELECT GROUPED  (sections 8, 12)
+───────────────────────────────────────────────── */
+function toggleMultiG(msId, opt, pillsId) {
+  opt.classList.toggle('selected');
+  if (pillsId) updatePillsG(msId, pillsId);
+  updateSACount(msId);
+  updateSABadge(msId);
+}
+
+function updatePillsG(msId, pillsId) {
+  const pillsEl = document.getElementById(pillsId);
+  if (!pillsEl) return;
+  const opts = document.querySelectorAll('#l-' + msId + ' .sel-option.selected');
+  pillsEl.innerHTML = '';
+  opts.forEach(o => {
+    const val = o.dataset.val;
+    const pill = document.createElement('span');
+    pill.className = 'sel-pill';
+    pill.dataset.val = val;
+    pill.innerHTML = val + '<span class="sel-pill-x" onclick="removePillG(\'' + msId + '\',\'' + val.replace(/'/g, "\\'") + '\');event.stopPropagation()"><span class="material-icons">close</span></span>';
+    pillsEl.appendChild(pill);
+  });
+}
+
+function removePillG(msId, val) {
+  const opt = document.querySelector('#l-' + msId + ' .sel-option[data-val="' + val + '"]');
+  if (opt) opt.classList.remove('selected');
+  updatePillsG(msId, 'pills-' + msId);
+  updateSACount(msId);
+  updateSABadge(msId);
+}
+
+function clearAllMultiG(msId, pillsId) {
+  document.querySelectorAll('#l-' + msId + ' .sel-option').forEach(o => o.classList.remove('selected'));
+  if (pillsId) document.getElementById(pillsId).innerHTML = '';
+  updateSACount(msId);
+  updateSABadge(msId);
+  closeAll();
+}
+
+/* ─────────────────────────────────────────────────
+   MULTI-SELECT AVATAR  (section 9)
+───────────────────────────────────────────────── */
+function toggleMultiAvatar(msId, opt, pillsId) {
+  opt.classList.toggle('selected');
+  updateAvatarPills(msId, pillsId);
+  updateSACount(msId);
+}
+
+function updateAvatarPills(msId, pillsId) {
+  const pillsEl = document.getElementById(pillsId);
+  if (!pillsEl) return;
+  const opts = document.querySelectorAll('#l-' + msId + ' .sel-option.selected');
+  pillsEl.innerHTML = '';
+  opts.forEach(o => {
+    const val = o.dataset.val;
+    const bg = o.dataset.color || 'rgba(131,66,187,0.1)';
+    const color = o.dataset.pillColor || '#7239A4';
+    const initials = o.dataset.initials || val.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+    const pill = document.createElement('span');
+    pill.className = 'sel-pill';
+    pill.style.cssText = 'background:' + bg + ';color:' + color;
+    pill.dataset.val = val;
+    pill.innerHTML = initials + '<span class="sel-pill-x" onclick="removeAvPill(\'' + msId + '\',\'' + val.replace(/'/g, "\\'") + '\');event.stopPropagation()"><span class="material-icons">close</span></span>';
+    pillsEl.appendChild(pill);
+  });
+}
+
+function removeAvPill(msId, val) {
+  const opt = document.querySelector('#l-' + msId + ' .sel-option[data-val="' + val + '"]');
+  if (opt) opt.classList.remove('selected');
+  updateAvatarPills(msId, 'pills-' + msId);
+  updateSACount(msId);
+}
+
+function clearMultiAv(msId, pillsId) {
+  document.querySelectorAll('#l-' + msId + ' .sel-option').forEach(o => o.classList.remove('selected'));
+  const pillsEl = document.getElementById(pillsId);
+  if (pillsEl) pillsEl.innerHTML = '';
+  updateSACount(msId);
+  closeAll();
+}
+
+/* ─────────────────────────────────────────────────
+   COMBOBOX — free text + suggestions  (section 10)
+───────────────────────────────────────────────── */
+function cbFilter(cbId, query) {
+  const q = query.toLowerCase().trim();
+  const list = document.getElementById('l-' + cbId);
+  const empty = document.getElementById('empty-' + cbId);
+  const clearBtn = document.getElementById(cbId + '-clear');
+  let visible = 0;
+  list.querySelectorAll('.sel-option').forEach(opt => {
+    const match = q === '' || opt.dataset.val.toLowerCase().includes(q);
+    opt.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+  if (empty) empty.style.display = visible === 0 && q ? '' : 'none';
+  if (clearBtn) clearBtn.style.opacity = query ? '1' : '0';
+  openPanel('t-' + cbId, 'p-' + cbId);
+}
+
+function cbPick(cbId, val) {
+  const input = document.getElementById(cbId + '-input');
+  if (input) input.value = val;
+  const clearBtn = document.getElementById(cbId + '-clear');
+  if (clearBtn) clearBtn.style.opacity = '1';
+  document.querySelectorAll('#l-' + cbId + ' .sel-option').forEach(o => {
+    o.classList.toggle('selected', o.dataset.val === val);
+    o.style.display = '';
+  });
+  const empty = document.getElementById('empty-' + cbId);
+  if (empty) empty.style.display = 'none';
+  closeAll();
+}
+
+function cbClear(cbId) {
+  const input = document.getElementById(cbId + '-input');
+  if (input) input.value = '';
+  const clearBtn = document.getElementById(cbId + '-clear');
+  if (clearBtn) clearBtn.style.opacity = '0';
+  document.querySelectorAll('#l-' + cbId + ' .sel-option').forEach(o => {
+    o.classList.remove('selected'); o.style.display = '';
+  });
+  const empty = document.getElementById('empty-' + cbId);
+  if (empty) empty.style.display = 'none';
+}
+
+/* ─────────────────────────────────────────────────
+   MULTI COMBOBOX — tags from typed text  (section 11)
+───────────────────────────────────────────────── */
+const cbTags = {};
+
+function cbFilterMulti(mcbId, query) {
+  const q = query.toLowerCase().trim();
+  const list = document.getElementById('l-' + mcbId);
+  const empty = document.getElementById('empty-' + mcbId);
+  let visible = 0;
+  list.querySelectorAll('.sel-option').forEach(opt => {
+    const match = q === '' || opt.dataset.val.toLowerCase().includes(q);
+    opt.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+  if (empty) empty.style.display = visible === 0 && q ? '' : 'none';
+  openPanel('t-' + mcbId, 'p-' + mcbId);
+}
+
+function cbKeyMulti(mcbId, e) {
+  const input = document.getElementById(mcbId + '-input');
+  if (!input) return;
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    const val = input.value.replace(/,$/, '').trim();
+    if (val) { addCbTag(mcbId, val); input.value = ''; }
+  }
+  if (e.key === 'Backspace' && input.value === '') {
+    const pills = document.getElementById('pills-' + mcbId);
+    const lastPill = pills ? pills.lastElementChild : null;
+    if (lastPill) { const val = lastPill.dataset.val; removeCbTag(mcbId, val); }
+  }
+}
+
+function addCbTag(mcbId, val) {
+  if (!val) return;
+  if (!cbTags[mcbId]) cbTags[mcbId] = new Set();
+  if (cbTags[mcbId].has(val)) { closeAll(); return; } // no duplicates
+  cbTags[mcbId].add(val);
+  const pillsEl = document.getElementById('pills-' + mcbId);
+  if (pillsEl) {
+    const pill = document.createElement('span');
+    pill.className = 'sel-pill';
+    pill.dataset.val = val;
+    pill.innerHTML = val + '<span class="sel-pill-x" onclick="removeCbTag(\'' + mcbId + '\',\'' + val.replace(/'/g, "\\'") + '\');event.stopPropagation()"><span class="material-icons">close</span></span>';
+    pillsEl.appendChild(pill);
+  }
+  const input = document.getElementById(mcbId + '-input');
+  if (input) input.value = '';
+  // Reset list
+  document.querySelectorAll('#l-' + mcbId + ' .sel-option').forEach(o => o.style.display = '');
+  const empty = document.getElementById('empty-' + mcbId);
+  if (empty) empty.style.display = 'none';
+  closeAll();
+}
+
+function removeCbTag(mcbId, val) {
+  if (cbTags[mcbId]) cbTags[mcbId].delete(val);
+  const pillsEl = document.getElementById('pills-' + mcbId);
+  if (pillsEl) {
+    const pill = pillsEl.querySelector('[data-val="' + val + '"]');
+    if (pill) pill.remove();
+  }
+}
+
+/* ─────────────────────────────────────────────────
+   COMPLEX AUTOCOMPLETE  (section 12)
+───────────────────────────────────────────────── */
+function cxFilter(cxId, query) {
+  const q = query.toLowerCase().trim();
+  const list = document.getElementById('l-' + cxId);
+  const empty = document.getElementById('empty-' + cxId);
+  const clearBtn = document.getElementById(cxId + '-clear');
+  let visible = 0;
+  list.querySelectorAll('.sel-option').forEach(opt => {
+    const label = opt.dataset.val ? opt.dataset.val.toLowerCase() : opt.textContent.toLowerCase();
+    const match = q === '' || label.includes(q);
+    opt.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+  if (empty) empty.style.display = visible === 0 && q ? '' : 'none';
+  if (clearBtn) clearBtn.style.opacity = query ? '1' : '0';
+  openPanel('t-' + cxId, 'p-' + cxId);
+}
+
+function cxPick(cxId, opt) {
+  const val = opt.dataset.val;
+  const input = document.getElementById(cxId + '-input');
+  const clearBtn = document.getElementById(cxId + '-clear');
+  if (input) input.value = val;
+  if (clearBtn) clearBtn.style.opacity = '1';
+  document.querySelectorAll('#l-' + cxId + ' .sel-option').forEach(o => {
+    o.classList.toggle('selected', o === opt);
+    o.style.display = '';
+  });
+  const empty = document.getElementById('empty-' + cxId);
+  if (empty) empty.style.display = 'none';
+  closeAll();
+}
+
+function cxClear(cxId) {
+  const input = document.getElementById(cxId + '-input');
+  if (input) input.value = '';
+  const clearBtn = document.getElementById(cxId + '-clear');
+  if (clearBtn) clearBtn.style.opacity = '0';
+  document.querySelectorAll('#l-' + cxId + ' .sel-option').forEach(o => {
+    o.classList.remove('selected'); o.style.display = '';
+  });
+}
+</script>
+</body>
+</html>

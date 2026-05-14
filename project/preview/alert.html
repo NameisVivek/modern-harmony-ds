@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; display: flex; flex-direction: column; gap: 10px; }
+
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 8px; }
+  .lbl:first-child { margin-top: 0; }
+
+  /* ══════════════════════════════════════
+     ALERT BASE — eto-alert
+     Layout: icon + title on same row,
+             body text indented below
+  ══════════════════════════════════════ */
+  .alert {
+    padding: 12px 14px; border-radius: 8px; border: 1px solid;
+    position: relative; width: 100%;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+
+  /* ── Title row: icon + bold title + close ── */
+  .a-title-row {
+    display: flex; align-items: center; gap: 7px;
+  }
+  .a-icon { flex-shrink: 0; display: flex; align-items: center; }
+  .a-icon .material-icons-outlined { font-size: 18px; line-height: 1; }
+  .a-title {
+    flex: 1; font-size: 13px; font-weight: 600; color: inherit; line-height: 1.4;
+  }
+  .a-close {
+    width: 24px; height: 24px; flex-shrink: 0; margin-left: auto;
+    display: flex; align-items: center; justify-content: center;
+    background: transparent; border: none; cursor: pointer; border-radius: 4px;
+    opacity: 0.6; transition: opacity 0.1s, background 0.1s;
+  }
+  .a-close:hover { opacity: 1; background: rgba(0,0,0,0.07); }
+  .a-close .material-icons-outlined { font-size: 16px; }
+
+  /* ── Body text — indented to align with title (icon width + gap) ── */
+  .a-text {
+    font-size: 13px; color: inherit; line-height: 1.5; opacity: 0.85;
+    padding-left: 25px; /* 18px icon + 7px gap */
+  }
+  .a-actions {
+    display: flex; gap: 6px; margin-top: 4px;
+    padding-left: 25px;
+  }
+
+  /* ── Action button ── */
+  .a-btn {
+    height: 26px; padding: 0 10px; border-radius: 6px;
+    font-family: 'Switzer', sans-serif; font-size: 11px; font-weight: 500; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 4px; border: 1px solid transparent;
+    background: rgba(255,255,255,0.5); transition: background 0.1s;
+  }
+  .a-btn:hover { background: rgba(255,255,255,0.75); }
+
+  /* ══════════════════════════════════════
+     VARIANTS — tokens from codebase
+     Icons (material-icons-outlined):
+       error       → report
+       warning     → warning_amber
+       warning-high→ warning_amber
+       success     → check_circle
+       info        → info
+       violet      → notifications
+  ══════════════════════════════════════ */
+
+  /* ERROR — border: core-red-new-steps 500 = #E02F3A */
+  .alert-error {
+    background: #FEF7F4; border-color: #E02F3A; color: #9A112C;
+  }
+  .alert-error .a-icon .material-icons-outlined { color: #E02F3A; }
+  .alert-error .a-btn { border-color: rgba(224,47,58,0.3); color: #9A112C; }
+
+  /* WARNING — border: core-amber-steps 200 = #FDCC50 */
+  .alert-warning {
+    background: #FFFDEF; border-color: #FDCC50; color: #753A05;
+  }
+  .alert-warning .a-icon .material-icons-outlined { color: #FDCC50; }
+  .alert-warning .a-btn { border-color: rgba(253,204,80,0.5); color: #753A05; }
+
+  /* WARNING-HIGH — border: core-amber-steps 300 = #FDBF14 */
+  .alert-highrisk {
+    background: #FFF4DC; border-color: #FDBF14; color: #441501;
+  }
+  .alert-highrisk .a-icon .material-icons-outlined { color: #FDBF14; }
+  .alert-highrisk .a-btn { border-color: rgba(253,191,20,0.5); color: #441501; }
+
+  /* SUCCESS — border: core-green-steps 400 = #027B44 */
+  .alert-success {
+    background: #EEFEF9; border-color: #027B44; color: #27854D;
+  }
+  .alert-success .a-icon .material-icons-outlined { color: #027B44; }
+  .alert-success .a-btn { border-color: rgba(2,123,68,0.3); color: #27854D; }
+
+  /* INFO — border: core-blue-steps 500 = #1376D8 */
+  .alert-info {
+    background: #F2F8FF; border-color: #1376D8; color: #0D4C89;
+  }
+  .alert-info .a-icon .material-icons-outlined { color: #1376D8; }
+  .alert-info .a-btn { border-color: rgba(19,118,216,0.3); color: #0D4C89; }
+
+  /* VIOLET — border: core-violet-600 = #8342BB */
+  .alert-violet {
+    background: #F9F6FE; border-color: #8342BB; color: #4D3075;
+  }
+  .alert-violet .a-icon .material-icons-outlined { color: #8342BB; }
+  .alert-violet .a-btn { border-color: rgba(131,66,187,0.3); color: #4D3075; }
+</style>
+</head>
+<body>
+
+  <!-- ─── Error ─── -->
+  <div class="lbl">Error — report</div>
+  <div class="alert alert-error">
+    <div class="a-title-row">
+      <div class="a-icon"><span class="material-icons-outlined">report</span></div>
+      <div class="a-title">Unable to save changes</div>
+      <button class="a-close" onclick="this.closest('.alert').style.display='none'"><span class="material-icons-outlined">close</span></button>
+    </div>
+    <div class="a-text">The record could not be saved. Check your connection and try again.</div>
+    <div class="a-actions">
+      <button class="a-btn">Retry</button>
+      <button class="a-btn">View details</button>
+    </div>
+  </div>
+
+  <!-- ─── Warning ─── -->
+  <div class="lbl">Warning — warning_amber</div>
+  <div class="alert alert-warning">
+    <div class="a-title-row">
+      <div class="a-icon"><span class="material-icons-outlined">warning_amber</span></div>
+      <div class="a-title">Forecast data is 3 days old</div>
+      <button class="a-close" onclick="this.closest('.alert').style.display='none'"><span class="material-icons-outlined">close</span></button>
+    </div>
+    <div class="a-text">Your forecast may be out of date. Refresh to get the latest demand signals.</div>
+    <div class="a-actions">
+      <button class="a-btn">Refresh now</button>
+    </div>
+  </div>
+
+  <!-- ─── Warning-High ─── -->
+  <div class="lbl">Warning-high — warning_amber (amber-300 border)</div>
+  <div class="alert alert-highrisk">
+    <div class="a-title-row">
+      <div class="a-icon"><span class="material-icons-outlined">warning_amber</span></div>
+      <div class="a-title">High-risk shipment detected</div>
+      <button class="a-close" onclick="this.closest('.alert').style.display='none'"><span class="material-icons-outlined">close</span></button>
+    </div>
+    <div class="a-text">ORD-48199 is at risk of exceeding the allowed delay threshold. Immediate review required.</div>
+    <div class="a-actions">
+      <button class="a-btn">Review now</button>
+    </div>
+  </div>
+
+  <!-- ─── Success ─── -->
+  <div class="lbl">Success — check_circle</div>
+  <div class="alert alert-success">
+    <div class="a-title-row">
+      <div class="a-icon"><span class="material-icons-outlined">check_circle</span></div>
+      <div class="a-title">S&amp;OP cycle submitted successfully</div>
+      <button class="a-close" onclick="this.closest('.alert').style.display='none'"><span class="material-icons-outlined">close</span></button>
+    </div>
+    <div class="a-text">The December planning cycle has been submitted for approval.</div>
+  </div>
+
+  <!-- ─── Info ─── -->
+  <div class="lbl">Info — info</div>
+  <div class="alert alert-info">
+    <div class="a-title-row">
+      <div class="a-icon"><span class="material-icons-outlined">info</span></div>
+      <div class="a-title">AI forecast now available for Q1 2025</div>
+      <button class="a-close" onclick="this.closest('.alert').style.display='none'"><span class="material-icons-outlined">close</span></button>
+    </div>
+    <div class="a-text">An AI-generated demand forecast is ready for your review in the Forecast module.</div>
+    <div class="a-actions">
+      <button class="a-btn">View forecast</button>
+    </div>
+  </div>
+
+  <!-- ─── Violet ─── -->
+  <div class="lbl">Violet — notifications</div>
+  <div class="alert alert-violet">
+    <div class="a-title-row">
+      <div class="a-icon"><span class="material-icons-outlined">notifications</span></div>
+      <div class="a-title">New feature: AI scenario modelling</div>
+      <button class="a-close" onclick="this.closest('.alert').style.display='none'"><span class="material-icons-outlined">close</span></button>
+    </div>
+    <div class="a-text">AI-powered scenario comparison is now available in S&amp;OP Planning. Enable it in your preferences.</div>
+    <div class="a-actions">
+      <button class="a-btn">Learn more</button>
+      <button class="a-btn">Dismiss</button>
+    </div>
+  </div>
+
+  <!-- ─── Title only (no body) ─── -->
+  <div class="lbl">Title only — no body text</div>
+  <div class="alert alert-error">
+    <div class="a-title-row">
+      <div class="a-icon"><span class="material-icons-outlined">report</span></div>
+      <div class="a-title">Export failed — please try again</div>
+      <button class="a-close" onclick="this.closest('.alert').style.display='none'"><span class="material-icons-outlined">close</span></button>
+    </div>
+  </div>
+
+  <div class="alert alert-success">
+    <div class="a-title-row">
+      <div class="a-icon"><span class="material-icons-outlined">check_circle</span></div>
+      <div class="a-title">Order ORD-48201 approved successfully</div>
+      <button class="a-close" onclick="this.closest('.alert').style.display='none'"><span class="material-icons-outlined">close</span></button>
+    </div>
+  </div>
+
+  <!-- ─── Permanent (no close) ─── -->
+  <div class="lbl">Permanent — no close button</div>
+  <div class="alert alert-warning">
+    <div class="a-title-row">
+      <div class="a-icon"><span class="material-icons-outlined">warning_amber</span></div>
+      <div class="a-title">Scheduled maintenance — Saturday 18 Jan, 02:00–04:00 UTC</div>
+    </div>
+    <div class="a-text">The platform will be in read-only mode during this window. Exports will be queued and processed after maintenance.</div>
+  </div>
+
+  <!-- ─── All icons reference ─── -->
+  <div class="lbl">Icon reference — all types</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+    <div class="alert alert-error" style="padding:9px 12px">
+      <div class="a-title-row">
+        <div class="a-icon"><span class="material-icons-outlined">report</span></div>
+        <div class="a-title" style="font-size:12px">Error · <code style="font-size:10px;opacity:.7">report</code></div>
+      </div>
+    </div>
+    <div class="alert alert-warning" style="padding:9px 12px">
+      <div class="a-title-row">
+        <div class="a-icon"><span class="material-icons-outlined">warning_amber</span></div>
+        <div class="a-title" style="font-size:12px">Warning · <code style="font-size:10px;opacity:.7">warning_amber</code></div>
+      </div>
+    </div>
+    <div class="alert alert-highrisk" style="padding:9px 12px">
+      <div class="a-title-row">
+        <div class="a-icon"><span class="material-icons-outlined">warning_amber</span></div>
+        <div class="a-title" style="font-size:12px">Warn-high · <code style="font-size:10px;opacity:.7">warning_amber</code></div>
+      </div>
+    </div>
+    <div class="alert alert-success" style="padding:9px 12px">
+      <div class="a-title-row">
+        <div class="a-icon"><span class="material-icons-outlined">check_circle</span></div>
+        <div class="a-title" style="font-size:12px">Success · <code style="font-size:10px;opacity:.7">check_circle</code></div>
+      </div>
+    </div>
+    <div class="alert alert-info" style="padding:9px 12px">
+      <div class="a-title-row">
+        <div class="a-icon"><span class="material-icons-outlined">info</span></div>
+        <div class="a-title" style="font-size:12px">Info · <code style="font-size:10px;opacity:.7">info</code></div>
+      </div>
+    </div>
+    <div class="alert alert-violet" style="padding:9px 12px">
+      <div class="a-title-row">
+        <div class="a-icon"><span class="material-icons-outlined">notifications</span></div>
+        <div class="a-title" style="font-size:12px">Violet · <code style="font-size:10px;opacity:.7">notifications</code></div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

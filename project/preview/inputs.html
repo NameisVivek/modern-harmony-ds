@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 16px 20px; width: 700px; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .label { font-size: 11px; font-weight: 500; color: #282828; }
+  .hint  { font-size: 10px; color: #767676; margin-top: 2px; }
+  .error-msg { font-size: 10px; color: #E02F3A; margin-top: 2px; display: flex; align-items: center; gap: 3px; }
+  .error-msg .material-icons { font-size: 12px; }
+
+  .input-wrap { position: relative; display: flex; align-items: center; }
+  .input {
+    height: 32px; padding: 0 10px; border-radius: 8px;
+    border: 1px solid #DDDDE5; background: #fff;
+    font-family: 'Switzer', sans-serif; font-size: 14px; color: #282828;
+    outline: none; width: 100%;
+  }
+  .input::placeholder { color: #8C8C8C; }
+  .input:focus { border-color: #8342BB; box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(131,66,187,0.3); }
+  .input.error { border-color: #E02F3A; }
+  .input.disabled { background: #F0F0F4; color: #8C8C8C; cursor: not-allowed; }
+  .input.filled { background: #FBFBFB; }
+
+  .icon-left  { position: absolute; left: 8px; color: #8C8C8C; pointer-events: none; font-size: 16px; }
+  .icon-right { position: absolute; right: 8px; color: #8C8C8C; pointer-events: none; font-size: 16px; }
+  .input.has-icon-left { padding-left: 30px; }
+  .input.has-icon-right { padding-right: 30px; }
+
+  .select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='%238C8C8C'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; padding-right: 28px; }
+
+  .checkbox-row { display: flex; align-items: center; gap: 8px; }
+  .checkbox { width: 16px; height: 16px; border-radius: 3px; border: 1.5px solid #DDDDE5; appearance: none; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .checkbox:checked { background: #8342BB; border-color: #8342BB; }
+  .checkbox:checked::after { content: '✓'; color: white; font-size: 10px; font-weight: 700; }
+  .checkbox-label { font-size: 14px; color: #282828; }
+
+  .toggle { position: relative; width: 36px; height: 20px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .track { position: absolute; inset: 0; border-radius: 10px; background: #DDDDE5; cursor: pointer; transition: background 0.15s; }
+  .track::after { content: ''; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; transition: transform 0.15s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+  .toggle input:checked + .track { background: #8342BB; }
+  .toggle input:checked + .track::after { transform: translateX(16px); }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="field" style="width:160px">
+      <div class="label">Default</div>
+      <div class="input-wrap"><input class="input" type="text" placeholder="Placeholder text"></div>
+    </div>
+    <div class="field" style="width:160px">
+      <div class="label">Focused</div>
+      <div class="input-wrap"><input class="input" type="text" value="Active input" style="border-color:#8342BB; box-shadow:0 0 0 2px #fff,0 0 0 4px rgba(131,66,187,0.3)"></div>
+    </div>
+    <div class="field" style="width:160px">
+      <div class="label">With icon</div>
+      <div class="input-wrap">
+        <span class="material-icons icon-left" style="font-size:16px">search</span>
+        <input class="input has-icon-left" type="text" placeholder="Search records...">
+      </div>
+    </div>
+    <div class="field" style="width:160px">
+      <div class="label">Disabled</div>
+      <div class="input-wrap"><input class="input disabled" type="text" value="Disabled" disabled></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="field" style="width:160px">
+      <div class="label">Error state</div>
+      <div class="input-wrap"><input class="input error" type="text" value="Invalid entry"></div>
+      <div class="error-msg"><span class="material-icons">error_outline</span>This field is required</div>
+    </div>
+    <div class="field" style="width:180px">
+      <div class="label">Select / dropdown</div>
+      <div class="input-wrap"><select class="input select"><option>All regions</option><option>APAC</option><option>EMEA</option></select></div>
+    </div>
+    <div class="field" style="justify-content:flex-end; gap:10px">
+      <div class="checkbox-row">
+        <input class="checkbox" type="checkbox" checked id="cb1">
+        <label class="checkbox-label" for="cb1">Include sub-items</label>
+      </div>
+      <div class="checkbox-row">
+        <input class="checkbox" type="checkbox" id="cb2">
+        <label class="checkbox-label" for="cb2">Exclude archived</label>
+      </div>
+      <div class="checkbox-row" style="margin-top:4px">
+        <label class="toggle"><input type="checkbox" checked><div class="track"></div></label>
+        <span class="checkbox-label">Auto-refresh</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

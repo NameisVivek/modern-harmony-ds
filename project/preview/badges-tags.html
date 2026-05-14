@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 16px 20px; width: 700px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+  .label { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+  /* Badge (status pill) */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 9999px;
+    font-size: 11px; font-weight: 500; line-height: 16px;
+  }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .badge-secondary  { background: rgba(131,66,187,0.1); color: #7239A4; }
+  .badge-success    { background: #C5F3DF; color: #27854D; }
+  .badge-error      { background: #FFCDD0; color: #B02530; }
+  .badge-warning    { background: #FFEDC0; color: #C47A00; }
+  .badge-high-risk  { background: #FFE099; color: #915800; }
+  .badge-info       { background: #C0E0FF; color: #0066CC; }
+  .badge-neutral    { background: #DDDDE5; color: #5E5C75; }
+  .badge-outline    { background: #fff; border: 1px solid #BFBECE; color: #282828; }
+  .badge-reviewed   { background: #C5F3DF; color: #27854D; border: 1px solid #5BD6A0; }
+  .badge-dark       { background: #282828; color: #fff; }
+
+  /* Tag (with close) */
+  .tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 4px 2px 8px; border-radius: 4px;
+    font-size: 12px; font-weight: 400; border: 1px solid;
+  }
+  .tag-close { display: flex; align-items: center; cursor: pointer; }
+  .tag-close .material-icons { font-size: 14px; }
+  .tag-accent   { background: rgba(131,66,187,0.08); color: #7239A4; border-color: #BFBECE; }
+  .tag-neutral  { background: #F0F0F4; color: #282828; border-color: #DDDDE5; }
+  .tag-success  { background: #F0FAF3; color: #27854D; border-color: #A1EECC; }
+  .tag-error    { background: #FFF5F5; color: #B02530; border-color: #FFCDD0; }
+
+  /* Notification badge */
+  .notif-badge {
+    min-width: 15px; height: 15px; padding: 0 3px;
+    background: #E02F3A; color: #fff;
+    border-radius: 9999px; font-size: 9px; font-weight: 500;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+</style>
+</head>
+<body>
+  <div class="label">Status badges</div>
+  <div class="row">
+    <span class="badge badge-secondary"><span class="dot" style="background:#8342BB"></span>In progress</span>
+    <span class="badge badge-success"><span class="dot" style="background:#27854D"></span>Reviewed</span>
+    <span class="badge badge-error"><span class="dot" style="background:#E02F3A"></span>Error</span>
+    <span class="badge badge-warning"><span class="dot" style="background:#C47A00"></span>Warning</span>
+    <span class="badge badge-high-risk"><span class="dot" style="background:#E68A00"></span>High risk</span>
+    <span class="badge badge-info"><span class="dot" style="background:#0066CC"></span>Info</span>
+    <span class="badge badge-neutral">Draft</span>
+    <span class="badge badge-outline">Archived</span>
+    <span class="badge badge-reviewed">✓ Reviewed</span>
+    <span class="badge badge-dark">Released</span>
+  </div>
+  <div class="label">Tags (with close)</div>
+  <div class="row">
+    <span class="tag tag-accent">Forecast<span class="tag-close"><span class="material-icons">close</span></span></span>
+    <span class="tag tag-neutral">Q1 2025<span class="tag-close"><span class="material-icons">close</span></span></span>
+    <span class="tag tag-success">On track<span class="tag-close"><span class="material-icons">close</span></span></span>
+    <span class="tag tag-error">Overdue<span class="tag-close"><span class="material-icons">close</span></span></span>
+    <span class="tag tag-neutral">APAC<span class="tag-close"><span class="material-icons">close</span></span></span>
+    <span class="tag tag-neutral">SKU-48291<span class="tag-close"><span class="material-icons">close</span></span></span>
+  </div>
+  <div class="label">Notification counts &amp; icon badges</div>
+  <div class="row">
+    <span class="notif-badge">3</span>
+    <span class="notif-badge">12</span>
+    <span class="notif-badge">99</span>
+    <span style="font-size:11px; color:#767676; margin-left:4px">— Appear on notification bell icon in app header</span>
+  </div>
+</body>
+</html>

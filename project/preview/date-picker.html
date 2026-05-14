@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 16px 18px; width: fit-content; min-width: 400px; display: flex; flex-direction: column; gap: 24px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .card { background: #fff; border-radius: 10px; border: 1px solid #EBEBEB; padding: 16px 18px; }
+  .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+  .col { display: flex; flex-direction: column; gap: 8px; }
+
+  /* ══════════════════════════════════
+     DATE INPUT — eto-date-input
+  ══════════════════════════════════ */
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field-label { font-size: 12px; font-weight: 500; color: #282828; }
+  .field-hint  { font-size: 10px; color: #8C8C8C; }
+  .field-error { font-size: 10px; color: #E02F3A; display: flex; align-items: center; gap: 3px; }
+  .field-error .material-icons-outlined { font-size: 12px; }
+
+  /* Input wrapper — eto-date-input__field-container */
+  .date-input {
+    display: flex; align-items: center;
+    height: 32px; border: 1px solid #DDDDE5; border-radius: 8px;
+    padding: 0 0 0 10px; background: #fff; cursor: pointer;
+    gap: 0; min-width: 180px; transition: border-color 0.1s, box-shadow 0.1s;
+    position: relative;
+  }
+  .date-input:focus-within {
+    border-color: #8342BB;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(131,66,187,0.25);
+  }
+  .date-input.error { border-color: #E02F3A; }
+  .date-input.error:focus-within { box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(224,47,58,0.25); }
+  .date-input.disabled { background: #F0F0F4; pointer-events: none; border-color: #EBEBEB; }
+
+  /* Text field */
+  .date-input input {
+    flex: 1; border: none; outline: none;
+    font-family: 'Switzer', sans-serif; font-size: 13px; color: #282828;
+    background: transparent; min-width: 0;
+  }
+  .date-input input::placeholder { color: #8C8C8C; }
+  .date-input.disabled input { color: #8C8C8C; }
+
+  /* Addon icon — eto-date-input__addon (outlined date_range) */
+  .date-addon {
+    width: 32px; height: 30px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; cursor: pointer; border-left: 1px solid #EBEBEB;
+    margin-left: 6px;
+  }
+  .date-addon .material-icons-outlined { font-size: 16px; color: #8C8C8C; }
+  .date-input:hover .date-addon .material-icons-outlined { color: #5E5C75; }
+  .date-input.disabled .date-addon { border-color: #DDDDE5; }
+
+  /* ══════════════════════════════════
+     CALENDAR PANEL — eto-calendar
+  ══════════════════════════════════ */
+  .cal-panel {
+    background: #fff; border-radius: 12px;
+    border: 1px solid #E5E5EC;
+    box-shadow: 0 4px 20px rgba(55,23,78,0.12), 0 1px 4px rgba(55,23,78,0.06);
+    overflow: hidden; width: 280px; flex-shrink: 0;
+  }
+
+  /* Header */
+  .cal-header {
+    display: flex; align-items: center;
+    padding: 12px 10px 8px; gap: 2px;
+  }
+  .cal-nav {
+    width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+    background: transparent; border: none; border-radius: 6px; cursor: pointer; color: #5E5C75;
+    transition: background 0.1s;
+  }
+  .cal-nav:hover { background: #F0F0F4; color: #282828; }
+  .cal-nav .material-icons { font-size: 18px; }
+  .cal-month-year {
+    flex: 1; text-align: center; font-size: 14px; font-weight: 600; color: #282828;
+    cursor: pointer; border-radius: 6px; padding: 4px;
+    display: flex; align-items: center; justify-content: center; gap: 3px;
+  }
+  .cal-month-year:hover { background: #F0F0F4; }
+  .cal-month-year .material-icons { font-size: 16px; color: #8C8C8C; }
+
+  /* Days grid */
+  .cal-body { padding: 0 8px 8px; }
+  .cal-weekdays {
+    display: grid; grid-template-columns: repeat(7,1fr);
+    margin-bottom: 2px;
+  }
+  .cal-wd {
+    text-align: center; font-size: 10px; font-weight: 600; color: #8C8C8C;
+    padding: 4px 0; letter-spacing: 0.04em;
+  }
+  .cal-days { display: grid; grid-template-columns: repeat(7,1fr); gap: 1px; }
+  .cal-day {
+    height: 34px; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: #282828; border-radius: 6px; cursor: pointer;
+    transition: background 0.1s; position: relative; font-weight: 400;
+  }
+  .cal-day:hover:not(.disabled):not(.selected):not(.range-start):not(.range-end) {
+    background: #F0F0F4;
+  }
+  .cal-day.other-month { color: #BFBECE; }
+  .cal-day.today { font-weight: 600; }
+  .cal-day.today::after {
+    content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+    width: 4px; height: 4px; border-radius: 50%; background: #8342BB;
+  }
+  .cal-day.selected {
+    background: #8342BB; color: #fff; font-weight: 600; border-radius: 6px;
+  }
+  .cal-day.selected::after { display: none; }
+  .cal-day.in-range {
+    background: rgba(131,66,187,0.1); border-radius: 0; color: #282828;
+  }
+  .cal-day.range-start {
+    background: #8342BB; color: #fff; font-weight: 600;
+    border-radius: 6px 0 0 6px;
+  }
+  .cal-day.range-end {
+    background: #8342BB; color: #fff; font-weight: 600;
+    border-radius: 0 6px 6px 0;
+  }
+  .cal-day.range-start.range-end { border-radius: 6px; }
+  .cal-day.disabled { color: #DDDDE5; cursor: not-allowed; }
+
+  /* Footer */
+  .cal-footer {
+    padding: 8px 12px; border-top: 1px solid #F0F0F4;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .cal-footer-info { flex: 1; font-size: 11px; color: #5E5C75; }
+  .cal-btn {
+    height: 26px; padding: 0 12px; border-radius: 6px;
+    font-family: 'Switzer', sans-serif; font-size: 11px; font-weight: 500; cursor: pointer;
+  }
+  .cal-btn-primary { background: #8342BB; color: #fff; border: none; box-shadow: 0 1px 2px rgba(55,23,78,0.2); }
+  .cal-btn-primary:hover { background: #7239A4; }
+  .cal-btn-default { background: #fff; color: #282828; border: 1px solid #DDDDE5; }
+  .cal-btn-default:hover { background: #F0F0F4; }
+
+  /* Time row */
+  .cal-time {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; border-top: 1px solid #F0F0F4;
+    background: #FAFAFA;
+  }
+  .time-label { font-size: 11px; color: #5E5C75; font-weight: 500; flex-shrink: 0; }
+  .time-input-wrap {
+    display: flex; align-items: center;
+    border: 1px solid #DDDDE5; border-radius: 6px; overflow: hidden;
+    background: #fff;
+  }
+  .time-seg {
+    width: 34px; height: 26px; border: none; outline: none;
+    text-align: center; font-family: 'Switzer', sans-serif;
+    font-size: 12px; color: #282828; background: transparent;
+  }
+  .time-seg:focus { background: rgba(131,66,187,0.06); color: #8342BB; }
+  .time-colon { color: #8C8C8C; font-weight: 600; font-size: 12px; padding: 0 1px; }
+  .time-zone { font-size: 11px; color: #8C8C8C; }
+
+  /* ── Time scroll wheel — drum picker ── */
+  .tw-drum-wrap {
+    position: relative; width: 48px; height: 224px; /* 7 × 32px */
+    overflow: hidden; cursor: ns-resize; touch-action: none;
+    flex-shrink: 0;
+  }
+  .tw-drum-wrap.tw-ampm { width: 44px; }
+  .tw-highlight {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 100%; height: 32px; background: #8342BB;
+    border-radius: 7px; pointer-events: none; z-index: 1;
+  }
+  .tw-fade-top, .tw-fade-bottom {
+    position: absolute; left: 0; right: 0; height: 72px;
+    pointer-events: none; z-index: 3;
+  }
+  .tw-fade-top    { top: 0;    background: linear-gradient(to bottom, rgba(255,255,255,0.96) 0%, transparent 100%); }
+  .tw-fade-bottom { bottom: 0; background: linear-gradient(to top,    rgba(255,255,255,0.96) 0%, transparent 100%); }
+  .tw-drum { position: absolute; top: 0; left: 0; right: 0; will-change: transform; z-index: 2; }
+  .tw-item {
+    height: 32px; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 400; color: #8C8C8C;
+    user-select: none; pointer-events: none;
+  }
+  .tw-item.tw-sel { color: #fff; font-weight: 600; font-size: 13px; letter-spacing: -0.01em; }
+
+  /* Today circle — date+time calendar variant */
+  .cal-day.today-circle {
+    border: 1.5px solid #BFBECE; border-radius: 50%;
+    font-weight: 400; color: #282828;
+  }
+  .cal-day.today-circle::after { display: none; }
+
+  /* Large calendar for date+time picker */
+  .cal-large { font-size: 18px; }
+  .cal-large .cal-wd { font-size: 12px; font-weight: 500; color: #8C8C8C; padding: 8px 0; letter-spacing: 0; }
+  .cal-large .cal-day { height: 48px; font-size: 17px; border-radius: 50%; width: 48px; margin: 0 auto; }
+  .cal-large .cal-days { gap: 0; }
+  .cal-large .cal-weekdays { gap: 0; }
+
+  .cal-grid-sm {
+    display: grid; grid-template-columns: repeat(4,1fr); gap: 4px; padding: 8px;
+  }
+  .cal-month-item, .cal-year-item {
+    height: 34px; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: #282828; border-radius: 6px; cursor: pointer;
+    transition: background 0.1s;
+  }
+  .cal-month-item:hover, .cal-year-item:hover { background: #F0F0F4; }
+  .cal-month-item.selected, .cal-year-item.selected {
+    background: #8342BB; color: #fff; font-weight: 600;
+  }
+  .cal-month-item.current, .cal-year-item.current { font-weight: 600; color: #8342BB; }
+
+  /* ── View transition wrapper ── */
+  .cal-view-wrap { overflow: hidden; }
+</style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════
+       1. INPUT FIELD VARIANTS
+  ═══════════════════════════════ -->
+  <div>
+    <div class="lbl">Date input — eto-date-input (all states)</div>
+    <div class="card row">
+
+      <div class="field" style="width:180px">
+        <label class="field-label">Date</label>
+        <div class="date-input">
+          <input type="text" placeholder="DD / MM / YYYY">
+          <div class="date-addon"><span class="material-icons-outlined">date_range</span></div>
+        </div>
+      </div>
+
+      <div class="field" style="width:180px">
+        <label class="field-label">Filled</label>
+        <div class="date-input">
+          <input type="text" value="15 Jan 2025">
+          <div class="date-addon"><span class="material-icons-outlined">date_range</span></div>
+        </div>
+      </div>
+
+      <div class="field" style="width:210px">
+        <label class="field-label">Date &amp; time</label>
+        <div class="date-input">
+          <input type="text" value="15 Jan 2025, 09:30">
+          <div class="date-addon"><span class="material-icons-outlined">schedule</span></div>
+        </div>
+      </div>
+
+      <div class="field" style="width:230px">
+        <label class="field-label">Date range</label>
+        <div class="date-input">
+          <input type="text" value="01 Jan – 31 Mar 2025">
+          <div class="date-addon"><span class="material-icons-outlined">date_range</span></div>
+        </div>
+      </div>
+
+      <div class="field" style="width:180px">
+        <label class="field-label">Required <span style="color:#E02F3A">*</span></label>
+        <div class="date-input">
+          <input type="text" placeholder="DD / MM / YYYY">
+          <div class="date-addon"><span class="material-icons-outlined">date_range</span></div>
+        </div>
+      </div>
+
+      <div class="field" style="width:180px">
+        <label class="field-label">Error</label>
+        <div class="date-input error">
+          <input type="text" value="32 / 13 / 2025">
+          <div class="date-addon"><span class="material-icons-outlined">date_range</span></div>
+        </div>
+        <div class="field-error"><span class="material-icons-outlined">error_outline</span>Invalid date</div>
+      </div>
+
+      <div class="field" style="width:180px">
+        <label class="field-label" style="color:#8C8C8C">Disabled</label>
+        <div class="date-input disabled">
+          <input type="text" value="15 Jan 2025" disabled>
+          <div class="date-addon"><span class="material-icons-outlined">date_range</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       2. CALENDAR — SINGLE DATE
+  ═══════════════════════════════ -->
+  <div>
+    <div class="lbl">Calendar panels</div>
+    <div class="row">
+
+      <!-- Single date -->
+      <div>
+        <div style="font-size:9px;font-weight:500;color:#8C8C8C;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px">Single date</div>
+        <div class="cal-panel" id="cal1">
+          <div class="cal-header">
+            <button class="cal-nav" id="cal1-prev" onclick="calPrev('cal1')"><span class="material-icons">chevron_left</span></button>
+            <div class="cal-month-year" id="cal1-title" onclick="calTitleClick('cal1')"></div>
+            <button class="cal-nav" id="cal1-next" onclick="calNext('cal1')"><span class="material-icons">chevron_right</span></button>
+          </div>
+          <div class="cal-view-wrap" id="cal1-view"></div>
+          <div class="cal-footer" id="cal1-footer">
+            <button class="cal-btn cal-btn-default" onclick="clearCal('cal1')">Clear</button>
+            <div style="flex:1"></div>
+            <button class="cal-btn cal-btn-primary">Apply</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Date range -->
+      <div>
+        <div style="font-size:9px;font-weight:500;color:#8C8C8C;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px">Date range</div>
+        <div class="cal-panel" id="cal3">
+          <div class="cal-header">
+            <button class="cal-nav" id="cal3-prev" onclick="calPrev('cal3')"><span class="material-icons">chevron_left</span></button>
+            <div class="cal-month-year" id="cal3-title" onclick="calTitleClick('cal3')"></div>
+            <button class="cal-nav" id="cal3-next" onclick="calNext('cal3')"><span class="material-icons">chevron_right</span></button>
+          </div>
+          <div class="cal-view-wrap" id="cal3-view"></div>
+          <div class="cal-footer" id="cal3-footer">
+            <span class="cal-footer-info" id="cal3-info">Click to pick start date</span>
+            <button class="cal-btn cal-btn-default" onclick="clearRange()">Clear</button>
+            <button class="cal-btn cal-btn-primary">Apply</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       3. MONTH / YEAR PICKER
+  ═══════════════════════════════ -->
+  <div>
+    <div class="lbl">Month &amp; year picker views</div>
+    <div class="row">
+
+      <!-- Month picker -->
+      <div>
+        <div style="font-size:9px;font-weight:500;color:#8C8C8C;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px">Month picker</div>
+        <div class="cal-panel" style="width:240px">
+          <div class="cal-header">
+            <button class="cal-nav"><span class="material-icons">chevron_left</span></button>
+            <div class="cal-month-year">2025 <span class="material-icons">expand_more</span></div>
+            <button class="cal-nav"><span class="material-icons">chevron_right</span></button>
+          </div>
+          <div class="cal-grid-sm">
+            <div class="cal-month-item">Jan</div><div class="cal-month-item selected">Feb</div>
+            <div class="cal-month-item">Mar</div><div class="cal-month-item">Apr</div>
+            <div class="cal-month-item">May</div><div class="cal-month-item">Jun</div>
+            <div class="cal-month-item current">Jul</div><div class="cal-month-item">Aug</div>
+            <div class="cal-month-item">Sep</div><div class="cal-month-item">Oct</div>
+            <div class="cal-month-item">Nov</div><div class="cal-month-item">Dec</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Year picker -->
+      <div>
+        <div style="font-size:9px;font-weight:500;color:#8C8C8C;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px">Year picker</div>
+        <div class="cal-panel" style="width:240px">
+          <div class="cal-header">
+            <button class="cal-nav"><span class="material-icons">chevron_left</span></button>
+            <div class="cal-month-year">2020 – 2031 <span class="material-icons">expand_more</span></div>
+            <button class="cal-nav"><span class="material-icons">chevron_right</span></button>
+          </div>
+          <div class="cal-grid-sm">
+            <div class="cal-year-item">2020</div><div class="cal-year-item">2021</div>
+            <div class="cal-year-item">2022</div><div class="cal-year-item">2023</div>
+            <div class="cal-year-item">2024</div><div class="cal-year-item selected">2025</div>
+            <div class="cal-year-item current">2026</div><div class="cal-year-item">2027</div>
+            <div class="cal-year-item">2028</div><div class="cal-year-item">2029</div>
+            <div class="cal-year-item">2030</div><div class="cal-year-item">2031</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       4. DATE + TIME PICKER — Figma reference
+       Side-by-side calendar + time scroll wheels
+  ═══════════════════════════════ -->
+  <div>
+    <div class="lbl">Date &amp; time picker — calendar + scroll time wheel</div>
+    <div class="col">
+
+      <!-- Input -->
+      <div class="field" style="width:320px">
+        <label class="field-label">Date and time</label>
+        <div class="date-input" style="border-color:#8342BB;box-shadow:0 0 0 2px #fff,0 0 0 4px rgba(131,66,187,0.25)">
+          <div style="display:flex;align-items:center;flex:1;gap:1px;font-size:13px">
+            <span style="background:rgba(131,66,187,0.15);color:#7239A4;font-weight:600;padding:1px 3px;border-radius:3px">MM</span>
+            <span style="color:#8C8C8C">-DD-YYYY, --:-- --</span>
+          </div>
+          <div class="date-addon"><span class="material-icons-outlined">calendar_month</span></div>
+        </div>
+      </div>
+
+      <!-- Panel -->
+      <div style="display:inline-flex;align-items:stretch;align-self:flex-start;background:#fff;border-radius:12px;border:1px solid #E5E5EC;box-shadow:0 4px 16px rgba(55,23,78,0.12);overflow:hidden;">
+
+        <!-- ── CALENDAR (left) ── -->
+        <div style="width:280px;">
+
+          <!-- header -->
+          <div style="display:flex;align-items:center;padding:10px 10px 8px;gap:2px">
+            <button id="dt-prev" onclick="calPrev('dt')" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;border-radius:6px;cursor:pointer;color:#5E5C75;transition:background 0.1s" onmouseover="this.style.background='#F0F0F4'" onmouseout="this.style.background='transparent'">
+              <span class="material-icons" style="font-size:18px">chevron_left</span>
+            </button>
+            <div id="dt-title" onclick="calTitleClick('dt')" style="flex:1;text-align:center;font-size:13px;font-weight:600;color:#282828;cursor:pointer;border-radius:6px;padding:4px;display:flex;align-items:center;justify-content:center;gap:3px;transition:background 0.1s" onmouseover="this.style.background='#F0F0F4'" onmouseout="this.style.background='transparent'"></div>
+            <button id="dt-next" onclick="calNext('dt')" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;border-radius:6px;cursor:pointer;color:#5E5C75;transition:background 0.1s" onmouseover="this.style.background='#F0F0F4'" onmouseout="this.style.background='transparent'">
+              <span class="material-icons" style="font-size:18px">chevron_right</span>
+            </button>
+          </div>
+
+          <!-- view content (days / months / years) -->
+          <div id="dt-view"></div>
+        </div>
+
+        <!-- ── TIME WHEELS (right) ── -->
+        <div style="border-left:1px solid #F0F0F4;display:flex;flex-direction:row;align-items:center;padding:10px 8px;gap:4px;width:fit-content;">
+
+          <!-- Hour drum -->
+          <div class="tw-drum-wrap" id="tw-hour-wrap">
+            <div class="tw-highlight"></div>
+            <div class="tw-fade-top"></div>
+            <div class="tw-drum" id="tw-hour-drum"></div>
+            <div class="tw-fade-bottom"></div>
+          </div>
+
+          <!-- Minute drum -->
+          <div class="tw-drum-wrap" id="tw-min-wrap">
+            <div class="tw-highlight"></div>
+            <div class="tw-fade-top"></div>
+            <div class="tw-drum" id="tw-min-drum"></div>
+            <div class="tw-fade-bottom"></div>
+          </div>
+
+          <!-- AM/PM drum -->
+          <div class="tw-drum-wrap tw-ampm" id="tw-ampm-wrap">
+            <div class="tw-highlight"></div>
+            <div class="tw-fade-top"></div>
+            <div class="tw-drum" id="tw-ampm-drum"></div>
+            <div class="tw-fade-bottom"></div>
+          </div>
+
+        </div><!-- /time wheels -->
+      </div><!-- /panel -->
+    </div>
+  </div>
+
+<script>
+// ── Constants ─────────────────────────────────────────────────────────────
+const MONTHS_LONG  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const TODAY = new Date();
+
+// ── State ─────────────────────────────────────────────────────────────────
+const calState = {
+  cal1: { year: 2025, month: 0,  selected: 15,  view: 'days', yearPage: 2020 },
+  cal3: { year: 2025, month: 0,  selected: null, view: 'days', yearPage: 2020 },
+  dt:   { year: 2024, month: 4,  selected: null, view: 'days', yearPage: 2020 },
+};
+let rangeStart = 6, rangeEnd = 15;
+
+// ── Master render ─────────────────────────────────────────────────────────
+function renderCal(id, dir) {
+  const s      = calState[id];
+  const wrap   = document.getElementById(id + '-view');
+  const title  = document.getElementById(id + '-title');
+  const footer = document.getElementById(id + '-footer');
+  if (!wrap || !title) return;
+
+  title.style.background = ''; // reset any stuck hover
+
+  if (s.view === 'days') {
+    title.innerHTML = MONTHS_LONG[s.month] + ' ' + s.year + ' <span class="material-icons" style="font-size:15px;color:#8C8C8C;vertical-align:middle">expand_more</span>';
+    title.style.cursor = 'pointer';
+    title.style.pointerEvents = 'auto';
+  } else if (s.view === 'months') {
+    title.innerHTML = s.year + ' <span class="material-icons" style="font-size:15px;color:#8C8C8C;vertical-align:middle">expand_more</span>';
+    title.style.cursor = 'pointer';
+    title.style.pointerEvents = 'auto';
+  } else {
+    title.textContent = s.yearPage + ' – ' + (s.yearPage + 11);
+    title.style.cursor = 'default';
+    title.style.pointerEvents = 'none';
+  }
+
+  if (footer) footer.style.display = s.view === 'days' ? 'flex' : 'none';
+
+  let html = '';
+  if (s.view === 'days')   html = buildDays(id, s);
+  if (s.view === 'months') html = buildMonths(id, s);
+  if (s.view === 'years')  html = buildYears(id, s);
+
+  const inner = document.createElement('div');
+  inner.innerHTML = html;
+  const tx = dir === 'forward' ? '10px' : dir === 'back' ? '-10px' : '0';
+  inner.style.cssText = 'opacity:0;transform:translateX(' + tx + ');transition:opacity 0.18s ease,transform 0.18s ease';
+  wrap.innerHTML = '';
+  wrap.appendChild(inner);
+  requestAnimationFrame(function() { inner.style.opacity = '1'; inner.style.transform = 'translateX(0)'; });
+}
+
+// ── View builders ─────────────────────────────────────────────────────────
+function buildDays(id, s) {
+  const firstDay    = new Date(s.year, s.month, 1).getDay();
+  const daysInMonth = new Date(s.year, s.month + 1, 0).getDate();
+  const prevDays    = new Date(s.year, s.month, 0).getDate();
+  const startOffset = firstDay === 0 ? 6 : firstDay - 1;
+  const isCurrent   = TODAY.getFullYear() === s.year && TODAY.getMonth() === s.month;
+  const todayD      = isCurrent ? TODAY.getDate() : -1;
+
+  let h = '<div class="cal-body"><div class="cal-weekdays">';
+  ['Mo','Tu','We','Th','Fr','Sa','Su'].forEach(function(d) { h += '<div class="cal-wd">' + d + '</div>'; });
+  h += '</div><div class="cal-days">';
+
+  for (let i = startOffset - 1; i >= 0; i--)
+    h += '<div class="cal-day other-month">' + (prevDays - i) + '</div>';
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    let cls = 'cal-day';
+    if (d === todayD) cls += ' today';
+    if (id === 'cal3') {
+      if (rangeStart && rangeEnd) {
+        if (d === rangeStart && d === rangeEnd) cls += ' range-start range-end';
+        else if (d === rangeStart) cls += ' range-start';
+        else if (d === rangeEnd)   cls += ' range-end';
+        else if (d > rangeStart && d < rangeEnd) cls += ' in-range';
+      } else if (rangeStart && d === rangeStart) cls += ' selected';
+      h += '<div class="' + cls + '" onclick="pickRange(' + d + ')">' + d + '</div>';
+    } else {
+      if (s.selected === d) cls += ' selected';
+      h += '<div class="' + cls + '" onclick="selectDay(\'' + id + '\',' + d + ')">' + d + '</div>';
+    }
+  }
+  const total = startOffset + daysInMonth;
+  const rem = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for (let d = 1; d <= rem; d++) h += '<div class="cal-day other-month">' + d + '</div>';
+  h += '</div></div>';
+  return h;
+}
+
+function buildMonths(id, s) {
+  let h = '<div class="cal-grid-sm">';
+  MONTHS_SHORT.forEach(function(m, i) {
+    let cls = 'cal-month-item';
+    if (i === s.month) cls += ' selected';
+    if (TODAY.getMonth() === i && TODAY.getFullYear() === s.year) cls += ' current';
+    h += '<div class="' + cls + '" onclick="selectMonth(\'' + id + '\',' + i + ')">' + m + '</div>';
+  });
+  h += '</div>';
+  return h;
+}
+
+function buildYears(id, s) {
+  let h = '<div class="cal-grid-sm">';
+  for (let y = s.yearPage; y < s.yearPage + 12; y++) {
+    let cls = 'cal-year-item';
+    if (y === s.year) cls += ' selected';
+    if (y === TODAY.getFullYear()) cls += ' current';
+    h += '<div class="' + cls + '" onclick="selectYear(\'' + id + '\',' + y + ')">' + y + '</div>';
+  }
+  h += '</div>';
+  return h;
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────
+function calTitleClick(id) {
+  const s = calState[id];
+  if (s.view === 'days')  { s.view = 'years'; renderCal(id, 'forward'); }
+}
+
+function calPrev(id) {
+  const s = calState[id];
+  if (s.view === 'days')   { if (s.month === 0) { s.month = 11; s.year--; } else s.month--; renderCal(id, 'back'); }
+  if (s.view === 'months') { s.year--;        renderCal(id, 'back'); }
+  if (s.view === 'years')  { s.yearPage -= 12; renderCal(id, 'back'); }
+}
+
+function calNext(id) {
+  const s = calState[id];
+  if (s.view === 'days')   { if (s.month === 11) { s.month = 0; s.year++; } else s.month++; renderCal(id, 'forward'); }
+  if (s.view === 'months') { s.year++;        renderCal(id, 'forward'); }
+  if (s.view === 'years')  { s.yearPage += 12; renderCal(id, 'forward'); }
+}
+
+// ── Selection ─────────────────────────────────────────────────────────────
+function selectMonth(id, m) { const s = calState[id]; s.month = m; s.view = 'days'; renderCal(id, 'back'); }
+function selectYear(id, y)  { const s = calState[id]; s.year = y;  s.view = 'days'; renderCal(id, 'back'); }
+function selectDay(id, day) { calState[id].selected = day; renderCal(id); }
+function clearCal(id)       { calState[id].selected = null; renderCal(id); }
+function prevMonth(id)      { calPrev(id); }
+function nextMonth(id)      { calNext(id); }
+
+// ── Range ─────────────────────────────────────────────────────────────────
+function pickRange(day) {
+  if (!rangeStart || (rangeStart && rangeEnd)) { rangeStart = day; rangeEnd = null; }
+  else { if (day < rangeStart) { rangeEnd = rangeStart; rangeStart = day; } else rangeEnd = day; }
+  renderCal('cal3');
+  const s = calState.cal3;
+  const info = document.getElementById('cal3-info');
+  if (info) {
+    if (rangeStart && rangeEnd)
+      info.textContent = rangeStart + ' ' + MONTHS_SHORT[s.month] + ' – ' + rangeEnd + ' ' + MONTHS_SHORT[s.month] + ' ' + s.year;
+    else if (rangeStart)
+      info.textContent = rangeStart + ' ' + MONTHS_SHORT[s.month] + ' ' + s.year + ' → pick end';
+    else
+      info.textContent = 'Click to pick start date';
+  }
+}
+
+function clearRange() {
+  rangeStart = null; rangeEnd = null;
+  renderCal('cal3');
+  const info = document.getElementById('cal3-info');
+  if (info) info.textContent = 'Click to pick start date';
+}
+
+// ── Time wheel ────────────────────────────────────────────────────────────
+function selTw(colId, selId, item) {
+  document.getElementById(selId).textContent = item.textContent;
+  document.getElementById(colId).appendChild(item);
+}
+
+// ── Drum wheel interaction ─────────────────────────────────────────────────
+(function() {
+  const ITEM_H = 32;
+  const VISIBLE = 7;
+  const CENTER_PX = Math.floor(VISIBLE / 2) * ITEM_H; // 96px
+
+  function DrumWheel(wrapId, drumId, items, initialValue) {
+    const wrap = document.getElementById(wrapId);
+    const drum = document.getElementById(drumId);
+    if (!wrap || !drum) return;
+
+    const n = items.length;
+    // enough copies so drum height >> viewport; more for tiny lists like AM/PM
+    const copies = Math.max(7, Math.ceil(VISIBLE * 4 / n));
+    const midCopy = Math.floor(copies / 2);
+
+    // Build DOM
+    for (var c = 0; c < copies; c++) {
+      for (var i = 0; i < n; i++) {
+        var el = document.createElement('div');
+        el.className = 'tw-item';
+        el.textContent = items[i];
+        drum.appendChild(el);
+      }
+    }
+
+    // offset = absolute item index at centre (float during drag)
+    var initLogical = Math.max(0, items.indexOf(String(initialValue)));
+    var offset = midCopy * n + initLogical;
+    var snapAnim = null;
+    var wheelTimer = null;
+
+    function ty(o) { return CENTER_PX - o * ITEM_H; }
+
+    function applyRaw(o) {
+      drum.style.transform = 'translateY(' + ty(o) + 'px)';
+    }
+
+    function logicalIdx(o) {
+      return ((Math.round(o) % n) + n) % n;
+    }
+
+    function updateHighlight(o) {
+      var li = logicalIdx(o);
+      var els = drum.querySelectorAll('.tw-item');
+      for (var k = 0; k < els.length; k++) {
+        els[k].classList.toggle('tw-sel', (k % n) === li);
+      }
+    }
+
+    function normalize(o) {
+      // silently re-centre to midCopy territory after a snap
+      var rounded = Math.round(o);
+      var li = logicalIdx(rounded);
+      var ideal = midCopy * n + li;
+      var dist = rounded - ideal;
+      var jumps = Math.round(dist / n);
+      return o - jumps * n;
+    }
+
+    function snapTo(targetRaw, withMomentum) {
+      if (snapAnim) cancelAnimationFrame(snapAnim);
+      var target = Math.round(targetRaw);
+
+      function step() {
+        var diff = target - offset;
+        if (Math.abs(diff) < 0.012) {
+          offset = normalize(target);
+          applyRaw(offset);
+          updateHighlight(offset);
+          return;
+        }
+        offset += diff * 0.24;
+        applyRaw(offset);
+        updateHighlight(offset);
+        snapAnim = requestAnimationFrame(step);
+      }
+      snapAnim = requestAnimationFrame(step);
+    }
+
+    // initial render
+    applyRaw(offset);
+    updateHighlight(offset);
+
+    // ── Mouse wheel ──────────────────────────────────────────────────────
+    wrap.addEventListener('wheel', function(e) {
+      e.preventDefault();
+      if (snapAnim) { cancelAnimationFrame(snapAnim); snapAnim = null; }
+      clearTimeout(wheelTimer);
+      offset += Math.sign(e.deltaY);
+      applyRaw(offset);
+      updateHighlight(offset);
+      wheelTimer = setTimeout(function() { snapTo(offset, false); }, 120);
+    }, { passive: false });
+
+    // ── Pointer drag ─────────────────────────────────────────────────────
+    var drag = false, startY, startOff, lastY, lastT, vel;
+
+    wrap.addEventListener('pointerdown', function(e) {
+      if (snapAnim) { cancelAnimationFrame(snapAnim); snapAnim = null; }
+      drag = true; startY = e.clientY; startOff = offset;
+      lastY = e.clientY; lastT = Date.now(); vel = 0;
+      wrap.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    });
+
+    wrap.addEventListener('pointermove', function(e) {
+      if (!drag) return;
+      var dy = e.clientY - startY;
+      offset = startOff - dy / ITEM_H;
+      var now = Date.now(), dt = now - lastT;
+      if (dt > 0) vel = -(e.clientY - lastY) / dt / ITEM_H;
+      lastY = e.clientY; lastT = now;
+      applyRaw(offset);
+      updateHighlight(offset);
+    });
+
+    function endDrag() {
+      if (!drag) return;
+      drag = false;
+      // apply momentum, capped to ±6 items
+      var momentum = Math.max(-6, Math.min(6, vel * 160));
+      snapTo(offset + momentum, true);
+    }
+
+    wrap.addEventListener('pointerup', endDrag);
+    wrap.addEventListener('pointercancel', function() { drag = false; snapTo(offset, true); });
+  }
+
+  // Instantiate the three drums
+  DrumWheel('tw-hour-wrap', 'tw-hour-drum',
+    ['1','2','3','4','5','6','7','8','9','10','11','12'], '10');
+  DrumWheel('tw-min-wrap',  'tw-min-drum',
+    ['00','05','10','15','20','25','30','35','40','45','50','55'], '30');
+  DrumWheel('tw-ampm-wrap', 'tw-ampm-drum', ['AM','PM'], 'AM');
+})();
+
+// ── Init ──────────────────────────────────────────────────────────────────
+renderCal('cal1');
+renderCal('cal3');
+renderCal('dt');
+</script>
+</body>
+</html>

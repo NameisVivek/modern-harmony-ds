@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 12px; width: 700px; }
+  .row { display: flex; gap: 10px; align-items: flex-start; }
+
+  /* Sidebar shell */
+  .sidebar {
+    background: #fff; border: 1px solid #EBEBEB;
+    box-shadow: 0 2px 4px rgba(55,23,78,0.06), 0 4px 8px -2px rgba(55,23,78,0.1);
+    display: flex; flex-direction: column;
+    border-radius: 10px; overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* Nav item */
+  .nav-item {
+    display: flex; align-items: center;
+    height: 40px; cursor: pointer;
+    border-left: 4px solid transparent;
+    padding-left: 10px; gap: 10px;
+  }
+  .nav-item .material-icons { font-size: 20px; flex-shrink: 0; }
+  .nav-label { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* States */
+  .nav-default .material-icons { color: #5E5C75; }
+  .nav-default .nav-label      { color: #282828; font-weight: 400; }
+  .nav-default:hover            { background: rgba(40,40,40,0.05); }
+
+  .nav-active {
+    background: rgba(131,66,187,0.08);
+    border-left-color: #8342BB;
+  }
+  .nav-active .material-icons { color: #8342BB; }
+  .nav-active .nav-label      { color: #7239A4; font-weight: 500; }
+
+  .nav-disabled .material-icons { color: #BFBECE; }
+  .nav-disabled .nav-label      { color: #BFBECE; font-weight: 400; }
+
+  /* Divider */
+  .nav-divider { height: 1px; background: #F0F0F4; margin: 4px 0; }
+
+  /* Avatar item */
+  .nav-user { display: flex; align-items: center; height: 44px; padding: 0 10px; gap: 8px; cursor: pointer; border-top: 1px solid #F0F0F4; }
+  .nav-user-avatar { width: 24px; height: 24px; border-radius: 50%; background: #8342BB; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 500; color: #fff; flex-shrink: 0; }
+  .nav-user-name  { font-size: 13px; font-weight: 500; color: #282828; white-space: nowrap; }
+  .nav-user-role  { font-size: 10px; color: #8C8C8C; white-space: nowrap; }
+
+  /* Tooltip stub (collapsed state) */
+  .tooltip { position: absolute; left: 56px; background: #282828; color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 5px; white-space: nowrap; pointer-events: none; z-index: 10; box-shadow: 0 2px 8px rgba(20,16,41,0.2); }
+
+  /* Labels */
+  .panel-label { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+  /* Annotations */
+  .anns { display: flex; flex-direction: column; gap: 4px; padding: 4px 0; }
+  .ann  { display: flex; align-items: center; gap: 6px; font-size: 9px; color: #5E5C75; line-height: 1.4; }
+  .ann-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <!-- Collapsed sidebar (48px) -->
+    <div>
+      <div class="panel-label">Collapsed — 48px</div>
+      <div class="sidebar" style="width:48px">
+        <div class="nav-item nav-default" style="padding-left:14px">
+          <span class="material-icons">home</span>
+        </div>
+        <div class="nav-item nav-active" style="padding-left:10px">
+          <span class="material-icons">insert_chart_outlined</span>
+        </div>
+        <div class="nav-item nav-default" style="padding-left:14px">
+          <span class="material-icons">calendar_today</span>
+        </div>
+        <div class="nav-item nav-default" style="padding-left:14px">
+          <span class="material-icons">assignment</span>
+        </div>
+        <div class="nav-item nav-default" style="padding-left:14px">
+          <span class="material-icons">local_shipping</span>
+        </div>
+        <div class="nav-item nav-default" style="padding-left:14px">
+          <span class="material-icons">bar_chart</span>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-item nav-default" style="padding-left:14px">
+          <span class="material-icons">storage</span>
+        </div>
+        <div class="nav-item nav-disabled" style="padding-left:14px">
+          <span class="material-icons">tune</span>
+        </div>
+        <div style="flex:1; min-height:20px"></div>
+        <div class="nav-item nav-default" style="padding-left:14px">
+          <span class="material-icons">help_outline</span>
+        </div>
+        <div class="nav-item nav-default" style="padding-left:14px">
+          <span class="material-icons">settings</span>
+        </div>
+        <div class="nav-user" style="padding:0 12px; justify-content:center">
+          <div class="nav-user-avatar">JD</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expanded sidebar (216px) -->
+    <div>
+      <div class="panel-label">Expanded — 216px</div>
+      <div class="sidebar" style="width:216px">
+        <div class="nav-item nav-default">
+          <span class="material-icons">home</span>
+          <span class="nav-label">Dashboard</span>
+        </div>
+        <div class="nav-item nav-active">
+          <span class="material-icons">insert_chart_outlined</span>
+          <span class="nav-label">S&amp;OP Planning</span>
+        </div>
+        <div class="nav-item nav-default">
+          <span class="material-icons">calendar_today</span>
+          <span class="nav-label">Forecast</span>
+        </div>
+        <div class="nav-item nav-default">
+          <span class="material-icons">assignment</span>
+          <span class="nav-label">Orders</span>
+        </div>
+        <div class="nav-item nav-default">
+          <span class="material-icons">local_shipping</span>
+          <span class="nav-label">Shipments</span>
+        </div>
+        <div class="nav-item nav-default">
+          <span class="material-icons">bar_chart</span>
+          <span class="nav-label">Reports</span>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-item nav-default">
+          <span class="material-icons">storage</span>
+          <span class="nav-label">Data management</span>
+        </div>
+        <div class="nav-item nav-disabled">
+          <span class="material-icons">tune</span>
+          <span class="nav-label" style="color:#BFBECE">Configuration</span>
+        </div>
+        <div style="flex:1; min-height:20px"></div>
+        <div class="nav-item nav-default">
+          <span class="material-icons">help_outline</span>
+          <span class="nav-label">Help</span>
+        </div>
+        <div class="nav-item nav-default">
+          <span class="material-icons">settings</span>
+          <span class="nav-label">Settings</span>
+        </div>
+        <div class="nav-user">
+          <div class="nav-user-avatar">JD</div>
+          <div>
+            <div class="nav-user-name">Jane Doe</div>
+            <div class="nav-user-role">Supply Planner</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Annotations -->
+    <div style="flex:1; padding-top:20px">
+      <div class="anns">
+        <div class="ann"><div class="ann-dot" style="background:#fff;border:1px solid #EBEBEB"></div>Surface: white, border 1px #EBEBEB</div>
+        <div class="ann"><div class="ann-dot" style="background:#282828"></div>Shadow: violet-tinted (rgba 55,23,78)</div>
+        <div class="ann"><div class="ann-dot" style="background:rgba(131,66,187,0.08); border-left:4px solid #8342BB"></div>Active: rgba(131,66,187,0.08) + 4px left border violet-600</div>
+        <div class="ann"><div class="ann-dot" style="background:#8342BB"></div>Active icon: violet-600</div>
+        <div class="ann"><div class="ann-dot" style="background:#7239A4"></div>Active label: violet-675, weight 500</div>
+        <div class="ann"><div class="ann-dot" style="background:#5E5C75"></div>Default icon: cool-600</div>
+        <div class="ann"><div class="ann-dot" style="background:#282828"></div>Default label: gray-875, weight 400</div>
+        <div class="ann"><div class="ann-dot" style="background:#BFBECE"></div>Disabled: cool-200</div>
+        <div class="ann"><div class="ann-dot" style="background:#F0F0F4"></div>Divider: cool-50, 1px, margin 4px</div>
+        <div class="ann"><div class="ann-dot" style="background:#8342BB"></div>Item height: 40px</div>
+        <div class="ann"><div class="ann-dot" style="background:#8342BB"></div>Collapsed: 48px wide</div>
+        <div class="ann"><div class="ann-dot" style="background:#8342BB"></div>Expanded: 216px wide</div>
+        <div class="ann"><div class="ann-dot" style="background:#8342BB"></div>Transition: width 0.2s ease-out</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

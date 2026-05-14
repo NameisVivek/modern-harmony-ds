@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; margin-top: 14px; }
+  .lbl:first-child { margin-top: 0; }
+  .row { display: flex; gap: 12px; }
+
+  /* Empty state card */
+  .empty-card {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px; padding: 28px 20px; text-align: center;
+    border: 1px solid #EBEBEB; border-radius: 12px; background: #FBFBFB;
+    min-height: 180px;
+  }
+
+  /* Icon area */
+  .empty-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .empty-icon .material-icons { font-size: 26px; }
+
+  .empty-title { font-size: 14px; font-weight: 500; color: #282828; }
+  .empty-body  { font-size: 12px; color: #767676; line-height: 1.4; max-width: 200px; }
+
+  .btn-sm { height: 28px; padding: 0 12px; border-radius: 6px; font-family: 'Switzer', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; border: none; }
+  .btn-sm .material-icons { font-size: 14px; }
+  .btn-primary-sm { background: #8342BB; color: #fff; }
+  .btn-default-sm { background: #fff; color: #282828; border: 1px solid #DDDDE5; }
+</style>
+</head>
+<body>
+  <div class="lbl">Standard empty states</div>
+  <div class="row">
+    <!-- No data / first use -->
+    <div class="empty-card">
+      <div class="empty-icon" style="background:#ECE4F5">
+        <span class="material-icons" style="color:#8342BB">assessment</span>
+      </div>
+      <div class="empty-title">No scenarios yet</div>
+      <div class="empty-body">Create your first planning scenario to get started with S&OP.</div>
+      <button class="btn-sm btn-primary-sm"><span class="material-icons">add</span>New scenario</button>
+    </div>
+
+    <!-- No search results -->
+    <div class="empty-card">
+      <div class="empty-icon" style="background:#F0F0F4">
+        <span class="material-icons" style="color:#8C8C8C">search_off</span>
+      </div>
+      <div class="empty-title">No results found</div>
+      <div class="empty-body">No orders match "ORD-99999". Try a different search term or clear your filters.</div>
+      <button class="btn-sm btn-default-sm">Clear filters</button>
+    </div>
+
+    <!-- Error / access -->
+    <div class="empty-card">
+      <div class="empty-icon" style="background:#FEF7F4">
+        <span class="material-icons" style="color:#9A112C">lock_outline</span>
+      </div>
+      <div class="empty-title">Access restricted</div>
+      <div class="empty-body">You don't have permission to view this module. Contact your administrator.</div>
+      <button class="btn-sm btn-default-sm">Request access</button>
+    </div>
+  </div>
+
+  <div class="lbl">In table / grid context</div>
+  <div style="border:1px solid #EBEBEB;border-radius:10px;overflow:hidden">
+    <div style="background:#F0F0F4;padding:6px 12px;border-bottom:1px solid #DDDDE5;display:flex;gap:24px">
+      <span style="font-size:10px;font-weight:500;color:#5E5C75">ORDER ID</span>
+      <span style="font-size:10px;font-weight:500;color:#5E5C75">ORIGIN</span>
+      <span style="font-size:10px;font-weight:500;color:#5E5C75;margin-left:auto">STATUS</span>
+    </div>
+    <div class="empty-card" style="border:none;border-radius:0;background:#fff;min-height:140px">
+      <div class="empty-icon" style="background:#F0F0F4">
+        <span class="material-icons" style="color:#8C8C8C">table_rows</span>
+      </div>
+      <div class="empty-title">No records to show</div>
+      <div class="empty-body">No orders match the current filters.</div>
+      <button class="btn-sm btn-default-sm"><span class="material-icons">filter_list_off</span>Clear filters</button>
+    </div>
+  </div>
+</body>
+</html>

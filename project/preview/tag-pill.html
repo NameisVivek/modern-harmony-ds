@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; display: flex; flex-direction: column; gap: 12px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 5px; }
+  .row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .divider { height: 1px; background: #F0F0F4; }
+
+  /* ── Tag (with close) ── */
+  .tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 4px 2px 8px; border-radius: 4px; border: 1px solid;
+    font-size: 12px; font-weight: 400; cursor: default;
+    transition: opacity 0.1s;
+  }
+  .tag-close { display: flex; align-items: center; cursor: pointer; padding: 1px; border-radius: 3px; }
+  .tag-close .material-icons { font-size: 13px; }
+  .tag-close:hover { background: rgba(0,0,0,0.08); }
+
+  .tag-accent   { background: rgba(131,66,187,0.08); color: #7239A4; border-color: #BFBECE; }
+  .tag-neutral  { background: #F0F0F4; color: #282828; border-color: #DDDDE5; }
+  .tag-success  { background: #EEFEF9; color: #27854D; border-color: #A1EECC; }
+  .tag-error    { background: #FEF7F4; color: #9A112C; border-color: #F0B0AE; }
+  .tag-warning  { background: #FFFDEF; color: #753A05; border-color: #FDECC0; }
+  .tag-info     { background: #F4F9FE; color: #0D4C89; border-color: #C3E3FC; }
+
+  /* ── Pill (status, no close) ── */
+  .pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 9999px;
+    font-size: 11px; font-weight: 500;
+  }
+  .pill-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+  .pill-accent   { background: rgba(131,66,187,0.1); color: #7239A4; }
+  .pill-neutral  { background: #DDDDE5; color: #5E5C75; }
+  .pill-success  { background: #C5F3DF; color: #27854D; }
+  .pill-error    { background: #F6D7D6; color: #9A112C; }
+  .pill-warning  { background: #FDECC0; color: #753A05; }
+  .pill-highrisk { background: #FDD880; color: #441501; }
+  .pill-info     { background: #C3E3FC; color: #0D4C89; }
+  .pill-dark     { background: #282828; color: #fff; }
+
+  /* ── Label tag (no close) ── */
+  .label-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 4px; border: 1px solid;
+    font-size: 11px; font-weight: 500;
+  }
+</style>
+</head>
+<body>
+  <div>
+    <div class="lbl">Tags — with close button (removable)</div>
+    <div class="row" id="tagRow">
+      <span class="tag tag-accent">S&amp;OP<span class="tag-close" onclick="this.closest('.tag').remove()"><span class="material-icons">close</span></span></span>
+      <span class="tag tag-neutral">APAC<span class="tag-close" onclick="this.closest('.tag').remove()"><span class="material-icons">close</span></span></span>
+      <span class="tag tag-success">On track<span class="tag-close" onclick="this.closest('.tag').remove()"><span class="material-icons">close</span></span></span>
+      <span class="tag tag-error">Overdue<span class="tag-close" onclick="this.closest('.tag').remove()"><span class="material-icons">close</span></span></span>
+      <span class="tag tag-warning">At risk<span class="tag-close" onclick="this.closest('.tag').remove()"><span class="material-icons">close</span></span></span>
+      <span class="tag tag-info">Q1 2025<span class="tag-close" onclick="this.closest('.tag').remove()"><span class="material-icons">close</span></span></span>
+      <span class="tag tag-neutral">SKU-9483<span class="tag-close" onclick="this.closest('.tag').remove()"><span class="material-icons">close</span></span></span>
+      <span class="tag tag-neutral">Forecast<span class="tag-close" onclick="this.closest('.tag').remove()"><span class="material-icons">close</span></span></span>
+      <span style="font-size:11px;color:#8C8C8C;font-style:italic">← click × to remove</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div class="lbl">Status pills — read-only</div>
+    <div class="row">
+      <span class="pill pill-accent"><span class="pill-dot" style="background:#8342BB"></span>In progress</span>
+      <span class="pill pill-success"><span class="pill-dot" style="background:#27854D"></span>Completed</span>
+      <span class="pill pill-error"><span class="pill-dot" style="background:#E02F3A"></span>Failed</span>
+      <span class="pill pill-warning"><span class="pill-dot" style="background:#753A05"></span>Warning</span>
+      <span class="pill pill-highrisk"><span class="pill-dot" style="background:#441501"></span>High risk</span>
+      <span class="pill pill-info"><span class="pill-dot" style="background:#0D4C89"></span>Informational</span>
+      <span class="pill pill-neutral">Draft</span>
+      <span class="pill pill-dark">Released</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div class="lbl">Label tags — no close, compact</div>
+    <div class="row">
+      <span class="label-tag" style="background:rgba(131,66,187,0.08);color:#7239A4;border-color:#BFBECE">S&amp;OP</span>
+      <span class="label-tag" style="background:#C5F3DF;color:#27854D;border-color:#A1EECC">Reviewed ✓</span>
+      <span class="label-tag" style="background:#F6D7D6;color:#9A112C;border-color:#F0B0AE">Error</span>
+      <span class="label-tag" style="background:#F0F0F4;color:#5E5C75;border-color:#DDDDE5">Read-only</span>
+      <span class="label-tag" style="background:#C3E3FC;color:#0D4C89;border-color:#97C0FA">Beta</span>
+      <span class="label-tag" style="background:#282828;color:#fff;border-color:#282828">v2.4.1</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div class="lbl">In context — filter bar with active tags</div>
+    <div style="background:#F0F0F4;padding:8px 12px;border-radius:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+      <span style="font-size:11px;color:#5E5C75;font-weight:500">Active filters:</span>
+      <span class="tag tag-neutral">Region: APAC<span class="tag-close" onclick="this.closest('.tag').remove()"><span class="material-icons">close</span></span></span>
+      <span class="tag tag-neutral">Status: Delayed<span class="tag-close" onclick="this.closest('.tag').remove()"><span class="material-icons">close</span></span></span>
+      <span class="tag tag-neutral">Jan 2025<span class="tag-close" onclick="this.closest('.tag').remove()"><span class="material-icons">close</span></span></span>
+      <button style="height:24px;padding:0 8px;background:transparent;border:none;color:#7239A4;font-family:'Switzer',sans-serif;font-size:11px;font-weight:500;cursor:pointer">Clear all</button>
+    </div>
+  </div>
+</body>
+</html>

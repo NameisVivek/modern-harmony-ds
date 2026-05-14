@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 16px; width: 900px; display: flex; flex-direction: column; gap: 20px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+  /* Page mock shell */
+  .page-mock { border-radius: 10px; overflow: hidden; border: 1px solid #DDDDE5; box-shadow: 0 2px 4px rgba(55,23,78,0.06); display: flex; flex-direction: column; }
+  .page-body { background: #F0F0F4; padding: 14px 16px; min-height: 80px; font-size: 12px; color: #8C8C8C; }
+
+  /* ── Footer — eto-footer ── */
+  .eto-footer {
+    background: #fff;
+    border-top: 2px solid #8342BB;   /* eto-footer-top-line */
+    display: flex; flex-direction: column;
+  }
+
+  /* Top accent line — eto-footer-top-line */
+  .footer-top-line {
+    height: 2px; background: linear-gradient(90deg, #8342BB 0%, #B49AD6 100%);
+  }
+
+  /* Main container */
+  .footer-container {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 14px; gap: 12px; min-height: 48px;
+    border-top: none;
+  }
+
+  /* ── Left: action buttons ── */
+  .footer-left { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+  /* ── Buttons — eto-btn variants ── */
+  .btn {
+    height: 32px; padding: 0 14px; border-radius: 8px;
+    font-family: 'Switzer', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+    transition: all 0.1s;
+  }
+  .btn .material-icons { font-size: 15px; }
+  .btn-primary { background: #8342BB; color: #fff; border: none; box-shadow: 0 1px 2px rgba(55,23,78,0.25); }
+  .btn-primary:hover { background: #7239A4; }
+  .btn-default { background: #fff; color: #282828; border: 1px solid #DDDDE5; box-shadow: 0 1px 2px rgba(55,23,78,0.06); }
+  .btn-default:hover { background: #F0F0F4; }
+  .btn-danger  { background: #E02F3A; color: #fff; border: none; box-shadow: 0 1px 2px rgba(176,37,48,0.3); }
+  .btn-danger:hover { background: #C0172D; }
+  .btn-ghost { background: transparent; color: #7239A4; border: none; box-shadow: none; font-weight: 400; }
+  .btn-ghost:hover { background: rgba(131,66,187,0.06); }
+  .btn[disabled] { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+  /* ── Right: record count + pagination ── */
+  .footer-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+
+  .footer-count {
+    font-family: 'Switzer', sans-serif; font-size: 12px; color: #5E5C75;
+    white-space: nowrap;
+  }
+  .footer-count strong { color: #282828; font-weight: 500; }
+
+  /* ── Pagination — eto-pagination-container ── */
+  .pag { display: flex; align-items: center; gap: 2px; }
+  .pg-btn {
+    min-width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+    border-radius: 5px; border: none; background: transparent; cursor: pointer;
+    font-family: 'Switzer', sans-serif; font-size: 12px; color: #282828;
+    padding: 0 5px; transition: background 0.1s;
+  }
+  .pg-btn:hover { background: #F0F0F4; }
+  .pg-btn.active { background: #8342BB; color: #fff; font-weight: 500; }
+  .pg-btn.disabled { color: #BFBECE; cursor: not-allowed; }
+  .pg-btn.disabled:hover { background: transparent; }
+  .pg-btn .material-icons { font-size: 16px; }
+  .pg-dots { min-width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; color: #8C8C8C; font-size: 12px; }
+
+  /* Rows per page */
+  .footer-rpp {
+    display: flex; align-items: center; gap: 6px; font-size: 12px; color: #5E5C75;
+  }
+  .rpp-select {
+    height: 28px; padding: 0 22px 0 8px; border: 1px solid #DDDDE5; border-radius: 5px;
+    font-family: 'Switzer', sans-serif; font-size: 12px; color: #282828;
+    appearance: none;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='%238C8C8C'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 6px center;
+    cursor: pointer;
+  }
+
+  /* Annotations */
+  .annotations { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .ann { display: flex; align-items: center; gap: 5px; font-size: 10px; color: #5E5C75; }
+  .ann-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════
+       1. DEFAULT — with action buttons + pagination
+       ═══════════════════════════════════ -->
+  <div>
+    <div class="lbl">Footer — default (eto-footer) with action buttons and pagination</div>
+    <div class="page-mock">
+      <div class="page-body">Page content area</div>
+      <footer class="eto-footer">
+        <div class="footer-top-line"></div>
+        <div class="footer-container">
+          <!-- Left: actions — eto-footer-container-left -->
+          <div class="footer-left">
+            <button class="btn btn-primary">Contact us</button>
+            <button class="btn btn-default">
+              <span class="material-icons">thumb_up</span>
+              Approve for guest list
+            </button>
+            <button class="btn btn-danger">
+              Report as hoax
+              <span class="material-icons">notifications</span>
+            </button>
+          </div>
+          <!-- Right: count + pagination — eto-footer-container-right -->
+          <div class="footer-right">
+            <span class="footer-count"><strong>0</strong> selected</span>
+            <div class="pag" id="pag-f1">
+              <button class="pg-btn disabled"><span class="material-icons">first_page</span></button>
+              <button class="pg-btn disabled"><span class="material-icons">chevron_left</span></button>
+              <button class="pg-btn active" onclick="fpg('pag-f1',this)">1</button>
+              <button class="pg-btn" onclick="fpg('pag-f1',this)">2</button>
+              <button class="pg-btn" onclick="fpg('pag-f1',this)">3</button>
+              <div class="pg-dots">•••</div>
+              <button class="pg-btn" onclick="fpg('pag-f1',this)">24</button>
+              <button class="pg-btn"><span class="material-icons">chevron_right</span></button>
+              <button class="pg-btn"><span class="material-icons">last_page</span></button>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <div class="annotations">
+      <div class="ann"><div class="ann-dot" style="background:#8342BB"></div>Top accent line — violet-600 gradient</div>
+      <div class="ann"><div class="ann-dot" style="background:#fff;border:1px solid #EBEBEB"></div>Background — white</div>
+      <div class="ann"><div class="ann-dot" style="background:#282828"></div>Min height 48px · Switzer 13px/500</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       2. WITH SELECTION + ROWS PER PAGE
+       ═══════════════════════════════════ -->
+  <div>
+    <div class="lbl">Footer — rows selected + rows-per-page selector</div>
+    <div class="page-mock">
+      <div class="page-body">Grid content area</div>
+      <footer class="eto-footer">
+        <div class="footer-top-line"></div>
+        <div class="footer-container">
+          <div class="footer-left">
+            <button class="btn btn-primary"><span class="material-icons">check_circle_outline</span>Approve selected</button>
+            <button class="btn btn-default"><span class="material-icons">cloud_download</span>Export</button>
+            <button class="btn btn-ghost">Clear selection</button>
+          </div>
+          <div class="footer-right">
+            <div class="footer-rpp">
+              <span>Rows per page:</span>
+              <select class="rpp-select">
+                <option>25</option>
+                <option selected>50</option>
+                <option>100</option>
+              </select>
+            </div>
+            <span class="footer-count"><strong>12,847</strong> records · <strong id="sel-count">3</strong> selected</span>
+            <div class="pag" id="pag-f2">
+              <button class="pg-btn disabled"><span class="material-icons">first_page</span></button>
+              <button class="pg-btn disabled"><span class="material-icons">chevron_left</span></button>
+              <button class="pg-btn active" onclick="fpg('pag-f2',this)">1</button>
+              <button class="pg-btn" onclick="fpg('pag-f2',this)">2</button>
+              <button class="pg-btn" onclick="fpg('pag-f2',this)">3</button>
+              <div class="pg-dots">•••</div>
+              <button class="pg-btn" onclick="fpg('pag-f2',this)">257</button>
+              <button class="pg-btn"><span class="material-icons">chevron_right</span></button>
+              <button class="pg-btn"><span class="material-icons">last_page</span></button>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       3. MINIMAL — pagination only
+       ═══════════════════════════════════ -->
+  <div>
+    <div class="lbl">Footer — minimal, pagination only</div>
+    <div class="page-mock">
+      <div class="page-body">Content area</div>
+      <footer class="eto-footer">
+        <div class="footer-top-line"></div>
+        <div class="footer-container" style="justify-content:flex-end">
+          <div class="footer-right">
+            <span class="footer-count">1–50 of <strong>847</strong></span>
+            <div class="pag" id="pag-f3">
+              <button class="pg-btn disabled"><span class="material-icons">first_page</span></button>
+              <button class="pg-btn disabled"><span class="material-icons">chevron_left</span></button>
+              <button class="pg-btn active" onclick="fpg('pag-f3',this)">1</button>
+              <button class="pg-btn" onclick="fpg('pag-f3',this)">2</button>
+              <button class="pg-btn" onclick="fpg('pag-f3',this)">3</button>
+              <div class="pg-dots">•••</div>
+              <button class="pg-btn" onclick="fpg('pag-f3',this)">17</button>
+              <button class="pg-btn"><span class="material-icons">chevron_right</span></button>
+              <button class="pg-btn"><span class="material-icons">last_page</span></button>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+<script>
+function fpg(pagId, btn) {
+  if (!btn.textContent.trim() || btn.querySelector('.material-icons')) return;
+  document.querySelectorAll('#' + pagId + ' .pg-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

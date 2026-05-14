@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Switzer', sans-serif; width: 700px; }
+  .row { display: flex; }
+  .panel { flex: 1; padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; }
+  .panel-dark { background: #282828; }
+  .panel-light { background: #fff; border: 1px solid #EBEBEB; }
+  .panel-subtle { background: #F0F0F4; border: 1px solid #EBEBEB; }
+  .usage-label { font-size: 9px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+  .light-label  { color: rgba(255,255,255,0.5); }
+  .dark-label   { color: #8C8C8C; }
+  /* leo logo wordmark — reconstructed SVG */
+  .logo-wrap { display: flex; align-items: center; }
+  .logo-img { max-height: 28px; max-width: 100%; object-fit: contain; }
+
+  /* Inline SVG wordmark recreation */
+  .wordmark { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+  .wordmark-sm { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+  .monogram {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700;
+  }
+  .sub { font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <!-- Dark background: light logo -->
+    <div class="panel panel-dark">
+      <div class="usage-label light-label">On dark — app header</div>
+      <div class="logo-wrap">
+        <img class="logo-img" src="../assets/logo-leo.png" alt="leo logo" style="filter:invert(1); max-height:32px" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <div style="display:none; flex-direction:column;">
+          <div class="wordmark" style="color:#fff; font-family:'Switzer',sans-serif">leo<span style="font-size:14px; vertical-align:super; font-weight:400">®</span></div>
+          <div class="sub" style="color:rgba(255,255,255,0.5)">Wisetech Global Group</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:16px; align-items:center; margin-top:4px;">
+        <div class="monogram" style="background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2)">
+          <span style="color:#fff; font-family:'Switzer',sans-serif; font-size:14px; font-weight:700">e2</span>
+        </div>
+        <div>
+          <div class="wordmark-sm" style="color:#fff; font-family:'Switzer',sans-serif">leo<span style="font-size:9px; vertical-align:super; font-weight:400">®</span></div>
+          <div style="font-size:8px; color:rgba(255,255,255,0.4); letter-spacing:0.1em; text-transform:uppercase; margin-top:1px">SM — 96×24px app header</div>
+        </div>
+      </div>
+    </div>
+    <!-- Light background: dark logo -->
+    <div class="panel panel-light">
+      <div class="usage-label dark-label">On light — documentation</div>
+      <div class="logo-wrap">
+        <img class="logo-img" src="../assets/logo-leo.png" alt="leo logo" style="max-height:32px" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <div style="display:none; flex-direction:column;">
+          <div class="wordmark" style="color:#282828; font-family:'Switzer',sans-serif">leo<span style="font-size:14px; vertical-align:super; font-weight:400">®</span></div>
+          <div class="sub" style="color:#8C8C8C">Wisetech Global Group</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:16px; align-items:center; margin-top:4px;">
+        <div class="monogram" style="border:2px solid #282828;">
+          <span style="color:#282828; font-family:'Switzer',sans-serif; font-size:14px; font-weight:700">e2</span>
+        </div>
+        <div>
+          <div class="wordmark-sm" style="color:#282828; font-family:'Switzer',sans-serif">leo<span style="font-size:9px; vertical-align:super; font-weight:400">®</span></div>
+          <div style="font-size:8px; color:#8C8C8C; letter-spacing:0.1em; text-transform:uppercase; margin-top:1px">favicon monogram</div>
+        </div>
+      </div>
+    </div>
+    <!-- Subtle: do's/don'ts notes -->
+    <div class="panel panel-subtle" style="flex:0.7; font-size:10px; color:#282828; gap:8px;">
+      <div class="usage-label dark-label">Usage rules</div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <div style="color:#27854D; font-weight:500">✓ do's</div>
+        <div style="color:#282828; line-height:1.4">Use SM variant in app header (96×24px). Use LG only for specific landing use cases.</div>
+        <div style="color:#E02F3A; font-weight:500; margin-top:4px">✗ don'ts</div>
+        <div style="color:#282828; line-height:1.4">Don't use LG as a substitute for page content. Don't recolor the logo.</div>
+        <div style="color:#8C8C8C; margin-top:4px">Vectors only — not image files. Only dark version currently in use.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

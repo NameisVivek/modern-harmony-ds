@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 12px; width: 700px; }
+  .panel { background: #fff; border-radius: 12px; border: 1px solid #EBEBEB; overflow: hidden; box-shadow: 0 1px 3px rgba(55,23,78,0.08); }
+  .toolbar { padding: 8px 12px; border-bottom: 1px solid #EBEBEB; display: flex; align-items: center; gap: 8px; background: #fff; }
+  .toolbar-title { font-size: 12px; font-weight: 500; color: #282828; }
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; font-size: 10px; font-weight: 500; }
+  .chip-violet { background: rgba(131,66,187,0.1); color: #7239A4; }
+  .spacer { flex: 1; }
+  .icon-btn { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border: 1px solid #DDDDE5; border-radius: 5px; background: #fff; cursor: pointer; }
+  .icon-btn .material-icons { font-size: 14px; color: #5E5C75; }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  /* Header */
+  th {
+    height: 28px; padding: 0 10px;
+    font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 500;
+    color: #5E5C75; letter-spacing: 0.04em; text-align: left;
+    background: #F0F0F4; border-bottom: 1px solid #DDDDE5;
+    white-space: nowrap; user-select: none;
+  }
+  th.right { text-align: right; }
+  th .sort { display: inline-flex; align-items: center; gap: 2px; cursor: pointer; }
+  th .material-icons { font-size: 12px; color: #8B8AA5; vertical-align: middle; }
+
+  /* Rows */
+  td { height: 30px; padding: 0 10px; font-size: 12px; color: #282828; border-bottom: 1px solid #F0F0F4; vertical-align: middle; }
+  td.right { text-align: right; }
+  td.mono { font-family: 'Roboto Mono', monospace; font-size: 11px; }
+  td.id   { color: #7239A4; font-weight: 500; }
+
+  .row-default  { background: #fff; }
+  .row-alt      { background: #F0F0F4; }
+  .row-selected { background: rgba(131,66,187,0.08); outline: 1px solid #8342BB; outline-offset: -1px; }
+  .row-hover    { background: rgba(40,40,40,0.04); }
+  .row-error td { background: #FEF7F4; }
+  .row-error td.indicator { border-left: 3px solid #E02F3A; padding-left: 7px; }
+  .row-warning td { background: #FFFDEF; }
+  .row-warning td.indicator { border-left: 3px solid #FDBF14; padding-left: 7px; }
+  .row-success td { background: #EEFEF9; }
+  .row-success td.indicator { border-left: 3px solid #5BD6A0; padding-left: 7px; }
+
+  /* Cell types */
+  .badge { display: inline-flex; align-items: center; gap: 3px; padding: 1px 7px; border-radius: 9999px; font-size: 10px; font-weight: 500; }
+  .badge-info    { background: #C3E3FC; color: #0D4C89; }
+  .badge-error   { background: #F6D7D6; color: #9A112C; }
+  .badge-success { background: #C5F3DF; color: #27854D; }
+  .badge-warning { background: #FDECC0; color: #753A05; }
+  .badge-neutral { background: #DDDDE5; color: #5E5C75; }
+  .dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Checkbox */
+  .cb { width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid #BFBECE; display: inline-block; vertical-align: middle; }
+  .cb.checked { background: #8342BB; border-color: #8342BB; display: inline-flex; align-items: center; justify-content: center; }
+  .cb.checked::after { content: '✓'; color: #fff; font-size: 9px; font-weight: 700; }
+
+  .state-label { font-size: 8px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px 2px; display: block; }
+</style>
+</head>
+<body>
+<div class="panel">
+  <div class="toolbar">
+    <span class="toolbar-title">Order lines</span>
+    <span class="chip chip-violet">S&amp;OP</span>
+    <span style="font-size:11px;color:#8C8C8C">12,847 records</span>
+    <div class="spacer"></div>
+    <div class="icon-btn"><span class="material-icons">search</span></div>
+    <div class="icon-btn"><span class="material-icons">filter_list</span></div>
+    <div class="icon-btn"><span class="material-icons">cloud_download</span></div>
+    <div class="icon-btn"><span class="material-icons">more_vert</span></div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:32px; padding:0 8px"><div class="cb checked"></div></th>
+        <th><span class="sort">Order ID <span class="material-icons">arrow_upward</span></span></th>
+        <th>Origin</th>
+        <th>Destination</th>
+        <th class="right"><span class="sort">Qty <span class="material-icons">unfold_more</span></span></th>
+        <th><span class="sort">ETA <span class="material-icons">unfold_more</span></span></th>
+        <th>Status</th>
+        <th style="width:32px"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Default -->
+      <tr class="row-default">
+        <td style="padding:0 8px"><div class="cb"></div></td>
+        <td class="id indicator">ORD-48201</td>
+        <td>Shanghai, CN</td>
+        <td>Los Angeles, US</td>
+        <td class="right mono">1,240</td>
+        <td>15 Jan 2025</td>
+        <td><span class="badge badge-info"><span class="dot" style="background:#3999E4"></span>In transit</span></td>
+        <td><span class="material-icons" style="font-size:14px;color:#8C8C8C;cursor:pointer">more_vert</span></td>
+      </tr>
+      <!-- Alt row -->
+      <tr class="row-alt">
+        <td style="padding:0 8px"><div class="cb"></div></td>
+        <td class="id">ORD-48200</td>
+        <td>Hamburg, DE</td>
+        <td>New York, US</td>
+        <td class="right mono">876</td>
+        <td>18 Jan 2025</td>
+        <td><span class="badge badge-neutral">Draft</span></td>
+        <td><span class="material-icons" style="font-size:14px;color:#8C8C8C;cursor:pointer">more_vert</span></td>
+      </tr>
+      <!-- Selected -->
+      <tr class="row-selected">
+        <td style="padding:0 8px"><div class="cb checked"></div></td>
+        <td class="id">ORD-48199</td>
+        <td>Singapore, SG</td>
+        <td>Sydney, AU</td>
+        <td class="right mono">2,100</td>
+        <td>22 Jan 2025</td>
+        <td><span class="badge badge-success"><span class="dot" style="background:#5BD6A0"></span>On track</span></td>
+        <td><span class="material-icons" style="font-size:14px;color:#8342BB;cursor:pointer">more_vert</span></td>
+      </tr>
+      <!-- Error row -->
+      <tr class="row-error">
+        <td style="padding:0 8px"><div class="cb"></div></td>
+        <td class="id indicator">ORD-48198</td>
+        <td>Rotterdam, NL</td>
+        <td>Montreal, CA</td>
+        <td class="right mono">543</td>
+        <td style="color:#9A112C;font-weight:500">10 Jan 2025</td>
+        <td><span class="badge badge-error"><span class="dot" style="background:#E02F3A"></span>Delayed</span></td>
+        <td><span class="material-icons" style="font-size:14px;color:#8C8C8C;cursor:pointer">more_vert</span></td>
+      </tr>
+      <!-- Warning row -->
+      <tr class="row-warning">
+        <td style="padding:0 8px"><div class="cb"></div></td>
+        <td class="id indicator">ORD-48197</td>
+        <td>Tokyo, JP</td>
+        <td>Seattle, US</td>
+        <td class="right mono">3,800</td>
+        <td>25 Jan 2025</td>
+        <td><span class="badge badge-warning"><span class="dot" style="background:#FDBF14"></span>Warning</span></td>
+        <td><span class="material-icons" style="font-size:14px;color:#8C8C8C;cursor:pointer">more_vert</span></td>
+      </tr>
+      <!-- Success row -->
+      <tr class="row-success">
+        <td style="padding:0 8px"><div class="cb"></div></td>
+        <td class="id indicator">ORD-48196</td>
+        <td>Dubai, AE</td>
+        <td>London, GB</td>
+        <td class="right mono">660</td>
+        <td>28 Jan 2025</td>
+        <td><span class="badge badge-success"><span class="dot" style="background:#5BD6A0"></span>Delivered</span></td>
+        <td><span class="material-icons" style="font-size:14px;color:#8C8C8C;cursor:pointer">more_vert</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- State key -->
+  <div style="padding:6px 10px 8px; border-top:1px solid #F0F0F4; display:flex; gap:14px; align-items:center; flex-wrap:wrap;">
+    <span style="font-size:9px;font-weight:500;color:#8C8C8C;letter-spacing:0.06em;text-transform:uppercase">Row states:</span>
+    <span style="display:inline-flex;align-items:center;gap:4px;font-size:9px;color:#282828"><span style="width:10px;height:10px;border-radius:2px;background:#fff;border:1px solid #EBEBEB;display:inline-block"></span>Default</span>
+    <span style="display:inline-flex;align-items:center;gap:4px;font-size:9px;color:#282828"><span style="width:10px;height:10px;border-radius:2px;background:#F0F0F4;border:1px solid #EBEBEB;display:inline-block"></span>Alt row</span>
+    <span style="display:inline-flex;align-items:center;gap:4px;font-size:9px;color:#8342BB"><span style="width:10px;height:10px;border-radius:2px;background:rgba(131,66,187,0.1);border:1px solid #8342BB;display:inline-block"></span>Selected</span>
+    <span style="display:inline-flex;align-items:center;gap:4px;font-size:9px;color:#9A112C"><span style="width:10px;height:10px;border-radius:2px;background:#FEF7F4;border-left:3px solid #E02F3A;display:inline-block"></span>Error</span>
+    <span style="display:inline-flex;align-items:center;gap:4px;font-size:9px;color:#753A05"><span style="width:10px;height:10px;border-radius:2px;background:#FFFDEF;border-left:3px solid #FDBF14;display:inline-block"></span>Warning</span>
+    <span style="display:inline-flex;align-items:center;gap:4px;font-size:9px;color:#27854D"><span style="width:10px;height:10px;border-radius:2px;background:#EEFEF9;border-left:3px solid #5BD6A0;display:inline-block"></span>Success</span>
+  </div>
+</div>
+</body>
+</html>

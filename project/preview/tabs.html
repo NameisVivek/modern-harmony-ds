@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; display: flex; flex-direction: column; gap: 14px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+  /* Tab row */
+  .tab-row {
+    display: flex; align-items: stretch; border-bottom: 1px solid rgba(191,190,206,0.55);
+  }
+
+  /* Individual tab */
+  .tab {
+    display: flex; align-items: center; gap: 6px;
+    height: 40px; padding: 0 16px; cursor: pointer; position: relative;
+    font-family: 'Switzer', sans-serif; font-size: 14px; font-weight: 400; color: #282828;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    user-select: none; white-space: nowrap;
+    transition: background 0.1s;
+  }
+  .tab:hover { background: rgba(40,40,40,0.05); }
+  .tab.selected {
+    font-weight: 500; color: #7239A4;
+    border-bottom-color: #8342BB;
+  }
+  .tab.selected .tab-badge { background: #8342BB; color: #fff; }
+  .tab.disabled { color: #BFBECE; cursor: not-allowed; }
+  .tab.disabled:hover { background: transparent; }
+  .tab .material-icons { font-size: 16px; color: inherit; }
+
+  /* Badge */
+  .tab-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 18px; min-width: 18px; padding: 0 5px;
+    border-radius: 9px; background: #DDDDE5; color: #5E5C75;
+    font-size: 10px; font-weight: 500; font-family: 'Switzer', sans-serif;
+  }
+
+  /* Underline style */
+  .tab-row.underline .tab.selected {
+    background: transparent;
+    border-bottom-color: #8342BB;
+    color: #7239A4;
+  }
+  .tab-row.underline .tab:hover { background: transparent; text-decoration: underline; text-underline-offset: 4px; }
+
+  /* Tab content area */
+  .tab-content { display: none; padding: 14px 0; }
+  .tab-content.active { display: block; }
+  .tab-content-text { font-size: 13px; color: #5E5C75; }
+
+  /* Section */
+  .section { display: flex; flex-direction: column; }
+</style>
+</head>
+<body>
+  <!-- Default style tabs -->
+  <div class="section">
+    <div class="lbl">Default style — with icons and badge</div>
+    <div class="tab-row" id="tabs1">
+      <div class="tab selected" data-tab="t1-orders" onclick="switchTab('tabs1',this,'content1')">
+        <span class="material-icons">list_alt</span>Orders<span class="tab-badge">42</span>
+      </div>
+      <div class="tab" data-tab="t1-shipments" onclick="switchTab('tabs1',this,'content1')">
+        <span class="material-icons">local_shipping</span>Shipments
+      </div>
+      <div class="tab" data-tab="t1-forecast" onclick="switchTab('tabs1',this,'content1')">
+        <span class="material-icons">assessment</span>Forecast<span class="tab-badge">8</span>
+      </div>
+      <div class="tab" data-tab="t1-reports" onclick="switchTab('tabs1',this,'content1')">
+        Reports
+      </div>
+      <div class="tab disabled">Archive</div>
+    </div>
+    <div id="content1">
+      <div class="tab-content active" data-panel="t1-orders"><div class="tab-content-text">Orders tab content — showing 42 active order lines</div></div>
+      <div class="tab-content" data-panel="t1-shipments"><div class="tab-content-text">Shipments tab content</div></div>
+      <div class="tab-content" data-panel="t1-forecast"><div class="tab-content-text">Forecast tab content — 8 items need review</div></div>
+      <div class="tab-content" data-panel="t1-reports"><div class="tab-content-text">Reports tab content</div></div>
+    </div>
+  </div>
+
+  <!-- Underline style -->
+  <div class="section">
+    <div class="lbl">Underline style — secondary / nested tabs</div>
+    <div class="tab-row underline" id="tabs2">
+      <div class="tab" data-tab="t2-week" onclick="switchTab('tabs2',this,'content2')">Week</div>
+      <div class="tab selected" data-tab="t2-month" onclick="switchTab('tabs2',this,'content2')">Month</div>
+      <div class="tab" data-tab="t2-quarter" onclick="switchTab('tabs2',this,'content2')">Quarter</div>
+      <div class="tab" data-tab="t2-year" onclick="switchTab('tabs2',this,'content2')">Year</div>
+    </div>
+    <div id="content2">
+      <div class="tab-content" data-panel="t2-week"><div class="tab-content-text">Weekly view</div></div>
+      <div class="tab-content active" data-panel="t2-month"><div class="tab-content-text">Monthly view — current planning horizon</div></div>
+      <div class="tab-content" data-panel="t2-quarter"><div class="tab-content-text">Quarterly view</div></div>
+      <div class="tab-content" data-panel="t2-year"><div class="tab-content-text">Annual view</div></div>
+    </div>
+  </div>
+
+  <!-- All states -->
+  <div class="section">
+    <div class="lbl">All states</div>
+    <div class="tab-row" style="border-bottom:none; gap:4px">
+      <div class="tab" style="border:none; color:#282828; height:32px; background:#F0F0F4; border-radius:4px; font-size:12px; pointer-events:none">Default</div>
+      <div class="tab" style="border:none; color:#282828; height:32px; background:rgba(40,40,40,0.07); border-radius:4px; font-size:12px; pointer-events:none">Hover</div>
+      <div class="tab selected" style="height:32px; background:transparent; font-size:12px; pointer-events:none">Selected</div>
+      <div class="tab disabled" style="height:32px; font-size:12px; pointer-events:none">Disabled</div>
+      <div class="tab" style="border:none; height:32px; box-shadow:0 0 0 2px #fff,0 0 0 4px #8342BB; border-radius:4px; font-size:12px; background:transparent; pointer-events:none">Focused</div>
+    </div>
+  </div>
+
+<script>
+function switchTab(rowId, el, contentId) {
+  if (el.classList.contains('disabled')) return;
+  document.querySelectorAll('#' + rowId + ' .tab').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  const key = el.dataset.tab;
+  document.querySelectorAll('#' + contentId + ' .tab-content').forEach(c => {
+    c.classList.toggle('active', c.dataset.panel === key);
+  });
+}
+</script>
+</body>
+</html>

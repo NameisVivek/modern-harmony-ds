@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 16px; width: 1100px; display: flex; flex-direction: column; gap: 20px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+
+  /* ══════════════════════════════════════
+     APP HEADER SHELL
+  ══════════════════════════════════════ */
+  .app-header-shell {
+    border-radius: 10px; overflow: visible;
+    box-shadow: 0 1px 4px rgba(55,23,78,0.08);
+    position: relative;
+  }
+
+  /* ── Main row ── */
+  .ah-row {
+    height: 48px; background: #fff;
+    display: flex; align-items: center; gap: 0;
+    padding: 0 20px 0 0;
+    border-bottom: 1px solid #EBEBEB;
+    border-radius: 10px 10px 0 0;
+  }
+
+  /* ── Dummy app icon ── */
+  .app-icon {
+    width: 32px; height: 32px; border-radius: 8px; background: #282828;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+
+  /* ── leo wordmark ── */
+  .ah-logo { display: flex; align-items: center; flex-shrink: 0; }
+
+  /* ── Breadcrumbs ── */
+  .ah-breadcrumbs {
+    display: flex; align-items: center; gap: 0;
+    height: 100%; overflow: hidden; flex-shrink: 1; min-width: 0; padding-left: 4px;
+  }
+  .bc-sep { font-size: 13px; color: #BFBECE; padding: 0 3px; flex-shrink: 0; user-select: none; font-weight: 400; }
+  .bc-wrap { position: relative; display: flex; align-items: center; height: 100%; }
+  .bc-btn {
+    display: flex; align-items: center; gap: 3px;
+    height: 30px; padding: 0 8px; background: transparent; border: none;
+    cursor: pointer; border-radius: 6px; white-space: nowrap;
+    font-family: 'Switzer', sans-serif; font-size: 13px; color: #282828;
+    transition: background 0.1s; font-weight: 400;
+  }
+  .bc-btn:hover { background: rgba(40,40,40,0.06); }
+  .bc-btn.bc-active { color: #7239A4; font-weight: 500; }
+  .bc-btn .bc-arrow { color: #8C8C8C; font-size: 14px; }
+
+  /* Simple hover dropdown (for 2nd breadcrumb) */
+  .bc-dropdown {
+    position: absolute; top: calc(100% + 4px); left: 0; z-index: 300;
+    background: #fff; border-radius: 8px; border: 1px solid #E5E5EC;
+    box-shadow: 0 4px 16px rgba(55,23,78,0.12); min-width: 200px;
+    padding: 4px 0; display: none;
+  }
+  .bc-wrap:hover .bc-dropdown { display: block; }
+  .bc-dropdown a {
+    display: block; padding: 7px 14px; font-size: 13px; color: #282828;
+    text-decoration: none; font-family: 'Switzer', sans-serif;
+  }
+  .bc-dropdown a:hover { background: rgba(131,66,187,0.06); }
+
+  /* ══════════════════════════════════════
+     MEGANAV — eto-meganav
+     Slides in from left under header
+  ══════════════════════════════════════ */
+  .meganav-overlay {
+    position: fixed; inset: 0; z-index: 250;
+    background: rgba(40,40,40,0.15);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .meganav-overlay.open { opacity: 1; pointer-events: all; }
+
+  .meganav {
+    position: fixed; top: 80px; left: 0; bottom: 0; z-index: 260;
+    width: 320px; background: #fff;
+    box-shadow: 4px 0 24px rgba(20,16,41,0.14);
+    display: flex; flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  }
+  .meganav.open { transform: translateX(0); }
+
+  /* Meganav header */
+  .mn-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 14px 10px; border-bottom: 1px solid #EBEBEB; flex-shrink: 0;
+  }
+  .mn-title { flex: 1; font-size: 14px; font-weight: 600; color: #282828; }
+  .mn-close {
+    width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+    background: transparent; border: none; cursor: pointer; border-radius: 5px;
+    color: #5E5C75; transition: background 0.1s;
+  }
+  .mn-close:hover { background: #F0F0F4; color: #282828; }
+  .mn-close .material-icons { font-size: 18px; }
+
+  /* Meganav search */
+  .mn-search {
+    display: flex; align-items: center; gap: 7px;
+    height: 32px; margin: 10px 14px; padding: 0 10px;
+    background: #F0F0F4; border-radius: 8px; flex-shrink: 0;
+  }
+  .mn-search .material-icons { font-size: 15px; color: #8C8C8C; flex-shrink: 0; }
+  .mn-search input {
+    flex: 1; background: transparent; border: none; outline: none;
+    font-family: 'Switzer', sans-serif; font-size: 13px; color: #282828;
+  }
+  .mn-search input::placeholder { color: #8C8C8C; }
+
+  /* Meganav scroll area (two-panel layout) */
+  .mn-panels { flex: 1; display: flex; overflow: hidden; position: relative; }
+
+  /* Primary list */
+  .mn-primary {
+    width: 100%; flex-shrink: 0; overflow-y: auto;
+    transition: transform 0.22s ease, opacity 0.18s;
+  }
+  .mn-primary::-webkit-scrollbar { width: 4px; }
+  .mn-primary::-webkit-scrollbar-thumb { background: #DDDDE5; border-radius: 2px; }
+  .mn-primary.slide-out { transform: translateX(-40px); opacity: 0; pointer-events: none; }
+
+  /* Secondary panel (sub-items) */
+  .mn-secondary {
+    position: absolute; inset: 0; background: #fff;
+    overflow-y: auto; transform: translateX(100%); opacity: 0;
+    transition: transform 0.22s ease, opacity 0.18s;
+    display: flex; flex-direction: column;
+  }
+  .mn-secondary::-webkit-scrollbar { width: 4px; }
+  .mn-secondary::-webkit-scrollbar-thumb { background: #DDDDE5; border-radius: 2px; }
+  .mn-secondary.open { transform: translateX(0); opacity: 1; }
+
+  .mn-back {
+    display: flex; align-items: center; gap: 5px;
+    padding: 10px 14px; cursor: pointer;
+    font-family: 'Switzer', sans-serif; font-size: 12px; color: #7239A4;
+    font-weight: 500; border-bottom: 1px solid #F0F0F4; flex-shrink: 0;
+    background: none; border-left: none; border-right: none; border-top: none; text-align: left;
+  }
+  .mn-back:hover { background: rgba(131,66,187,0.04); }
+  .mn-back .material-icons { font-size: 16px; }
+
+  /* Group label */
+  .mn-group-label {
+    font-size: 9px; font-weight: 500; color: #8C8C8C;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 10px 14px 3px;
+  }
+
+  /* Nav item */
+  .mn-item {
+    display: flex; align-items: center; gap: 0;
+    padding: 8px 14px; cursor: pointer;
+    font-family: 'Switzer', sans-serif; font-size: 13px; color: #282828;
+    transition: background 0.08s; text-decoration: none; border: none;
+    background: transparent; width: 100%; text-align: left;
+  }
+  .mn-item:hover { background: #F8F8FB; }
+  .mn-item.active { background: rgba(131,66,187,0.06); color: #7239A4; font-weight: 500; }
+  .mn-item span { flex: 1; }
+  .mn-item .mn-chev { font-size: 18px; color: #BFBECE; flex-shrink: 0; }
+  .mn-sep { height: 1px; background: #F0F0F4; margin: 4px 0; }
+
+  /* ── Right section ── */
+  .ah-right { display: flex; align-items: center; gap: 0; flex-shrink: 0; margin-left: auto; padding-right: 0; }
+
+  /* Search */
+  .ah-search {
+    display: flex; align-items: center; gap: 6px; height: 32px; width: 240px;
+    padding: 0 12px; border-radius: 20px;
+    background: #E8E8EE; border: none;
+    cursor: text; transition: all 0.15s;
+  }
+  .ah-search:focus-within { background: #E0E0E8; box-shadow: 0 0 0 2px rgba(131,66,187,0.2); }
+  .ah-search input { flex: 1; background: transparent; border: none; outline: none; font-family: 'Switzer', sans-serif; font-size: 13px; color: #282828; }
+  .ah-search input::placeholder { color: #8C8C8C; }
+  .ah-search .material-icons { font-size: 18px; color: #8C8C8C; flex-shrink: 0; }
+
+  /* Assistant button — outlined violet pill */
+  .ah-assistant {
+    display: flex; align-items: center; gap: 5px;
+    height: 28px; padding: 0 10px;
+    background: transparent; border: 1px solid #8342BB; border-radius: 20px;
+    cursor: pointer; font-family: 'Switzer', sans-serif; font-size: 12px;
+    font-weight: 500; color: #7239A4; white-space: nowrap;
+    transition: background 0.1s;
+  }
+  .ah-assistant:hover { background: rgba(131,66,187,0.06); }
+
+  /* Icon buttons */
+  .ah-icon-btn {
+    width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+    background: transparent; border: none; cursor: pointer; border-radius: 6px; color: #5E5C75;
+    transition: background 0.1s;
+  }
+  .ah-icon-btn:hover { background: rgba(40,40,40,0.06); }
+  .ah-icon-btn .material-icons { font-size: 20px; }
+
+  /* Divider */
+  .ah-div { width: 1px; height: 20px; background: #EBEBEB; flex-shrink: 0; }
+
+  /* User section */
+  .ah-user {
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 6px 0 8px; height: 40px; border-radius: 8px;
+    cursor: default; transition: background 0.1s; position: relative;
+  }
+  .ah-user:hover { background: rgba(40,40,40,0.05); }
+  .ah-user-text { display: flex; flex-direction: column; align-items: flex-end; }
+  .ah-user-name { font-size: 12px; font-weight: 600; color: #282828; line-height: 1.3; white-space: nowrap; }
+  .ah-user-role { font-size: 11px; color: #767676; line-height: 1.3; white-space: nowrap; }
+  .ah-avatar {
+    width: 32px; height: 32px; border-radius: 50%; background: #282828;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Switzer', sans-serif; font-weight: 600; font-size: 11px;
+    color: #fff; flex-shrink: 0; letter-spacing: 0.03em;
+  }
+
+  /* User dropdown */
+  .ah-user-menu {
+    position: absolute; top: calc(100% + 4px); right: 0; z-index: 500;
+    background: #fff; border-radius: 10px; border: 1px solid #EBEBEB;
+    box-shadow: 0 4px 20px rgba(55,23,78,0.14); min-width: 220px;
+    padding: 4px 0; display: none;
+  }
+  .ah-user:hover .ah-user-menu { display: block; }
+  .um-head { padding: 8px 14px 10px; border-bottom: 1px solid #F0F0F4; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .um-item { display: flex; align-items: center; gap: 8px; padding: 7px 14px; cursor: pointer; position: relative; }
+  .um-item:hover { background: rgba(40,40,40,0.05); }
+  .um-item .material-icons { font-size: 16px; color: #5E5C75; }
+  .um-label { font-size: 13px; color: #282828; font-family: 'Switzer', sans-serif; flex: 1; }
+  .um-chevron { font-size: 14px; color: #BFBECE; }
+  .um-sep { height: 1px; background: #F0F0F4; margin: 4px 0; }
+  .um-submenu {
+    position: absolute; left: 100%; top: 0;
+    background: #fff; border-radius: 10px; border: 1px solid #EBEBEB;
+    box-shadow: 0 4px 16px rgba(55,23,78,0.12); min-width: 180px;
+    padding: 4px 0; z-index: 600; display: none;
+  }
+  .um-item:hover .um-submenu { display: block; }
+  .um-submenu a { display: block; padding: 7px 14px; font-size: 13px; color: #282828; font-family: 'Switzer', sans-serif; text-decoration: none; }
+  .um-submenu a:hover { background: rgba(131,66,187,0.06); }
+
+  /* ── Favorites bar ── */
+  .ah-fav-bar {
+    height: 32px; background: #fff; border-top: none;
+    border-radius: 0 0 10px 10px;
+    border-bottom: 1px solid #EBEBEB;
+    display: flex; align-items: center; padding: 0 10px; gap: 4px;
+    overflow: visible;
+    position: relative; z-index: 200;
+    flex-wrap: nowrap;
+  }
+  .fav-pill {
+    display: flex; align-items: center; gap: 4px;
+    height: 22px; padding: 0 8px;
+    background: transparent; border: 1px solid #DDDDE5; border-radius: 11px;
+    cursor: pointer; font-family: 'Switzer', sans-serif; font-size: 11px;
+    color: #282828; white-space: nowrap; flex-shrink: 0; transition: background 0.1s;
+    position: relative;
+  }
+  .fav-pill:hover { background: rgba(131,66,187,0.06); border-color: #C0B4E8; }
+  .fav-pill.open { background: rgba(131,66,187,0.08); border-color: #8342BB; color: #7239A4; }
+
+  /* Pill dropdown */
+  .fav-dropdown {
+    position: absolute; top: calc(100% + 5px); left: 0;
+    background: #fff; border-radius: 8px; border: 1px solid #E5E5EC;
+    box-shadow: 0 4px 20px rgba(55,23,78,0.12), 0 1px 4px rgba(55,23,78,0.06);
+    min-width: 240px; max-width: 320px;
+    padding: 4px 0; z-index: 400; display: none;
+    max-height: 320px; overflow-y: auto;
+  }
+  .fav-dropdown::-webkit-scrollbar { width: 5px; }
+  .fav-dropdown::-webkit-scrollbar-thumb { background: #DDDDE5; border-radius: 3px; }
+  .fav-dropdown::-webkit-scrollbar-track { background: transparent; }
+  .fav-dropdown.open { display: block; }
+
+  /* Plain item */
+  .fav-dropdown-item {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 12px; cursor: pointer;
+    font-family: 'Switzer', sans-serif; font-size: 12px; color: #282828;
+    text-decoration: none; transition: background 0.08s;
+    text-align: left;
+  }
+  .fav-dropdown-item:hover { background: rgba(131,66,187,0.06); }
+  .fav-dropdown-item .item-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fav-dropdown-item .item-ext { font-size: 13px; color: #8C8C8C; flex-shrink: 0; margin-left: auto; }
+  .fav-dropdown-item .item-chev { font-size: 15px; color: #BFBECE; flex-shrink: 0; margin-left: auto; transition: transform 0.15s; }
+  .fav-dropdown-item.folder-open .item-chev { transform: rotate(180deg); }
+
+  /* Sub-items (indented, hidden by default) */
+  .fav-sub { display: none; }
+  .fav-sub.open { display: block; }
+  .fav-sub .fav-dropdown-item { padding-left: 24px; font-size: 12px; color: #5E5C75; }
+
+  /* More dropdown specific styles */
+  .more-folder { font-size: 13px; font-weight: 400; color: #282828; padding: 10px 14px; }
+  .more-folder-icon { font-size: 16px; color: #5E5C75; flex-shrink: 0; }
+  .more-folder .item-chev { font-size: 18px; color: #5E5C75; }
+  .more-folder.folder-open .item-chev { transform: none; } /* chevron already points up */
+
+  .more-sub { padding: 8px 14px 8px 36px; font-size: 13px; color: #282828; }
+  .more-ext { color: #282828; }
+  .more-ext-icon { font-size: 14px; color: #282828; flex-shrink: 0; }
+
+  /* Fav bar clips overflow, more btn always visible */
+  .fav-pills-wrap {
+    display: flex; align-items: center; gap: 4px;
+    overflow: visible; min-width: 0;
+  }
+
+  .fav-more { display: flex; align-items: center; gap: 5px; height: 22px; padding: 0 10px; background: #EAEAEF; border: 1px solid #DDDDE5; border-radius: 11px; cursor: pointer; font-family: 'Switzer', sans-serif; font-size: 11px; color: #5E5C75; white-space: nowrap; flex-shrink: 0; transition: background 0.1s; position: relative; }
+  .fav-more:hover { background: #DDDDE5; }
+  .fav-more.open { background: #DDDDE5; border-color: #BFBECE; }
+  .fav-more .more-dots { font-size: 11px; color: #8C8C8C; letter-spacing: 1.5px; display: flex; align-items: center; line-height: 1; }
+</style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════
+       FULL HEADER — matches reference
+  ═══════════════════════════════════ -->
+  <div>
+    <div class="lbl">Application header — matches Figma reference</div>
+    <div class="app-header-shell">
+
+      <!-- Main row -->
+      <div class="ah-row">
+
+        <!-- Logo: dummy icon + wordmark -->
+        <div style="display:flex;align-items:center;gap:0;padding:0 2px 0 20px;height:100%;flex-shrink:0">
+          <div class="app-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <rect x="2" y="2" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.9)"/>
+            <rect x="10" y="2" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.5)"/>
+            <rect x="2" y="10" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.5)"/>
+            <rect x="10" y="10" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.3)"/>
+          </svg>
+        </div>
+        <div class="ah-logo"><img src="../assets/logo-leo.png" alt="leo" style="height:64px;width:auto;"></div>
+        </div><!-- /logo wrapper -->
+
+        <!-- Breadcrumbs: first item opens meganav, second has hover dropdown -->
+        <nav class="ah-breadcrumbs">
+          <!-- First breadcrumb — clicks open meganav -->
+          <div class="bc-wrap">
+            <button class="bc-btn" id="bc-main" onclick="openMeganav()">
+              Animal Transport(ATS)
+              <span class="material-icons bc-arrow">expand_more</span>
+            </button>
+          </div>
+          <span class="bc-sep">/</span>
+          <!-- Second breadcrumb — hover dropdown -->
+          <div class="bc-wrap">
+            <button class="bc-btn">
+              My Workspace
+              <span class="material-icons bc-arrow">expand_more</span>
+            </button>
+            <div class="bc-dropdown">
+              <a href="#">My Workspace</a>
+              <a href="#">Transport Request</a>
+              <a href="#">Orders</a>
+              <a href="#">Inquiries Status</a>
+              <a href="#">Open Inquiries</a>
+            </div>
+          </div>
+          <span class="bc-sep">/</span>
+          <!-- Third — plain, active -->
+          <div class="bc-wrap">
+            <button class="bc-btn bc-active" style="cursor:default">Resurrected Pets</button>
+          </div>
+        </nav>
+
+        <!-- Right -->
+        <div class="ah-right">
+
+          <!-- Search -->
+          <div class="ah-search" style="margin-left:16px">
+            <input type="text" placeholder="What are you looking for?">
+            <span class="material-icons">search</span>
+          </div>
+
+          <!-- Assistant — outlined violet pill -->
+          <button class="ah-assistant" style="margin-left:16px">
+            <svg width="13" height="12" viewBox="0 0 13 12" fill="none"><path d="M4.73 8.09L5.64 6.1L7.63 5.19L5.64 4.28L4.73 2.29L3.82 4.28L1.83 5.19L3.82 6.1L4.73 8.09ZM4.73 9.92L3.25 6.67L0 5.19L3.25 3.71L4.73 0.46L6.21 3.71L9.45 5.19L6.21 6.67L4.73 9.92ZM9.94 11.54L9.21 9.9L7.58 9.17L9.21 8.43L9.94 6.81L10.69 8.43L12.31 9.17L10.69 9.9L9.94 11.54Z" fill="#7239A4"/></svg>
+            Assistant
+          </button>
+
+          <!-- Bell -->
+          <button class="ah-icon-btn" title="Notifications" style="margin-left:8px"><span class="material-icons">notifications_none</span></button>
+
+          <div class="ah-div" style="margin-left:8px"></div>
+
+          <!-- User -->
+          <div class="ah-user">
+            <div class="ah-user-text">
+              <span class="ah-user-name">Allabastar Plasma Guicci</span>
+              <span class="ah-user-role">Demand Planner</span>
+            </div>
+            <div class="ah-avatar">AP</div>
+
+            <!-- Dropdown -->
+            <div class="ah-user-menu">
+              <div class="um-head">
+                <div class="ah-avatar" style="width:32px;height:32px;font-size:11px">AP</div>
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:#282828;font-family:'Switzer',sans-serif">Allabastar Plasma Guicci</div>
+                  <div style="font-size:11px;color:#767676;font-family:'Switzer',sans-serif">Demand Planner</div>
+                </div>
+              </div>
+              <div class="um-item">
+                <span class="material-icons">sync_alt</span>
+                <span class="um-label">Switch role</span>
+                <span class="material-icons um-chevron">chevron_right</span>
+                <div class="um-submenu">
+                  <a href="#">Administrator</a><a href="#">Demand planner</a><a href="#">Financial planner</a>
+                </div>
+              </div>
+              <div class="um-sep"></div>
+              <div class="um-item"><span class="material-icons">person</span><span class="um-label">Preferences</span></div>
+              <div class="um-item">
+                <span class="material-icons">pin_drop</span><span class="um-label">Change location</span>
+                <span class="material-icons um-chevron">chevron_right</span>
+                <div class="um-submenu">
+                  <a href="#">Northeast</a><a href="#">Northwest</a><a href="#">Central</a><a href="#">Southeast</a>
+                </div>
+              </div>
+              <div class="um-item"><span class="material-icons">settings</span><span class="um-label">Update preferences</span></div>
+              <div class="um-sep"></div>
+              <div class="um-item"><span class="material-icons">info</span><span class="um-label">About leo</span></div>
+              <div class="um-item"><span class="material-icons">support</span><span class="um-label">Contact support</span></div>
+              <div class="um-item"><span class="material-icons">logout</span><span class="um-label">Log out</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /ah-row -->
+
+      <!-- Favorites bar — interactive pills -->
+      <div class="ah-fav-bar" id="favBar">
+        <div class="fav-pills-wrap">
+        <!-- Pill 1: Favorite Group — folder structure -->
+        <button class="fav-pill" onclick="toggleFav(this)">Global Custom/Warehousing/Warehou...
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" class="fav-arrow"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="fav-dropdown" onclick="event.stopPropagation()">
+            <!-- Folder item with sub-items -->
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Global Custom/Warehousing/Warehou...</span></a>
+<a class="fav-dropdown-item" href="#"><span class="item-label">Global Custom/Warehousing/Warehouse management/Inbound/Open Orders/Order 98-98279</span></a>
+<a class="fav-dropdown-item" href="#"><span class="item-label">Orders/Order 2023-442</span></a>
+<a class="fav-dropdown-item" href="#"><span class="item-label">Orders/Order 2022-441</span></a>
+            <!-- Plain items -->
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Receipt</span></a>
+            <!-- Folder item — external -->
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Label External folder</span></a>
+<a class="fav-dropdown-item" href="#"><span class="item-label">Orders/Order 2023-442</span></a>
+<a class="fav-dropdown-item" href="#"><span class="item-label">Orders/Order 2022-441</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Lead Board</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Stores</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Receipt Summary</span><span class="material-icons item-ext">open_in_new</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">PO Spend Summary</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Ad Hoc Report</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">My Workspace</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Home</span><span class="material-icons item-ext">open_in_new</span></a>
+          </div>
+        </button>
+
+        <!-- Pill 2: Simple flat list -->
+        <button class="fav-pill" onclick="toggleFav(this)">Global Custom/Warehousing/Warehou...
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" class="fav-arrow"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="fav-dropdown" onclick="event.stopPropagation()">
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Order Collaboration/Purchase Orders/Order Summary/Order2022-23</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Order Collaboration/Purchase Orders/Order Summary/Order2023-24</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Order Collaboration/Purchase Orders/Order Summary/Order2021-22</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Order Collaboration/Purchase Orders/Order Summary/Order2020-21</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Supply Collaboration/Order Collaboration/Purchase Orders/Warehouse management/Open Orders/Order 98-98279</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Supply Collaboration/Order Collaboration/Purchase Orders/Open Orders/Order 98-98280</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Home</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">My Workspace</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Downloads</span></a>
+          </div>
+        </button>
+
+        <!-- Pill 3: Simple -->
+        <button class="fav-pill" onclick="toggleFav(this)">Global Custom/Warehousing/Warehou...
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" class="fav-arrow"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="fav-dropdown" onclick="event.stopPropagation()">
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Forecast Collaboration</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Replenishment</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Demand Signals</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Planning Parameters</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Consensus Forecast</span></a>
+          </div>
+        </button>
+
+        <!-- Pill 4: With folder -->
+        <button class="fav-pill" onclick="toggleFav(this)">Global Custom/Warehousing/Warehou...
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" class="fav-arrow"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="fav-dropdown" onclick="event.stopPropagation()">
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Shipment Tracking</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Freight Management</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Carrier Performance</span><span class="material-icons item-ext">open_in_new</span></a>
+            <div class="fav-dropdown-sep"></div>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Open Exceptions</span></a>
+          </div>
+        </button>
+
+        </div><!-- /fav-pills-wrap -->
+        <!-- more button OUTSIDE wrap so pill overflow hides behind it -->
+
+        <!-- More button -->
+        <button class="fav-more" id="favMore" onclick="toggleMore()">
+          more
+          <svg width="10" height="3" viewBox="0 0 10 3" fill="none" style="flex-shrink:0;display:block">
+            <circle cx="1.5" cy="1.5" r="1" fill="#8C8C8C"/>
+            <circle cx="5" cy="1.5" r="1" fill="#8C8C8C"/>
+            <circle cx="8.5" cy="1.5" r="1" fill="#8C8C8C"/>
+          </svg>
+          <div class="fav-dropdown" id="moreDropdown" onclick="event.stopPropagation()" style="left:auto;right:0;min-width:360px;max-height:400px">
+
+            <!-- Folder 1: Label folder 1 — expanded by default -->
+            <div class="fav-dropdown-item more-folder folder-open" onclick="toggleSub(this)">
+              <span class="more-folder-icon material-icons">folder_open</span>
+              <span class="item-label">Label folder 1</span>
+              <span class="material-icons item-chev">expand_less</span>
+            </div>
+            <div class="fav-sub open">
+              <a class="fav-dropdown-item more-sub" href="#"><span class="item-label">Label</span></a>
+              <a class="fav-dropdown-item more-sub" href="#"><span class="item-label">Global Custom/Warehousing/Warehouse management/Inbo...</span></a>
+            </div>
+
+            <!-- Plain label -->
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Label</span></a>
+
+            <!-- Folder 2: Label External folder — expanded -->
+            <div class="fav-dropdown-item more-folder folder-open" onclick="toggleSub(this)">
+              <span class="more-folder-icon material-icons">folder_open</span>
+              <span class="item-label">Label External folder</span>
+              <span class="material-icons item-chev">expand_less</span>
+            </div>
+            <div class="fav-sub open">
+              <a class="fav-dropdown-item more-sub more-ext" href="#"><span class="more-ext-icon material-icons">open_in_new</span><span class="item-label">Global Custom/Warehousing/Warehouse management/...</span></a>
+              <a class="fav-dropdown-item more-sub more-ext" href="#"><span class="more-ext-icon material-icons">open_in_new</span><span class="item-label">Global Custom/Warehousing/Warehouse management/...</span></a>
+              <a class="fav-dropdown-item more-sub more-ext" href="#"><span class="more-ext-icon material-icons">open_in_new</span><span class="item-label">Global Custom/Warehousing/Warehouse management/...</span></a>
+            </div>
+
+            <!-- Plain labels -->
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Label</span></a>
+            <a class="fav-dropdown-item" href="#"><span class="item-label">Label</span></a>
+
+            <!-- External plain item -->
+            <a class="fav-dropdown-item more-ext" href="#"><span class="more-ext-icon material-icons">open_in_new</span><span class="item-label">Label</span></a>
+
+          </div>
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+<!-- ══════════════════════════════════
+     MEGANAV PANEL — eto-meganav
+     Opens when first breadcrumb clicked
+══════════════════════════════════ -->
+<div class="meganav-overlay" id="mnOverlay" onclick="closeMeganav()"></div>
+<div class="meganav" id="meganav">
+
+  <!-- Header -->
+  <div class="mn-header">
+    <span class="mn-title" id="mnTitle">Animal Transport (ATS)</span>
+    <button class="mn-close" onclick="closeMeganav()"><span class="material-icons">close</span></button>
+  </div>
+
+  <!-- Search -->
+  <div class="mn-search">
+    <span class="material-icons">search</span>
+    <input type="text" placeholder="Find..." oninput="filterMeganav(this.value)">
+  </div>
+
+  <!-- Two-panel layout -->
+  <div class="mn-panels">
+
+    <!-- Primary list -->
+    <div class="mn-primary" id="mnPrimary">
+      <!-- Group: (no title — first group) -->
+      <button class="mn-item" onclick="openMnSub('workspace')">
+        <span>My Workspace</span>
+      </button>
+      <button class="mn-item" onclick="openMnSub('transport')">
+        <span>Transport Request</span>
+        <span class="material-icons mn-chev">chevron_right</span>
+      </button>
+      <button class="mn-item" onclick="openMnSub('orders')">
+        <span>Orders</span>
+        <span class="material-icons mn-chev">chevron_right</span>
+      </button>
+      <div class="mn-sep"></div>
+      <div class="mn-group-label">Inquiries</div>
+      <button class="mn-item" onclick="openMnSub('inq-status')">
+        <span>Inquiries Status</span>
+        <span class="material-icons mn-chev">chevron_right</span>
+      </button>
+      <button class="mn-item" onclick="openMnSub('inq-open')">
+        <span>Open Inquiries</span>
+      </button>
+      <button class="mn-item" onclick="openMnSub('inq-new')">
+        <span>New Inquiry</span>
+      </button>
+      <div class="mn-sep"></div>
+      <div class="mn-group-label">Manage Partners</div>
+      <button class="mn-item" onclick="openMnSub('partners-current')">
+        <span>Current Partners</span>
+        <span class="material-icons mn-chev">chevron_right</span>
+      </button>
+      <button class="mn-item" onclick="openMnSub('partners-request')">
+        <span>Partner Request</span>
+      </button>
+      <button class="mn-item" onclick="openMnSub('partners-past')">
+        <span>Past Partners</span>
+      </button>
+      <div class="mn-sep"></div>
+      <div class="mn-group-label">History</div>
+      <button class="mn-item" onclick="openMnSub('hist-order')">
+        <span>Order History</span>
+      </button>
+      <button class="mn-item" onclick="openMnSub('hist-transport')">
+        <span>Transport Log</span>
+      </button>
+      <button class="mn-item" onclick="openMnSub('hist-reports')">
+        <span>Reports</span>
+      </button>
+    </div>
+
+    <!-- Secondary panel — injected by JS -->
+    <div class="mn-secondary" id="mnSecondary">
+      <button class="mn-back" onclick="closeMnSub()">
+        <span class="material-icons">chevron_left</span> Back
+      </button>
+      <div id="mnSecContent"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ── Sub-menu data matching codebase application-header breadcrumbs ── */
+const MN_SUB = {
+  'workspace': null, // no sub
+  'transport': [
+    { label: 'Active Transports', url: '#' },
+    { label: 'Pending Approval', url: '#' },
+    { label: 'Completed', url: '#' },
+    { label: 'Cancelled', url: '#' },
+  ],
+  'orders': [
+    { label: 'Purchase Orders', url: '#' },
+    { label: 'Sales Orders', url: '#' },
+    { label: 'Order Search', url: '#' },
+  ],
+  'inq-status': [
+    { label: 'Status Done', url: '#' },
+    { label: 'Status Pending', url: '#' },
+    { label: 'Status In Review', url: '#' },
+  ],
+  'inq-open': null,
+  'inq-new': null,
+  'partners-current': [
+    { label: 'Inquiries Status', url: '#' },
+    { label: 'Open Inquiries', url: '#' },
+    { label: 'Sustainability', url: '#' },
+  ],
+  'partners-request': null,
+  'partners-past': null,
+  'hist-order': null,
+  'hist-transport': null,
+  'hist-reports': null,
+};
+
+/* ── Open / close meganav ── */
+function openMeganav() {
+  document.getElementById('meganav').classList.add('open');
+  document.getElementById('mnOverlay').classList.add('open');
+  // Reset to primary
+  closeMnSub();
+}
+
+function closeMeganav() {
+  document.getElementById('meganav').classList.remove('open');
+  document.getElementById('mnOverlay').classList.remove('open');
+}
+
+/* ── Open sub-panel ── */
+function openMnSub(key) {
+  const items = MN_SUB[key];
+  if (!items || items.length === 0) {
+    // Just navigate (no sub)
+    closeMeganav();
+    return;
+  }
+  const sec = document.getElementById('mnSecondary');
+  const content = document.getElementById('mnSecContent');
+  const label = document.querySelector(`[onclick="openMnSub('${key}')"] span:first-child`)?.textContent || key;
+
+  content.innerHTML = `
+    <div class="mn-group-label">${label}</div>
+    ${items.map(i => `<a class="mn-item" href="${i.url}"><span>${i.label}</span></a>`).join('')}
+  `;
+  sec.classList.add('open');
+  document.getElementById('mnPrimary').classList.add('slide-out');
+}
+
+function closeMnSub() {
+  document.getElementById('mnSecondary').classList.remove('open');
+  document.getElementById('mnPrimary').classList.remove('slide-out');
+}
+
+/* ── Filter meganav items ── */
+function filterMeganav(q) {
+  const query = q.toLowerCase();
+  document.querySelectorAll('#mnPrimary .mn-item').forEach(item => {
+    const label = item.querySelector('span')?.textContent?.toLowerCase() || '';
+    item.style.display = label.includes(query) ? '' : 'none';
+  });
+  document.querySelectorAll('#mnPrimary .mn-group-label, #mnPrimary .mn-sep').forEach(el => {
+    el.style.display = query ? 'none' : '';
+  });
+}
+
+/* ── Keyboard ── */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('mnSecondary').classList.contains('open')) {
+      closeMnSub();
+    } else {
+      closeMeganav();
+    }
+  }
+});
+</script>
+
+<script>
+function closeAllFav() {
+  document.querySelectorAll('.fav-pill.open, .fav-more.open').forEach(el => {
+    el.classList.remove('open');
+    el.querySelector('.fav-dropdown')?.classList.remove('open');
+    const arr = el.querySelector('.fav-arrow');
+    if (arr) arr.style.transform = '';
+  });
+}
+
+function toggleFav(pill) {
+  const dropdown = pill.querySelector('.fav-dropdown');
+  if (!dropdown) return;
+  const isOpen = pill.classList.contains('open');
+  closeAllFav();
+  if (!isOpen) {
+    pill.classList.add('open');
+    dropdown.classList.add('open');
+    const arr = pill.querySelector('.fav-arrow');
+    if (arr) arr.style.transform = 'rotate(180deg)';
+  }
+}
+
+function toggleMore() {
+  const btn = document.getElementById('favMore');
+  const dd  = document.getElementById('moreDropdown');
+  const isOpen = btn.classList.contains('open');
+  closeAllFav();
+  if (!isOpen) { btn.classList.add('open'); dd.classList.add('open'); }
+}
+
+// ── Sub-folder toggle ─────────────────────────────────────────────────────────
+function toggleSub(item) {
+  const sub = item.nextElementSibling;
+  if (!sub || !sub.classList.contains('fav-sub')) return;
+  const isOpen = sub.classList.contains('open');
+  sub.classList.toggle('open', !isOpen);
+  item.classList.toggle('folder-open', !isOpen);
+  // update chevron icon text for more-folder items
+  const chev = item.querySelector('.item-chev');
+  if (chev) chev.textContent = isOpen ? 'expand_more' : 'expand_less';
+}
+
+// Close on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('.fav-pill') && !e.target.closest('.fav-more')) closeAllFav();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllFav(); });
+
+// ── Breadcrumb dropdowns ──────────────────────────────────────────────────────
+document.querySelectorAll('.bc-wrap').forEach(wrap => {
+  const dd = wrap.querySelector('.bc-dropdown');
+  if (!dd) return;
+  let t;
+  wrap.addEventListener('mouseenter', () => { clearTimeout(t); dd.style.display = 'block'; });
+  wrap.addEventListener('mouseleave', () => { t = setTimeout(() => dd.style.display = 'none', 150); });
+  dd.addEventListener('mouseenter',  () => clearTimeout(t));
+  dd.addEventListener('mouseleave',  () => { t = setTimeout(() => dd.style.display = 'none', 150); });
+});
+</script>
+</body>
+</html>

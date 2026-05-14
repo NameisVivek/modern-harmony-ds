@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 14px; width: 700px; display: flex; flex-direction: column; gap: 12px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #5E5C75; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* Base card */
+  .kw { background: #fff; border-radius: 14px; border: 1px solid #EBEBEB; box-shadow: 0 2px 4px rgba(55,23,78,0.06), 0 4px 8px -2px rgba(55,23,78,0.07); }
+
+  /* Simple KPI */
+  .kpi-simple { padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; min-width: 140px; flex: 1; }
+  .kpi-header { display: flex; align-items: center; justify-content: space-between; }
+  .kpi-label  { font-size: 11px; color: #767676; }
+  .kpi-icon   { width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+  .kpi-icon .material-icons { font-size: 15px; }
+  .kpi-value  { font-family: 'Roboto Mono', monospace; font-size: 26px; font-weight: 500; color: #282828; line-height: 1; }
+  .kpi-unit   { font-family: 'Switzer', sans-serif; font-size: 13px; color: #767676; font-weight: 400; }
+  .kpi-trend  { display: flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 500; }
+  .kpi-trend .material-icons { font-size: 13px; }
+  .up   { color: #27854D; } .down { color: #9A112C; } .flat { color: #767676; }
+
+  /* Ratio KPI */
+  .kpi-ratio { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; min-width: 160px; flex: 1; }
+  .ratio-bar { height: 6px; border-radius: 3px; background: #F0F0F4; overflow: hidden; }
+  .ratio-fill { height: 100%; border-radius: 3px; }
+  .ratio-labels { display: flex; justify-content: space-between; font-size: 10px; color: #8C8C8C; }
+
+  /* Sparkline (SVG) */
+  .kpi-spark { padding: 12px 14px; min-width: 160px; flex: 1; }
+  .spark-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+
+  /* Multi-metric */
+  .kpi-multi { padding: 14px 16px; min-width: 220px; flex: 1.5; }
+  .multi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; margin-top: 8px; }
+  .multi-item { display: flex; flex-direction: column; gap: 2px; }
+  .multi-value { font-family: 'Roboto Mono', monospace; font-size: 18px; font-weight: 500; color: #282828; line-height: 1; }
+  .multi-label { font-size: 10px; color: #8C8C8C; }
+
+  /* Status widget */
+  .kpi-status { padding: 12px 14px; min-width: 190px; flex: 1.3; }
+  .status-items { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .status-item { display: flex; align-items: center; gap: 8px; }
+  .status-dot  { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .status-name { font-size: 12px; color: #282828; flex: 1; }
+  .status-val  { font-family: 'Roboto Mono', monospace; font-size: 12px; color: #282828; font-weight: 500; }
+  .status-bar  { height: 4px; border-radius: 2px; background: #F0F0F4; overflow: hidden; }
+  .status-bar-fill { height: 100%; border-radius: 2px; }
+
+  /* Refresh action */
+  .widget-action { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .widget-title  { font-size: 12px; font-weight: 500; color: #282828; }
+  .widget-refresh { display: flex; align-items: center; gap: 3px; font-size: 10px; color: #8C8C8C; cursor: pointer; }
+  .widget-refresh:hover { color: #7239A4; }
+  .widget-refresh .material-icons { font-size: 13px; }
+</style>
+</head>
+<body>
+  <div class="lbl">Simple KPI cards</div>
+  <div class="row">
+    <div class="kw kpi-simple">
+      <div class="kpi-header">
+        <div class="kpi-label">Open Orders</div>
+        <div class="kpi-icon" style="background:rgba(131,66,187,0.1)"><span class="material-icons" style="color:#8342BB">list_alt</span></div>
+      </div>
+      <div><span class="kpi-value">12,847</span></div>
+      <div class="kpi-trend up"><span class="material-icons">trending_up</span>+3.2% vs last period</div>
+    </div>
+    <div class="kw kpi-simple">
+      <div class="kpi-header">
+        <div class="kpi-label">On-time Delivery</div>
+        <div class="kpi-icon" style="background:#EEFEF9"><span class="material-icons" style="color:#27854D">local_shipping</span></div>
+      </div>
+      <div><span class="kpi-value">94.2</span><span class="kpi-unit"> %</span></div>
+      <div class="kpi-trend down"><span class="material-icons">trending_down</span>−1.1% vs last period</div>
+    </div>
+    <div class="kw kpi-simple">
+      <div class="kpi-header">
+        <div class="kpi-label">Forecast Accuracy</div>
+        <div class="kpi-icon" style="background:#F4F9FE"><span class="material-icons" style="color:#0D4C89">assessment</span></div>
+      </div>
+      <div><span class="kpi-value">87.6</span><span class="kpi-unit"> %</span></div>
+      <div class="kpi-trend up"><span class="material-icons">trending_up</span>+0.8%</div>
+    </div>
+    <div class="kw kpi-simple">
+      <div class="kpi-header">
+        <div class="kpi-label">Active Shipments</div>
+        <div class="kpi-icon" style="background:#FFFDEF"><span class="material-icons" style="color:#753A05">flight_takeoff</span></div>
+      </div>
+      <div><span class="kpi-value">3,241</span></div>
+      <div class="kpi-trend flat"><span class="material-icons">trending_flat</span>Stable</div>
+    </div>
+  </div>
+
+  <div class="lbl">Ratio + progress KPI</div>
+  <div class="row">
+    <div class="kw kpi-ratio">
+      <div class="widget-action">
+        <div class="widget-title">Cycle completion</div>
+        <div class="widget-refresh"><span class="material-icons">refresh</span>Refresh</div>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:6px">
+        <span style="font-family:'Roboto Mono',monospace;font-size:24px;font-weight:500;color:#282828">847</span>
+        <span style="font-size:13px;color:#767676">/ 1,240 orders</span>
+      </div>
+      <div class="ratio-bar"><div class="ratio-fill" style="width:68%;background:#8342BB"></div></div>
+      <div class="ratio-labels"><span>68% complete</span><span>393 remaining</span></div>
+    </div>
+
+    <div class="kw kpi-ratio">
+      <div class="widget-action">
+        <div class="widget-title">Inventory fill rate</div>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:6px">
+        <span style="font-family:'Roboto Mono',monospace;font-size:24px;font-weight:500;color:#27854D">94.2</span>
+        <span style="font-size:13px;color:#767676">%</span>
+        <span style="font-size:10px;color:#27854D;font-weight:500;margin-left:auto">▲ Target: 95%</span>
+      </div>
+      <div class="ratio-bar">
+        <div class="ratio-fill" style="width:94.2%;background:#5BD6A0"></div>
+      </div>
+      <div class="ratio-labels"><span style="color:#27854D">Near target</span><span>Target: 95%</span></div>
+    </div>
+
+    <!-- Sparkline -->
+    <div class="kw kpi-spark">
+      <div class="widget-action">
+        <div class="widget-title">Weekly demand</div>
+        <div class="widget-refresh"><span class="material-icons">more_horiz</span></div>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:6px">
+        <span style="font-family:'Roboto Mono',monospace;font-size:22px;font-weight:500;color:#282828">54,012</span>
+        <span style="font-size:11px;color:#27854D;font-weight:500">↑ 8%</span>
+      </div>
+      <svg width="100%" height="44" viewBox="0 0 200 44" preserveAspectRatio="none">
+        <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8342BB" stop-opacity="0.18"/><stop offset="100%" stop-color="#8342BB" stop-opacity="0"/></linearGradient></defs>
+        <path d="M0,34 L30,28 L60,32 L90,20 L120,24 L150,12 L180,8 L200,4" stroke="#8342BB" stroke-width="1.8" fill="none"/>
+        <path d="M0,34 L30,28 L60,32 L90,20 L120,24 L150,12 L180,8 L200,4 L200,44 L0,44 Z" fill="url(#sg)"/>
+        <circle cx="200" cy="4" r="3" fill="#8342BB"/>
+      </svg>
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:#8C8C8C;margin-top:2px">
+        <span>6w ago</span><span>Now</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lbl">Multi-metric + status breakdown</div>
+  <div class="row">
+    <div class="kw kpi-multi">
+      <div class="widget-action">
+        <div class="widget-title">Order breakdown</div>
+        <div class="widget-refresh"><span class="material-icons">refresh</span></div>
+      </div>
+      <div class="multi-grid">
+        <div class="multi-item"><div class="multi-value" style="color:#282828">8,420</div><div class="multi-label">On track</div></div>
+        <div class="multi-item"><div class="multi-value" style="color:#9A112C">284</div><div class="multi-label">Delayed</div></div>
+        <div class="multi-item"><div class="multi-value" style="color:#C47A00">1,103</div><div class="multi-label">Warning</div></div>
+        <div class="multi-item"><div class="multi-value" style="color:#8C8C8C">3,040</div><div class="multi-label">Completed</div></div>
+      </div>
+    </div>
+
+    <div class="kw kpi-status">
+      <div class="widget-action">
+        <div class="widget-title">Regional distribution</div>
+      </div>
+      <div class="status-items">
+        <div>
+          <div class="status-item" style="margin-bottom:3px">
+            <div class="status-dot" style="background:#8342BB"></div>
+            <div class="status-name">APAC</div>
+            <div class="status-val">42%</div>
+          </div>
+          <div class="status-bar"><div class="status-bar-fill" style="width:42%;background:#8342BB"></div></div>
+        </div>
+        <div>
+          <div class="status-item" style="margin-bottom:3px">
+            <div class="status-dot" style="background:#3999E4"></div>
+            <div class="status-name">Americas</div>
+            <div class="status-val">31%</div>
+          </div>
+          <div class="status-bar"><div class="status-bar-fill" style="width:31%;background:#3999E4"></div></div>
+        </div>
+        <div>
+          <div class="status-item" style="margin-bottom:3px">
+            <div class="status-dot" style="background:#5BD6A0"></div>
+            <div class="status-name">EMEA</div>
+            <div class="status-val">27%</div>
+          </div>
+          <div class="status-bar"><div class="status-bar-fill" style="width:27%;background:#5BD6A0"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

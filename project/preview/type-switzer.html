@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 14px 20px; width: 700px; }
+  .grid { display: grid; grid-template-columns: 100px 1fr 80px; gap: 0; }
+  .row { display: contents; }
+  .row > * { padding: 5px 0; border-bottom: 1px solid #F0F0F4; display: flex; align-items: center; }
+  .row:last-child > * { border-bottom: none; }
+  .weight-label { font-size: 9px; color: #8C8C8C; font-weight: 500; font-family: 'Switzer', sans-serif; }
+  .specimen { font-family: 'Switzer', sans-serif; font-size: 17px; color: #282828; line-height: 1; white-space: nowrap; }
+  .usage { font-size: 9px; color: #8342BB; font-family: 'Switzer', sans-serif; text-align: right; font-weight: 500; }
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div class="row">
+      <div class="weight-label">Thin / 100</div>
+      <div class="specimen" style="font-weight:100">Supply chain management</div>
+      <div class="usage">decorative</div>
+    </div>
+    <div class="row">
+      <div class="weight-label">Extralight / 200</div>
+      <div class="specimen" style="font-weight:200">Supply chain management</div>
+      <div class="usage">decorative</div>
+    </div>
+    <div class="row">
+      <div class="weight-label">Light / 300</div>
+      <div class="specimen" style="font-weight:300">Supply chain management</div>
+      <div class="usage">subtitles</div>
+    </div>
+    <div class="row">
+      <div class="weight-label">Regular / 400</div>
+      <div class="specimen" style="font-weight:400">Supply chain management</div>
+      <div class="usage">body, captions</div>
+    </div>
+    <div class="row">
+      <div class="weight-label">Medium / 500 ★</div>
+      <div class="specimen" style="font-weight:500;color:#8342BB">Supply chain management</div>
+      <div class="usage" style="color:#282828">UI labels, nav</div>
+    </div>
+    <div class="row">
+      <div class="weight-label">Semibold / 600</div>
+      <div class="specimen" style="font-weight:600">Supply chain management</div>
+      <div class="usage">emphasis</div>
+    </div>
+    <div class="row">
+      <div class="weight-label">Bold / 700 ★</div>
+      <div class="specimen" style="font-weight:700;color:#282828">Supply chain management</div>
+      <div class="usage" style="color:#282828">headings, logo</div>
+    </div>
+    <div class="row">
+      <div class="weight-label">Extrabold / 800</div>
+      <div class="specimen" style="font-weight:800">Supply chain management</div>
+      <div class="usage">display</div>
+    </div>
+    <div class="row">
+      <div class="weight-label">Black / 900</div>
+      <div class="specimen" style="font-weight:900">Supply chain management</div>
+      <div class="usage">hero / cover</div>
+    </div>
+    <div class="row">
+      <div class="weight-label">Italic / 400i</div>
+      <div class="specimen" style="font-weight:400;font-style:italic;color:#767676">Optional field — leave blank to use defaults</div>
+      <div class="usage">notes, hints</div>
+    </div>
+  </div>
+</body>
+</html>

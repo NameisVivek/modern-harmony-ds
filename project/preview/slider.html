@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; display: flex; flex-direction: column; gap: 16px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .divider { height: 1px; background: #F0F0F4; }
+
+  /* Slider field */
+  .slider-field { display: flex; flex-direction: column; gap: 6px; }
+  .slider-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .slider-name  { font-size: 13px; font-weight: 500; color: #282828; }
+  .slider-value { font-size: 13px; color: #7239A4; font-weight: 500; min-width: 40px; text-align: right; }
+
+  /* Range input */
+  input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 4px; border-radius: 2px; cursor: pointer; outline: none;
+    background: linear-gradient(to right, #8342BB var(--pct, 50%), #DDDDE5 var(--pct, 50%));
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #8342BB; border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(55,23,78,0.2), 0 0 0 1px rgba(131,66,187,0.3);
+    cursor: pointer; transition: transform 0.1s;
+  }
+  input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type=range]:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #8342BB;
+  }
+  input[type=range]:disabled {
+    opacity: 0.4; cursor: not-allowed;
+  }
+  input[type=range]:disabled::-webkit-slider-thumb { cursor: not-allowed; }
+
+  /* Tick marks */
+  .tick-row { display: flex; justify-content: space-between; margin-top: -2px; }
+  .tick-label { font-size: 9px; color: #8C8C8C; }
+
+  /* Range slider (dual handle simulation) */
+  .range-wrap { position: relative; height: 16px; }
+  .range-track { position: absolute; top: 6px; left: 0; right: 0; height: 4px; border-radius: 2px; background: #DDDDE5; }
+  .range-fill  { position: absolute; top: 6px; height: 4px; background: #8342BB; border-radius: 2px; left: 25%; width: 50%; }
+  .range-thumb {
+    position: absolute; top: 0; width: 16px; height: 16px; border-radius: 50%;
+    background: #8342BB; border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(55,23,78,0.2), 0 0 0 1px rgba(131,66,187,0.3);
+    cursor: pointer; transform: translateX(-50%);
+  }
+</style>
+</head>
+<body>
+  <div>
+    <div class="lbl">Single value slider</div>
+    <div style="display:flex; flex-direction:column; gap:14px; max-width:520px">
+      <div class="slider-field">
+        <div class="slider-label-row">
+          <div class="slider-name">Forecast horizon</div>
+          <div class="slider-value" id="v1">12 weeks</div>
+        </div>
+        <input type="range" min="1" max="52" value="12" oninput="updateSlider(this,'v1',null,'weeks')">
+        <div class="tick-row">
+          <span class="tick-label">1</span>
+          <span class="tick-label">13</span>
+          <span class="tick-label">26</span>
+          <span class="tick-label">39</span>
+          <span class="tick-label">52 wks</span>
+        </div>
+      </div>
+
+      <div class="slider-field">
+        <div class="slider-label-row">
+          <div class="slider-name">Alert threshold</div>
+          <div class="slider-value" id="v2">25%</div>
+        </div>
+        <input type="range" min="0" max="100" value="25" oninput="updateSlider(this,'v2','%','')">
+      </div>
+
+      <div class="slider-field">
+        <div class="slider-label-row">
+          <div class="slider-name">Confidence level</div>
+          <div class="slider-value" id="v3">80%</div>
+        </div>
+        <input type="range" min="50" max="99" value="80" step="5" oninput="updateSlider(this,'v3','%','')">
+        <div class="tick-row">
+          <span class="tick-label">50%</span>
+          <span class="tick-label">65%</span>
+          <span class="tick-label">80%</span>
+          <span class="tick-label">95%</span>
+        </div>
+      </div>
+
+      <div class="slider-field">
+        <div class="slider-label-row">
+          <div class="slider-name">Lead time buffer (disabled)</div>
+          <div class="slider-value" style="color:#8C8C8C">7 days</div>
+        </div>
+        <input type="range" min="0" max="30" value="7" disabled>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div class="lbl">Range slider (dual handle)</div>
+    <div style="max-width:520px">
+      <div class="slider-label-row" style="margin-bottom:8px">
+        <div class="slider-name">Order quantity range</div>
+        <div style="font-size:13px;color:#7239A4;font-weight:500">500 – 2,000 units</div>
+      </div>
+      <div class="range-wrap">
+        <div class="range-track"></div>
+        <div class="range-fill"></div>
+        <div class="range-thumb" style="left:25%"></div>
+        <div class="range-thumb" style="left:75%"></div>
+      </div>
+      <div class="tick-row" style="margin-top:6px">
+        <span class="tick-label">0</span>
+        <span class="tick-label">500</span>
+        <span class="tick-label">1,000</span>
+        <span class="tick-label">1,500</span>
+        <span class="tick-label">2,000+</span>
+      </div>
+    </div>
+  </div>
+
+<script>
+function updateSlider(el, valId, suffix, prefix) {
+  const pct = ((el.value - el.min) / (el.max - el.min)) * 100;
+  el.style.setProperty('--pct', pct + '%');
+  document.getElementById(valId).textContent = (prefix || '') + el.value + (suffix || '');
+}
+document.querySelectorAll('input[type=range]').forEach(el => {
+  const pct = ((el.value - el.min) / (el.max - el.min)) * 100;
+  el.style.setProperty('--pct', pct + '%');
+});
+</script>
+</body>
+</html>

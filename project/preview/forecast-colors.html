@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; }
+  .calendar { display: flex; border: 1px solid #DDDDE5; border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
+  .col { flex: 1; }
+  .col-head { padding: 5px 4px; text-align: center; font-size: 9px; font-weight: 500; border-bottom: 1px solid rgba(0,0,0,0.07); letter-spacing: 0.02em; }
+  .col-body { padding: 8px 4px; text-align: center; }
+  .col-val  { font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 500; }
+  .col-lbl  { font-size: 7px; opacity: 0.65; margin-top: 2px; }
+  .today-dot { width: 4px; height: 4px; background: #27854D; border-radius: 50%; margin: 3px auto 0; }
+  .groups { display: flex; gap: 14px; }
+  .group { flex: 1; }
+  .group-label { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 5px; }
+  .sw-row { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+  .sw { width: 18px; height: 18px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.07); flex-shrink: 0; }
+  .sw-name { font-size: 9px; color: #282828; }
+  .sw-hex  { font-size: 8px; color: #767676; margin-left: auto; }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="calendar">
+    <div class="col">
+      <div class="col-head" style="background:#8B8AA5;color:#fff">Aug</div>
+      <div class="col-body" style="background:#8B8AA5"><div class="col-val" style="color:#fff">48,291</div><div class="col-lbl" style="color:#fff">cool-400</div></div>
+    </div>
+    <div class="col">
+      <div class="col-head" style="background:#BFBECE;color:#282828">Sep</div>
+      <div class="col-body" style="background:#BFBECE"><div class="col-val">51,034</div><div class="col-lbl">cool-200</div></div>
+    </div>
+    <div class="col">
+      <div class="col-head" style="background:#C6C7D2;color:#282828">Oct</div>
+      <div class="col-body" style="background:#C6C7D2"><div class="col-val">49,876</div><div class="col-lbl">cool-150</div></div>
+    </div>
+    <div class="col">
+      <div class="col-head" style="background:#DDDDE5;color:#282828">Nov</div>
+      <div class="col-body" style="background:#DDDDE5"><div class="col-val">52,410</div><div class="col-lbl">cool-100</div></div>
+    </div>
+    <div class="col" style="border-left:2px solid #27854D;border-right:2px solid #27854D">
+      <div class="col-head" style="background:#A1EECC;color:#27854D">Dec ← Now</div>
+      <div class="col-body" style="background:#A1EECC"><div class="col-val" style="color:#27854D">54,012</div><div class="col-lbl" style="color:#27854D">green-100</div><div class="today-dot"></div></div>
+    </div>
+    <div class="col">
+      <div class="col-head" style="background:#ECE4F5;color:#7239A4">Jan 25</div>
+      <div class="col-body" style="background:#ECE4F5"><div class="col-val" style="color:#7239A4">56,800</div><div class="col-lbl" style="color:#7239A4">violet-75</div></div>
+    </div>
+    <div class="col">
+      <div class="col-head" style="background:#CABAEF;color:#7239A4">Feb</div>
+      <div class="col-body" style="background:#CABAEF"><div class="col-val" style="color:#7239A4">58,200</div><div class="col-lbl" style="color:#7239A4">violet-100</div></div>
+    </div>
+    <div class="col">
+      <div class="col-head" style="background:#B4A4E0;color:#4D3075">Mar</div>
+      <div class="col-body" style="background:#B4A4E0"><div class="col-val" style="color:#4D3075">59,100</div><div class="col-lbl" style="color:#4D3075">violet-225</div></div>
+    </div>
+    <div class="col">
+      <div class="col-head" style="background:#B49AD6;color:#4D3075">Q2 2025</div>
+      <div class="col-body" style="background:#B49AD6"><div class="col-val" style="color:#4D3075">62,400</div><div class="col-lbl" style="color:#4D3075">violet-300</div></div>
+    </div>
+  </div>
+  <div class="groups">
+    <div class="group">
+      <div class="group-label">Past — cool gray scale</div>
+      <div class="sw-row"><div class="sw" style="background:#F0F0F4"></div><div class="sw-name">cool-50</div><div class="sw-hex">#F0F0F4</div></div>
+      <div class="sw-row"><div class="sw" style="background:#DDDDE5"></div><div class="sw-name">cool-100</div><div class="sw-hex">#DDDDE5</div></div>
+      <div class="sw-row"><div class="sw" style="background:#C6C7D2"></div><div class="sw-name">cool-150</div><div class="sw-hex">#C6C7D2</div></div>
+      <div class="sw-row"><div class="sw" style="background:#BFBECE"></div><div class="sw-name">cool-200</div><div class="sw-hex">#BFBECE</div></div>
+      <div class="sw-row"><div class="sw" style="background:#8B8AA5"></div><div class="sw-name">cool-400</div><div class="sw-hex">#8B8AA5</div></div>
+    </div>
+    <div class="group">
+      <div class="group-label">Present — green scale</div>
+      <div class="sw-row"><div class="sw" style="background:#DDFAEE"></div><div class="sw-name">green-50 · week</div><div class="sw-hex">#DDFAEE</div></div>
+      <div class="sw-row"><div class="sw" style="background:#C5F3DF"></div><div class="sw-name">green-75 · month</div><div class="sw-hex">#C5F3DF</div></div>
+      <div class="sw-row"><div class="sw" style="background:#A1EECC"></div><div class="sw-name">green-100 · quarter</div><div class="sw-hex">#A1EECC</div></div>
+      <div class="sw-row"><div class="sw" style="background:#5BD6A0"></div><div class="sw-name">green-200 · year</div><div class="sw-hex">#5BD6A0</div></div>
+    </div>
+    <div class="group">
+      <div class="group-label">Future — violet scale</div>
+      <div class="sw-row"><div class="sw" style="background:#ECE4F5"></div><div class="sw-name">violet-75 · week</div><div class="sw-hex">#ECE4F5</div></div>
+      <div class="sw-row"><div class="sw" style="background:#CABAEF"></div><div class="sw-name">violet-100 · month</div><div class="sw-hex">#CABAEF</div></div>
+      <div class="sw-row"><div class="sw" style="background:#B4A4E0"></div><div class="sw-name">violet-225 · quarter</div><div class="sw-hex">#B4A4E0</div></div>
+      <div class="sw-row"><div class="sw" style="background:#B49AD6"></div><div class="sw-name">violet-300 · year</div><div class="sw-hex">#B49AD6</div></div>
+    </div>
+  </div>
+</body>
+</html>

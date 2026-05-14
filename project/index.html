@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Harmony — Design System</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; font-family: 'Switzer', sans-serif; background: #F0F0F4; }
+
+/* ══════════════════════════════════════
+   SHELL
+══════════════════════════════════════ */
+.shell { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+/* ══════════════════════════════════════
+   TOP HEADER
+══════════════════════════════════════ */
+.top-header {
+  height: 52px; background: #282828; flex-shrink: 0;
+  display: flex; align-items: center; gap: 0;
+  padding: 0 20px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 1px 4px rgba(20,16,41,0.25);
+  position: relative; z-index: 100;
+}
+.header-logo {
+  display: flex; align-items: center; gap: 10px;
+  padding-right: 18px; border-right: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+.header-logo svg { flex-shrink: 0; }
+.header-logo-sub { font-size: 9px; font-weight: 500; color: rgba(255,255,255,0.35); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+.header-title { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55); margin-left: 16px; letter-spacing: 0.02em; }
+
+/* Search */
+.header-search {
+  margin-left: auto; display: flex; align-items: center; gap: 7px;
+  height: 30px; padding: 0 10px; width: 220px;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 7px; cursor: text; transition: all 0.15s;
+}
+.header-search:focus-within { background: rgba(255,255,255,0.13); border-color: rgba(131,66,187,0.6); box-shadow: 0 0 0 3px rgba(131,66,187,0.18); }
+.header-search .material-icons { font-size: 14px; color: rgba(255,255,255,0.38); flex-shrink: 0; }
+.header-search input { flex: 1; background: transparent; border: none; outline: none; font-family: 'Switzer', sans-serif; font-size: 12px; color: #fff; }
+.header-search input::placeholder { color: rgba(255,255,255,0.3); }
+
+/* Component count badge */
+.header-count { margin-left: 14px; font-size: 10px; color: rgba(255,255,255,0.3); flex-shrink: 0; }
+
+/* ══════════════════════════════════════
+   BODY STAGE
+══════════════════════════════════════ */
+.stage { flex: 1; position: relative; overflow: hidden; }
+
+/* ══════════════════════════════════════
+   LIST PANE
+══════════════════════════════════════ */
+.list-pane {
+  position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden;
+  transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.28s ease;
+  will-change: transform, opacity;
+  padding: 20px;
+}
+.list-pane::-webkit-scrollbar { width: 5px; }
+.list-pane::-webkit-scrollbar-thumb { background: #DDDDE5; border-radius: 3px; }
+.list-pane.exit { transform: translateX(-56px); opacity: 0; pointer-events: none; }
+
+/* ── Page title ── */
+.page-title { margin-bottom: 20px; }
+.page-title h1 { font-size: 20px; font-weight: 600; color: #282828; letter-spacing: -0.01em; }
+.page-title p  { font-size: 13px; color: #767676; margin-top: 3px; }
+
+/* ── Category section ── */
+.cat-section { margin-bottom: 10px; border-radius: 12px; overflow: hidden; border: 1px solid #EBEBEB; background: #fff; box-shadow: 0 1px 2px rgba(55,23,78,0.04); }
+
+/* Category header (accordion toggle) */
+.cat-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 13px 16px; cursor: pointer; user-select: none;
+  background: #fff; transition: background 0.1s;
+}
+.cat-header:hover { background: #F8F8FB; }
+.cat-header.open { background: #F8F8FB; border-bottom: 1px solid #EBEBEB; }
+
+.cat-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.cat-icon .material-icons { font-size: 15px; }
+.cat-name { flex: 1; font-size: 13px; font-weight: 600; color: #282828; }
+.cat-count { font-size: 10px; color: #8C8C8C; background: #F0F0F4; border-radius: 4px; padding: 2px 7px; font-weight: 500; }
+.cat-chevron .material-icons { font-size: 18px; color: #BFBECE; transition: transform 0.2s ease; }
+.cat-header.open .cat-chevron .material-icons { transform: rotate(180deg); }
+
+/* Category body */
+.cat-body { max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1); }
+.cat-body.open { max-height: 2000px; }
+
+/* Component grid */
+.comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1px; background: #EBEBEB; }
+
+/* Component card — fully clickable */
+.comp-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; background: #fff; cursor: pointer;
+  transition: background 0.1s; position: relative;
+  overflow: hidden;
+}
+.comp-card:hover { background: #F8F8FB; }
+.comp-card:hover .comp-name { color: #282828; }
+
+/* Left accent */
+.comp-card::before {
+  content: ''; position: absolute; left: 0; top: 8px; bottom: 8px;
+  width: 0; background: #8342BB; border-radius: 0 2px 2px 0;
+  transition: width 0.15s;
+}
+.comp-card:hover::before { width: 3px; }
+
+.comp-dot { width: 6px; height: 6px; border-radius: 50%; background: #DDDDE5; flex-shrink: 0; transition: background 0.15s; }
+.comp-card:hover .comp-dot { background: #8342BB; }
+
+.comp-name { flex: 1; font-size: 12px; font-weight: 500; color: #5E5C75; transition: color 0.1s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Open button — hidden, whole card is clickable */
+.comp-open { display: none; }
+
+/* No results */
+.no-results { padding: 40px 20px; text-align: center; display: none; }
+.no-results .material-icons { font-size: 32px; color: #DDDDE5; display: block; margin: 0 auto 10px; }
+.no-results p { font-size: 13px; color: #8C8C8C; }
+
+/* ══════════════════════════════════════
+   DETAIL PANE
+══════════════════════════════════════ */
+.detail-pane {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  transform: translateX(100%); opacity: 0; pointer-events: none;
+  transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.28s ease;
+  will-change: transform, opacity; background: #fff;
+}
+.detail-pane.enter { transform: translateX(0); opacity: 1; pointer-events: all; }
+
+/* Detail header */
+.detail-header {
+  display: flex; align-items: center; gap: 0;
+  height: 48px; padding: 0 14px; border-bottom: 1px solid #EBEBEB;
+  background: #fff; flex-shrink: 0; position: relative; z-index: 10;
+}
+.detail-back {
+  display: flex; align-items: center; gap: 5px;
+  height: 32px; padding: 0 10px 0 6px;
+  background: transparent; border: none; cursor: pointer; border-radius: 7px;
+  font-family: 'Switzer', sans-serif; font-size: 13px; font-weight: 500; color: #5E5C75;
+  transition: background 0.1s, color 0.1s; flex-shrink: 0;
+}
+.detail-back:hover { background: #F0F0F4; color: #282828; }
+.detail-back .material-icons { font-size: 18px; }
+
+.detail-sep { width: 1px; height: 18px; background: #EBEBEB; margin: 0 12px; flex-shrink: 0; }
+
+.detail-breadcrumb { display: flex; align-items: center; gap: 5px; flex: 1; min-width: 0; font-size: 12px; }
+.detail-breadcrumb .bc-all { color: #8C8C8C; cursor: pointer; }
+.detail-breadcrumb .bc-all:hover { color: #7239A4; text-decoration: underline; }
+.detail-breadcrumb .bc-sep { font-family: 'Material Icons'; font-size: 14px; color: #BFBECE; flex-shrink: 0; }
+.detail-breadcrumb .bc-cat { color: #8C8C8C; flex-shrink: 0; }
+.detail-breadcrumb .bc-current { font-weight: 500; color: #282828; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Right controls */
+.detail-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+.ctrl-btn {
+  display: flex; align-items: center; gap: 4px;
+  height: 28px; padding: 0 10px;
+  background: #fff; border: 1px solid #DDDDE5; border-radius: 6px;
+  font-family: 'Switzer', sans-serif; font-size: 11px; font-weight: 500; color: #5E5C75;
+  cursor: pointer; transition: all 0.1s; text-decoration: none;
+}
+.ctrl-btn .material-icons { font-size: 14px; }
+.ctrl-btn:hover { background: #F0F0F4; color: #282828; border-color: #BFBECE; }
+
+.nav-btn-sm {
+  width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+  background: #fff; border: 1px solid #DDDDE5; border-radius: 6px;
+  cursor: pointer; color: #5E5C75; transition: all 0.1s;
+}
+.nav-btn-sm:hover:not([disabled]) { background: #8342BB; border-color: #8342BB; color: #fff; }
+.nav-btn-sm[disabled] { opacity: 0.3; cursor: not-allowed; }
+.nav-btn-sm .material-icons { font-size: 16px; }
+
+.nav-count-sm { font-size: 11px; color: #8C8C8C; min-width: 42px; text-align: center; font-variant-numeric: tabular-nums; }
+
+/* Iframe wrapper */
+.detail-iframe-wrap { flex: 1; position: relative; background: #F0F0F4; overflow: hidden; }
+.detail-iframe-wrap iframe {
+  width: 100%; height: 100%; border: none;
+  opacity: 0; transition: opacity 0.25s ease;
+}
+.detail-iframe-wrap iframe.loaded { opacity: 1; }
+
+/* Loading overlay */
+.iframe-loading {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 10px;
+  background: #F0F0F4; pointer-events: none;
+  transition: opacity 0.2s;
+}
+.iframe-loading.hidden { opacity: 0; }
+.loading-spinner {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid #EBEBEB; border-top-color: #8342BB;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.iframe-loading p { font-size: 12px; color: #8C8C8C; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ── Top header ── -->
+  <header class="top-header">
+    <div class="header-logo">
+      <img src="assets/logo-leo.png" alt="leo" style="height:40px;width:auto;background:#fff;border-radius:5px;padding:2px 5px;">
+    </div>
+    <span class="header-title">Design System</span>
+    <div class="header-search">
+      <span class="material-icons">search</span>
+      <input type="text" id="searchInput" placeholder="Search components…" oninput="handleSearch(this.value)" autocomplete="off">
+    </div>
+    <span class="header-count" id="totalCount"></span>
+  </header>
+
+  <!-- ── Stage ── -->
+  <div class="stage" id="stage">
+
+    <!-- LIST PANE -->
+    <div class="list-pane" id="listPane">
+      <div class="page-title">
+        <h1>Components</h1>
+        <p>Click any component to open it in a focused view</p>
+      </div>
+
+      <div id="catList"></div>
+
+      <div class="no-results" id="noResults">
+        <span class="material-icons">search_off</span>
+        <p>No components match your search</p>
+      </div>
+    </div>
+
+    <!-- DETAIL PANE -->
+    <div class="detail-pane" id="detailPane">
+      <div class="detail-header">
+        <button class="detail-back" onclick="goBack()" title="Back to all components (Esc)">
+          <span class="material-icons">arrow_back</span>
+          Back
+        </button>
+        <div class="detail-sep"></div>
+        <div class="detail-breadcrumb">
+          <span class="bc-all" onclick="goBack()">All</span>
+          <span class="bc-sep">chevron_right</span>
+          <span class="bc-cat" id="bcCat"></span>
+          <span class="bc-sep">chevron_right</span>
+          <span class="bc-current" id="bcName"></span>
+        </div>
+        <div class="detail-controls">
+          <button class="nav-btn-sm" id="prevBtn" onclick="navigateItem(-1)" disabled title="Previous (←)">
+            <span class="material-icons">chevron_left</span>
+          </button>
+          <span class="nav-count-sm" id="navCount"></span>
+          <button class="nav-btn-sm" id="nextBtn" onclick="navigateItem(1)" title="Next (→)">
+            <span class="material-icons">chevron_right</span>
+          </button>
+          <a class="ctrl-btn" id="openExternal" href="#" target="_blank" title="Open in new tab">
+            <span class="material-icons">open_in_new</span>
+            New tab
+          </a>
+        </div>
+      </div>
+
+      <div class="detail-iframe-wrap">
+        <div class="iframe-loading" id="iframeLoading">
+          <div class="loading-spinner"></div>
+          <p>Loading component…</p>
+        </div>
+        <iframe id="compFrame" onload="frameLoaded()" title="Component preview"></iframe>
+      </div>
+    </div>
+
+  </div><!-- /stage -->
+</div><!-- /shell -->
+
+<script>
+/* ─────────────────────────────────────────
+   COMPONENT DATA
+───────────────────────────────────────── */
+const CATEGORIES = [
+  {
+    name: 'Foundations',
+    icon: 'palette',
+    iconColor: '#8342BB',
+    iconBg: 'rgba(131,66,187,0.1)',
+    items: [
+      { name: 'Brand colors',       file: 'preview/brand-colors.html' },
+      { name: 'Neutral colors',     file: 'preview/neutral-colors.html' },
+      { name: 'Semantic colors',    file: 'preview/semantic-colors.html' },
+      { name: 'Forecast colors',    file: 'preview/forecast-colors.html' },
+      { name: 'Type — Display',     file: 'preview/type-display.html' },
+      { name: 'Type — UI',          file: 'preview/type-ui.html' },
+      { name: 'Type — Switzer',     file: 'preview/type-switzer.html' },
+      { name: 'Spacing tokens',     file: 'preview/spacing-tokens.html' },
+      { name: 'Elevation & shadows',file: 'preview/elevation-shadows.html' },
+      { name: 'Corner radius',      file: 'preview/corner-radius.html' },
+      { name: 'Scrollbar',          file: 'preview/scrollbar.html' },
+    ]
+  },
+  {
+    name: 'Navigation',
+    icon: 'navigation',
+    iconColor: '#0066CC',
+    iconBg: 'rgba(0,102,204,0.1)',
+    items: [
+      { name: 'App header',     file: 'preview/app-header.html' },
+      { name: 'Sidebar',        file: 'preview/sidebar.html' },
+      { name: 'Breadcrumbs',    file: 'preview/breadcrumbs.html' },
+      { name: 'Meganav',        file: 'preview/meganav.html' },
+      { name: 'Tabs',           file: 'preview/tabs.html' },
+      { name: 'Pagination',     file: 'preview/pagination.html' },
+    ]
+  },
+  {
+    name: 'Inputs & Forms',
+    icon: 'edit',
+    iconColor: '#27854D',
+    iconBg: 'rgba(39,133,77,0.1)',
+    items: [
+      { name: 'Buttons',        file: 'preview/buttons.html' },
+      { name: 'Button group',   file: 'preview/button-group.html' },
+      { name: 'Inputs',         file: 'preview/inputs.html' },
+      { name: 'Select input',   file: 'preview/select-input.html' },
+      { name: 'Checkbox',       file: 'preview/checkbox.html' },
+      { name: 'Radio button',   file: 'preview/radio-button.html' },
+      { name: 'Switch',         file: 'preview/switch.html' },
+      { name: 'Slider',         file: 'preview/slider.html' },
+      { name: 'Stepper',        file: 'preview/stepper.html' },
+      { name: 'Segments',       file: 'preview/segments.html' },
+      { name: 'Date picker',    file: 'preview/date-picker.html' },
+      { name: 'File upload',    file: 'preview/file-upload.html' },
+      { name: 'Textarea & link',file: 'preview/textarea-link.html' },
+      { name: 'Embedded search',file: 'preview/embedded-search.html' },
+      { name: 'Command bar',    file: 'preview/command-bar.html' },
+    ]
+  },
+  {
+    name: 'Feedback & Overlays',
+    icon: 'notifications',
+    iconColor: '#C47A00',
+    iconBg: 'rgba(196,122,0,0.1)',
+    items: [
+      { name: 'Alert',          file: 'preview/alert.html' },
+      { name: 'Modal',          file: 'preview/modal.html' },
+      { name: 'Drawer',         file: 'preview/drawer.html' },
+      { name: 'Tooltip',        file: 'preview/tooltip.html' },
+      { name: 'Notifications',  file: 'preview/notifications.html' },
+      { name: 'Progress',       file: 'preview/progress.html' },
+      { name: 'Action sheet',   file: 'preview/action-sheet.html' },
+    ]
+  },
+  {
+    name: 'Data Display',
+    icon: 'table_chart',
+    iconColor: '#B02530',
+    iconBg: 'rgba(176,37,48,0.1)',
+    items: [
+      { name: 'Data grid',        file: 'preview/data-grid.html' },
+      { name: 'KPI widgets',      file: 'preview/kpi-widgets.html' },
+      { name: 'Card & well',      file: 'preview/card-well.html' },
+      { name: 'Badges & tags',    file: 'preview/badges-tags.html' },
+      { name: 'Tag pill',         file: 'preview/tag-pill.html' },
+      { name: 'Avatar',           file: 'preview/avatar.html' },
+      { name: 'Field value pairs',file: 'preview/field-value-pairs.html' },
+      { name: 'Section heading',  file: 'preview/section-heading.html' },
+      { name: 'Empty states',     file: 'preview/empty-states.html' },
+      { name: 'Tree view',        file: 'preview/tree-view.html' },
+    ]
+  },
+  {
+    name: 'Complex Components',
+    icon: 'widgets',
+    iconColor: '#5E5C75',
+    iconBg: 'rgba(94,92,117,0.1)',
+    items: [
+      { name: 'Accordion',   file: 'preview/accordion.html' },
+      { name: 'Ping-pong',   file: 'preview/ping-pong.html' },
+      { name: 'Footer',      file: 'preview/footer.html' },
+    ]
+  },
+
+];
+
+/* ─────────────────────────────────────────
+   STATE
+───────────────────────────────────────── */
+let currentFile  = null;
+let flatItems    = [];   // [{name, file, catName, catIdx, itemIdx, globalIdx}]
+let currentGlobal= 0;
+let isExpanded   = false;
+
+/* ─────────────────────────────────────────
+   BUILD FLAT INDEX
+───────────────────────────────────────── */
+let g = 0;
+CATEGORIES.forEach((cat, ci) => {
+  cat.items.forEach((item, ii) => {
+    flatItems.push({ name: item.name, file: item.file, catName: cat.name, catIdx: ci, itemIdx: ii, globalIdx: g++ });
+  });
+});
+
+const TOTAL = flatItems.length;
+
+/* ─────────────────────────────────────────
+   RENDER CATEGORY LIST
+───────────────────────────────────────── */
+function buildList(filter = '') {
+  const q = filter.toLowerCase().trim();
+  const container = document.getElementById('catList');
+  let totalVisible = 0;
+
+  container.innerHTML = CATEGORIES.map((cat, ci) => {
+    const visibleItems = cat.items.filter(item => !q || item.name.toLowerCase().includes(q));
+    if (visibleItems.length === 0) return '';
+    totalVisible += visibleItems.length;
+
+    const itemsHtml = visibleItems.map(item => {
+      const fi = flatItems.find(f => f.file === item.file);
+      return `
+        <div class="comp-card" tabindex="0"
+             onclick="openComp('${item.file}',${fi ? fi.globalIdx : 0})"
+             onkeydown="if(event.key==='Enter')openComp('${item.file}',${fi ? fi.globalIdx : 0})"
+             data-file="${item.file}">
+          <div class="comp-dot"></div>
+          <span class="comp-name">${item.name}</span>
+        </div>
+      `;
+    }).join('');
+
+    const isOpen = !q ? (ci === 0) : true; // open first by default; all open during search
+
+    return `
+      <div class="cat-section" data-cat="${ci}">
+        <div class="cat-header ${isOpen ? 'open' : ''}" onclick="toggleCat(this)">
+          <div class="cat-icon" style="background:${cat.iconBg}">
+            <span class="material-icons" style="color:${cat.iconColor}">${cat.icon}</span>
+          </div>
+          <span class="cat-name">${cat.name}</span>
+          <span class="cat-count">${visibleItems.length}</span>
+          <div class="cat-chevron"><span class="material-icons">expand_more</span></div>
+        </div>
+        <div class="cat-body ${isOpen ? 'open' : ''}">
+          <div class="comp-grid">${itemsHtml}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('noResults').style.display = (totalVisible === 0 && q) ? 'block' : 'none';
+  document.getElementById('totalCount').textContent = q ? `${totalVisible} match${totalVisible !== 1 ? 'es' : ''}` : `${TOTAL} components`;
+}
+
+/* ─────────────────────────────────────────
+   TOGGLE CATEGORY
+───────────────────────────────────────── */
+function toggleCat(header) {
+  const body = header.nextElementSibling;
+  header.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+/* ─────────────────────────────────────────
+   OPEN COMPONENT
+───────────────────────────────────────── */
+function openComp(file, globalIdx) {
+  currentGlobal = globalIdx;
+  currentFile   = file;
+
+  loadFrame(file);
+
+  const fi  = flatItems[globalIdx];
+  document.getElementById('bcName').textContent = fi.name;
+  document.getElementById('bcCat').textContent  = fi.catName;
+  document.getElementById('openExternal').href  = file;
+  updateNavButtons();
+
+  // Transition
+  const listPane   = document.getElementById('listPane');
+  const detailPane = document.getElementById('detailPane');
+  requestAnimationFrame(() => {
+    listPane.classList.add('exit');
+    detailPane.classList.add('enter');
+  });
+  isExpanded = true;
+}
+
+/* ─────────────────────────────────────────
+   LOAD IFRAME
+───────────────────────────────────────── */
+function loadFrame(file) {
+  const frame   = document.getElementById('compFrame');
+  const loading = document.getElementById('iframeLoading');
+  frame.classList.remove('loaded');
+  loading.classList.remove('hidden');
+  frame.src = file;
+}
+
+function frameLoaded() {
+  const frame   = document.getElementById('compFrame');
+  const loading = document.getElementById('iframeLoading');
+  frame.classList.add('loaded');
+  loading.classList.add('hidden');
+}
+
+/* ─────────────────────────────────────────
+   NAVIGATE BETWEEN ITEMS
+───────────────────────────────────────── */
+function navigateItem(dir) {
+  const next = currentGlobal + dir;
+  if (next < 0 || next >= TOTAL) return;
+
+  const frame = document.getElementById('compFrame');
+  // Fade iframe out briefly
+  frame.style.opacity = '0';
+  frame.style.transition = 'opacity 0.15s';
+
+  setTimeout(() => {
+    const fi = flatItems[next];
+    currentGlobal = next;
+    currentFile   = fi.file;
+
+    document.getElementById('bcName').textContent = fi.name;
+    document.getElementById('bcCat').textContent  = fi.catName;
+    document.getElementById('openExternal').href  = fi.file;
+    updateNavButtons();
+    loadFrame(fi.file);
+  }, 150);
+}
+
+function updateNavButtons() {
+  const fi    = flatItems[currentGlobal];
+  document.getElementById('prevBtn').disabled = currentGlobal === 0;
+  document.getElementById('nextBtn').disabled = currentGlobal === TOTAL - 1;
+  document.getElementById('navCount').textContent = (currentGlobal + 1) + ' / ' + TOTAL;
+}
+
+/* ─────────────────────────────────────────
+   GO BACK
+───────────────────────────────────────── */
+function goBack() {
+  const listPane   = document.getElementById('listPane');
+  const detailPane = document.getElementById('detailPane');
+
+  detailPane.classList.remove('enter');
+  listPane.classList.remove('exit');
+
+  // Stop iframe to free resources
+  setTimeout(() => {
+    document.getElementById('compFrame').src = '';
+  }, 380);
+
+  isExpanded = false;
+}
+
+/* ─────────────────────────────────────────
+   SEARCH
+───────────────────────────────────────── */
+function handleSearch(q) {
+  buildList(q);
+}
+
+/* ─────────────────────────────────────────
+   KEYBOARD
+───────────────────────────────────────── */
+document.addEventListener('keydown', e => {
+  if (!isExpanded) {
+    // Focus search on '/'
+    if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+      e.preventDefault();
+      document.getElementById('searchInput').focus();
+    }
+    return;
+  }
+  if (e.key === 'Escape')     { e.preventDefault(); goBack(); }
+  if (e.key === 'ArrowLeft')  { e.preventDefault(); navigateItem(-1); }
+  if (e.key === 'ArrowRight') { e.preventDefault(); navigateItem(1); }
+});
+
+/* ─────────────────────────────────────────
+   INIT
+───────────────────────────────────────── */
+buildList();
+</script>
+</body>
+</html>

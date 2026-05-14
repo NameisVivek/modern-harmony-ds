@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 16px 18px; width: 820px; display: flex; flex-direction: column; gap: 18px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .card { background: #fff; border-radius: 10px; border: 1px solid #EBEBEB; padding: 16px 18px; display: flex; flex-direction: column; gap: 14px; }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .divider { height: 1px; background: #F0F0F4; }
+
+  /* ══════════════════════════════════
+     BUTTON BASE — eto-btn
+  ══════════════════════════════════ */
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 32px; padding: 0 16px; border-radius: 8px; border: none;
+    font-family: 'Switzer', sans-serif; font-size: 14px; font-weight: 500;
+    letter-spacing: 0.005em; cursor: pointer; white-space: nowrap;
+    transition: background 0.1s;
+  }
+  .btn .material-icons { font-size: 18px; }
+
+  /* Primary */
+  .btn-primary {
+    background: #8342BB;
+    background-image: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%);
+    color: #fff;
+    box-shadow: 0 1px 2px rgba(55,23,78,0.2), inset 0 1px 0 rgba(255,255,255,0.12);
+  }
+  .btn-primary:hover:not(:disabled) { background: #7239A4; }
+  .btn-primary:active:not(:disabled) { background: #4D3075; }
+
+  /* Default */
+  .btn-default {
+    background: #fff; color: #282828;
+    border: 1px solid #DDDDE5;
+    box-shadow: 0 1px 2px rgba(55,23,78,0.08);
+  }
+  .btn-default:hover:not(:disabled) { background: #F0F0F4; }
+  .btn-default:active:not(:disabled) { background: #E5E5EC; }
+
+  /* Borderless */
+  .btn-borderless { background: transparent; color: #282828; border: 1px solid transparent; }
+  .btn-borderless:hover:not(:disabled) { background: rgba(40,40,40,0.07); }
+
+  /* Inline / link */
+  .btn-inline {
+    background: transparent; color: #7239A4; border: none;
+    padding: 0 2px; height: auto; font-size: 14px; font-weight: 400;
+  }
+  .btn-inline:hover { text-decoration: underline; }
+
+  /* Selected */
+  .btn-selected {
+    background: rgba(131,66,187,0.08); color: #7239A4; border: 1px solid #BFBECE;
+  }
+  .btn-selected:hover { background: rgba(131,66,187,0.14); }
+
+  /* Destructive */
+  .btn-destructive { background: #E02F3A; color: #fff; box-shadow: 0 1px 2px rgba(176,37,48,0.3); }
+  .btn-destructive:hover { background: #C0172D; }
+
+  /* Disabled */
+  .btn:disabled { background: #F0F0F4; color: #8C8C8C; border-color: transparent; cursor: not-allowed; box-shadow: none; opacity: 1; }
+  .btn-primary:disabled { background: #DDDDE5; color: #8C8C8C; box-shadow: none; }
+
+  /* On dark */
+  .dark-bg { background: #282828; padding: 10px 12px; border-radius: 8px; display: flex; gap: 8px; align-items: center; }
+  .btn-on-dark { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.16); }
+  .btn-on-dark:hover { background: rgba(255,255,255,0.2); }
+
+  /* Icon-only */
+  .btn-icon { padding: 0; width: 32px; justify-content: center; }
+
+  /* ── Size variants ── */
+  .btn-sm { height: 28px; padding: 0 12px; font-size: 12px; border-radius: 7px; }
+  .btn-sm .material-icons { font-size: 15px; }
+  .btn-lg { height: 40px; padding: 0 20px; font-size: 15px; border-radius: 9px; }
+  .btn-lg .material-icons { font-size: 20px; }
+  .btn-xl { height: 48px; padding: 0 24px; font-size: 16px; border-radius: 10px; }
+  .btn-xl .material-icons { font-size: 22px; }
+
+  /* ── Loading state ── */
+  .btn-loading { pointer-events: none; }
+  .btn-spinner {
+    width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
+    animation: spin 0.7s linear infinite;
+  }
+  .btn-primary .btn-spinner { border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; }
+  .btn-default .btn-spinner { border: 2px solid #DDDDE5; border-top-color: #8342BB; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Done state ── */
+  .btn-done { pointer-events: none; }
+  .btn-primary.btn-done { background: #27854D; }
+  .btn-default.btn-done { border-color: #027B44; }
+  .btn-default.btn-done .done-check { color: #27854D; }
+
+  /* ── Split button ── */
+  .btn-split { display: inline-flex; align-items: stretch; position: relative; }
+  .btn-split-main { border-radius: 8px 0 0 8px !important; }
+  .btn-split-arrow { border-radius: 0 8px 8px 0 !important; padding: 0 8px !important; width: auto; }
+  .btn-primary.btn-split-arrow { border-left: 1px solid rgba(255,255,255,0.2); }
+  .btn-default.btn-split-arrow { border-left: 1px solid #DDDDE5; }
+  .btn-split-arrow .material-icons { font-size: 18px; }
+  .split-dropdown {
+    position: absolute; top: calc(100% + 4px); right: 0;
+    background: #fff; border-radius: 8px; border: 1px solid #E5E5EC;
+    box-shadow: 0 4px 16px rgba(55,23,78,0.12); min-width: 200px;
+    padding: 4px 0; z-index: 100; display: none;
+  }
+  .btn-split.open .split-dropdown { display: block; }
+  .split-dropdown a {
+    display: flex; align-items: center; gap: 8px; padding: 8px 14px;
+    font-size: 13px; color: #282828; text-decoration: none; font-family: 'Switzer', sans-serif;
+  }
+  .split-dropdown a .material-icons { font-size: 16px; color: #5E5C75; }
+  .split-dropdown a:hover { background: rgba(131,66,187,0.06); }
+  .split-dropdown-sep { height: 1px; background: #F0F0F4; margin: 3px 0; }
+
+  /* ── Button group ── */
+  .btn-group { display: flex; align-items: center; gap: 8px; }
+</style>
+</head>
+<body>
+
+  <!-- 1. VARIANTS -->
+  <div>
+    <div class="lbl">Variants</div>
+    <div class="card">
+      <div class="row">
+        <button class="btn btn-primary"><span class="material-icons">add</span>Primary</button>
+        <button class="btn btn-default">Default</button>
+        <button class="btn btn-borderless">Borderless</button>
+        <button class="btn btn-inline">inline</button>
+        <button class="btn btn-selected"><span class="material-icons">star</span>Selected</button>
+        <button class="btn btn-destructive"><span class="material-icons">delete</span>Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. WITH ICONS -->
+  <div>
+    <div class="lbl">With icons — leading, trailing, icon-only</div>
+    <div class="card">
+      <div class="row">
+        <button class="btn btn-primary"><span class="material-icons">cloud_upload</span>Upload</button>
+        <button class="btn btn-default"><span class="material-icons">filter_list</span>Filters</button>
+        <button class="btn btn-default">View orders<span class="material-icons">expand_more</span></button>
+        <button class="btn btn-default btn-icon" title="More options"><span class="material-icons">more_vert</span></button>
+        <button class="btn btn-default btn-icon" title="Search"><span class="material-icons">search</span></button>
+        <button class="btn btn-borderless btn-icon" title="Settings"><span class="material-icons">settings</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. SIZES -->
+  <div>
+    <div class="lbl">Sizes — sm / md (default) / lg / xl</div>
+    <div class="card">
+      <div class="row" style="align-items:flex-end">
+        <button class="btn btn-primary btn-sm"><span class="material-icons">add</span>Small</button>
+        <button class="btn btn-primary">Medium</button>
+        <button class="btn btn-primary btn-lg"><span class="material-icons">add</span>Large</button>
+        <button class="btn btn-primary btn-xl"><span class="material-icons">add</span>X-Large</button>
+      </div>
+      <div class="row" style="align-items:flex-end">
+        <button class="btn btn-default btn-sm">Small</button>
+        <button class="btn btn-default">Medium</button>
+        <button class="btn btn-default btn-lg">Large</button>
+        <button class="btn btn-default btn-xl">X-Large</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. STATES -->
+  <div>
+    <div class="lbl">States — default / hover / disabled / focus</div>
+    <div class="card">
+      <div class="row">
+        <button class="btn btn-primary">Primary</button>
+        <button class="btn btn-primary" style="background:#7239A4">Hover</button>
+        <button class="btn btn-primary" disabled>Disabled</button>
+        <button class="btn btn-primary" style="box-shadow:0 0 0 2px #fff,0 0 0 4px #8342BB">Focus</button>
+      </div>
+      <div class="row">
+        <button class="btn btn-default">Default</button>
+        <button class="btn btn-default" style="background:#F0F0F4">Hover</button>
+        <button class="btn btn-default" disabled>Disabled</button>
+        <button class="btn btn-default" style="border-color:#8342BB;box-shadow:0 0 0 2px #fff,0 0 0 4px rgba(131,66,187,0.3)">Focus</button>
+      </div>
+      <div class="row">
+        <button class="btn btn-borderless">Borderless</button>
+        <button class="btn btn-borderless" style="background:rgba(40,40,40,0.07)">Hover</button>
+        <button class="btn btn-borderless" disabled>Disabled</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. ON DARK -->
+  <div>
+    <div class="lbl">On dark background</div>
+    <div class="card" style="background:#282828;border-color:transparent">
+      <div class="row">
+        <button class="btn btn-primary">Save</button>
+        <button class="btn btn-on-dark">Cancel</button>
+        <button class="btn btn-inline" style="color:rgba(255,255,255,0.7)">reset</button>
+        <button class="btn btn-on-dark btn-icon"><span class="material-icons" style="color:#fff">close</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. LOADING & DONE -->
+  <div>
+    <div class="lbl">Loading &amp; done states — eto-btn--loading / eto-btn--done</div>
+    <div class="card">
+      <div class="row">
+        <button class="btn btn-primary btn-loading"><div class="btn-spinner"></div>Saving…</button>
+        <button class="btn btn-default btn-loading"><div class="btn-spinner"></div>Exporting…</button>
+        <button class="btn btn-primary btn-done"><span class="material-icons">check</span>Saved</button>
+        <button class="btn btn-default btn-done">
+          <span class="material-icons done-check">check_circle_outline</span>
+          <span class="done-check">Exported</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. SPLIT BUTTON -->
+  <div>
+    <div class="lbl">Split button — eto-btn-split (main action + dropdown)</div>
+    <div class="card">
+      <div class="row">
+        <div class="btn-split" onclick="toggleSplit(this)">
+          <button class="btn btn-primary btn-split-main"><span class="material-icons">cloud_download</span>Export CSV</button>
+          <button class="btn btn-primary btn-split-arrow btn-icon"><span class="material-icons">keyboard_arrow_down</span></button>
+          <div class="split-dropdown">
+            <a href="#"><span class="material-icons">description</span>Export as Excel</a>
+            <a href="#"><span class="material-icons">code</span>Export as JSON</a>
+            <div class="split-dropdown-sep"></div>
+            <a href="#"><span class="material-icons">schedule</span>Schedule export</a>
+          </div>
+        </div>
+        <div class="btn-split" onclick="toggleSplit(this)">
+          <button class="btn btn-primary btn-split-main"><span class="material-icons">add</span>New scenario</button>
+          <button class="btn btn-primary btn-split-arrow btn-icon"><span class="material-icons">keyboard_arrow_down</span></button>
+          <div class="split-dropdown">
+            <a href="#"><span class="material-icons">content_copy</span>Duplicate existing</a>
+            <a href="#"><span class="material-icons">upload_file</span>Import from file</a>
+          </div>
+        </div>
+        <div class="btn-split" onclick="toggleSplit(this)">
+          <button class="btn btn-default btn-split-main"><span class="material-icons">share</span>Share</button>
+          <button class="btn btn-default btn-split-arrow btn-icon"><span class="material-icons">keyboard_arrow_down</span></button>
+          <div class="split-dropdown">
+            <a href="#"><span class="material-icons">link</span>Copy link</a>
+            <a href="#"><span class="material-icons">email</span>Send by email</a>
+          </div>
+        </div>
+        <!-- Disabled split -->
+        <div class="btn-split">
+          <button class="btn btn-primary btn-split-main" disabled><span class="material-icons">cloud_download</span>Export</button>
+          <button class="btn btn-primary btn-split-arrow btn-icon" disabled><span class="material-icons">keyboard_arrow_down</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. BUTTON GROUP — related actions -->
+  <div>
+    <div class="lbl">Button group — eto-btn-group (related actions)</div>
+    <div class="card">
+      <div class="row">
+        <div class="btn-group">
+          <button class="btn btn-primary"><span class="material-icons">send</span>Submit</button>
+          <button class="btn btn-default"><span class="material-icons">save</span>Save draft</button>
+          <button class="btn btn-borderless">Discard</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="btn-group">
+          <button class="btn btn-destructive"><span class="material-icons">delete</span>Delete</button>
+          <button class="btn btn-default">Keep</button>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary"><span class="material-icons">check</span>Approve</button>
+          <button class="btn btn-default"><span class="material-icons">edit</span>Request changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+function toggleSplit(wrap) {
+  const isOpen = wrap.classList.contains('open');
+  document.querySelectorAll('.btn-split.open').forEach(s => s.classList.remove('open'));
+  if (!isOpen) wrap.classList.add('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.btn-split')) document.querySelectorAll('.btn-split.open').forEach(s => s.classList.remove('open'));
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.btn-split.open').forEach(s => s.classList.remove('open'));
+});
+</script>
+</body>
+</html>

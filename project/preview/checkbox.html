@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 16px 18px; width: 700px; display: flex; flex-direction: column; gap: 20px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .row { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+  .col { display: flex; flex-direction: column; gap: 10px; }
+  .divider { height: 1px; background: #F0F0F4; }
+
+  /* ══════════════════════════════════
+     CHECKBOX — eto-checkbox
+     Box: 18×18px · border-radius: 4px
+     Matches codebase checkbox-radio placeholders
+  ══════════════════════════════════ */
+
+  /* Wrapper — eto-checkbox */
+  .cb {
+    display: inline-flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; user-select: none; position: relative;
+  }
+  .cb.disabled { cursor: not-allowed; opacity: 1; }
+
+  /* Hidden native input */
+  .cb input[type="checkbox"] {
+    position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
+  }
+
+  /* ── Visual box — eto-checkbox__box ── */
+  .cb-box {
+    width: 18px; height: 18px; min-width: 18px; border-radius: 4px;
+    border: 1.5px solid #8C8C8C;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.1s, border-color 0.1s, box-shadow 0.1s;
+    margin-top: 1px; /* optical alignment with 14px label */
+    position: relative; overflow: hidden;
+  }
+
+  /* Checkmark — Material Icons check */
+  .cb-box::before {
+    font-family: 'Material Icons'; content: 'check';
+    font-size: 14px; line-height: 1; color: #fff;
+    display: none;
+  }
+
+  /* Indeterminate dash */
+  .cb-box.indeterminate::before {
+    content: ''; width: 9px; height: 2px;
+    background: #fff; border-radius: 1px;
+    font-family: unset; font-size: unset;
+    display: block;
+  }
+
+  /* ── Label — eto-checkbox__label ── */
+  .cb-label {
+    font-size: 14px; color: #282828; line-height: 1.5;
+  }
+  .cb-hint {
+    font-size: 11px; color: #767676; margin-top: 1px;
+  }
+
+  /* ── STATES ── */
+
+  /* Default hover */
+  .cb:not(.disabled):hover .cb-box {
+    border-color: #8342BB;
+    background: rgba(131,66,187,0.04);
+  }
+
+  /* Focus */
+  .cb input:focus-visible ~ .cb-box {
+    border-color: #8342BB;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(131,66,187,0.3);
+  }
+
+  /* Checked */
+  .cb-box.checked {
+    background: #8342BB; border-color: #8342BB;
+  }
+  .cb-box.checked::before { display: block; }
+
+  /* Checked hover */
+  .cb:not(.disabled):hover .cb-box.checked {
+    background: #7239A4; border-color: #7239A4;
+  }
+
+  /* Indeterminate */
+  .cb-box.indeterminate {
+    background: #8342BB; border-color: #8342BB;
+  }
+  .cb-box.indeterminate::before { display: block; }
+  .cb:not(.disabled):hover .cb-box.indeterminate {
+    background: #7239A4; border-color: #7239A4;
+  }
+
+  /* Error */
+  .cb-box.error {
+    border-color: #E02F3A;
+  }
+  .cb:not(.disabled):hover .cb-box.error {
+    border-color: #C0172D; background: rgba(224,47,58,0.04);
+  }
+  .cb-box.error.checked {
+    background: #E02F3A; border-color: #E02F3A;
+  }
+  .cb .cb-error-msg {
+    font-size: 11px; color: #E02F3A; display: flex; align-items: center; gap: 3px; margin-top: 2px;
+  }
+  .cb .cb-error-msg .material-icons { font-size: 12px; }
+
+  /* Disabled */
+  .cb.disabled .cb-box {
+    background: #F0F0F4; border-color: #DDDDE5; cursor: not-allowed;
+  }
+  .cb.disabled .cb-box.checked {
+    background: #DDDDE5; border-color: #DDDDE5;
+  }
+  .cb.disabled .cb-box.checked::before { color: #8C8C8C; }
+  .cb.disabled .cb-box.indeterminate::before { background: #8C8C8C; }
+  .cb.disabled .cb-label { color: #8C8C8C; }
+
+  /* Double check — eto-checkbox--double (select-all: all items checked) */
+  .cb-box.double {
+    background: #fff; border-color: #BFBECE;
+    position: relative;
+  }
+  .cb-box.double::before {
+    font-family: 'Material Symbols Outlined';
+    content: 'done_all';
+    font-size: 15px; line-height: 1;
+    color: #8342BB;
+    display: flex; align-items: center; justify-content: center;
+    position: absolute; inset: 0;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+  }
+  .cb:not(.disabled):hover .cb-box.double { border-color: #8342BB; background: rgba(131,66,187,0.04); }
+</style>
+</head>
+<body>
+
+  <!-- ── States ── -->
+  <div>
+    <div class="lbl">States</div>
+    <div class="row">
+      <!-- Double check (select-all) -->
+      <label class="cb">
+        <input type="checkbox">
+        <div class="cb-box double"></div>
+        <div><div class="cb-label">Double check</div></div>
+      </label>
+
+      <!-- Unchecked -->
+      <label class="cb" onclick="toggleCb(this)">
+        <input type="checkbox">
+        <div class="cb-box"></div>
+        <div><div class="cb-label">Unchecked</div></div>
+      </label>
+
+      <!-- Checked -->
+      <label class="cb" onclick="toggleCb(this)">
+        <input type="checkbox" checked>
+        <div class="cb-box checked"></div>
+        <div><div class="cb-label">Checked</div></div>
+      </label>
+
+      <!-- Indeterminate -->
+      <label class="cb" onclick="toggleCb(this)">
+        <input type="checkbox">
+        <div class="cb-box indeterminate"></div>
+        <div><div class="cb-label">Indeterminate</div></div>
+      </label>
+
+      <!-- Focus (simulated) -->
+      <label class="cb">
+        <input type="checkbox">
+        <div class="cb-box" style="border-color:#8342BB;box-shadow:0 0 0 2px #fff,0 0 0 4px rgba(131,66,187,0.3)"></div>
+        <div><div class="cb-label">Focused</div></div>
+      </label>
+
+      <!-- Error -->
+      <label class="cb" onclick="toggleCb(this)">
+        <input type="checkbox">
+        <div class="cb-box error"></div>
+        <div><div class="cb-label">Error</div></div>
+      </label>
+
+      <!-- Error checked -->
+      <label class="cb" onclick="toggleCb(this)">
+        <input type="checkbox" checked>
+        <div class="cb-box error checked"></div>
+        <div><div class="cb-label">Error checked</div></div>
+      </label>
+
+      <!-- Disabled -->
+      <label class="cb disabled">
+        <input type="checkbox" disabled>
+        <div class="cb-box"></div>
+        <div><div class="cb-label">Disabled</div></div>
+      </label>
+
+      <!-- Disabled checked -->
+      <label class="cb disabled">
+        <input type="checkbox" disabled checked>
+        <div class="cb-box checked"></div>
+        <div><div class="cb-label">Disabled checked</div></div>
+      </label>
+
+      <!-- Disabled indeterminate -->
+      <label class="cb disabled">
+        <input type="checkbox" disabled>
+        <div class="cb-box indeterminate"></div>
+        <div><div class="cb-label">Disabled partial</div></div>
+      </label>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── With hint text ── -->
+  <div>
+    <div class="lbl">With hint text</div>
+    <div class="col" style="max-width:320px">
+      <label class="cb" onclick="toggleCb(this)">
+        <input type="checkbox" checked>
+        <div class="cb-box checked"></div>
+        <div>
+          <div class="cb-label">A shipment is delayed</div>
+          <div class="cb-hint">Applies to all active orders</div>
+        </div>
+      </label>
+      <label class="cb" onclick="toggleCb(this)">
+        <input type="checkbox" checked>
+        <div class="cb-box checked"></div>
+        <div>
+          <div class="cb-label">Forecast deviation exceeds 10%</div>
+          <div class="cb-hint">Comparison against plan</div>
+        </div>
+      </label>
+      <label class="cb" onclick="toggleCb(this)">
+        <input type="checkbox">
+        <div class="cb-box"></div>
+        <div>
+          <div class="cb-label">S&amp;OP cycle is approved</div>
+        </div>
+      </label>
+      <label class="cb disabled">
+        <input type="checkbox" disabled checked>
+        <div class="cb-box checked"></div>
+        <div>
+          <div class="cb-label">System maintenance alerts</div>
+          <div class="cb-hint">Managed by administrator</div>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── With error message ── -->
+  <div>
+    <div class="lbl">Error validation</div>
+    <div class="col" style="max-width:320px">
+      <div>
+        <label class="cb" onclick="toggleCb(this)">
+          <input type="checkbox">
+          <div class="cb-box error"></div>
+          <div>
+            <div class="cb-label" style="color:#9A112C">I accept the terms and conditions</div>
+          </div>
+        </label>
+        <div style="display:flex;align-items:center;gap:4px;margin-top:5px;margin-left:28px;font-size:11px;color:#E02F3A">
+          <span class="material-icons" style="font-size:13px">error_outline</span>
+          You must accept the terms to continue
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── Group — select all + items ── -->
+  <div>
+    <div class="lbl">Checkbox group — select all pattern</div>
+    <div class="col" style="max-width:320px">
+      <div style="font-size:11px;font-weight:500;color:#282828;padding-bottom:6px;border-bottom:1px solid #F0F0F4">
+        Notify me when:
+      </div>
+      <!-- Select all -->
+      <label class="cb" id="select-all" onclick="toggleSelectAll(event, this)">
+        <input type="checkbox">
+        <div class="cb-box indeterminate" id="sa-box"></div>
+        <div><div class="cb-label" style="font-weight:500">Select all</div></div>
+      </label>
+      <div style="display:flex;flex-direction:column;gap:8px;padding-left:6px;border-left:2px solid #F0F0F4;margin-left:7px">
+        <label class="cb child-cb" onclick="toggleCbChild(this)">
+          <input type="checkbox" checked>
+          <div class="cb-box checked"></div>
+          <div><div class="cb-label">A shipment is delayed</div></div>
+        </label>
+        <label class="cb child-cb" onclick="toggleCbChild(this)">
+          <input type="checkbox" checked>
+          <div class="cb-box checked"></div>
+          <div><div class="cb-label">Forecast deviation exceeds 10%</div></div>
+        </label>
+        <label class="cb child-cb" onclick="toggleCbChild(this)">
+          <input type="checkbox">
+          <div class="cb-box"></div>
+          <div><div class="cb-label">S&amp;OP cycle approved</div></div>
+        </label>
+        <label class="cb child-cb" onclick="toggleCbChild(this)">
+          <input type="checkbox">
+          <div class="cb-box"></div>
+          <div><div class="cb-label">New AI forecast available</div></div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+<script>
+function toggleCb(label) {
+  if (label.classList.contains('disabled')) return;
+  const box = label.querySelector('.cb-box');
+  if (box.classList.contains('indeterminate')) {
+    box.classList.remove('indeterminate');
+    box.classList.add('checked');
+  } else if (box.classList.contains('checked')) {
+    box.classList.remove('checked');
+  } else {
+    // only if error, keep it; else add checked
+    box.classList.add('checked');
+  }
+}
+
+function toggleSelectAll(e, label) {
+  e.preventDefault();
+  if (label.classList.contains('disabled')) return;
+  const box = label.querySelector('.cb-box');
+  const isAllChecked = box.classList.contains('double');
+  document.querySelectorAll('.child-cb .cb-box').forEach(b => {
+    if (!isAllChecked) { b.classList.add('checked'); b.classList.remove('indeterminate'); }
+    else { b.classList.remove('checked', 'indeterminate'); }
+  });
+  updateSelectAll();
+}
+
+function toggleCbChild(label) {
+  toggleCb(label);
+  updateSelectAll();
+}
+
+function updateSelectAll() {
+  const boxes = document.querySelectorAll('.child-cb .cb-box');
+  const checkedCount = [...boxes].filter(b => b.classList.contains('checked')).length;
+  const saBox = document.getElementById('sa-box');
+  if (checkedCount === 0) {
+    saBox.classList.remove('checked', 'indeterminate', 'double');
+  } else if (checkedCount === boxes.length) {
+    saBox.classList.remove('checked', 'indeterminate');
+    saBox.classList.add('double');
+  } else {
+    saBox.classList.remove('checked', 'double');
+    saBox.classList.add('indeterminate');
+  }
+}
+</script>
+</body>
+</html>

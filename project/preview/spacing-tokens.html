@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 16px 20px; width: 700px; }
+  .scale { display: flex; align-items: flex-end; gap: 12px; padding: 12px 0 8px; }
+  .token { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .bar { background: #8342BB; border-radius: 3px; width: 32px; }
+  .name { font-size: 9px; font-weight: 500; color: #282828; }
+  .val  { font-size: 8px; color: #767676; }
+  .divider-h { height: 1px; background: #F0F0F4; margin: 4px 0; }
+  .contexts { display: flex; gap: 20px; margin-top: 4px; }
+  .ctx { display: flex; flex-direction: column; gap: 4px; }
+  .ctx-label { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; }
+  .ctx-item { display: flex; align-items: center; gap: 8px; font-size: 10px; color: #282828; }
+  .ctx-dot { width: 8px; height: 8px; border-radius: 2px; background: #ECE4F5; border: 1px solid #8342BB; flex-shrink:0; }
+</style>
+</head>
+<body>
+  <div class="scale">
+    <div class="token"><div class="bar" style="height:2px"></div><div class="name">sp-2</div><div class="val">2px</div></div>
+    <div class="token"><div class="bar" style="height:4px"></div><div class="name">sp-4</div><div class="val">4px</div></div>
+    <div class="token"><div class="bar" style="height:8px"></div><div class="name">sp-8</div><div class="val">8px</div></div>
+    <div class="token"><div class="bar" style="height:12px"></div><div class="name">sp-12</div><div class="val">12px</div></div>
+    <div class="token"><div class="bar" style="height:14px"></div><div class="name">sp-14</div><div class="val">14px</div></div>
+    <div class="token"><div class="bar" style="height:16px; background:#4D3075"></div><div class="name" style="color:#4D3075">1 REM</div><div class="val">16px</div></div>
+    <div class="token"><div class="bar" style="height:20px"></div><div class="name">sp-20</div><div class="val">20px</div></div>
+    <div class="token"><div class="bar" style="height:24px"></div><div class="name">sp-24</div><div class="val">24px</div></div>
+    <div class="token"><div class="bar" style="height:32px"></div><div class="name">sp-32</div><div class="val">32px</div></div>
+    <div class="token"><div class="bar" style="height:48px"></div><div class="name">sp-48</div><div class="val">48px</div></div>
+    <div class="token"><div class="bar" style="height:64px; background:#ECE4F5; border:1px solid #B9ACE8"></div><div class="name">sp-64</div><div class="val">64px</div></div>
+  </div>
+  <div class="divider-h"></div>
+  <div class="contexts">
+    <div class="ctx">
+      <div class="ctx-label">Frame level → padding</div>
+      <div class="ctx-item"><div class="ctx-dot"></div>element: 8px</div>
+      <div class="ctx-item"><div class="ctx-dot"></div>base (input/btn): 16px</div>
+      <div class="ctx-item"><div class="ctx-dot"></div>panel: 24px</div>
+      <div class="ctx-item"><div class="ctx-dot"></div>container: 24px</div>
+      <div class="ctx-item"><div class="ctx-dot"></div>page: 32px</div>
+    </div>
+    <div class="ctx">
+      <div class="ctx-label">Frame level → spacing</div>
+      <div class="ctx-item"><div class="ctx-dot"></div>element gap: 4px</div>
+      <div class="ctx-item"><div class="ctx-dot"></div>base gap: 8px</div>
+      <div class="ctx-item"><div class="ctx-dot"></div>panel gap: 16px</div>
+      <div class="ctx-item"><div class="ctx-dot"></div>container gap: 24px</div>
+      <div class="ctx-item"><div class="ctx-dot"></div>page gap: 32px</div>
+    </div>
+    <div class="ctx">
+      <div class="ctx-label">Density modes</div>
+      <div class="ctx-item"><div class="ctx-dot" style="background:#D4ECC8; border-color:#27854D"></div>Comfy [default] — 1 REM = 16px</div>
+      <div class="ctx-item"><div class="ctx-dot" style="background:#FFEDC0; border-color:#C47A00"></div>Cozy — 1 REM = 14px</div>
+      <div class="ctx-item"><div class="ctx-dot" style="background:#FFCDD0; border-color:#E02F3A"></div>Condensed — 1 REM = 12px</div>
+    </div>
+  </div>
+</body>
+</html>

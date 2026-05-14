@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; display: flex; flex-direction: column; gap: 14px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #5E5C75; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start; }
+
+  /* ── Card ── */
+  .card {
+    background: #fff; border-radius: 16px;
+    border: 1px solid #EBEBEB;
+    box-shadow: 0 2px 4px rgba(55,23,78,0.06), 0 4px 8px -2px rgba(55,23,78,0.08);
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 14px 16px 10px; display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid #F0F0F4;
+  }
+  .card-title { font-size: 13px; font-weight: 500; color: #282828; flex: 1; }
+  .card-icon  { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card-icon .material-icons { font-size: 16px; }
+  .card-body  { padding: 12px 16px; }
+  .card-footer { padding: 10px 16px; border-top: 1px solid #F0F0F4; display: flex; justify-content: flex-end; gap: 6px; }
+
+  /* ── KPI Card ── */
+  .kpi-card {
+    background: #fff; border-radius: 16px;
+    border: 1px solid #EBEBEB;
+    box-shadow: 0 2px 4px rgba(55,23,78,0.06), 0 4px 8px -2px rgba(55,23,78,0.08);
+    padding: 14px 16px; display: flex; flex-direction: column; gap: 5px;
+    min-width: 140px;
+  }
+  .kpi-label { font-size: 11px; color: #767676; }
+  .kpi-value { font-family: 'Roboto Mono', monospace; font-size: 24px; font-weight: 500; color: #282828; line-height: 1; }
+  .kpi-trend { display: flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 500; }
+  .kpi-trend .material-icons { font-size: 13px; }
+  .trend-up   { color: #27854D; }
+  .trend-down { color: #9A112C; }
+  .trend-flat { color: #767676; }
+  .kpi-icon-wrap { width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; align-self: flex-start; }
+  .kpi-icon-wrap .material-icons { font-size: 15px; }
+
+  /* ── Well ── */
+  .well {
+    background: #F0F0F4; border-radius: 12px;
+    border: 1px solid #DDDDE5; padding: 14px 16px;
+  }
+  .well-title { font-size: 13px; font-weight: 500; color: #282828; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .well-title .material-icons { font-size: 16px; color: #8342BB; }
+
+  /* Buttons */
+  .btn-sm { height: 26px; padding: 0 10px; border-radius: 6px; font-family: 'Switzer', sans-serif; font-size: 11px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; }
+  .btn-sm .material-icons { font-size: 13px; }
+  .btn-primary-sm { background: #8342BB; color: #fff; border: none; }
+  .btn-default-sm { background: #fff; color: #282828; border: 1px solid #DDDDE5; }
+</style>
+</head>
+<body>
+  <div class="lbl">KPI Cards</div>
+  <div class="row">
+    <div class="kpi-card">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="kpi-label">Open Orders</div>
+        <div class="kpi-icon-wrap" style="background:rgba(131,66,187,0.1)"><span class="material-icons" style="color:#8342BB">list_alt</span></div>
+      </div>
+      <div class="kpi-value">12,847</div>
+      <div class="kpi-trend trend-up"><span class="material-icons">trending_up</span>+3.2% vs last period</div>
+    </div>
+    <div class="kpi-card">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="kpi-label">On-time Delivery</div>
+        <div class="kpi-icon-wrap" style="background:rgba(91,214,160,0.15)"><span class="material-icons" style="color:#27854D">local_shipping</span></div>
+      </div>
+      <div class="kpi-value">94.2<span style="font-size:14px;color:#767676;font-weight:400">%</span></div>
+      <div class="kpi-trend trend-down"><span class="material-icons">trending_down</span>−1.1% vs last period</div>
+    </div>
+    <div class="kpi-card">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="kpi-label">Forecast Accuracy</div>
+        <div class="kpi-icon-wrap" style="background:rgba(57,153,228,0.12)"><span class="material-icons" style="color:#0D4C89">assessment</span></div>
+      </div>
+      <div class="kpi-value">87.6<span style="font-size:14px;color:#767676;font-weight:400">%</span></div>
+      <div class="kpi-trend trend-up"><span class="material-icons">trending_up</span>+0.8%</div>
+    </div>
+    <div class="kpi-card">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="kpi-label">Active Shipments</div>
+        <div class="kpi-icon-wrap" style="background:rgba(240,160,8,0.12)"><span class="material-icons" style="color:#753A05">flight_takeoff</span></div>
+      </div>
+      <div class="kpi-value">3,241</div>
+      <div class="kpi-trend trend-flat"><span class="material-icons">trending_flat</span>Stable</div>
+    </div>
+  </div>
+
+  <div class="lbl">Card — with header, body, footer</div>
+  <div class="row">
+    <div class="card" style="width:310px">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(131,66,187,0.1)"><span class="material-icons" style="color:#8342BB">assessment</span></div>
+        <div class="card-title">Forecast summary</div>
+        <button style="width:24px;height:24px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:4px;"><span class="material-icons" style="font-size:16px;color:#8C8C8C">more_vert</span></button>
+      </div>
+      <div class="card-body">
+        <div style="font-size:12px;color:#5E5C75;line-height:1.5">Demand forecast for Q1 2025 shows a <strong style="color:#282828">+8% increase</strong> compared to the previous quarter. AI confidence score: <span style="color:#7239A4;font-weight:500">87%</span></div>
+      </div>
+      <div class="card-footer">
+        <button class="btn-sm btn-default-sm">Dismiss</button>
+        <button class="btn-sm btn-primary-sm">View forecast</button>
+      </div>
+    </div>
+
+    <div class="card" style="width:310px">
+      <div class="card-header">
+        <div class="card-icon" style="background:#FEF7F4"><span class="material-icons" style="color:#9A112C">warning</span></div>
+        <div class="card-title">3 shipments at risk</div>
+      </div>
+      <div class="card-body">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#282828">
+            <span style="display:inline-flex;padding:1px 7px;border-radius:9999px;background:#FFCDD0;color:#B02530;font-size:10px;font-weight:500">Delayed</span>ORD-48199 — Hamburg → NY
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#282828">
+            <span style="display:inline-flex;padding:1px 7px;border-radius:9999px;background:#FDECC0;color:#753A05;font-size:10px;font-weight:500">Warning</span>ORD-48195 — Rotterdam → CA
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#282828">
+            <span style="display:inline-flex;padding:1px 7px;border-radius:9999px;background:#FDECC0;color:#753A05;font-size:10px;font-weight:500">Warning</span>ORD-48192 — Tokyo → Seattle
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button class="btn-sm btn-primary-sm">Review all</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="lbl">Well — collapsible content section</div>
+  <div class="well">
+    <div class="well-title"><span class="material-icons">tune</span>Planning parameters</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div>
+        <div style="font-size:10px;font-weight:500;color:#8C8C8C;margin-bottom:3px">Planning horizon</div>
+        <div style="font-size:13px;color:#282828">52 weeks</div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:500;color:#8C8C8C;margin-bottom:3px">Freeze period</div>
+        <div style="font-size:13px;color:#282828">4 weeks</div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:500;color:#8C8C8C;margin-bottom:3px">Demand signal</div>
+        <div style="font-size:13px;color:#282828">AI-assisted + manual</div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:500;color:#8C8C8C;margin-bottom:3px">Review cycle</div>
+        <div style="font-size:13px;color:#282828">Monthly</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

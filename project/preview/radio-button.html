@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; margin-top: 12px; }
+  .lbl:first-child { margin-top: 0; }
+  .row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+  .divider { height: 1px; background: #F0F0F4; margin: 10px 0; }
+
+  /* Radio row */
+  .rb-row { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; user-select: none; }
+  .rb-row.disabled { cursor: not-allowed; opacity: 0.5; }
+
+  /* Circle */
+  .rb-circle {
+    width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px;
+    border-radius: 50%; border: 1.5px solid #BFBECE; background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.1s;
+  }
+  .rb-row:not(.disabled):hover .rb-circle { border-color: #8342BB; background: rgba(131,66,187,0.04); }
+
+  /* Selected */
+  .rb-circle.selected { border-color: #8342BB; border-width: 2px; }
+  .rb-circle.selected::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #8342BB; display: block; }
+
+  /* Focused */
+  .rb-circle.focused { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #8342BB; border-color: #8342BB; }
+
+  /* Error */
+  .rb-circle.error { border-color: #E02F3A; }
+  .rb-circle.selected.error { border-color: #E02F3A; }
+  .rb-circle.selected.error::after { background: #E02F3A; }
+
+  .rb-label { font-size: 14px; color: #282828; line-height: 1.4; }
+  .rb-hint  { font-size: 11px; color: #767676; margin-top: 1px; }
+
+  /* Group */
+  .rb-group { display: flex; flex-direction: column; gap: 8px; }
+  .rb-group-horizontal { display: flex; gap: 20px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+  <div class="lbl">States</div>
+  <div class="row">
+    <div class="rb-row">
+      <div class="rb-circle"></div>
+      <div><div class="rb-label">Unselected</div></div>
+    </div>
+    <div class="rb-row">
+      <div class="rb-circle selected"></div>
+      <div><div class="rb-label">Selected</div></div>
+    </div>
+    <div class="rb-row">
+      <div class="rb-circle focused"></div>
+      <div><div class="rb-label">Focused</div></div>
+    </div>
+    <div class="rb-row">
+      <div class="rb-circle error"></div>
+      <div><div class="rb-label">Error</div></div>
+    </div>
+    <div class="rb-row">
+      <div class="rb-circle selected error"></div>
+      <div><div class="rb-label">Selected error</div></div>
+    </div>
+    <div class="rb-row disabled">
+      <div class="rb-circle"></div>
+      <div><div class="rb-label">Disabled</div></div>
+    </div>
+    <div class="rb-row disabled">
+      <div class="rb-circle selected"></div>
+      <div><div class="rb-label">Disabled selected</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="lbl">Interactive groups</div>
+  <div style="display:flex; gap:40px; align-items:flex-start">
+    <!-- Vertical group -->
+    <div>
+      <div style="font-size:11px;font-weight:500;color:#282828;margin-bottom:8px">Density mode</div>
+      <div class="rb-group" id="rg1">
+        <div class="rb-row" onclick="selectRadio('rg1', this)">
+          <div class="rb-circle selected"></div>
+          <div>
+            <div class="rb-label">Comfy</div>
+            <div class="rb-hint">Default — more whitespace</div>
+          </div>
+        </div>
+        <div class="rb-row" onclick="selectRadio('rg1', this)">
+          <div class="rb-circle"></div>
+          <div>
+            <div class="rb-label">Cozy</div>
+            <div class="rb-hint">Balanced density</div>
+          </div>
+        </div>
+        <div class="rb-row" onclick="selectRadio('rg1', this)">
+          <div class="rb-circle"></div>
+          <div>
+            <div class="rb-label">Condensed</div>
+            <div class="rb-hint">Maximum data density</div>
+          </div>
+        </div>
+        <div class="rb-row disabled">
+          <div class="rb-circle"></div>
+          <div>
+            <div class="rb-label">Custom</div>
+            <div class="rb-hint">Available in settings</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Horizontal group -->
+    <div>
+      <div style="font-size:11px;font-weight:500;color:#282828;margin-bottom:8px">View mode</div>
+      <div class="rb-group-horizontal" id="rg2">
+        <div class="rb-row" onclick="selectRadio('rg2', this)">
+          <div class="rb-circle selected"></div>
+          <div><div class="rb-label">List</div></div>
+        </div>
+        <div class="rb-row" onclick="selectRadio('rg2', this)">
+          <div class="rb-circle"></div>
+          <div><div class="rb-label">Grid</div></div>
+        </div>
+        <div class="rb-row" onclick="selectRadio('rg2', this)">
+          <div class="rb-circle"></div>
+          <div><div class="rb-label">Calendar</div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px">
+        <div style="font-size:11px;font-weight:500;color:#9A112C;margin-bottom:8px">Export format (required)</div>
+        <div class="rb-group" id="rg3">
+          <div class="rb-row" onclick="selectRadio('rg3', this)">
+            <div class="rb-circle error"></div>
+            <div><div class="rb-label">CSV</div></div>
+          </div>
+          <div class="rb-row" onclick="selectRadio('rg3', this)">
+            <div class="rb-circle error"></div>
+            <div><div class="rb-label">Excel (.xlsx)</div></div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:#9A112C;margin-top:5px">Please select a format</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+function selectRadio(groupId, row) {
+  if (row.classList.contains('disabled')) return;
+  document.querySelectorAll('#' + groupId + ' .rb-circle').forEach(c => {
+    c.classList.remove('selected');
+    c.classList.remove('focused');
+  });
+  row.querySelector('.rb-circle').classList.add('selected');
+}
+</script>
+</body>
+</html>

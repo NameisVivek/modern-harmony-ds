@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 16px; width: 700px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; margin-top: 14px; }
+  .lbl:first-child { margin-top: 0; }
+  .row { display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-end; }
+
+  /* Tooltip base */
+  .tip-wrap { position: relative; display: inline-flex; flex-direction: column; align-items: center; gap: 6px; }
+  .tooltip {
+    background: #282828; color: #fff;
+    font-family: 'Switzer', sans-serif; font-size: 11px; line-height: 1.4;
+    padding: 6px 10px; border-radius: 6px;
+    white-space: nowrap; max-width: 200px; white-space: normal;
+    box-shadow: 0 2px 8px rgba(20,16,41,0.2);
+    position: relative;
+  }
+  .tooltip.light {
+    background: #fff; color: #282828;
+    border: 1px solid #DDDDE5;
+    box-shadow: 0 2px 8px rgba(55,23,78,0.12);
+  }
+
+  /* Arrows */
+  .tooltip::after {
+    content: ''; position: absolute; border: 5px solid transparent;
+  }
+  /* Bottom (tip below element) */
+  .tip-top .tooltip::after { top: 100%; left: 50%; transform: translateX(-50%); border-top-color: #282828; }
+  .tip-top .tooltip.light::after { border-top-color: #DDDDE5; }
+  /* Top (tip above element) */
+  .tip-bottom .tooltip::after { bottom: 100%; left: 50%; transform: translateX(-50%); border-bottom-color: #282828; }
+  /* Right */
+  .tip-left .tooltip::after { left: 100%; top: 50%; transform: translateY(-50%); border-left-color: #282828; }
+  /* Left */
+  .tip-right .tooltip::after { right: 100%; top: 50%; transform: translateY(-50%); border-right-color: #282828; }
+
+  /* Trigger element */
+  .trigger {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #fff; border: 1px solid #DDDDE5; border-radius: 6px;
+    padding: 5px 10px; font-size: 12px; font-weight: 500; color: #282828; cursor: pointer;
+    box-shadow: 0 1px 2px rgba(55,23,78,0.06);
+  }
+  .trigger .material-icons { font-size: 16px; color: #8C8C8C; }
+  .trigger.icon-only { padding: 5px; width: 28px; height: 28px; }
+
+  /* Rows */
+  .tip-top    { flex-direction: column; }
+  .tip-bottom { flex-direction: column-reverse; }
+  .tip-left   { flex-direction: row; align-items: center; }
+  .tip-right  { flex-direction: row-reverse; align-items: center; }
+  .tip-left .tooltip, .tip-right .tooltip { margin: 0 6px; }
+</style>
+</head>
+<body>
+  <div class="lbl">Placement — dark variant</div>
+  <div class="row" style="padding:16px 0">
+    <div class="tip-wrap tip-top">
+      <div class="tooltip">Export as CSV or Excel</div>
+      <div class="trigger"><span class="material-icons">cloud_download</span>&nbsp;Export</div>
+      <div style="font-size:9px;color:#8C8C8C;text-align:center;margin-top:4px">top</div>
+    </div>
+    <div class="tip-wrap tip-bottom" style="margin-top:48px">
+      <div class="trigger"><span class="material-icons">filter_list</span>&nbsp;Filters</div>
+      <div class="tooltip">Apply column filters</div>
+      <div style="font-size:9px;color:#8C8C8C;text-align:center;margin-top:4px">bottom</div>
+    </div>
+    <div class="tip-wrap tip-left" style="gap:6px; margin-top:0">
+      <div class="tooltip">Add a new planning scenario</div>
+      <div class="trigger"><span class="material-icons">add</span>&nbsp;New scenario</div>
+      <div style="font-size:9px;color:#8C8C8C">left</div>
+    </div>
+    <div class="tip-wrap tip-right" style="gap:6px; margin-top:0">
+      <div class="tooltip">Open user settings</div>
+      <div class="trigger icon-only"><span class="material-icons">settings</span></div>
+      <div style="font-size:9px;color:#8C8C8C">right</div>
+    </div>
+  </div>
+
+  <div class="lbl">Light variant + multi-line</div>
+  <div class="row" style="padding:8px 0">
+    <div class="tip-wrap tip-top">
+      <div class="tooltip light" style="max-width:180px">Shows forecast accuracy compared to actual demand for the prior period.</div>
+      <div class="trigger"><span class="material-icons">info_outline</span>&nbsp;Forecast accuracy</div>
+    </div>
+    <div class="tip-wrap tip-top">
+      <div class="tooltip light">Locked by administrator</div>
+      <div class="trigger" style="opacity:0.5;cursor:not-allowed"><span class="material-icons">lock</span>&nbsp;Configuration</div>
+    </div>
+  </div>
+
+  <div class="lbl">Icon-button triggers (common usage)</div>
+  <div class="row" style="padding:8px 0; background:#282828; border-radius:8px; padding:10px 14px">
+    <div class="tip-wrap tip-top">
+      <div class="tooltip">Notifications (3 new)</div>
+      <div class="trigger icon-only" style="background:transparent;border:none;box-shadow:none"><span class="material-icons" style="color:rgba(255,255,255,0.75);font-size:20px">notifications</span></div>
+    </div>
+    <div class="tip-wrap tip-top">
+      <div class="tooltip">Help centre</div>
+      <div class="trigger icon-only" style="background:transparent;border:none;box-shadow:none"><span class="material-icons" style="color:rgba(255,255,255,0.75);font-size:20px">help_outline</span></div>
+    </div>
+    <div class="tip-wrap tip-top">
+      <div class="tooltip">System settings</div>
+      <div class="trigger icon-only" style="background:transparent;border:none;box-shadow:none"><span class="material-icons" style="color:rgba(255,255,255,0.75);font-size:20px">settings</span></div>
+    </div>
+  </div>
+</body>
+</html>

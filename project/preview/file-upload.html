@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; display: flex; flex-direction: column; gap: 14px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .divider { height: 1px; background: #F0F0F4; }
+
+  /* Drop zone */
+  .dropzone {
+    border: 2px dashed #BFBECE; border-radius: 12px; background: #FBFBFB;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px; padding: 24px 20px; text-align: center; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .dropzone:hover, .dropzone.drag-over {
+    border-color: #8342BB; background: rgba(131,66,187,0.04);
+  }
+  .dropzone-icon { width: 44px; height: 44px; border-radius: 12px; background: #ECE4F5; display: flex; align-items: center; justify-content: center; }
+  .dropzone-icon .material-icons { font-size: 22px; color: #8342BB; }
+  .dropzone-title { font-size: 13px; font-weight: 500; color: #282828; }
+  .dropzone-sub { font-size: 11px; color: #767676; }
+  .dropzone-sub a { color: #7239A4; text-decoration: underline; cursor: pointer; }
+  .dropzone-types { font-size: 10px; color: #8C8C8C; margin-top: 2px; }
+  .dropzone.error { border-color: #E02F3A; background: #FEF7F4; }
+  .dropzone.error .dropzone-icon { background: #F6D7D6; }
+  .dropzone.error .dropzone-icon .material-icons { color: #9A112C; }
+
+  /* File list item */
+  .file-item {
+    display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+    border: 1px solid #EBEBEB; border-radius: 8px; background: #fff;
+  }
+  .file-icon { width: 32px; height: 32px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .file-icon .material-icons { font-size: 18px; }
+  .file-info { flex: 1; min-width: 0; }
+  .file-name { font-size: 13px; color: #282828; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-size { font-size: 10px; color: #8C8C8C; margin-top: 1px; }
+  .file-remove { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; border-radius: 4px; color: #8C8C8C; flex-shrink: 0; }
+  .file-remove:hover { background: #F0F0F4; color: #282828; }
+  .file-remove .material-icons { font-size: 16px; }
+
+  /* Progress bar */
+  .file-progress { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid #EBEBEB; border-radius: 8px; }
+  .prog-track { flex: 1; height: 4px; background: #F0F0F4; border-radius: 2px; overflow: hidden; }
+  .prog-fill  { height: 100%; background: #8342BB; border-radius: 2px; transition: width 0.3s; }
+  .prog-pct   { font-size: 11px; color: #767676; flex-shrink: 0; min-width: 30px; text-align: right; }
+
+  /* Compact / button variant */
+  .upload-btn { height: 32px; padding: 0 14px; border-radius: 8px; background: #fff; color: #282828; border: 1px solid #DDDDE5; font-family: 'Switzer', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 2px rgba(55,23,78,0.06); }
+  .upload-btn .material-icons { font-size: 16px; color: #8342BB; }
+</style>
+</head>
+<body>
+  <div>
+    <div class="lbl">Drop zone variants</div>
+    <div class="row">
+      <!-- Default -->
+      <div class="dropzone" style="flex:1; min-width:200px">
+        <div class="dropzone-icon"><span class="material-icons">cloud_upload</span></div>
+        <div class="dropzone-title">Drag files here</div>
+        <div class="dropzone-sub">or <a>browse files</a> to upload</div>
+        <div class="dropzone-types">CSV, XLSX, PDF · Max 25 MB</div>
+      </div>
+      <!-- Drag-over active -->
+      <div class="dropzone drag-over" style="flex:1; min-width:200px">
+        <div class="dropzone-icon"><span class="material-icons">file_download</span></div>
+        <div class="dropzone-title" style="color:#8342BB">Drop to upload</div>
+        <div class="dropzone-sub" style="color:#7239A4">Release to add files</div>
+      </div>
+      <!-- Error -->
+      <div class="dropzone error" style="flex:1; min-width:200px">
+        <div class="dropzone-icon"><span class="material-icons">error_outline</span></div>
+        <div class="dropzone-title" style="color:#9A112C">File type not supported</div>
+        <div class="dropzone-sub" style="color:#9A112C">Upload CSV or Excel files only</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div class="lbl">File list — uploaded &amp; uploading</div>
+    <div style="display:flex;flex-direction:column;gap:6px;max-width:480px">
+      <!-- Complete -->
+      <div class="file-item">
+        <div class="file-icon" style="background:#EEFEF9"><span class="material-icons" style="color:#27854D">description</span></div>
+        <div class="file-info">
+          <div class="file-name">forecast_Q1_2025.csv</div>
+          <div class="file-size">2.4 MB · Uploaded</div>
+        </div>
+        <span style="display:flex;align-items:center;gap:3px;font-size:10px;font-weight:500;color:#27854D"><span class="material-icons" style="font-size:14px">check_circle</span>Done</span>
+        <button class="file-remove"><span class="material-icons">close</span></button>
+      </div>
+      <!-- Uploading -->
+      <div class="file-progress">
+        <div class="file-icon" style="background:#ECE4F5;flex-shrink:0;width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center"><span class="material-icons" style="color:#8342BB;font-size:18px">table_chart</span></div>
+        <div style="flex:1;min-width:0">
+          <div class="file-name" style="font-size:13px;font-weight:500;color:#282828;margin-bottom:4px">demand_data_2024.xlsx</div>
+          <div class="prog-track"><div class="prog-fill" style="width:68%"></div></div>
+        </div>
+        <div class="prog-pct">68%</div>
+        <button class="file-remove"><span class="material-icons">close</span></button>
+      </div>
+      <!-- Error -->
+      <div class="file-item" style="border-color:#F0B0AE;background:#FEF7F4">
+        <div class="file-icon" style="background:#F6D7D6"><span class="material-icons" style="color:#9A112C">insert_drive_file</span></div>
+        <div class="file-info">
+          <div class="file-name">legacy_report.pdf</div>
+          <div class="file-size" style="color:#9A112C">File too large — max 25 MB</div>
+        </div>
+        <span class="material-icons" style="color:#E02F3A;font-size:18px">error_outline</span>
+        <button class="file-remove"><span class="material-icons">close</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div class="lbl">Compact / inline upload button</div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <button class="upload-btn"><span class="material-icons">attach_file</span>Attach file</button>
+      <button class="upload-btn"><span class="material-icons">cloud_upload</span>Import data</button>
+      <span style="font-size:11px;color:#8C8C8C">No file selected</span>
+    </div>
+  </div>
+</body>
+</html>

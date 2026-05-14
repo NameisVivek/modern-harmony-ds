@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Harmony — leo S&OP Dashboard</title>
+
+<!-- Fonts -->
+<link rel="stylesheet" href="../../colors_and_type.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Roboto:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<!-- React + Babel -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body, #root { height: 100%; width: 100%; overflow: hidden; }
+  body { font-family: 'Switzer', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  /* Material icon button utility */
+  button { font-family: inherit; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #DDDDE5; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #BFBECE; }
+
+  /* Tweaks panel */
+  .tweaks-panel {
+    position: fixed; bottom: 20px; right: 20px; z-index: 999;
+    background: #fff; border: 1px solid #EBEBEB; border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(55,23,78,0.16); width: 260px;
+    font-family: 'Switzer', sans-serif; overflow: hidden;
+    display: none;
+  }
+  .tweaks-panel.open { display: block; }
+  .tweaks-header { background: #282828; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .tweaks-title { color: #fff; font-size: 13px; font-weight: 500; letter-spacing: 0.02em; }
+  .tweaks-close { background: transparent; border: none; cursor: pointer; color: rgba(255,255,255,0.6); display: flex; align-items: center; }
+  .tweaks-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 14px; }
+  .tweak-group { display: flex; flex-direction: column; gap: 6px; }
+  .tweak-label { font-size: 10px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.06em; text-transform: uppercase; }
+  .tweak-options { display: flex; gap: 6px; }
+  .tweak-option { flex: 1; padding: 5px 0; border: 1px solid #DDDDE5; border-radius: 6px; background: #fff; font-size: 12px; font-weight: 500; color: #282828; cursor: pointer; text-align: center; font-family: 'Switzer', sans-serif; transition: all 0.1s; }
+  .tweak-option.active { background: rgba(131,66,187,0.1); border-color: #8342BB; color: #7239A4; }
+  .tweak-toggle { display: flex; align-items: center; justify-content: space-between; }
+  .tweak-toggle-label { font-size: 13px; color: #282828; }
+  .toggle-track { width: 36px; height: 20px; border-radius: 10px; background: #DDDDE5; cursor: pointer; position: relative; transition: background 0.15s; flex-shrink: 0; }
+  .toggle-track.on { background: #8342BB; }
+  .toggle-thumb { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.2); transition: transform 0.15s; }
+  .toggle-track.on .toggle-thumb { transform: translateX(16px); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="AppHeader.jsx"></script>
+<script type="text/babel" src="Sidebar.jsx"></script>
+<script type="text/babel" src="MainContent.jsx"></script>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "sidebarExpanded": true,
+  "density": "comfy",
+  "showNotifPanel": false
+}/*EDITMODE-END*/;
+
+/* ── Toggle component ── */
+const Toggle = ({ on, onChange }) => (
+  <div className={`toggle-track ${on ? 'on' : ''}`} onClick={() => onChange(!on)}>
+    <div className="toggle-thumb" />
+  </div>
+);
+
+/* ── Tweaks Panel ── */
+const TweaksPanel = ({ open, onClose, tweaks, setTweak }) => (
+  <div className={`tweaks-panel ${open ? 'open' : ''}`}>
+    <div className="tweaks-header">
+      <span className="tweaks-title">Tweaks</span>
+      <button className="tweaks-close" onClick={onClose}>
+        <span className="material-icons" style={{ fontSize: 18 }}>close</span>
+      </button>
+    </div>
+    <div className="tweaks-body">
+      <div className="tweak-group">
+        <div className="tweak-label">Sidebar</div>
+        <div className="tweak-toggle">
+          <span className="tweak-toggle-label">Expanded</span>
+          <Toggle on={tweaks.sidebarExpanded} onChange={v => setTweak('sidebarExpanded', v)} />
+        </div>
+      </div>
+      <div className="tweak-group">
+        <div className="tweak-label">Density mode</div>
+        <div className="tweak-options">
+          {['comfy','cozy','condensed'].map(d => (
+            <button key={d} className={`tweak-option ${tweaks.density === d ? 'active' : ''}`} onClick={() => setTweak('density', d)}>
+              {d.charAt(0).toUpperCase() + d.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="tweak-group">
+        <div className="tweak-label">Notifications panel</div>
+        <div className="tweak-toggle">
+          <span className="tweak-toggle-label">Show panel</span>
+          <Toggle on={tweaks.showNotifPanel} onChange={v => setTweak('showNotifPanel', v)} />
+        </div>
+      </div>
+      <div style={{ paddingTop: 4, borderTop: '1px solid #F0F0F4' }}>
+        <div style={{ fontSize: 10, color: '#8C8C8C', lineHeight: 1.5 }}>
+          Modern Harmony Design System<br />
+          leo · WiseTech Global Group
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+/* ── Notifications panel ── */
+const NOTIFS = [
+  { icon: 'warning', color: '#C47A00', bg: '#FFEDC0', title: 'Forecast deviation detected', body: 'SKU-9483 is 18% above plan in APAC region.', time: '2 min ago' },
+  { icon: 'check_circle', color: '#27854D', bg: '#C5F3DF', title: 'S&OP cycle approved', body: 'December cycle approved by J. Smith.', time: '1 hr ago' },
+  { icon: 'error', color: '#B02530', bg: '#FFCDD0', title: 'Shipment ORD-48199 delayed', body: 'Hamburg → New York delayed by 3 days.', time: '3 hr ago' },
+];
+
+const NotifPanel = () => (
+  <div style={{ width: 300, flexShrink: 0, background: '#fff', borderLeft: '1px solid #EBEBEB', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ padding: '12px 16px', borderBottom: '1px solid #EBEBEB', display: 'flex', alignItems: 'center', gap: 8 }}>
+      <span className="material-icons" style={{ fontSize: 16, color: '#8342BB' }}>notifications</span>
+      <span style={{ fontFamily: "'Switzer',sans-serif", fontWeight: 500, fontSize: 13, color: '#282828' }}>Notifications</span>
+      <span style={{ marginLeft: 4, display: 'inline-flex', alignItems: 'center', padding: '1px 6px', borderRadius: 9999, background: '#E02F3A', color: '#fff', fontSize: 10, fontWeight: 700, fontFamily: "'Switzer',sans-serif" }}>3</span>
+    </div>
+    <div style={{ flex: 1, overflowY: 'auto', padding: '8px 0' }}>
+      {NOTIFS.map((n, i) => (
+        <div key={i} style={{ padding: '10px 16px', borderBottom: '1px solid #F0F0F4', cursor: 'pointer', display: 'flex', gap: 10 }}>
+          <div style={{ width: 28, height: 28, borderRadius: 8, background: n.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
+            <span className="material-icons" style={{ fontSize: 15, color: n.color }}>{n.icon}</span>
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontFamily: "'Switzer',sans-serif", fontSize: 12, fontWeight: 500, color: '#282828', marginBottom: 2 }}>{n.title}</div>
+            <div style={{ fontFamily: "'Switzer',sans-serif", fontSize: 11, color: '#767676', lineHeight: 1.4 }}>{n.body}</div>
+            <div style={{ fontFamily: "'Switzer',sans-serif", fontSize: 10, color: '#8C8C8C', marginTop: 4 }}>{n.time}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+    <div style={{ padding: '10px 16px', borderTop: '1px solid #EBEBEB' }}>
+      <button style={{ width: '100%', height: 30, background: 'transparent', border: '1px solid #DDDDE5', borderRadius: 6, fontFamily: "'Switzer',sans-serif", fontSize: 12, color: '#767676', cursor: 'pointer' }}>
+        View all notifications
+      </button>
+    </div>
+  </div>
+);
+
+/* ── App root ── */
+const App = () => {
+  const [tweaks, setTweaksState] = React.useState(TWEAK_DEFAULTS);
+  const [tweaksPanelOpen, setTweaksPanelOpen] = React.useState(false);
+  const [activeNav, setActiveNav] = React.useState('sop');
+
+  const setTweak = (key, val) => {
+    setTweaksState(prev => ({ ...prev, [key]: val }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [key]: val } }, '*');
+  };
+
+  // Tweaks protocol
+  React.useEffect(() => {
+    const handler = (e) => {
+      if (e.data?.type === '__activate_edit_mode')   setTweaksPanelOpen(true);
+      if (e.data?.type === '__deactivate_edit_mode')  setTweaksPanelOpen(false);
+    };
+    window.addEventListener('message', handler);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', handler);
+  }, []);
+
+  const density = tweaks.density === 'condensed' ? 'condensed' : tweaks.density === 'cozy' ? 'cozy' : 'comfy';
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+      <AppHeader
+        onToggleSidebar={() => setTweak('sidebarExpanded', !tweaks.sidebarExpanded)}
+        sidebarExpanded={tweaks.sidebarExpanded}
+      />
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', minHeight: 0 }}>
+        <Sidebar
+          expanded={tweaks.sidebarExpanded}
+          activeId={activeNav}
+          onNavigate={setActiveNav}
+        />
+        <MainContent />
+        {tweaks.showNotifPanel && <NotifPanel />}
+      </div>
+
+      <TweaksPanel
+        open={tweaksPanelOpen}
+        onClose={() => {
+          setTweaksPanelOpen(false);
+          window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+        }}
+        tweaks={tweaks}
+        setTweak={setTweak}
+      />
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

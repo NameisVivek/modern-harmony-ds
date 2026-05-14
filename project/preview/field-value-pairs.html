@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 16px 18px; width: 820px; display: flex; flex-direction: column; gap: 20px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .card { background: #fff; border-radius: 10px; border: 1px solid #EBEBEB; padding: 16px 18px; box-shadow: 0 1px 2px rgba(55,23,78,0.04); }
+  .row { display: flex; gap: 14px; }
+  .divider { height: 1px; background: #F0F0F4; }
+
+  /* ══════════════════════════════════
+     FIELD — label above value (stacked)
+     Matches Figma field-value component
+  ══════════════════════════════════ */
+  .fv {
+    display: flex; flex-direction: column; gap: 2px; min-width: 0;
+  }
+
+  /* Label — small, grey, medium weight */
+  .fv-label {
+    font-size: 11px; font-weight: 500; color: #8C8C8C;
+    line-height: 1.4; white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Value — 13px, dark */
+  .fv-value {
+    font-size: 13px; font-weight: 400; color: #282828;
+    line-height: 1.4;
+  }
+  .fv-value.empty { color: #BFBECE; font-style: italic; }
+  .fv-value.mono  { font-family: 'Roboto Mono', monospace; font-size: 12px; color: #282828; }
+  .fv-value.highlight { color: #7239A4; font-weight: 500; }
+  .fv-value.error { color: #9A112C; font-weight: 500; }
+
+  /* Inline edit action */
+  .fv-action {
+    display: inline-flex; align-items: center; gap: 3px;
+    font-size: 11px; color: #7239A4; cursor: pointer;
+    background: transparent; border: none;
+    font-family: 'Switzer', sans-serif; font-weight: 500; padding: 0;
+    margin-top: 2px; transition: color 0.1s;
+  }
+  .fv-action:hover { color: #4D3075; }
+  .fv-action .material-icons { font-size: 13px; }
+
+  /* Badges */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 9999px;
+    font-size: 11px; font-weight: 500;
+  }
+  .badge-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .badge-info    { background: #C0E0FF; color: #0D4C89; }
+  .badge-success { background: #C5F3DF; color: #27854D; }
+  .badge-error   { background: #FFCDD0; color: #B02530; }
+  .badge-warning { background: #FFEDC0; color: #C47A00; }
+  .badge-neutral { background: #F0F0F4; color: #5E5C75; }
+
+  /* Avatar inline */
+  .fv-avatar {
+    width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 600;
+  }
+
+  /* ══════════════════════════════════
+     GRID LAYOUT — responsive columns
+  ══════════════════════════════════ */
+  .fv-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 24px; }
+  .fv-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 24px; }
+  .fv-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px 20px; }
+
+  /* ══════════════════════════════════
+     INLINE LIST — label : value rows
+  ══════════════════════════════════ */
+  .fv-list { display: flex; flex-direction: column; }
+  .fv-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 8px 0; border-bottom: 1px solid #F0F0F4;
+  }
+  .fv-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .fv-row:first-child { padding-top: 0; }
+  .fv-row-label {
+    font-size: 11px; font-weight: 500; color: #8C8C8C;
+    flex-shrink: 0; line-height: 1.5; padding-top: 0;
+    min-width: 0;
+  }
+  .fv-row-value {
+    font-size: 13px; color: #282828; flex: 1; line-height: 1.5;
+  }
+
+  /* ══════════════════════════════════
+     SECTION TITLE within panel
+  ══════════════════════════════════ */
+  .section-head {
+    font-size: 11px; font-weight: 600; color: #282828;
+    margin-bottom: 12px; padding-bottom: 8px;
+    border-bottom: 1px solid #F0F0F4;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .section-head-action {
+    font-size: 11px; color: #7239A4; cursor: pointer; font-weight: 500;
+    background: transparent; border: none; font-family: 'Switzer', sans-serif;
+    display: flex; align-items: center; gap: 3px;
+  }
+  .section-head-action .material-icons { font-size: 13px; }
+</style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════
+       1. STACKED — label above value
+  ═══════════════════════════════ -->
+  <div>
+    <div class="lbl">Stacked — label above value (default)</div>
+    <div class="card">
+      <div class="fv-grid-4">
+        <div class="fv">
+          <span class="fv-label">Order ID</span>
+          <span class="fv-value mono">ORD-48201</span>
+        </div>
+        <div class="fv">
+          <span class="fv-label">Status</span>
+          <span class="fv-value"><span class="badge badge-info"><span class="badge-dot" style="background:#3399FF"></span>In transit</span></span>
+        </div>
+        <div class="fv">
+          <span class="fv-label">Origin</span>
+          <span class="fv-value">Shanghai, CN</span>
+        </div>
+        <div class="fv">
+          <span class="fv-label">Destination</span>
+          <span class="fv-value">Los Angeles, US</span>
+        </div>
+        <div class="fv">
+          <span class="fv-label">ETA</span>
+          <span class="fv-value">15 Jan 2025</span>
+        </div>
+        <div class="fv">
+          <span class="fv-label">Carrier</span>
+          <span class="fv-value">Maersk Line</span>
+        </div>
+        <div class="fv">
+          <span class="fv-label">SKU</span>
+          <span class="fv-value mono">SKU-9483</span>
+        </div>
+        <div class="fv">
+          <span class="fv-label">Quantity</span>
+          <span class="fv-value">1,240 units</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       2. INLINE LIST — label : value
+  ═══════════════════════════════ -->
+  <div>
+    <div class="lbl">Inline list — label left, value right</div>
+    <div class="row">
+
+      <!-- Shipment detail -->
+      <div class="card" style="flex:1">
+        <div class="section-head">
+          Shipment detail
+          <button class="section-head-action"><span class="material-icons">edit</span>Edit</button>
+        </div>
+        <div class="fv-list">
+          <div class="fv-row">
+            <span class="fv-row-label" style="width:100px">Order ID</span>
+            <span class="fv-row-value mono" style="font-family:'Roboto Mono',monospace;font-size:12px">ORD-48199</span>
+          </div>
+          <div class="fv-row">
+            <span class="fv-row-label" style="width:100px">Status</span>
+            <span class="fv-row-value"><span class="badge badge-error"><span class="badge-dot" style="background:#E02F3A"></span>Delayed</span></span>
+          </div>
+          <div class="fv-row">
+            <span class="fv-row-label" style="width:100px">Origin</span>
+            <span class="fv-row-value">Hamburg, DE</span>
+          </div>
+          <div class="fv-row">
+            <span class="fv-row-label" style="width:100px">Destination</span>
+            <span class="fv-row-value">New York, US</span>
+          </div>
+          <div class="fv-row">
+            <span class="fv-row-label" style="width:100px">ETA</span>
+            <span class="fv-row-value" style="color:#9A112C;font-weight:500">21 Jan 2025 <span style="font-size:11px;color:#767676;font-weight:400">+3 days</span></span>
+          </div>
+          <div class="fv-row">
+            <span class="fv-row-label" style="width:100px">Carrier</span>
+            <span class="fv-row-value">Maersk Line · MSCU 483</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scenario metadata -->
+      <div class="card" style="flex:1">
+        <div class="section-head">Scenario metadata</div>
+        <div class="fv-list">
+          <div class="fv-row">
+            <span class="fv-row-label" style="width:110px">Name</span>
+            <span class="fv-row-value" style="display:flex;align-items:center;justify-content:space-between">
+              <span>Optimistic Q1 2025</span>
+              <button class="fv-action"><span class="material-icons">edit</span>Edit</button>
+            </span>
+          </div>
+          <div class="fv-row">
+            <span class="fv-row-label" style="width:110px">Base forecast</span>
+            <span class="fv-row-value" style="display:flex;align-items:center;justify-content:space-between">
+              <span>AI-assisted</span>
+              <button class="fv-action"><span class="material-icons">edit</span>Edit</button>
+            </span>
+          </div>
+          <div class="fv-row">
+            <span class="fv-row-label" style="width:110px">Created by</span>
+            <span class="fv-row-value" style="display:flex;align-items:center;gap:6px">
+              <span class="fv-avatar" style="background:#ECE4F5;color:#7239A4">JD</span>
+              Jane Doe
+            </span>
+          </div>
+          <div class="fv-row">
+            <span class="fv-row-label" style="width:110px">Last updated</span>
+            <span class="fv-row-value" style="color:#767676">14 Jan 2025 · 09:43</span>
+          </div>
+          <div class="fv-row">
+            <span class="fv-row-label" style="width:110px">Status</span>
+            <span class="fv-row-value"><span class="badge badge-warning"><span class="badge-dot" style="background:#FFB84D"></span>Pending approval</span></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       3. VALUE STATES
+  ═══════════════════════════════ -->
+  <div>
+    <div class="lbl">Value states</div>
+    <div class="card">
+      <div class="fv-grid-4">
+        <div class="fv">
+          <span class="fv-label">Default</span>
+          <span class="fv-value">Maersk Line</span>
+        </div>
+        <div class="fv">
+          <span class="fv-label">Monospace</span>
+          <span class="fv-value mono">SKU-9483</span>
+        </div>
+        <div class="fv">
+          <span class="fv-label">Highlighted</span>
+          <span class="fv-value highlight">ORD-48199</span>
+        </div>
+        <div class="fv">
+          <span class="fv-label">Error / alert</span>
+          <span class="fv-value error">+3 days delayed</span>
+        </div>
+        <div class="fv">
+          <span class="fv-label">Empty / null</span>
+          <span class="fv-value empty">—</span>
+        </div>
+        <div class="fv">
+          <span class="fv-label">Secondary text</span>
+          <span class="fv-value" style="color:#767676">14 Jan 2025 · 09:43</span>
+        </div>
+        <div class="fv">
+          <span class="fv-label">With badge</span>
+          <span class="fv-value"><span class="badge badge-success"><span class="badge-dot" style="background:#5BD6A0"></span>On track</span></span>
+        </div>
+        <div class="fv">
+          <span class="fv-label">With action</span>
+          <div>
+            <span class="fv-value">Monthly</span>
+            <button class="fv-action"><span class="material-icons">edit</span>Edit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       4. HORIZONTAL GRID — order summary
+  ═══════════════════════════════ -->
+  <div>
+    <div class="lbl">Horizontal grid with dividers</div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr)">
+        <div style="padding:14px 16px;border-right:1px solid #F0F0F4;border-bottom:1px solid #F0F0F4">
+          <div class="fv"><span class="fv-label">Order ID</span><span class="fv-value mono">ORD-48201</span></div>
+        </div>
+        <div style="padding:14px 16px;border-right:1px solid #F0F0F4;border-bottom:1px solid #F0F0F4">
+          <div class="fv"><span class="fv-label">Status</span><span class="fv-value"><span class="badge badge-info"><span class="badge-dot" style="background:#3399FF"></span>In transit</span></span></div>
+        </div>
+        <div style="padding:14px 16px;border-right:1px solid #F0F0F4;border-bottom:1px solid #F0F0F4">
+          <div class="fv"><span class="fv-label">Origin</span><span class="fv-value">Shanghai, CN</span></div>
+        </div>
+        <div style="padding:14px 16px;border-bottom:1px solid #F0F0F4">
+          <div class="fv"><span class="fv-label">Destination</span><span class="fv-value">Los Angeles, US</span></div>
+        </div>
+        <div style="padding:14px 16px;border-right:1px solid #F0F0F4">
+          <div class="fv"><span class="fv-label">ETA</span><span class="fv-value">15 Jan 2025</span></div>
+        </div>
+        <div style="padding:14px 16px;border-right:1px solid #F0F0F4">
+          <div class="fv"><span class="fv-label">Carrier</span><span class="fv-value">COSCO Shipping</span></div>
+        </div>
+        <div style="padding:14px 16px;border-right:1px solid #F0F0F4">
+          <div class="fv"><span class="fv-label">SKU</span><span class="fv-value mono">SKU-9483</span></div>
+        </div>
+        <div style="padding:14px 16px">
+          <div class="fv"><span class="fv-label">Quantity</span><span class="fv-value">1,240 units</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

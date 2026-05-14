@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 16px; width: 900px; display: flex; flex-direction: column; gap: 18px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+  /* ── Ping-Pong container — eto-pingpong ── */
+  .pingpong {
+    display: flex; align-items: stretch; gap: 0;
+    background: #fff; border-radius: 10px; border: 1px solid #EBEBEB;
+    box-shadow: 0 1px 3px rgba(55,23,78,0.06);
+    overflow: hidden; height: 360px;
+  }
+  .pingpong.disabled { opacity: 0.5; pointer-events: none; }
+
+  /* ── List panels — eto-pingpong__list ── */
+  .pp-list { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+  /* ── Header — eto-pingpong__header ── */
+  .pp-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px; border-bottom: 1px solid #EBEBEB;
+    background: #F8F8FB; flex-shrink: 0;
+  }
+  .pp-title { font-size: 12px; font-weight: 500; color: #282828; flex: 1; }
+  .pp-count { font-size: 11px; color: #8C8C8C; background: #EBEBEB; border-radius: 4px; padding: 1px 6px; }
+
+  /* ── Search bar ── */
+  .pp-search {
+    display: flex; align-items: center; gap: 6px;
+    height: 30px; padding: 0 10px; margin: 8px; border-radius: 6px;
+    background: #fff; border: 1px solid #DDDDE5; flex-shrink: 0;
+  }
+  .pp-search .material-icons { font-size: 14px; color: #8C8C8C; flex-shrink: 0; }
+  .pp-search input {
+    flex: 1; background: transparent; border: none; outline: none;
+    font-family: 'Switzer', sans-serif; font-size: 12px; color: #282828;
+  }
+  .pp-search input::placeholder { color: #8C8C8C; }
+  .pp-search:focus-within { border-color: #8342BB; box-shadow: 0 0 0 2px rgba(131,66,187,0.15); }
+
+  /* ── Item list — eto-pingpong__available / __selected ── */
+  .pp-items {
+    flex: 1; overflow-y: auto; padding: 2px 0;
+  }
+  .pp-items::-webkit-scrollbar { width: 4px; }
+  .pp-items::-webkit-scrollbar-thumb { background: #DDDDE5; border-radius: 2px; }
+
+  /* ── Single item — <li> ── */
+  .pp-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 10px; cursor: pointer; user-select: none;
+    border-left: 3px solid transparent; transition: background 0.1s;
+    position: relative;
+  }
+  .pp-item:hover { background: #F8F8FB; }
+  .pp-item.selected-row { background: rgba(131,66,187,0.06); border-left-color: #8342BB; }
+  .pp-item.alt { background: #F8F8FB; }
+  .pp-item.alt.selected-row { background: rgba(131,66,187,0.1); }
+  .pp-item.dragging { opacity: 0.4; }
+  .pp-item.drag-over { border-top: 2px solid #8342BB; }
+
+  .pp-drag { color: #BFBECE; display: flex; align-items: center; flex-shrink: 0; cursor: grab; }
+  .pp-drag .material-icons { font-size: 18px; }
+  .pp-drag:active { cursor: grabbing; }
+
+  .pp-item-label { flex: 1; font-size: 13px; color: #282828; min-width: 0; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+
+  .pp-check { color: #8342BB; display: flex; align-items: center; flex-shrink: 0; opacity: 0; transition: opacity 0.1s; }
+  .pp-item.selected-row .pp-check { opacity: 1; }
+  .pp-check .material-icons { font-size: 16px; }
+
+  /* ── Controls column — eto-pingpong__controls ── */
+  .pp-controls {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 6px; padding: 0 6px; flex-shrink: 0; background: #F8F8FB;
+    border-left: 1px solid #EBEBEB; border-right: 1px solid #EBEBEB;
+  }
+
+  /* ── Control buttons ── */
+  .pp-ctrl-btn {
+    width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+    background: #fff; border: 1px solid #DDDDE5; border-radius: 6px;
+    cursor: pointer; transition: all 0.1s; color: #5E5C75;
+    box-shadow: 0 1px 2px rgba(55,23,78,0.06);
+  }
+  .pp-ctrl-btn .material-icons { font-size: 18px; }
+  .pp-ctrl-btn:hover:not([disabled]) { background: #8342BB; border-color: #8342BB; color: #fff; box-shadow: 0 1px 4px rgba(131,66,187,0.35); }
+  .pp-ctrl-btn[disabled] { opacity: 0.35; cursor: not-allowed; background: #F0F0F4; }
+  /* ── Drop placement indicator ── */
+  .pp-drop-line {
+    height: 2px; background: #8342BB; margin: 0 8px;
+    border-radius: 1px; pointer-events: none;
+    box-shadow: 0 0 4px rgba(131,66,187,0.4);
+  }
+  .pp-items.drag-target { background: rgba(131,66,187,0.03); }
+</style>
+</head>
+<body>
+
+  <div class="lbl">Ping-pong — dual-list transfer component (eto-pingpong)</div>
+
+  <div>
+    <div class="pingpong" id="pp1">
+      <!-- Available list -->
+      <div class="pp-list" id="pp1-available">
+        <div class="pp-header">
+          <span class="pp-title">Available</span>
+          <span class="pp-count" id="pp1-avail-count">7</span>
+        </div>
+        <div class="pp-search">
+          <span class="material-icons">search</span>
+          <input type="text" placeholder="Type to filter…" oninput="filterList('pp1','available',this.value)">
+        </div>
+        <ul class="pp-items" id="pp1-avail-list">
+          <li class="pp-item" onclick="selectItem(this,'pp1')" draggable="true">
+            <span class="pp-drag"><span class="material-icons">drag_indicator</span></span>
+            <span class="pp-item-label">Apple</span>
+            <span class="pp-check"><span class="material-icons">arrow_forward</span></span>
+          </li>
+          <li class="pp-item alt" onclick="selectItem(this,'pp1')" draggable="true">
+            <span class="pp-drag"><span class="material-icons">drag_indicator</span></span>
+            <span class="pp-item-label">Banana</span>
+            <span class="pp-check"><span class="material-icons">arrow_forward</span></span>
+          </li>
+          <li class="pp-item" onclick="selectItem(this,'pp1')" draggable="true">
+            <span class="pp-drag"><span class="material-icons">drag_indicator</span></span>
+            <span class="pp-item-label">Peach</span>
+            <span class="pp-check"><span class="material-icons">arrow_forward</span></span>
+          </li>
+          <li class="pp-item alt" onclick="selectItem(this,'pp1')" draggable="true">
+            <span class="pp-drag"><span class="material-icons">drag_indicator</span></span>
+            <span class="pp-item-label">Apricot</span>
+            <span class="pp-check"><span class="material-icons">arrow_forward</span></span>
+          </li>
+          <li class="pp-item" onclick="selectItem(this,'pp1')" draggable="true">
+            <span class="pp-drag"><span class="material-icons">drag_indicator</span></span>
+            <span class="pp-item-label">Plum</span>
+            <span class="pp-check"><span class="material-icons">arrow_forward</span></span>
+          </li>
+          <li class="pp-item alt" onclick="selectItem(this,'pp1')" draggable="true">
+            <span class="pp-drag"><span class="material-icons">drag_indicator</span></span>
+            <span class="pp-item-label">Mango</span>
+            <span class="pp-check"><span class="material-icons">arrow_forward</span></span>
+          </li>
+          <li class="pp-item" onclick="selectItem(this,'pp1')" draggable="true">
+            <span class="pp-drag"><span class="material-icons">drag_indicator</span></span>
+            <span class="pp-item-label">Kiwi</span>
+            <span class="pp-check"><span class="material-icons">arrow_forward</span></span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Controls -->
+      <div class="pp-controls">
+        <button class="pp-ctrl-btn double" id="pp1-add-all" title="Move all to selected" onclick="moveAll('pp1','add')" disabled>
+          <span class="material-icons">keyboard_double_arrow_right</span>
+        </button>
+        <button class="pp-ctrl-btn" id="pp1-add" title="Move selected" onclick="moveSelected('pp1','add')" disabled>
+          <span class="material-icons">keyboard_arrow_right</span>
+        </button>
+        <button class="pp-ctrl-btn" id="pp1-remove" title="Remove selected" onclick="moveSelected('pp1','remove')" disabled>
+          <span class="material-icons">keyboard_arrow_left</span>
+        </button>
+        <button class="pp-ctrl-btn double" id="pp1-remove-all" title="Remove all" onclick="moveAll('pp1','remove')" disabled>
+          <span class="material-icons">keyboard_double_arrow_left</span>
+        </button>
+      </div>
+
+      <!-- Selected list -->
+      <div class="pp-list" id="pp1-selected">
+        <div class="pp-header">
+          <span class="pp-title">Selected</span>
+          <span class="pp-count" id="pp1-sel-count">3</span>
+        </div>
+        <div class="pp-search">
+          <span class="material-icons">search</span>
+          <input type="text" placeholder="Type to filter…" oninput="filterList('pp1','selected',this.value)">
+        </div>
+        <ul class="pp-items" id="pp1-sel-list">
+          <li class="pp-item" onclick="selectItem(this,'pp1')" draggable="true">
+            <span class="pp-drag"><span class="material-icons">drag_indicator</span></span>
+            <span class="pp-item-label">Pineapple</span>
+            <span class="pp-check"><span class="material-icons">check</span></span>
+          </li>
+          <li class="pp-item alt" onclick="selectItem(this,'pp1')" draggable="true">
+            <span class="pp-drag"><span class="material-icons">drag_indicator</span></span>
+            <span class="pp-item-label">Grapes</span>
+            <span class="pp-check"><span class="material-icons">check</span></span>
+          </li>
+          <li class="pp-item" onclick="selectItem(this,'pp1')" draggable="true">
+            <span class="pp-drag"><span class="material-icons">drag_indicator</span></span>
+            <span class="pp-item-label">Orange</span>
+            <span class="pp-check"><span class="material-icons">check</span></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:8px; font-size:10px; color:#8C8C8C;">
+      Click items to select (highlight) · Use arrows to transfer · Drag items between lists
+    </div>
+  </div>
+
+  <!-- Disabled state -->
+  <div>
+    <div class="lbl">Disabled state</div>
+    <div class="pingpong disabled" style="height:200px">
+      <div class="pp-list">
+        <div class="pp-header"><span class="pp-title">Available</span><span class="pp-count">3</span></div>
+        <ul class="pp-items" style="padding:4px 0">
+          <li class="pp-item"><span class="pp-drag"><span class="material-icons">drag_indicator</span></span><span class="pp-item-label">Option A</span></li>
+          <li class="pp-item alt"><span class="pp-drag"><span class="material-icons">drag_indicator</span></span><span class="pp-item-label">Option B</span></li>
+          <li class="pp-item"><span class="pp-drag"><span class="material-icons">drag_indicator</span></span><span class="pp-item-label">Option C</span></li>
+        </ul>
+      </div>
+      <div class="pp-controls">
+        <button class="pp-ctrl-btn double" disabled><span class="material-icons">keyboard_double_arrow_right</span></button>
+        <button class="pp-ctrl-btn" disabled><span class="material-icons">keyboard_arrow_right</span></button>
+        <button class="pp-ctrl-btn" disabled><span class="material-icons">keyboard_arrow_left</span></button>
+        <button class="pp-ctrl-btn double" disabled><span class="material-icons">keyboard_double_arrow_left</span></button>
+      </div>
+      <div class="pp-list">
+        <div class="pp-header"><span class="pp-title">Selected</span><span class="pp-count">2</span></div>
+        <ul class="pp-items" style="padding:4px 0">
+          <li class="pp-item"><span class="pp-drag"><span class="material-icons">drag_indicator</span></span><span class="pp-item-label">Option D</span><span class="pp-check" style="opacity:1"><span class="material-icons">check</span></span></li>
+          <li class="pp-item alt"><span class="pp-drag"><span class="material-icons">drag_indicator</span></span><span class="pp-item-label">Option E</span><span class="pp-check" style="opacity:1"><span class="material-icons">check</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+<script>
+// ── State ─────────────────────────────────────────────────────────────────────
+const ppState = {};
+let dragItem = null;
+let dragSourceList = null;
+
+function getPP(id) {
+  if (!ppState[id]) ppState[id] = { availSel: new Set(), selSel: new Set() };
+  return ppState[id];
+}
+
+// ── Click select ──────────────────────────────────────────────────────────────
+function selectItem(li, ppId) {
+  const list = li.closest('.pp-items');
+  const side = list.id.includes('avail') ? 'availSel' : 'selSel';
+  const state = getPP(ppId);
+  li.classList.toggle('selected-row');
+  const label = li.querySelector('.pp-item-label').textContent;
+  if (li.classList.contains('selected-row')) state[side].add(label);
+  else state[side].delete(label);
+  updateButtons(ppId);
+}
+
+// ── Drag & Drop ───────────────────────────────────────────────────────────────
+function initDragDrop() {
+  document.querySelectorAll('.pp-item[draggable]').forEach(li => attachDrag(li));
+  document.querySelectorAll('.pp-items').forEach(ul => attachDrop(ul));
+}
+
+function attachDrag(li) {
+  li.addEventListener('dragstart', e => {
+    dragItem = li;
+    dragSourceList = li.closest('.pp-items');
+    li.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', li.querySelector('.pp-item-label').textContent);
+  });
+  li.addEventListener('dragend', () => {
+    li.classList.remove('dragging');
+    clearDropIndicators();
+    dragItem = null;
+    dragSourceList = null;
+  });
+}
+
+function attachDrop(ul) {
+  ul.addEventListener('dragover', e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    ul.classList.add('drag-target');
+    showDropIndicator(ul, e.clientY);
+  });
+
+  ul.addEventListener('dragleave', e => {
+    // Only clear if leaving the list entirely
+    if (!ul.contains(e.relatedTarget)) {
+      ul.classList.remove('drag-target');
+      removeDropLine(ul);
+    }
+  });
+
+  ul.addEventListener('drop', e => {
+    e.preventDefault();
+    if (!dragItem) return;
+
+    const targetList = ul;
+    const indicator = ul.querySelector('.pp-drop-line');
+    const afterEl = indicator ? indicator.nextElementSibling : null;
+
+    // Move item
+    if (afterEl) {
+      targetList.insertBefore(dragItem, afterEl);
+    } else {
+      targetList.appendChild(dragItem);
+    }
+
+    // Update check icon based on destination list
+    const check = dragItem.querySelector('.pp-check .material-icons');
+    if (check) {
+      check.textContent = targetList.id.includes('sel') ? 'check' : 'arrow_forward';
+    }
+
+    clearDropIndicators();
+    ul.classList.remove('drag-target');
+
+    // Re-attach drag to moved item
+    attachDrag(dragItem);
+
+    // Find ppId and update
+    const ppId = targetList.id.split('-')[0] + '-' + targetList.id.split('-')[1];
+    const pid = targetList.closest('[id^="pp"]').id;
+    restripeList(document.getElementById(pid + '-avail-list'));
+    restripeList(document.getElementById(pid + '-sel-list'));
+    updateButtons(pid);
+  });
+}
+
+// ── Drop placement indicator ──────────────────────────────────────────────────
+function showDropIndicator(ul, clientY) {
+  removeDropLine(ul);
+  const items = [...ul.querySelectorAll('.pp-item:not(.dragging)')];
+  let insertBefore = null;
+
+  for (const item of items) {
+    const rect = item.getBoundingClientRect();
+    const mid = rect.top + rect.height / 2;
+    if (clientY < mid) { insertBefore = item; break; }
+  }
+
+  const line = document.createElement('div');
+  line.className = 'pp-drop-line';
+  if (insertBefore) ul.insertBefore(line, insertBefore);
+  else ul.appendChild(line);
+}
+
+function removeDropLine(ul) {
+  ul.querySelectorAll('.pp-drop-line').forEach(l => l.remove());
+}
+
+function clearDropIndicators() {
+  document.querySelectorAll('.pp-drop-line').forEach(l => l.remove());
+  document.querySelectorAll('.pp-items.drag-target').forEach(ul => ul.classList.remove('drag-target'));
+}
+
+// ── Button transfers ──────────────────────────────────────────────────────────
+function updateButtons(ppId) {
+  const state = getPP(ppId);
+  const availList = document.getElementById(ppId + '-avail-list');
+  const selList   = document.getElementById(ppId + '-sel-list');
+  const hasAvail  = availList.children.length > 0;
+  const hasSel    = selList.children.length > 0;
+
+  document.getElementById(ppId + '-add-all').disabled    = !hasAvail;
+  document.getElementById(ppId + '-add').disabled        = state.availSel.size === 0;
+  document.getElementById(ppId + '-remove').disabled     = state.selSel.size === 0;
+  document.getElementById(ppId + '-remove-all').disabled = !hasSel;
+
+  document.getElementById(ppId + '-avail-count').textContent = availList.querySelectorAll('li:not([style*="display: none"])').length;
+  document.getElementById(ppId + '-sel-count').textContent   = selList.querySelectorAll('li:not([style*="display: none"])').length;
+}
+
+function moveSelected(ppId, dir) {
+  const state = getPP(ppId);
+  const fromId = dir === 'add' ? ppId + '-avail-list' : ppId + '-sel-list';
+  const toId   = dir === 'add' ? ppId + '-sel-list'   : ppId + '-avail-list';
+  const side   = dir === 'add' ? 'availSel' : 'selSel';
+  const from = document.getElementById(fromId);
+  const to   = document.getElementById(toId);
+  Array.from(from.querySelectorAll('.pp-item.selected-row')).forEach(li => {
+    li.classList.remove('selected-row');
+    const check = li.querySelector('.pp-check .material-icons');
+    if (check) check.textContent = dir === 'add' ? 'check' : 'arrow_forward';
+    to.appendChild(li);
+    attachDrag(li);
+  });
+  state[side].clear();
+  restripeList(from); restripeList(to);
+  updateButtons(ppId);
+}
+
+function moveAll(ppId, dir) {
+  const fromId = dir === 'add' ? ppId + '-avail-list' : ppId + '-sel-list';
+  const toId   = dir === 'add' ? ppId + '-sel-list'   : ppId + '-avail-list';
+  const state  = getPP(ppId);
+  const from = document.getElementById(fromId);
+  const to   = document.getElementById(toId);
+  Array.from(from.querySelectorAll('li')).forEach(li => {
+    li.classList.remove('selected-row');
+    const check = li.querySelector('.pp-check .material-icons');
+    if (check) check.textContent = dir === 'add' ? 'check' : 'arrow_forward';
+    to.appendChild(li);
+    attachDrag(li);
+  });
+  state.availSel.clear(); state.selSel.clear();
+  restripeList(from); restripeList(to);
+  updateButtons(ppId);
+}
+
+function restripeList(ul) {
+  Array.from(ul.querySelectorAll('li')).forEach((li, i) => {
+    li.classList.toggle('alt', i % 2 === 1);
+  });
+}
+
+function filterList(ppId, side, query) {
+  const listId = ppId + '-' + (side === 'available' ? 'avail' : 'sel') + '-list';
+  const q = query.toLowerCase();
+  document.getElementById(listId).querySelectorAll('li').forEach(li => {
+    const label = li.querySelector('.pp-item-label').textContent.toLowerCase();
+    li.style.display = label.includes(q) ? '' : 'none';
+  });
+  updateButtons(ppId);
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+initDragDrop();
+updateButtons('pp1');
+</script>
+
+function getPP(id) {
+  if (!ppState[id]) ppState[id] = { availSel: new Set(), selSel: new Set() };
+  return ppState[id];
+}
+
+function selectItem(li, ppId) {
+  const list = li.closest('.pp-items');
+  const side = list.id.includes('avail') ? 'availSel' : 'selSel';
+  const state = getPP(ppId);
+
+  li.classList.toggle('selected-row');
+  const label = li.querySelector('.pp-item-label').textContent;
+  if (li.classList.contains('selected-row')) state[side].add(label);
+  else state[side].delete(label);
+
+  updateButtons(ppId);
+}
+
+function updateButtons(ppId) {
+  const state = getPP(ppId);
+  const availList = document.getElementById(ppId + '-avail-list');
+  const selList   = document.getElementById(ppId + '-sel-list');
+  const hasAvail  = availList.children.length > 0;
+  const hasSel    = selList.children.length > 0;
+  const availHighlighted = state.availSel.size > 0;
+  const selHighlighted   = state.selSel.size > 0;
+
+  document.getElementById(ppId + '-add-all').disabled    = !hasAvail;
+  document.getElementById(ppId + '-add').disabled        = !availHighlighted;
+  document.getElementById(ppId + '-remove').disabled     = !selHighlighted;
+  document.getElementById(ppId + '-remove-all').disabled = !hasSel;
+
+  document.getElementById(ppId + '-avail-count').textContent = availList.querySelectorAll('li:not([style*="display: none"])').length;
+  document.getElementById(ppId + '-sel-count').textContent   = selList.querySelectorAll('li:not([style*="display: none"])').length;
+}
+
+function moveSelected(ppId, dir) {
+  const state = getPP(ppId);
+  const fromId = dir === 'add' ? ppId + '-avail-list' : ppId + '-sel-list';
+  const toId   = dir === 'add' ? ppId + '-sel-list'   : ppId + '-avail-list';
+  const side   = dir === 'add' ? 'availSel' : 'selSel';
+
+  const from = document.getElementById(fromId);
+  const to   = document.getElementById(toId);
+
+  Array.from(from.querySelectorAll('.pp-item.selected-row')).forEach(li => {
+    li.classList.remove('selected-row');
+    // Update check icon
+    const check = li.querySelector('.pp-check .material-icons');
+    if (check) check.textContent = dir === 'add' ? 'check' : 'arrow_forward';
+    to.appendChild(li);
+  });
+
+  state[side].clear();
+  restripeList(from); restripeList(to);
+  updateButtons(ppId);
+}
+
+function moveAll(ppId, dir) {
+  const fromId = dir === 'add' ? ppId + '-avail-list' : ppId + '-sel-list';
+  const toId   = dir === 'add' ? ppId + '-sel-list'   : ppId + '-avail-list';
+  const state  = getPP(ppId);
+
+  const from = document.getElementById(fromId);
+  const to   = document.getElementById(toId);
+
+  Array.from(from.querySelectorAll('li')).forEach(li => {
+    li.classList.remove('selected-row');
+    const check = li.querySelector('.pp-check .material-icons');
+    if (check) check.textContent = dir === 'add' ? 'check' : 'arrow_forward';
+    to.appendChild(li);
+  });
+
+  state.availSel.clear(); state.selSel.clear();
+  restripeList(from); restripeList(to);
+  updateButtons(ppId);
+}
+
+function restripeList(ul) {
+  Array.from(ul.children).forEach((li, i) => {
+    li.classList.toggle('alt', i % 2 === 1);
+  });
+}
+
+function filterList(ppId, side, query) {
+  const listId = ppId + '-' + (side === 'available' ? 'avail' : 'sel') + '-list';
+  const q = query.toLowerCase();
+  document.getElementById(listId).querySelectorAll('li').forEach(li => {
+    const label = li.querySelector('.pp-item-label').textContent.toLowerCase();
+    li.style.display = label.includes(q) ? '' : 'none';
+  });
+  updateButtons(ppId);
+}
+
+// Init button states
+updateButtons('pp1');
+</script>
+</body>
+</html>

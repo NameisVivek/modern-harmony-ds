@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; display: flex; flex-direction: column; gap: 12px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #5E5C75; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+
+  /* Page mock */
+  .page-mock { display: flex; height: 360px; border-radius: 12px; overflow: hidden; border: 1px solid #DDDDE5; box-shadow: 0 2px 4px rgba(55,23,78,0.06); position: relative; }
+  .page-content { flex: 1; background: #F0F0F4; padding: 16px; }
+  .page-header { background: #282828; height: 36px; display: flex; align-items: center; padding: 0 12px; gap: 8px; }
+  .page-header-text { color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 500; flex: 1; }
+
+  /* Drawer panel */
+  .drawer {
+    width: 280px; background: #fff; border-left: 1px solid #EBEBEB;
+    box-shadow: -2px 0 8px rgba(55,23,78,0.08);
+    display: flex; flex-direction: column; flex-shrink: 0;
+  }
+  .drawer-header {
+    display: flex; align-items: center; padding: 12px 14px; border-bottom: 1px solid #EBEBEB;
+    gap: 8px; flex-shrink: 0;
+  }
+  .drawer-title { font-size: 14px; font-weight: 500; color: #282828; flex: 1; }
+  .drawer-close { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; border-radius: 4px; color: #8C8C8C; }
+  .drawer-close:hover { background: #F0F0F4; color: #282828; }
+  .drawer-close .material-icons { font-size: 18px; }
+  .drawer-body { flex: 1; overflow-y: auto; padding: 12px 14px; display: flex; flex-direction: column; gap: 12px; }
+  .drawer-footer { padding: 10px 14px; border-top: 1px solid #EBEBEB; display: flex; gap: 8px; justify-content: flex-end; flex-shrink: 0; }
+
+  /* Content inside drawer */
+  .detail-row { display: flex; flex-direction: column; gap: 2px; }
+  .detail-label { font-size: 10px; font-weight: 500; color: #8C8C8C; text-transform: uppercase; letter-spacing: 0.06em; }
+  .detail-value { font-size: 13px; color: #282828; }
+
+  /* Status badge */
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 500; }
+  .badge-info  { background: #C3E3FC; color: #0D4C89; }
+  .badge-error { background: #F6D7D6; color: #9A112C; }
+  .badge-dot   { width: 5px; height: 5px; border-radius: 50%; }
+
+  .divider-h { height: 1px; background: #F0F0F4; }
+
+  /* Buttons */
+  .btn { height: 28px; padding: 0 12px; border-radius: 6px; font-family: 'Switzer', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; }
+  .btn .material-icons { font-size: 14px; }
+  .btn-primary { background: #8342BB; color: #fff; border: none; }
+  .btn-default { background: #fff; color: #282828; border: 1px solid #DDDDE5; }
+
+  /* Mini grid rows */
+  .mini-row { display: flex; gap: 8px; padding: 5px 0; border-bottom: 1px solid #F0F0F4; font-size: 11px; color: #282828; align-items: center; }
+  .mini-row:last-child { border-bottom: none; }
+</style>
+</head>
+<body>
+  <div class="lbl">Right drawer — order detail panel</div>
+  <div class="page-mock">
+    <div style="display:flex;flex-direction:column;flex:1">
+      <div class="page-header">
+        <span class="material-icons" style="color:rgba(255,255,255,0.5);font-size:16px">menu</span>
+        <div class="page-header-text">S&amp;OP Planning — Order lines</div>
+      </div>
+      <div class="page-content">
+        <div style="background:#fff;border-radius:8px;border:1px solid #EBEBEB;overflow:hidden">
+          <div style="background:#F0F0F4;padding:6px 10px;border-bottom:1px solid #DDDDE5;display:flex;gap:20px">
+            <span style="font-size:10px;font-weight:500;color:#5E5C75">ORDER ID</span>
+            <span style="font-size:10px;font-weight:500;color:#5E5C75;margin-left:30px">ORIGIN</span>
+            <span style="font-size:10px;font-weight:500;color:#5E5C75;margin-left:60px">STATUS</span>
+          </div>
+          <div style="padding:0 10px">
+            <div class="mini-row">
+              <span style="color:#7239A4;font-weight:500;width:80px">ORD-48201</span>
+              <span style="flex:1">Shanghai, CN</span>
+              <span class="badge badge-info"><span class="badge-dot" style="background:#3999E4"></span>In transit</span>
+            </div>
+            <div class="mini-row" style="background:rgba(131,66,187,0.05)">
+              <span style="color:#7239A4;font-weight:500;width:80px">ORD-48199</span>
+              <span style="flex:1">Hamburg, DE</span>
+              <span class="badge badge-error"><span class="badge-dot" style="background:#E02F3A"></span>Delayed</span>
+            </div>
+            <div class="mini-row">
+              <span style="color:#7239A4;font-weight:500;width:80px">ORD-48198</span>
+              <span style="flex:1">Singapore, SG</span>
+              <span class="badge badge-info"><span class="badge-dot" style="background:#3999E4"></span>In transit</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="drawer">
+      <div class="drawer-header">
+        <span class="material-icons" style="font-size:16px;color:#8342BB">assignment</span>
+        <div class="drawer-title">ORD-48199</div>
+        <button class="drawer-close"><span class="material-icons">close</span></button>
+      </div>
+      <div class="drawer-body">
+        <div class="detail-row">
+          <div class="detail-label">Status</div>
+          <div class="detail-value"><span class="badge badge-error"><span class="badge-dot" style="background:#E02F3A"></span>Delayed — 3 days</span></div>
+        </div>
+        <div class="divider-h"></div>
+        <div class="detail-row">
+          <div class="detail-label">Route</div>
+          <div class="detail-value">Hamburg, DE → New York, US</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Carrier</div>
+          <div class="detail-value">Maersk Line</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">ETA (revised)</div>
+          <div class="detail-value" style="color:#9A112C;font-weight:500">21 Jan 2025 <span style="font-weight:400;color:#767676;font-size:11px">(was 18 Jan)</span></div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">SKU</div>
+          <div class="detail-value" style="font-family:'Roboto Mono',monospace;font-size:12px">SKU-2917</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Quantity</div>
+          <div class="detail-value">876 units</div>
+        </div>
+        <div class="divider-h"></div>
+        <div class="detail-row">
+          <div class="detail-label">Delay reason</div>
+          <div class="detail-value" style="font-size:12px;color:#5E5C75;line-height:1.4">Port congestion at Hamburg. Vessel departure rescheduled by carrier.</div>
+        </div>
+      </div>
+      <div class="drawer-footer">
+        <button class="btn btn-default"><span class="material-icons">flag</span>Flag</button>
+        <button class="btn btn-primary">View full order</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

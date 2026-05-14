@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; }
+  .section { margin-bottom: 14px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .av-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .av-size  { font-size: 8px; color: #8C8C8C; }
+
+  /* Avatar base */
+  .av {
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Switzer', sans-serif; font-weight: 500; color: #282828;
+    overflow: hidden; flex-shrink: 0; user-select: none;
+  }
+
+  /* Sizes with correct radius (rounded-rect, not circle) */
+  .av-xs   { width: 20px; height: 20px; border-radius: 6px;  font-size: 8px; }
+  .av-sm   { width: 24px; height: 24px; border-radius: 7px;  font-size: 9px; }
+  .av-md   { width: 32px; height: 32px; border-radius: 8px;  font-size: 11px; }
+  .av-lg   { width: 40px; height: 40px; border-radius: 10px; font-size: 13px; }
+  .av-xl   { width: 48px; height: 48px; border-radius: 12px; font-size: 15px; }
+  .av-2xl  { width: 64px; height: 64px; border-radius: 14px; font-size: 18px; }
+  .av-profile { width: 80px; height: 80px; border-radius: 18px; font-size: 22px; }
+
+  /* Background colors (from palette) */
+  .av-gray    { background: #EBEBEB; }
+  .av-violet  { background: #ECE4F5; color: #7239A4; }
+  .av-blue    { background: #C3E3FC; color: #0D4C89; }
+  .av-green   { background: #C5F3DF; color: #27854D; }
+  .av-amber   { background: #FDECC0; color: #753A05; }
+  .av-red     { background: #F6D7D6; color: #9A112C; }
+  .av-teal    { background: #CEECFC; color: #0D4C89; }
+  .av-pink    { background: #F0B0AE; color: #760824; }
+  .av-sage    { background: #A1EECC; color: #27854D; }
+  .av-dark    { background: #282828; color: #fff; }
+
+  .divider { height: 1px; background: #F0F0F4; margin: 10px 0; }
+</style>
+</head>
+<body>
+  <!-- Sizes -->
+  <div class="section">
+    <div class="lbl">Sizes — initials variant</div>
+    <div class="row">
+      <div class="av-wrap">
+        <div class="av av-xs av-violet">JD</div>
+        <div class="av-size">xs · 20px</div>
+      </div>
+      <div class="av-wrap">
+        <div class="av av-sm av-violet">JD</div>
+        <div class="av-size">sm · 24px</div>
+      </div>
+      <div class="av-wrap">
+        <div class="av av-md av-violet">JD</div>
+        <div class="av-size">md · 32px</div>
+      </div>
+      <div class="av-wrap">
+        <div class="av av-lg av-violet">JD</div>
+        <div class="av-size">lg · 40px</div>
+      </div>
+      <div class="av-wrap">
+        <div class="av av-xl av-violet">JD</div>
+        <div class="av-size">xl · 48px</div>
+      </div>
+      <div class="av-wrap">
+        <div class="av av-2xl av-violet">JD</div>
+        <div class="av-size">2xl · 64px</div>
+      </div>
+      <div class="av-wrap">
+        <div class="av av-profile av-violet">JD</div>
+        <div class="av-size">profile · 80px</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Background colors -->
+  <div class="section">
+    <div class="lbl">Background color palette — initials</div>
+    <div class="row">
+      <div class="av-wrap">
+        <div class="av av-md av-gray">AW</div>
+        <div class="av-size">gray</div>
+      </div>
+      <div class="av-wrap">
+        <div class="av av-md av-violet">JD</div>
+        <div class="av-size">violet</div>
+      </div>
+      <div class="av-wrap">
+        <div class="av av-md av-blue">MK</div>
+        <div class="av-size">blue</div>
+      </div>
+      <div class="av-wrap">
+        <div class="av av-md av-green">TN</div>
+        <div class="av-size">green</div>
+      </div>
+      <div class="av-wrap">
+        <div class="av av-md av-amber">RB</div>
+        <div class="av-size">amber</div>
+      </div>
+      <div class="av-wrap">
+        <div class="av av-md av-red">SP</div>
+        <div class="av-size">red</div>
+      </div>
+      <div class="av-wrap">
+        <div class="av av-md av-teal">VC</div>
+        <div class="av-size">teal</div>
+      </div>
+      <div class="av-wrap">
+        <div class="av av-md av-sage">EL</div>
+        <div class="av-size">sage</div>
+      </div>
+      <div class="av-wrap">
+        <div class="av av-md av-dark">SY</div>
+        <div class="av-size">dark</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- In context: app header + discussion -->
+  <div class="section">
+    <div class="lbl">In context — app header (sm) · sidebar · discussion thread</div>
+    <div class="row" style="align-items:flex-start; gap:24px">
+      <!-- App header context -->
+      <div style="background:#282828; padding:8px 12px; border-radius:8px; display:flex; align-items:center; gap:8px;">
+        <span style="font-family:'Switzer',sans-serif;font-weight:700;font-size:14px;color:#fff;letter-spacing:-0.02em">leo</span>
+        <div style="width:1px;height:16px;background:rgba(255,255,255,0.15)"></div>
+        <div class="av av-sm av-violet" style="border:1.5px solid rgba(255,255,255,0.2)">JD</div>
+      </div>
+
+      <!-- Discussion thread context -->
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <div class="av av-md av-blue">MK</div>
+          <div style="background:#F0F0F4;border-radius:0 8px 8px 8px;padding:7px 10px">
+            <div style="font-size:11px;font-weight:500;color:#282828">Mike K.</div>
+            <div style="font-size:11px;color:#5E5C75;margin-top:2px">Looks good for approval.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start;flex-direction:row-reverse">
+          <div class="av av-md av-violet">JD</div>
+          <div style="background:#ECE4F5;border-radius:8px 0 8px 8px;padding:7px 10px">
+            <div style="font-size:11px;font-weight:500;color:#7239A4">Jane D.</div>
+            <div style="font-size:11px;color:#5E5C75;margin-top:2px">Submitting now.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile page context -->
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="av av-profile av-violet">JD</div>
+        <div>
+          <div style="font-family:'Switzer',sans-serif;font-size:16px;font-weight:500;color:#282828">Jane Doe</div>
+          <div style="font-family:'Switzer',sans-serif;font-size:12px;color:#767676;margin-top:2px">Supply Planner · APAC</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

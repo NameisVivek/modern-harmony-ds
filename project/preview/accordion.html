@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; display: flex; gap: 20px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .col { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+
+  /* ══════════════════════════════════════
+     eto-accordion__container
+  ══════════════════════════════════════ */
+  .eto-accordion__container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;   /* $e2o-component-accordion-title__gap */
+  }
+
+  /* ══════════════════════════════════════
+     eto-accordion  (single item)
+  ══════════════════════════════════════ */
+  .eto-accordion {
+    border-radius: 8px; /* $e2o-component-accordion-title__border-radius */
+  }
+
+  /* ── Title bar ── */
+  .eto-accordion__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;                        /* $e2o-component-accordion-title__gap */
+    font-size: 14px;                 /* $e2o-component-accordion-title__font-size */
+    font-weight: 500;                /* $e2o-component-accordion-title__font-weight */
+    line-height: 1.4;                /* $e2o-component-accordion-title__line-height */
+    border: 1px solid #DDDDE5;      /* $e2o-component-accordion-title__border */
+    border-radius: 8px;              /* $e2o-component-accordion-title__border-radius */
+    padding: 10px 12px;             /* $e2o-component-accordion-title__padding */
+    cursor: pointer;
+    user-select: none;
+    background: #fff;
+    color: #282828;
+    transition: background 0.1s, border-color 0.1s;
+  }
+  .eto-accordion__title .md-icon {
+    color: #5E5C75;  /* $e2o-component-accordion-title-icon__color */
+    font-size: 20px;
+    flex-shrink: 0;
+    display: flex; align-items: center;
+  }
+  .eto-accordion__title-text {
+    flex-grow: 1;
+  }
+
+  /* Toggle icon — add/remove */
+  .eto-accordion-toggle-icon {
+    color: #5E5C75;
+    font-size: 20px;
+    flex-shrink: 0;
+    transition: transform 0.22s ease;
+    display: flex; align-items: center;
+  }
+
+  /* Hover */
+  .eto-accordion__title:hover {
+    background: rgba(40,40,40,0.04); /* $e2o-component-accordion-title--hover__background */
+    border-color: #BFBECE;           /* $e2o-component-accordion-title--hover__border */
+  }
+
+  /* Focus visible */
+  .eto-accordion__title:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #8342BB; /* $e2o-component-accordion-title--focus__box-shadow */
+    border-radius: 8px;
+  }
+
+  /* ── Content ── */
+  .eto-accordion__content {
+    height: 0;
+    line-height: 1.4;
+    font-size: 13px;  /* $e2o-component-accordion-content__font-size */
+    visibility: hidden;
+    opacity: 0;
+    overflow: hidden;
+    display: flex;
+    gap: 8px;
+    transition: opacity 0.2s ease, height 0.25s ease;
+  }
+
+  /* ── Expanded state — eto-accordion--expanded ── */
+  .eto-accordion.eto-accordion--expanded {
+    background: #F0F0F4; /* $e2o-component-accordion--expanded__background */
+    border-radius: 8px;  /* $e2o-component-accordion-title__border-radius */
+  }
+  .eto-accordion.eto-accordion--expanded .eto-accordion__title {
+    border-color: #F0F0F4; /* matches bg so border "disappears" at bottom */
+    border-radius: 8px 8px 0 0; /* $e2o-component-accordion--expanded__border-radius */
+    background: #F0F0F4;
+  }
+  .eto-accordion.eto-accordion--expanded .eto-accordion-toggle-icon {
+    transform: rotate(45deg); /* + becomes × */
+  }
+  .eto-accordion.eto-accordion--expanded .eto-accordion__content {
+    visibility: visible;
+    opacity: 1;
+    padding: 10px 12px 14px; /* $e2o-component-accordion--expanded__padding */
+    /* height set by JS via scrollHeight */
+    transition: opacity 0.2s ease, height 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* Hover when expanded */
+  .eto-accordion.eto-accordion--expanded:hover {
+    background: rgba(40,40,40,0.04); /* $e2o-component-accordion-expanded--hover__background */
+  }
+  .eto-accordion.eto-accordion--expanded:hover .eto-accordion__title {
+    border-color: transparent; /* $e2o-component-accordion-expanded--hover__border */
+  }
+
+  /* ── With icon variant — eto-accordion--withIcon ── */
+  .eto-accordion.eto-accordion--withIcon .eto-accordion__content {
+    padding-left: 40px; /* $e2o-component-accordion--expanded__padding-left (icon width + gap) */
+  }
+
+  /* Content body styles */
+  .eto-accordion__content p {
+    font-size: 13px; color: #5E5C75; line-height: 1.6;
+  }
+  .eto-accordion__content ul {
+    list-style: none; display: flex; flex-direction: column; gap: 5px; padding: 0;
+  }
+  .eto-accordion__content ul li {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: #5E5C75;
+  }
+  .eto-accordion__content ul li::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50%;
+    background: #8C8C8C; flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Column 1: With icons ── -->
+<div class="col">
+  <div>
+    <div class="lbl">With leading icon</div>
+    <div class="eto-accordion__container" id="acc-icons">
+
+      <section class="eto-accordion eto-accordion--withIcon eto-accordion--expanded">
+        <div class="eto-accordion__title" tabindex="0">
+          <span class="md-icon material-icons">inventory_2</span>
+          <span class="eto-accordion__title-text">Order management</span>
+          <span class="eto-accordion-toggle-icon material-icons">add</span>
+        </div>
+        <div class="eto-accordion__content">
+          <p>Manage open, in-transit, and fulfilled orders. Use filters to narrow by region, SKU, or date range.</p>
+        </div>
+      </section>
+
+      <section class="eto-accordion eto-accordion--withIcon">
+        <div class="eto-accordion__title" tabindex="0">
+          <span class="md-icon material-icons">assessment</span>
+          <span class="eto-accordion__title-text">Demand forecasting</span>
+          <span class="eto-accordion-toggle-icon material-icons">add</span>
+        </div>
+        <div class="eto-accordion__content">
+          <p>Review AI-generated demand signals and adjust planning parameters for the upcoming quarter.</p>
+        </div>
+      </section>
+
+      <section class="eto-accordion eto-accordion--withIcon">
+        <div class="eto-accordion__title" tabindex="0">
+          <span class="md-icon material-icons">local_shipping</span>
+          <span class="eto-accordion__title-text">Shipment tracking</span>
+          <span class="eto-accordion-toggle-icon material-icons">add</span>
+        </div>
+        <div class="eto-accordion__content">
+          <p>Track active shipments in real time. View carrier updates, ETA changes, and exception alerts.</p>
+        </div>
+      </section>
+
+      <section class="eto-accordion eto-accordion--withIcon">
+        <div class="eto-accordion__title" tabindex="0">
+          <span class="md-icon material-icons">settings</span>
+          <span class="eto-accordion__title-text">Configuration</span>
+          <span class="eto-accordion-toggle-icon material-icons">add</span>
+        </div>
+        <div class="eto-accordion__content">
+          <p>Update planning parameters, user roles, and system defaults for your organisation.</p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- No icon variant -->
+  <div>
+    <div class="lbl">No icon</div>
+    <div class="eto-accordion__container" id="acc-noicon">
+
+      <section class="eto-accordion">
+        <div class="eto-accordion__title" tabindex="0">
+          <span class="eto-accordion__title-text">How do I create a new scenario?</span>
+          <span class="eto-accordion-toggle-icon material-icons">add</span>
+        </div>
+        <div class="eto-accordion__content">
+          <p>Go to S&amp;OP Planning, click "New scenario", select a base forecast and adjust the parameters.</p>
+        </div>
+      </section>
+
+      <section class="eto-accordion eto-accordion--expanded">
+        <div class="eto-accordion__title" tabindex="0">
+          <span class="eto-accordion__title-text">What does the forecast accuracy metric show?</span>
+          <span class="eto-accordion-toggle-icon material-icons">add</span>
+        </div>
+        <div class="eto-accordion__content">
+          <p>Forecast accuracy compares the predicted demand against actual demand for the previous period, expressed as a percentage.</p>
+        </div>
+      </section>
+
+      <section class="eto-accordion">
+        <div class="eto-accordion__title" tabindex="0">
+          <span class="eto-accordion__title-text">Can I export forecast data?</span>
+          <span class="eto-accordion-toggle-icon material-icons">add</span>
+        </div>
+        <div class="eto-accordion__content">
+          <p>Yes — use the Export button in the toolbar. Choose CSV or Excel. Large exports may take a few minutes.</p>
+        </div>
+      </section>
+
+      <section class="eto-accordion">
+        <div class="eto-accordion__title" tabindex="0">
+          <span class="eto-accordion__title-text">How are high-risk items identified?</span>
+          <span class="eto-accordion-toggle-icon material-icons">add</span>
+        </div>
+        <div class="eto-accordion__content">
+          <p>Items exceeding the delay or deviation threshold defined in Configuration are automatically flagged as high-risk.</p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── Column 2: Multi-open + States ── -->
+<div class="col">
+
+  <!-- Multi-open (independent, not grouped) -->
+  <div>
+    <div class="lbl">Multi-open (independent)</div>
+    <div class="eto-accordion__container" id="acc-multi">
+
+      <section class="eto-accordion eto-accordion--withIcon eto-accordion--expanded">
+        <div class="eto-accordion__title" tabindex="0">
+          <span class="md-icon material-icons">bar_chart</span>
+          <span class="eto-accordion__title-text">S&amp;OP Planning</span>
+          <span class="eto-accordion-toggle-icon material-icons">add</span>
+        </div>
+        <div class="eto-accordion__content">
+          <ul>
+            <li>Demand review and consensus</li>
+            <li>Supply / capacity alignment</li>
+            <li>Pre-S&amp;OP and executive approval</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="eto-accordion eto-accordion--withIcon eto-accordion--expanded">
+        <div class="eto-accordion__title" tabindex="0">
+          <span class="md-icon material-icons">verified_user</span>
+          <span class="eto-accordion__title-text">Trade compliance</span>
+          <span class="eto-accordion-toggle-icon material-icons">add</span>
+        </div>
+        <div class="eto-accordion__content">
+          <ul>
+            <li>Denied party screening</li>
+            <li>Export control classification</li>
+            <li>Customs entry filing</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="eto-accordion eto-accordion--withIcon">
+        <div class="eto-accordion__title" tabindex="0">
+          <span class="md-icon material-icons">receipt_long</span>
+          <span class="eto-accordion__title-text">Invoices</span>
+          <span class="eto-accordion-toggle-icon material-icons">add</span>
+        </div>
+        <div class="eto-accordion__content">
+          <ul>
+            <li>Invoice matching and approval</li>
+            <li>Payment terms tracking</li>
+            <li>Dispute management</li>
+          </ul>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- States -->
+  <div>
+    <div class="lbl">States</div>
+    <div class="eto-accordion__container" id="acc-states">
+
+      <!-- Default (collapsed) -->
+      <section class="eto-accordion">
+        <div class="eto-accordion__title" tabindex="0">
+          <span class="eto-accordion__title-text">Default (collapsed)</span>
+          <span class="eto-accordion-toggle-icon material-icons">add</span>
+        </div>
+        <div class="eto-accordion__content">
+          <p>This accordion is in its default collapsed state.</p>
+        </div>
+      </section>
+
+      <!-- Expanded -->
+      <section class="eto-accordion eto-accordion--expanded">
+        <div class="eto-accordion__title" tabindex="0">
+          <span class="eto-accordion__title-text">Expanded</span>
+          <span class="eto-accordion-toggle-icon material-icons">add</span>
+        </div>
+        <div class="eto-accordion__content">
+          <p>This accordion is in its expanded state. The + icon rotates 45° to form ×, and the background becomes cool-50.</p>
+        </div>
+      </section>
+
+      <!-- Focused (simulated) -->
+      <section class="eto-accordion">
+        <div class="eto-accordion__title" tabindex="0" style="box-shadow: 0 0 0 2px #fff, 0 0 0 4px #8342BB; outline: none;">
+          <span class="eto-accordion__title-text">Focused</span>
+          <span class="eto-accordion-toggle-icon material-icons">add</span>
+        </div>
+        <div class="eto-accordion__content">
+          <p>Focus ring visible when navigating by keyboard.</p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+const PADDING_BOTTOM = 4; // matches codebase constants
+
+/* ── Set initial heights for already-expanded items ── */
+document.querySelectorAll('.eto-accordion--expanded .eto-accordion__content').forEach(el => {
+  el.style.height = (el.scrollHeight + PADDING_BOTTOM) + 'px';
+});
+
+/* ── Toggle handler — mirrors codebase accordion.js ── */
+function getExpandedSibling(container, current) {
+  if (!container) return null;
+  return container.querySelector('.eto-accordion.eto-accordion--expanded');
+}
+
+function collapseItem(item) {
+  item.classList.remove('eto-accordion--expanded');
+  const content = item.querySelector('.eto-accordion__content');
+  if (content) content.style.height = '0';
+}
+
+function expandItem(item) {
+  item.classList.add('eto-accordion--expanded');
+  const content = item.querySelector('.eto-accordion__content');
+  if (content) content.style.height = (content.scrollHeight + PADDING_BOTTOM) + 'px';
+}
+
+document.querySelectorAll('.eto-accordion__title').forEach(title => {
+  title.addEventListener('click', function(e) {
+    const accordion = this.closest('.eto-accordion');
+    const container = accordion.closest('.eto-accordion__container');
+    const isExpanded = accordion.classList.contains('eto-accordion--expanded');
+
+    // If this container is grouped (single-open), collapse siblings
+    // Multi-open containers have id="acc-multi" — skip sibling collapse for those
+    const isMultiOpen = container && container.id === 'acc-multi';
+
+    if (!isMultiOpen) {
+      const expanded = getExpandedSibling(container, accordion);
+      if (expanded && expanded !== accordion) collapseItem(expanded);
+    }
+
+    if (isExpanded) collapseItem(accordion);
+    else expandItem(accordion);
+  });
+
+  title.addEventListener('keyup', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this.click();
+    }
+  });
+});
+
+/* ── Resize: recalculate expanded heights ── */
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    document.querySelectorAll('.eto-accordion--expanded .eto-accordion__content').forEach(el => {
+      el.style.height = (el.scrollHeight + PADDING_BOTTOM) + 'px';
+    });
+  }, 100);
+});
+</script>
+</body>
+</html>

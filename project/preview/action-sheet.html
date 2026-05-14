@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #F0F0F4; font-family: 'Switzer', sans-serif;
+    padding: 20px; width: 900px;
+    display: flex; flex-direction: column; gap: 28px;
+  }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  /* ══════════════════════════════════════
+     DIALOG / ACTION SHEET CARD
+     — matches Figma: title + × + slot + buttons
+  ══════════════════════════════════════ */
+  .asc {
+    background: #fff; border-radius: 8px; border: 1px solid #EBEBEB;
+    box-shadow: 0 2px 4px rgba(55,23,78,0.06), 0 4px 8px rgba(55,23,78,0.08);
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+
+  /* ── Header: title + close ── */
+  .asc-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 14px 14px 10px;
+  }
+  .asc-title { flex: 1; font-size: 14px; font-weight: 500; color: #282828; }
+  .asc-close {
+    width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+    background: transparent; border: none; cursor: pointer; border-radius: 4px;
+    color: #4B4A5D; flex-shrink: 0; transition: background 0.1s;
+  }
+  .asc-close:hover { background: #F0F0F4; }
+  .asc-close .material-icons { font-size: 16px; }
+
+  /* ── Slot / content area ── */
+  .asc-slot {
+    padding: 10px 14px; flex: 1;
+    font-size: 13px; color: #5E5C75; line-height: 1.5;
+  }
+
+  /* Detail pairs inside slot */
+  .slot-field { display: flex; flex-direction: column; gap: 2px; margin-bottom: 10px; }
+  .slot-field:last-child { margin-bottom: 0; }
+  .slot-key { font-size: 9px; font-weight: 500; color: #8C8C8C; text-transform: uppercase; letter-spacing: 0.07em; }
+  .slot-val { font-size: 13px; color: #282828; }
+
+  /* Status badge inline */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 500;
+  }
+  .badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+  .badge-error   { background: #FFCDD0; color: #B02530; }
+  .badge-warning { background: #FFEDC0; color: #C47A00; }
+  .badge-success { background: #C5F3DF; color: #27854D; }
+  .badge-info    { background: #C0E0FF; color: #0D4C89; }
+  .badge-neutral { background: #F0F0F4; color: #5E5C75; }
+
+  /* ── Footer: buttons ── */
+  .asc-footer {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px 14px; flex-direction: column;
+  }
+
+  /* Primary button — violet #8342BB (eto-btn--primary) */
+  .btn-primary {
+    width: 100%; height: 32px;
+    background: #8342BB;
+    background-image: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%);
+    color: #fff; border: none; border-radius: 8px;
+    font-family: 'Switzer', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;
+    box-shadow: 0 1px 2px rgba(55,23,78,0.2), inset 0 1px 0 rgba(255,255,255,0.12);
+    transition: background 0.1s;
+  }
+  .btn-primary:hover { background: #7239A4; }
+  .btn-primary:active { background: #4D3075; }
+  .btn-primary .material-icons { font-size: 15px; }
+
+  /* Danger variant — red */
+  .btn-primary.danger { background: #E02F3A; box-shadow: 0 1px 2px rgba(176,37,48,0.25); }
+  .btn-primary.danger:hover { background: #C0172D; }
+
+  /* Secondary button — eto-btn--default */
+  .btn-secondary {
+    width: 100%; height: 32px; background: #fff;
+    color: #282828; border: 1px solid #DDDDE5; border-radius: 8px;
+    font-family: 'Switzer', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;
+    box-shadow: 0 1px 2px rgba(55,23,78,0.06);
+    transition: background 0.1s, border-color 0.1s;
+  }
+  .btn-secondary:hover { background: #F0F0F4; }
+  .btn-secondary .material-icons { font-size: 15px; }
+
+  /* ── Divider in slot ── */
+  .slot-sep { height: 1px; background: #F0F0F4; margin: 8px 0; }
+
+  /* ── Icon in header ── */
+  .asc-header-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .asc-header-icon .material-icons { font-size: 18px; }
+
+  /* ── Warning / danger stripe at top ── */
+  .asc-stripe { height: 4px; width: 100%; }
+
+  /* ── Sub text in header ── */
+  .asc-sub { font-size: 11px; color: #767676; margin-top: 1px; }
+
+  /* ── Scrollable slot ── */
+  .asc-slot.scroll { max-height: 140px; overflow-y: auto; }
+  .asc-slot.scroll::-webkit-scrollbar { width: 4px; }
+  .asc-slot.scroll::-webkit-scrollbar-thumb { background: #DDDDE5; border-radius: 2px; }
+
+  /* ── Input inside slot ── */
+  .slot-input {
+    width: 100%; height: 30px; padding: 0 10px;
+    border: 1px solid #DDDDE5; border-radius: 6px;
+    font-family: 'Switzer', sans-serif; font-size: 13px; color: #282828;
+    outline: none; background: #fff; margin-top: 4px;
+  }
+  .slot-input:focus { border-color: #8342BB; box-shadow: 0 0 0 2px rgba(131,66,187,0.2); }
+
+  /* ── Checkbox row inside slot ── */
+  .slot-check { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; }
+  .slot-check:last-child { margin-bottom: 0; }
+  .check-box {
+    width: 15px; height: 15px; border-radius: 3px; border: 1.5px solid #BFBECE;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px;
+    transition: all 0.1s;
+  }
+  .check-box.checked { background: #8342BB; border-color: #8342BB; }
+  .check-box.checked::after {
+    content: ''; width: 8px; height: 4.5px;
+    border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translateY(-1px); display: block;
+  }
+  .slot-check-label { font-size: 13px; color: #282828; line-height: 1.4; }
+  .slot-check-hint  { font-size: 11px; color: #767676; }
+</style>
+</head>
+<body>
+
+<!-- ═════════════════════════════════════════
+     ROW 1 — Default, Confirmation, Danger
+═════════════════════════════════════════ -->
+<div>
+  <div class="lbl">Default variants — title + content slot + primary & secondary buttons</div>
+  <div class="grid">
+
+    <!-- 1. Default: order action -->
+    <div class="asc">
+      <div class="asc-header">
+        <div class="asc-title">Edit order details</div>
+        <button class="asc-close"><span class="material-icons">close</span></button>
+      </div>
+      <div class="asc-slot">
+        <div class="slot-field">
+          <span class="slot-key">Order ID</span>
+          <span class="slot-val" style="color:#7239A4;font-weight:500">ORD-48199</span>
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">Route</span>
+          <span class="slot-val">Hamburg, DE → New York, US</span>
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">Status</span>
+          <span class="badge badge-error"><span class="badge-dot" style="background:#E02F3A"></span>Delayed</span>
+        </div>
+      </div>
+      <div class="asc-footer">
+        <button class="btn-primary">Save changes</button>
+        <button class="btn-secondary">Cancel</button>
+      </div>
+    </div>
+
+    <!-- 2. Confirmation -->
+    <div class="asc">
+      <div class="asc-header">
+        <div class="asc-header-icon" style="background:rgba(131,66,187,0.1)">
+          <span class="material-icons" style="color:#8342BB">check_circle_outline</span>
+        </div>
+        <div style="flex:1">
+          <div class="asc-title">Approve S&amp;OP cycle</div>
+          <div class="asc-sub">December planning cycle</div>
+        </div>
+        <button class="asc-close"><span class="material-icons">close</span></button>
+      </div>
+      <div class="asc-slot">
+        <div style="font-size:13px;color:#5E5C75;line-height:1.5">
+          Approving this cycle will lock the demand plan and notify all stakeholders. This action cannot be undone.
+        </div>
+        <div class="slot-sep"></div>
+        <div class="slot-field">
+          <span class="slot-key">Cycle</span>
+          <span class="slot-val">December 2024 · S&amp;OP</span>
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">Requested by</span>
+          <span class="slot-val">Burton Guster · Supply Planner</span>
+        </div>
+      </div>
+      <div class="asc-footer">
+        <button class="btn-primary"><span class="material-icons">check</span>Approve</button>
+        <button class="btn-secondary">Cancel</button>
+      </div>
+    </div>
+
+    <!-- 3. Danger: delete/cancel -->
+    <div class="asc">
+      <div class="asc-stripe" style="background:#E02F3A"></div>
+      <div class="asc-header">
+        <div class="asc-header-icon" style="background:#FEF7F4">
+          <span class="material-icons" style="color:#B02530">delete_outline</span>
+        </div>
+        <div style="flex:1">
+          <div class="asc-title">Cancel order</div>
+          <div class="asc-sub" style="color:#B02530">This action is irreversible</div>
+        </div>
+        <button class="asc-close"><span class="material-icons">close</span></button>
+      </div>
+      <div class="asc-slot">
+        <div style="font-size:13px;color:#5E5C75;line-height:1.5;margin-bottom:10px">
+          Cancelling <strong style="color:#282828">ORD-48199</strong> will notify the carrier and supplier. Any in-transit goods will need to be returned.
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">Reason</span>
+          <span class="slot-val">Supplier unavailability</span>
+        </div>
+      </div>
+      <div class="asc-footer">
+        <button class="btn-primary danger"><span class="material-icons">cancel</span>Cancel order</button>
+        <button class="btn-secondary">Keep order</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════
+     ROW 2 — With form input, warning, info
+═════════════════════════════════════════ -->
+<div>
+  <div class="lbl">With form input · warning · info</div>
+  <div class="grid">
+
+    <!-- 4. With input field -->
+    <div class="asc">
+      <div class="asc-header">
+        <div class="asc-title">Create new scenario</div>
+        <button class="asc-close"><span class="material-icons">close</span></button>
+      </div>
+      <div class="asc-slot">
+        <div class="slot-field">
+          <span class="slot-key">Scenario name <span style="color:#E02F3A">*</span></span>
+          <input class="slot-input" type="text" placeholder="e.g. Optimistic Q1 2025">
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">Base forecast</span>
+          <select class="slot-input" style="cursor:pointer;padding-right:4px">
+            <option>Standard demand model</option>
+            <option>AI-assisted forecast</option>
+            <option>Manual baseline</option>
+          </select>
+        </div>
+      </div>
+      <div class="asc-footer">
+        <button class="btn-primary"><span class="material-icons">add</span>Create scenario</button>
+        <button class="btn-secondary">Cancel</button>
+      </div>
+    </div>
+
+    <!-- 5. Warning -->
+    <div class="asc">
+      <div class="asc-stripe" style="background:#FFB84D"></div>
+      <div class="asc-header">
+        <div class="asc-header-icon" style="background:#FFEDC0">
+          <span class="material-icons" style="color:#C47A00">warning_amber</span>
+        </div>
+        <div style="flex:1">
+          <div class="asc-title">Forecast deviation</div>
+          <div class="asc-sub" style="color:#C47A00">SKU-9483 · APAC region</div>
+        </div>
+        <button class="asc-close"><span class="material-icons">close</span></button>
+      </div>
+      <div class="asc-slot">
+        <div style="font-size:13px;color:#5E5C75;line-height:1.5;margin-bottom:10px">
+          Demand for <strong style="color:#282828">SKU-9483</strong> is <strong style="color:#C47A00">18% above plan</strong> in the APAC region. Review and adjust the forecast to prevent stockout.
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">Deviation</span>
+          <span class="badge badge-warning"><span class="badge-dot" style="background:#FFB84D"></span>+18% above plan</span>
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">Detected</span>
+          <span class="slot-val">2 min ago · AI signal</span>
+        </div>
+      </div>
+      <div class="asc-footer">
+        <button class="btn-primary"><span class="material-icons">assessment</span>Review forecast</button>
+        <button class="btn-secondary">Dismiss</button>
+      </div>
+    </div>
+
+    <!-- 6. Info / neutral -->
+    <div class="asc">
+      <div class="asc-header">
+        <div class="asc-header-icon" style="background:#C0E0FF">
+          <span class="material-icons" style="color:#0D4C89">info_outline</span>
+        </div>
+        <div style="flex:1">
+          <div class="asc-title">Export order data</div>
+          <div class="asc-sub">Choose format and scope</div>
+        </div>
+        <button class="asc-close"><span class="material-icons">close</span></button>
+      </div>
+      <div class="asc-slot">
+        <div class="slot-field">
+          <span class="slot-key">Format</span>
+          <select class="slot-input" style="cursor:pointer;padding-right:4px">
+            <option>CSV — comma-separated</option>
+            <option>Excel (.xlsx)</option>
+            <option>JSON</option>
+          </select>
+        </div>
+        <div class="slot-sep"></div>
+        <div class="slot-check">
+          <div class="check-box checked"></div>
+          <div>
+            <div class="slot-check-label">Include shipment data</div>
+            <div class="slot-check-hint">ETA, carrier, and route details</div>
+          </div>
+        </div>
+        <div class="slot-check">
+          <div class="check-box"></div>
+          <div>
+            <div class="slot-check-label">Include financial data</div>
+            <div class="slot-check-hint">Unit price, total value</div>
+          </div>
+        </div>
+      </div>
+      <div class="asc-footer">
+        <button class="btn-primary"><span class="material-icons">cloud_download</span>Export</button>
+        <button class="btn-secondary">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════
+     ROW 3 — No icon, scrollable, success
+═════════════════════════════════════════ -->
+<div>
+  <div class="lbl">Simple · scrollable content · success confirmation</div>
+  <div class="grid">
+
+    <!-- 7. Simple action list -->
+    <div class="asc">
+      <div class="asc-header">
+        <div class="asc-title">ORD-48199 actions</div>
+        <button class="asc-close"><span class="material-icons">close</span></button>
+      </div>
+      <div class="asc-slot" style="padding:4px 0">
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;transition:background 0.1s" onmouseover="this.style.background='#F8F8FB'" onmouseout="this.style.background='transparent'">
+          <span class="material-icons" style="font-size:18px;color:#8342BB">edit</span>
+          <span style="font-size:13px;color:#282828;flex:1">Edit order details</span>
+          <span class="material-icons" style="font-size:16px;color:#BFBECE">chevron_right</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;transition:background 0.1s" onmouseover="this.style.background='#F8F8FB'" onmouseout="this.style.background='transparent'">
+          <span class="material-icons" style="font-size:18px;color:#0D4C89">local_shipping</span>
+          <span style="font-size:13px;color:#282828;flex:1">Track shipment</span>
+          <span class="material-icons" style="font-size:16px;color:#BFBECE">chevron_right</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;transition:background 0.1s" onmouseover="this.style.background='#F8F8FB'" onmouseout="this.style.background='transparent'">
+          <span class="material-icons" style="font-size:18px;color:#5E5C75">content_copy</span>
+          <span style="font-size:13px;color:#282828;flex:1">Duplicate order</span>
+        </div>
+        <div style="height:1px;background:#F0F0F4;margin:2px 0"></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;transition:background 0.1s" onmouseover="this.style.background='#FEF7F4'" onmouseout="this.style.background='transparent'">
+          <span class="material-icons" style="font-size:18px;color:#E02F3A">delete_outline</span>
+          <span style="font-size:13px;color:#9A112C;flex:1">Cancel order</span>
+        </div>
+      </div>
+      <div class="asc-footer" style="padding-top:6px">
+        <button class="btn-secondary">Close</button>
+      </div>
+    </div>
+
+    <!-- 8. Scrollable content -->
+    <div class="asc">
+      <div class="asc-header">
+        <div class="asc-title">Shipment details</div>
+        <button class="asc-close"><span class="material-icons">close</span></button>
+      </div>
+      <div class="asc-slot scroll">
+        <div class="slot-field">
+          <span class="slot-key">Order ID</span>
+          <span class="slot-val" style="color:#7239A4;font-weight:500">ORD-48201</span>
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">Origin</span>
+          <span class="slot-val">Shanghai, CN</span>
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">Destination</span>
+          <span class="slot-val">Los Angeles, US</span>
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">SKU</span>
+          <span class="slot-val" style="font-family:'Roboto Mono',monospace;font-size:12px;color:#767676">SKU-9483</span>
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">Quantity</span>
+          <span class="slot-val">1,240 units</span>
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">ETA</span>
+          <span class="slot-val">15 Jan 2025</span>
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">Status</span>
+          <span class="badge badge-info"><span class="badge-dot" style="background:#3399FF"></span>In transit</span>
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">Carrier</span>
+          <span class="slot-val">Maersk Line · MSCU 483 291</span>
+        </div>
+      </div>
+      <div class="asc-footer">
+        <button class="btn-primary"><span class="material-icons">open_in_new</span>View full order</button>
+        <button class="btn-secondary">Close</button>
+      </div>
+    </div>
+
+    <!-- 9. Success / done -->
+    <div class="asc">
+      <div class="asc-stripe" style="background:#5BD6A0"></div>
+      <div class="asc-header">
+        <div class="asc-header-icon" style="background:#C5F3DF">
+          <span class="material-icons" style="color:#27854D">check_circle</span>
+        </div>
+        <div style="flex:1">
+          <div class="asc-title">Order approved</div>
+          <div class="asc-sub" style="color:#27854D">All checks passed</div>
+        </div>
+        <button class="asc-close"><span class="material-icons">close</span></button>
+      </div>
+      <div class="asc-slot">
+        <div style="font-size:13px;color:#5E5C75;line-height:1.5;margin-bottom:10px">
+          <strong style="color:#282828">ORD-48198</strong> has been approved and routed to the carrier. The supplier has been notified.
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">Route</span>
+          <span class="slot-val">Singapore, SG → Sydney, AU</span>
+        </div>
+        <div class="slot-field">
+          <span class="slot-key">Estimated arrival</span>
+          <span class="slot-val">22 Jan 2025</span>
+        </div>
+      </div>
+      <div class="asc-footer">
+        <button class="btn-primary"><span class="material-icons">visibility</span>View order</button>
+        <button class="btn-secondary">Done</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

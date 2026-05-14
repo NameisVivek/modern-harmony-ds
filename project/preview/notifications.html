@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F0F0F4; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; display: flex; gap: 12px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #5E5C75; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+  /* Notification panel */
+  .notif-panel {
+    background: #fff; border-radius: 12px; border: 1px solid #EBEBEB;
+    box-shadow: 0 4px 16px rgba(55,23,78,0.12);
+    width: 320px; display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0;
+  }
+  .notif-header {
+    padding: 10px 14px; border-bottom: 1px solid #EBEBEB;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .notif-title { font-size: 13px; font-weight: 500; color: #282828; flex: 1; }
+  .notif-badge { display: inline-flex; padding: 1px 6px; border-radius: 9999px; background: #E02F3A; color: #fff; font-size: 9.5px; font-weight: 700; }
+  .notif-mark-all { font-size: 11px; color: #7239A4; cursor: pointer; font-weight: 500; }
+
+  /* Filter tabs */
+  .notif-tabs { display: flex; border-bottom: 1px solid #EBEBEB; }
+  .notif-tab { flex: 1; text-align: center; padding: 7px 0; font-size: 11px; font-weight: 500; color: #767676; cursor: pointer; border-bottom: 2px solid transparent; }
+  .notif-tab.active { color: #7239A4; border-bottom-color: #8342BB; }
+
+  /* Notification item */
+  .notif-item { display: flex; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #F0F0F4; cursor: pointer; position: relative; }
+  .notif-item:hover { background: #F8F8FA; }
+  .notif-item.unread { background: rgba(131,66,187,0.03); }
+  .notif-item.unread::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #8342BB; border-radius: 0 2px 2px 0; }
+  .notif-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .notif-icon .material-icons { font-size: 16px; }
+  .notif-content { flex: 1; min-width: 0; }
+  .notif-content-title { font-size: 12px; font-weight: 500; color: #282828; line-height: 1.3; }
+  .notif-content-body  { font-size: 11px; color: #5E5C75; margin-top: 2px; line-height: 1.3; }
+  .notif-time { font-size: 10px; color: #8C8C8C; white-space: nowrap; flex-shrink: 0; }
+
+  /* Footer */
+  .notif-footer { padding: 8px 14px; border-top: 1px solid #EBEBEB; }
+  .notif-footer-btn { width: 100%; height: 28px; background: transparent; border: 1px solid #DDDDE5; border-radius: 6px; font-family: 'Switzer', sans-serif; font-size: 11px; color: #767676; cursor: pointer; }
+
+  /* Summary panel */
+  .summary-panel { flex: 1; }
+  .summary-section { margin-bottom: 12px; }
+  .summary-group { background: #fff; border-radius: 10px; border: 1px solid #EBEBEB; overflow: hidden; }
+  .summary-group-header { padding: 6px 12px; background: #F0F0F4; border-bottom: 1px solid #EBEBEB; font-size: 10px; font-weight: 500; color: #5E5C75; letter-spacing: 0.04em; text-transform: uppercase; }
+  .summary-item { display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-bottom: 1px solid #F0F0F4; font-size: 12px; }
+  .summary-item:last-child { border-bottom: none; }
+  .summary-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+</style>
+</head>
+<body>
+  <!-- Notification dropdown panel -->
+  <div class="notif-panel">
+    <div class="notif-header">
+      <span class="material-icons" style="font-size:16px;color:#8342BB">notifications</span>
+      <div class="notif-title">Notifications</div>
+      <span class="notif-badge">3</span>
+      <span class="notif-mark-all">Mark all read</span>
+    </div>
+    <div class="notif-tabs">
+      <div class="notif-tab active">All</div>
+      <div class="notif-tab">Unread <span style="background:#E02F3A;color:#fff;font-size:8px;padding:1px 4px;border-radius:9999px;margin-left:3px;font-weight:700">3</span></div>
+      <div class="notif-tab">Alerts</div>
+    </div>
+    <div style="overflow-y:auto;max-height:320px">
+      <div class="notif-item unread">
+        <div class="notif-icon" style="background:#FEF7F4"><span class="material-icons" style="color:#9A112C">warning</span></div>
+        <div class="notif-content">
+          <div class="notif-content-title">Shipment ORD-48199 delayed</div>
+          <div class="notif-content-body">Hamburg → New York delayed by 3 days. ETA now 21 Jan.</div>
+        </div>
+        <div class="notif-time">2 min</div>
+      </div>
+      <div class="notif-item unread">
+        <div class="notif-icon" style="background:#FFFDEF"><span class="material-icons" style="color:#753A05">priority_high</span></div>
+        <div class="notif-content">
+          <div class="notif-content-title">Forecast deviation detected</div>
+          <div class="notif-content-body">SKU-9483 is 18% above plan in APAC.</div>
+        </div>
+        <div class="notif-time">1 hr</div>
+      </div>
+      <div class="notif-item unread">
+        <div class="notif-icon" style="background:#EEFEF9"><span class="material-icons" style="color:#27854D">check_circle</span></div>
+        <div class="notif-content">
+          <div class="notif-content-title">S&amp;OP cycle approved</div>
+          <div class="notif-content-body">December cycle approved by J. Smith.</div>
+        </div>
+        <div class="notif-time">3 hr</div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-icon" style="background:#F0F0F4"><span class="material-icons" style="color:#5E5C75">info</span></div>
+        <div class="notif-content">
+          <div class="notif-content-title">AI forecast ready for Q1 2025</div>
+          <div class="notif-content-body">New AI-generated demand forecast is available.</div>
+        </div>
+        <div class="notif-time">1 day</div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-icon" style="background:#F0F0F4"><span class="material-icons" style="color:#5E5C75">update</span></div>
+        <div class="notif-content">
+          <div class="notif-content-title">System maintenance</div>
+          <div class="notif-content-body">Scheduled maintenance on 20 Jan 02:00–04:00 UTC.</div>
+        </div>
+        <div class="notif-time">2 days</div>
+      </div>
+    </div>
+    <div class="notif-footer">
+      <button class="notif-footer-btn">View all notifications</button>
+    </div>
+  </div>
+
+  <!-- Summary view -->
+  <div class="summary-panel">
+    <div class="summary-section">
+      <div class="lbl">Notification types</div>
+      <div class="summary-group">
+        <div class="summary-group-header">By priority</div>
+        <div class="summary-item"><span class="summary-dot" style="background:#E02F3A"></span><span style="flex:1">Error / Critical</span><span style="color:#9A112C;font-weight:500">2</span></div>
+        <div class="summary-item"><span class="summary-dot" style="background:#FDBF14"></span><span style="flex:1">Warning</span><span style="color:#753A05;font-weight:500">4</span></div>
+        <div class="summary-item"><span class="summary-dot" style="background:#5BD6A0"></span><span style="flex:1">Success</span><span style="color:#27854D;font-weight:500">7</span></div>
+        <div class="summary-item"><span class="summary-dot" style="background:#8B8AA5"></span><span style="flex:1">Informational</span><span style="color:#5E5C75;font-weight:500">12</span></div>
+      </div>
+    </div>
+    <div class="summary-section">
+      <div class="summary-group">
+        <div class="summary-group-header">Bell icon states</div>
+        <div class="summary-item">
+          <span class="material-icons" style="font-size:18px;color:rgba(255,255,255,0.75);background:#282828;padding:4px;border-radius:5px">notifications</span>
+          <span style="flex:1;color:#5E5C75">No notifications</span>
+        </div>
+        <div class="summary-item">
+          <div style="position:relative;display:inline-flex">
+            <span class="material-icons" style="font-size:18px;color:rgba(255,255,255,0.75);background:#282828;padding:4px;border-radius:5px">notifications</span>
+            <span style="position:absolute;top:0;right:0;width:8px;height:8px;background:#E02F3A;border-radius:50%;border:1.5px solid #282828"></span>
+          </div>
+          <span style="flex:1;color:#5E5C75">Has unread (dot)</span>
+        </div>
+        <div class="summary-item">
+          <div style="position:relative;display:inline-flex">
+            <span class="material-icons" style="font-size:18px;color:rgba(255,255,255,0.75);background:#282828;padding:4px;border-radius:5px">notifications</span>
+            <span style="position:absolute;top:-2px;right:-4px;min-width:14px;height:14px;background:#E02F3A;border-radius:9999px;font-size:8px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;padding:0 2px;border:1.5px solid #282828">3</span>
+          </div>
+          <span style="flex:1;color:#5E5C75">Has unread (count)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

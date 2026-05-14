@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 16px 20px; width: 700px; }
+  .row { display: flex; gap: 20px; align-items: flex-end; }
+  .item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .box { background: #ECE4F5; border: 2px solid #8342BB; width: 72px; height: 72px; }
+  .pill { background: #ECE4F5; border: 2px solid #8342BB; width: 120px; height: 36px; }
+  .name { font-size: 10px; font-weight: 500; color: #282828; }
+  .val  { font-size: 9px; color: #767676; }
+  .use  { font-size: 8px; color: #8C8C8C; text-align: center; max-width: 90px; line-height: 1.3; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="item">
+      <div class="box" style="border-radius:4px"></div>
+      <div class="name">element</div>
+      <div class="val">4px</div>
+      <div class="use">Badges, inner chips, cell fills</div>
+    </div>
+    <div class="item">
+      <div class="box" style="border-radius:6px"></div>
+      <div class="name">base-sm</div>
+      <div class="val">6px</div>
+      <div class="use">Inline button variant</div>
+    </div>
+    <div class="item">
+      <div class="box" style="border-radius:8px"></div>
+      <div class="name">base</div>
+      <div class="val">8px</div>
+      <div class="use">Buttons, inputs, small components</div>
+    </div>
+    <div class="item">
+      <div class="box" style="border-radius:12px"></div>
+      <div class="name">panel</div>
+      <div class="val">12px</div>
+      <div class="use">Panels, large chips, popovers</div>
+    </div>
+    <div class="item">
+      <div class="box" style="border-radius:24px"></div>
+      <div class="name">container</div>
+      <div class="val">24px</div>
+      <div class="use">Cards, modals, drawers, dialogs</div>
+    </div>
+    <div class="item">
+      <div class="pill" style="border-radius:9999px"></div>
+      <div class="name">full</div>
+      <div class="val">—</div>
+      <div class="use">Tags with close, status pills</div>
+    </div>
+  </div>
+</body>
+</html>

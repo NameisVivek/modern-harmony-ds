@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Switzer', sans-serif; padding: 14px 16px; width: 700px; }
+  .lbl { font-size: 9px; font-weight: 500; color: #8C8C8C; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; margin-top: 12px; }
+  .lbl:first-child { margin-top: 0; }
+  .row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+  .divider { height: 1px; background: #F0F0F4; margin: 10px 0; }
+
+  /* Switch row */
+  .sw-row { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+  .sw-row.disabled { cursor: not-allowed; opacity: 0.45; }
+
+  /* Track */
+  .sw-track {
+    width: 36px; height: 20px; border-radius: 10px; background: #DDDDE5;
+    position: relative; flex-shrink: 0; transition: background 0.15s;
+  }
+  .sw-track.on  { background: #8342BB; }
+  .sw-track.focused { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #8342BB; }
+
+  /* Thumb */
+  .sw-thumb {
+    position: absolute; top: 2px; left: 2px;
+    width: 16px; height: 16px; border-radius: 50%; background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    transition: transform 0.15s;
+  }
+  .sw-track.on .sw-thumb { transform: translateX(16px); }
+
+  /* Labels */
+  .sw-label { font-size: 14px; color: #282828; }
+  .sw-hint  { font-size: 11px; color: #767676; }
+
+  /* Row layout for settings list */
+  .settings-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; border-bottom: 1px solid #F0F0F4;
+  }
+  .settings-row:last-child { border-bottom: none; }
+  .settings-panel { border: 1px solid #EBEBEB; border-radius: 10px; overflow: hidden; }
+</style>
+</head>
+<body>
+  <div class="lbl">States</div>
+  <div class="row">
+    <div class="sw-row" onclick="toggleSw(this)">
+      <div class="sw-track"><div class="sw-thumb"></div></div>
+      <div class="sw-label">Off</div>
+    </div>
+    <div class="sw-row" onclick="toggleSw(this)">
+      <div class="sw-track on"><div class="sw-thumb"></div></div>
+      <div class="sw-label">On</div>
+    </div>
+    <div class="sw-row" onclick="toggleSw(this)">
+      <div class="sw-track focused"><div class="sw-thumb"></div></div>
+      <div class="sw-label">Focused (off)</div>
+    </div>
+    <div class="sw-row" onclick="toggleSw(this)">
+      <div class="sw-track on focused"><div class="sw-thumb"></div></div>
+      <div class="sw-label">Focused (on)</div>
+    </div>
+    <div class="sw-row disabled">
+      <div class="sw-track"><div class="sw-thumb"></div></div>
+      <div class="sw-label">Disabled off</div>
+    </div>
+    <div class="sw-row disabled">
+      <div class="sw-track on"><div class="sw-thumb"></div></div>
+      <div class="sw-label">Disabled on</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="lbl">In context — notification settings panel</div>
+  <div class="settings-panel">
+    <div class="settings-row">
+      <div>
+        <div style="font-size:13px;font-weight:500;color:#282828">Auto-refresh data</div>
+        <div style="font-size:11px;color:#767676;margin-top:1px">Refresh dashboard every 5 minutes</div>
+      </div>
+      <div class="sw-row" onclick="toggleSw(this)" style="cursor:pointer">
+        <div class="sw-track on"><div class="sw-thumb"></div></div>
+      </div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div style="font-size:13px;font-weight:500;color:#282828">Email notifications</div>
+        <div style="font-size:11px;color:#767676;margin-top:1px">Receive alerts by email</div>
+      </div>
+      <div class="sw-row" onclick="toggleSw(this)" style="cursor:pointer">
+        <div class="sw-track on"><div class="sw-thumb"></div></div>
+      </div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div style="font-size:13px;font-weight:500;color:#282828">Show forecast confidence bands</div>
+        <div style="font-size:11px;color:#767676;margin-top:1px">Display upper and lower bounds on charts</div>
+      </div>
+      <div class="sw-row" onclick="toggleSw(this)" style="cursor:pointer">
+        <div class="sw-track"><div class="sw-thumb"></div></div>
+      </div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div style="font-size:13px;font-weight:500;color:#282828">AI-assisted planning</div>
+        <div style="font-size:11px;color:#767676;margin-top:1px">Show AI recommendations in the planning grid</div>
+      </div>
+      <div class="sw-row" onclick="toggleSw(this)" style="cursor:pointer">
+        <div class="sw-track on"><div class="sw-thumb"></div></div>
+      </div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div style="font-size:13px;font-weight:500;color:#8C8C8C">Advanced export options</div>
+        <div style="font-size:11px;color:#BFBECE;margin-top:1px">Requires administrator access</div>
+      </div>
+      <div class="sw-row disabled" style="cursor:not-allowed">
+        <div class="sw-track"><div class="sw-thumb"></div></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+function toggleSw(row) {
+  if (row.classList.contains('disabled')) return;
+  const track = row.querySelector('.sw-track');
+  track.classList.toggle('on');
+}
+</script>
+</body>
+</html>

@@ -76,19 +76,20 @@ interface DrumWheelProps {
   items: string[];
   initialValue: string;
   width: number;
+  fillHeight?: boolean; // true → stretch to parent height (hours/minutes)
   onSelect?: (value: string) => void;
 }
 
-function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProps) {
+function DrumWheelColumn({ items, initialValue, width, fillHeight = false, onSelect }: DrumWheelProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const drumRef = useRef<HTMLDivElement>(null);
   // Always-current ref for onSelect so the effect closure never goes stale
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
 
-  // Height adapts to item count: AM/PM shows 2 rows, hours/minutes show DRUM_VISIBLE
-  const visibleRows = Math.min(DRUM_VISIBLE, items.length);
-  const drumHeight = visibleRows * DRUM_ITEM_H;
+  // When fillHeight=true the CSS height is 100%; otherwise clamp to items.length rows
+  const naturalRows = Math.min(DRUM_VISIBLE, items.length);
+  const drumHeight = naturalRows * DRUM_ITEM_H;
 
   const stateRef = useRef({
     offset: 0,
@@ -160,6 +161,27 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
       const dist = rounded - ideal;
       const jumps = Math.round(dist / n);
       return o - jumps * n;
+    }
+
+    function updateHover(mouseY: number) {
+      if (s.drag) return;
+      const hoveredK = Math.floor(mouseY / DRUM_ITEM_H + Math.round(s.offset));
+      const hovLi = logicalIdx(hoveredK);
+      const selLi = logicalIdx(Math.round(s.offset));
+      drum.querySelectorAll<HTMLElement>('.tw-item').forEach((el, k) => {
+        const logK = k % n;
+        const isSelected = logK === selLi;
+        const isHov = logK === hovLi && !isSelected;
+        el.style.background = isHov ? 'rgba(131,66,187,0.10)' : '';
+        el.style.borderRadius = isHov ? '6px' : '';
+      });
+    }
+
+    function clearHover() {
+      drum.querySelectorAll<HTMLElement>('.tw-item').forEach(el => {
+        el.style.background = '';
+        el.style.borderRadius = '';
+      });
     }
 
     function snapTo(targetRaw: number) {
@@ -245,11 +267,19 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
       snapTo(s.offset);
     };
 
+    const onMouseMove = (e: MouseEvent) => {
+      const rect = wrap.getBoundingClientRect();
+      updateHover(e.clientY - rect.top);
+    };
+    const onMouseLeave = () => clearHover();
+
     wrap.addEventListener('wheel', onWheel, { passive: false });
     wrap.addEventListener('pointerdown', onPointerDown);
     wrap.addEventListener('pointermove', onPointerMove);
     wrap.addEventListener('pointerup', endDrag);
     wrap.addEventListener('pointercancel', onPointerCancel);
+    wrap.addEventListener('mousemove', onMouseMove);
+    wrap.addEventListener('mouseleave', onMouseLeave);
 
     return () => {
       wrap.removeEventListener('wheel', onWheel);
@@ -257,6 +287,8 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
       wrap.removeEventListener('pointermove', onPointerMove);
       wrap.removeEventListener('pointerup', endDrag);
       wrap.removeEventListener('pointercancel', onPointerCancel);
+      wrap.removeEventListener('mousemove', onMouseMove);
+      wrap.removeEventListener('mouseleave', onMouseLeave);
       if (s.snapAnim) cancelAnimationFrame(s.snapAnim);
       clearTimeout(s.wheelTimer);
     };
@@ -269,9 +301,9 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
       style={{
         position: 'relative',
         width: `${width}px`,
-        height: `${drumHeight}px`,
+        height: fillHeight ? '100%' : `${drumHeight}px`,
         overflow: 'hidden',
-        cursor: 'ns-resize',
+        cursor: 'pointer',
         touchAction: 'none',
         flexShrink: 0,
       }}
@@ -297,8 +329,8 @@ function DrumWheelColumn({ items, initialValue, width, onSelect }: DrumWheelProp
           zIndex: 2,
         }}
       />
-      {/* Bottom fade — only for drums taller than 2 rows */}
-      {visibleRows > 2 && (
+      {/* Bottom fade — for tall drums only */}
+      {(fillHeight || naturalRows > 2) && (
         <div style={{
           position: 'absolute',
           bottom: 0, left: 0, right: 0,
@@ -647,27 +679,32 @@ function CalendarPanel({
       {showTime && (
         <div style={{
           borderLeft: '1px solid #F0F0F4',
-          display: 'flex', flexDirection: 'row', alignItems: 'flex-start',
+          display: 'flex', flexDirection: 'row', alignItems: 'stretch',
           padding: '10px 8px', gap: '4px',
         }}>
           <DrumWheelColumn
             items={HOUR_ITEMS}
             initialValue={timeHour || '10'}
             width={48}
+            fillHeight
             onSelect={onTimeHourChange}
           />
           <DrumWheelColumn
             items={MINUTE_ITEMS}
             initialValue={timeMinute || '00'}
             width={48}
+            fillHeight
             onSelect={onTimeMinuteChange}
           />
-          <DrumWheelColumn
-            items={AMPM_ITEMS}
-            initialValue={timeAmpm || 'AM'}
-            width={44}
-            onSelect={onTimeAmpmChange}
-          />
+          {/* AM/PM stays natural height (2 rows) — wrap keeps it top-aligned */}
+          <div style={{ alignSelf: 'flex-start' }}>
+            <DrumWheelColumn
+              items={AMPM_ITEMS}
+              initialValue={timeAmpm || 'AM'}
+              width={44}
+              onSelect={onTimeAmpmChange}
+            />
+          </div>
         </div>
       )}
     </div>

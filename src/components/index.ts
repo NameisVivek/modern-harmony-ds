@@ -60,6 +60,8 @@ export { Segments } from './Segments'
 export { SectionHeading } from './SectionHeading'
 export { CommandBar } from './CommandBar'
 export type { CommandBarProps, CommandItem } from './CommandBar'
+export { MegaNav } from './MegaNav'
+export type { MegaNavProps, MegaNavMenu, MegaNavColumn, MegaNavItem } from './MegaNav'
 
 // Composite / advanced
 export { PingPong } from './PingPong'

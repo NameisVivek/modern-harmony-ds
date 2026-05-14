@@ -290,7 +290,7 @@ export function AppHeader({
             {sidebarExpanded ? 'left_panel_open' : 'left_panel_close'}
           </span>
         </button>
-        <span style={s.logoWordmark}>e2open</span>
+        <span style={s.logoWordmark}>Design System</span>
         {envLabel && (
           <span style={{ ...s.envBadge, ...envStyles[envVariant] }}>
             {envLabel}

@@ -1780,13 +1780,7 @@ export default function App() {
         sidebarExpanded={sidebarExpanded}
         onToggleSidebar={() => setSidebarExpanded((e) => !e)}
         breadcrumbs={[
-          {
-            label: 'Design System',
-            children: sectionOrder.map((id) => ({
-              label: sectionMeta[id].label,
-              onClick: () => setActiveSection(id),
-            })),
-          },
+          { label: 'Design System' },
           { label: sectionMeta[activeSection].label },
         ]}
         envLabel="Design System"

@@ -293,7 +293,7 @@ export function AppHeader({
           title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
         >
           <span className="material-icons" style={{ fontSize: 20 }}>
-            {sidebarExpanded ? 'left_panel_open' : 'left_panel_close'}
+            {sidebarExpanded ? 'menu_open' : 'menu'}
           </span>
         </button>
         <span style={s.logoWordmark}>Design System</span>

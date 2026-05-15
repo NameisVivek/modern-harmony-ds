@@ -2616,7 +2616,7 @@ function ExampleDesignsSection() {
 
 // ── Page Layouts ───────────────────────────────────────────────────────────────
 
-interface LayoutImageCardProps {
+interface LayoutAccordionItem {
   number: string;
   name: string;
   description: string;
@@ -2624,54 +2624,84 @@ interface LayoutImageCardProps {
   src: string;
 }
 
-function LayoutImageCard({ number, name, description, tags, src }: LayoutImageCardProps) {
-  const [hover, setHover] = useState(false);
+function LayoutAccordion({ item, open, onToggle }: { item: LayoutAccordionItem; open: boolean; onToggle: () => void }) {
   return (
-    <div
-      style={{
-        background: 'var(--dec-color-surface)',
-        borderRadius: 14,
-        border: `1px solid ${hover ? '#C4B5E8' : 'var(--core-gray-75)'}`,
-        boxShadow: hover ? '0 4px 24px rgba(131,66,187,0.13)' : 'var(--elevation-2)',
-        overflow: 'hidden',
-        transition: 'box-shadow 0.18s, border-color 0.18s',
-        cursor: 'default',
-      }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
-      {/* Image area */}
-      <div style={{ background: '#F7F5FC', borderBottom: '1px solid var(--core-gray-75)', overflow: 'hidden', position: 'relative' }}>
-        <img
-          src={src}
-          alt={name}
-          style={{
-            width: '100%',
-            display: 'block',
-            transition: 'transform 0.3s ease',
-            transform: hover ? 'scale(1.02)' : 'scale(1)',
-          }}
-        />
-      </div>
-      {/* Info area */}
-      <div style={{ padding: '14px 16px 16px' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10, marginBottom: 6 }}>
-          <div>
-            <div style={{ fontSize: 10, fontWeight: 600, color: '#9B72CF', fontFamily: 'var(--font-ui)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 3 }}>
-              Layout {number}
-            </div>
-            <div style={{ fontSize: 14, fontWeight: 700, color: '#1C1C2E', fontFamily: 'Switzer, var(--font-ui)', letterSpacing: '-0.01em' }}>
-              {name}
-            </div>
+    <div style={{
+      background: 'var(--dec-color-surface)',
+      borderRadius: 12,
+      border: `1px solid ${open ? '#C4B5E8' : 'var(--core-gray-75)'}`,
+      boxShadow: open ? '0 4px 20px rgba(131,66,187,0.10)' : 'var(--elevation-2)',
+      overflow: 'hidden',
+      transition: 'border-color 0.2s, box-shadow 0.2s',
+    }}>
+      {/* Accordion header — always visible, clickable */}
+      <button
+        onClick={onToggle}
+        style={{
+          display: 'flex', alignItems: 'center', width: '100%', gap: 14,
+          padding: '14px 18px',
+          background: open ? 'linear-gradient(135deg, #FAF7FF 0%, #F4EEFF 100%)' : 'transparent',
+          border: 'none', borderBottom: open ? '1px solid #E8DFFA' : '1px solid transparent',
+          cursor: 'pointer', textAlign: 'left',
+          transition: 'background 0.2s, border-color 0.2s',
+        }}
+      >
+        {/* Number badge */}
+        <div style={{
+          width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+          background: open ? '#8342BB' : '#F2ECF8',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          transition: 'background 0.2s',
+        }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: open ? '#fff' : '#8342BB', fontFamily: 'var(--font-ui)' }}>
+            {item.number}
+          </span>
+        </div>
+
+        {/* Title + description */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: '#1C1C2E', fontFamily: 'Switzer, var(--font-ui)', letterSpacing: '-0.01em', marginBottom: 2 }}>
+            {item.name}
           </div>
-          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'flex-end', flexShrink: 0 }}>
-            {tags.map(t => (
-              <span key={t} style={{ padding: '2px 7px', borderRadius: 4, background: '#F2ECF8', color: '#4E2975', fontSize: 10, fontWeight: 600, fontFamily: 'var(--font-ui)', border: '1px solid #CABAEF' }}>{t}</span>
-            ))}
+          <div style={{ fontSize: 11, color: '#7B7A8E', fontFamily: 'var(--font-ui)', lineHeight: 1.4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {item.description}
           </div>
         </div>
-        <div style={{ fontSize: 11.5, color: '#5E5C75', fontFamily: 'var(--font-ui)', lineHeight: 1.55 }}>
-          {description}
+
+        {/* Tags */}
+        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'flex-end', flexShrink: 0, maxWidth: 220 }}>
+          {item.tags.map(t => (
+            <span key={t} style={{ padding: '2px 7px', borderRadius: 4, background: open ? '#EDE0FA' : '#F2ECF8', color: '#4E2975', fontSize: 10, fontWeight: 600, fontFamily: 'var(--font-ui)', border: '1px solid #CABAEF', whiteSpace: 'nowrap' }}>{t}</span>
+          ))}
+        </div>
+
+        {/* Chevron */}
+        <span className="material-icons" style={{
+          fontSize: 20, color: open ? '#8342BB' : '#BBBBC8', fontFamily: 'Material Icons', lineHeight: 1, flexShrink: 0,
+          transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+          transition: 'transform 0.25s ease, color 0.2s',
+        }}>expand_more</span>
+      </button>
+
+      {/* Collapsible image body */}
+      <div style={{
+        overflow: 'hidden',
+        maxHeight: open ? '9999px' : '0',
+        transition: 'max-height 0.35s ease',
+      }}>
+        <div style={{ background: '#F7F5FC', padding: '16px 18px' }}>
+          {/* Full description when expanded */}
+          <p style={{ margin: '0 0 14px', fontSize: 12, color: '#5E5C75', fontFamily: 'var(--font-ui)', lineHeight: 1.6 }}>
+            {item.description}
+          </p>
+          {/* Image */}
+          <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid #E0D9F5', boxShadow: '0 2px 12px rgba(131,66,187,0.08)' }}>
+            <img
+              src={item.src}
+              alt={item.name}
+              style={{ width: '100%', display: 'block' }}
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -2679,7 +2709,7 @@ function LayoutImageCard({ number, name, description, tags, src }: LayoutImageCa
 }
 
 function PageLayoutsSection() {
-  const layouts: LayoutImageCardProps[] = [
+  const layouts: LayoutAccordionItem[] = [
     {
       number: '01',
       name: 'Scroll Behaviour',
@@ -2731,38 +2761,40 @@ function PageLayoutsSection() {
     },
   ];
 
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggle = (i: number) => setOpenIndex(prev => prev === i ? null : i);
+
   return (
-    <div style={{ padding: '28px 24px 40px', maxWidth: 1100, margin: '0 auto' }}>
+    <div style={{ padding: '28px 24px 40px', maxWidth: 900, margin: '0 auto' }}>
       {/* Header */}
-      <div style={{ marginBottom: 28 }}>
+      <div style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
           <span className="material-icons" style={{ fontSize: 22, color: 'var(--dec-color-brand-base)', fontFamily: 'Material Icons', lineHeight: 1 }}>photo_library</span>
           <h1 style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 22, fontWeight: 700, color: '#1C1C2E', letterSpacing: '-0.03em', margin: 0 }}>Page Layouts</h1>
         </div>
         <p style={{ fontFamily: 'var(--font-ui)', fontSize: 13, color: '#5E5C75', margin: 0, lineHeight: 1.6, maxWidth: 560 }}>
-          Reference layouts and UX pattern documentation. More layouts will be added as the design system evolves.
+          Reference layouts and UX pattern documentation. Click any layout to expand and view the full reference.
         </p>
       </div>
 
-      {/* Gallery grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
-        {layouts.map(l => (
-          <LayoutImageCard key={l.number} {...l} />
+      {/* Accordion list */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {layouts.map((l, i) => (
+          <LayoutAccordion key={l.number} item={l} open={openIndex === i} onToggle={() => toggle(i)} />
         ))}
       </div>
 
       {/* More coming banner */}
       <div style={{
-        marginTop: 28,
-        padding: '14px 18px',
+        marginTop: 20,
+        padding: '12px 16px',
         borderRadius: 10,
         background: 'linear-gradient(135deg, #F5F0FC 0%, #EDE6F8 100%)',
         border: '1px dashed #C4B5E8',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 10,
+        display: 'flex', alignItems: 'center', gap: 10,
       }}>
-        <span className="material-icons" style={{ fontSize: 18, color: '#9B72CF', fontFamily: 'Material Icons', lineHeight: 1, flexShrink: 0 }}>add_photo_alternate</span>
+        <span className="material-icons" style={{ fontSize: 17, color: '#9B72CF', fontFamily: 'Material Icons', lineHeight: 1, flexShrink: 0 }}>add_photo_alternate</span>
         <span style={{ fontSize: 12, color: '#4E2975', fontFamily: 'var(--font-ui)', fontWeight: 500 }}>
           More layout references coming soon — additional patterns will be added here.
         </span>

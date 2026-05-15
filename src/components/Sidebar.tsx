@@ -20,6 +20,8 @@ export interface SidebarProps {
   userRole?: string
   userInitials?: string
   onNavigate?: (id: string) => void
+  notificationCount?: number
+  isMobile?: boolean
 }
 
 const defaultItems: NavItem[] = [
@@ -45,6 +47,8 @@ export function Sidebar({
   userRole = 'Administrator',
   userInitials = 'BG',
   onNavigate,
+  notificationCount = 0,
+  isMobile = false,
 }: SidebarProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [tooltip, setTooltip] = useState<{ label: string; y: number } | null>(null)
@@ -203,7 +207,13 @@ export function Sidebar({
 
         <div style={{ flex: 1, minHeight: 20 }} />
 
+        {isMobile && <div style={{ height: 1, background: '#F0F0F4', margin: '4px 0', flexShrink: 0 }} />}
         {[
+          // On mobile, surface notifications + assistant above Help since they're hidden from the header
+          ...(isMobile ? [
+            { id: '_notif', icon: 'notifications_none', label: 'Notifications', badge: notificationCount },
+            { id: '_assistant', icon: 'auto_awesome', label: 'Assistant', accent: true },
+          ] : []),
           { id: '_help', icon: 'help_outline', label: 'Help' },
           { id: '_settings', icon: 'settings', label: 'Settings' },
         ].map((item) => (
@@ -222,13 +232,51 @@ export function Sidebar({
               background: hoveredId === item.id ? 'rgba(40,40,40,0.05)' : 'transparent',
               transition: 'background 0.1s',
               flexShrink: 0,
+              position: 'relative',
             }}
             onMouseEnter={() => setHoveredId(item.id)}
             onMouseLeave={() => setHoveredId(null)}
           >
-            <span className="material-icons" style={{ fontSize: 20, flexShrink: 0, color: '#5E5C75' }}>{item.icon}</span>
+            <span
+              className="material-icons"
+              style={{ fontSize: 20, flexShrink: 0, color: (item as {accent?:boolean}).accent ? '#8342BB' : '#5E5C75' }}
+            >
+              {item.icon}
+            </span>
             {expanded && (
-              <span style={{ fontSize: 14, color: '#282828', whiteSpace: 'nowrap' }}>{item.label}</span>
+              <span style={{ fontSize: 14, color: '#282828', whiteSpace: 'nowrap', flex: 1 }}>{item.label}</span>
+            )}
+            {/* Notification badge */}
+            {(item as {badge?:number}).badge != null && (item as {badge?:number}).badge! > 0 && (
+              expanded ? (
+                <span style={{
+                  marginRight: 10,
+                  background: '#E02F3A',
+                  color: '#fff',
+                  fontSize: 10,
+                  fontWeight: 600,
+                  borderRadius: 10,
+                  padding: '0 5px',
+                  minWidth: 16,
+                  height: 16,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  {(item as {badge?:number}).badge}
+                </span>
+              ) : (
+                <span style={{
+                  position: 'absolute',
+                  top: 8,
+                  left: 26,
+                  width: 8,
+                  height: 8,
+                  background: '#E02F3A',
+                  borderRadius: '50%',
+                  border: '1.5px solid #fff',
+                }} />
+              )
             )}
           </div>
         ))}

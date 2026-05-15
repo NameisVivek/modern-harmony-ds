@@ -18,6 +18,7 @@ export interface AppHeaderProps {
   userName?: string
   userRole?: string
   userInitials?: string
+  isMobile?: boolean
 }
 
 const s: Record<string, React.CSSProperties> = {
@@ -258,6 +259,7 @@ export function AppHeader({
   userName = 'Burton Guster',
   userRole = 'Administrator',
   userInitials = 'BG',
+  isMobile = false,
 }: AppHeaderProps) {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<number | null>(null)
@@ -297,7 +299,7 @@ export function AppHeader({
           </span>
         </button>
         <span style={s.logoWordmark}>Design System</span>
-        {envLabel && (
+        {envLabel && !isMobile && (
           <span style={{ ...s.envBadge, ...envStyles[envVariant] }}>
             {envLabel}
           </span>
@@ -400,91 +402,95 @@ export function AppHeader({
           Assistant
         </button>
 
-        {/* Notifications */}
-        <button
-          style={{
-            ...s.iconBtn,
-            background: hoveredBtn === 'notif' ? 'rgba(40,40,40,0.06)' : 'transparent',
-          }}
-          onMouseEnter={() => setHoveredBtn('notif')}
-          onMouseLeave={() => setHoveredBtn(null)}
-          onClick={onNotifications}
-        >
-          <span className="material-icons" style={{ fontSize: 20 }}>notifications_none</span>
-          {notificationCount > 0 && <span style={s.badge} />}
-        </button>
-
-        {/* User menu */}
-        <div style={{ position: 'relative' }} ref={menuRef}>
+        {/* Notifications — desktop only */}
+        {!isMobile && (
           <button
             style={{
-              ...s.userArea,
-              background: userMenuOpen || hoveredBtn === 'user' ? 'rgba(40,40,40,0.05)' : 'transparent',
+              ...s.iconBtn,
+              background: hoveredBtn === 'notif' ? 'rgba(40,40,40,0.06)' : 'transparent',
             }}
-            onMouseEnter={() => setHoveredBtn('user')}
+            onMouseEnter={() => setHoveredBtn('notif')}
             onMouseLeave={() => setHoveredBtn(null)}
-            onClick={() => setUserMenuOpen(!userMenuOpen)}
+            onClick={onNotifications}
           >
-            <div style={s.userInfo}>
-              <span style={s.userName}>{userName}</span>
-              <span style={s.userRole}>{userRole}</span>
-            </div>
-            <div style={s.avatar}>{userInitials}</div>
+            <span className="material-icons" style={{ fontSize: 20 }}>notifications_none</span>
+            {notificationCount > 0 && <span style={s.badge} />}
           </button>
+        )}
 
-          {userMenuOpen && (
-            <div style={s.dropdownMenu}>
-              <button
-                style={{
-                  ...s.menuItem,
-                  background: hoveredBtn === 'mu-pref' ? 'rgba(131,66,187,0.05)' : 'transparent',
-                }}
-                onMouseEnter={() => setHoveredBtn('mu-pref')}
-                onMouseLeave={() => setHoveredBtn(null)}
-              >
-                <span className="material-icons" style={{ fontSize: 16, color: '#5E5C75' }}>settings</span>
-                Preferences
-              </button>
-              <button
-                style={{
-                  ...s.menuItem,
-                  background: hoveredBtn === 'mu-role' ? 'rgba(131,66,187,0.05)' : 'transparent',
-                }}
-                onMouseEnter={() => setHoveredBtn('mu-role')}
-                onMouseLeave={() => setHoveredBtn(null)}
-              >
-                <span className="material-icons" style={{ fontSize: 16, color: '#5E5C75' }}>swap_horiz</span>
-                Switch role
-                <span className="material-icons" style={{ fontSize: 14, color: '#BFBECE', marginLeft: 'auto' }}>chevron_right</span>
-              </button>
-              <button
-                style={{
-                  ...s.menuItem,
-                  background: hoveredBtn === 'mu-loc' ? 'rgba(131,66,187,0.05)' : 'transparent',
-                }}
-                onMouseEnter={() => setHoveredBtn('mu-loc')}
-                onMouseLeave={() => setHoveredBtn(null)}
-              >
-                <span className="material-icons" style={{ fontSize: 16, color: '#5E5C75' }}>location_on</span>
-                Change location
-                <span className="material-icons" style={{ fontSize: 14, color: '#BFBECE', marginLeft: 'auto' }}>chevron_right</span>
-              </button>
-              <div style={s.menuDivider} />
-              <button
-                style={{
-                  ...s.menuItem,
-                  background: hoveredBtn === 'mu-logout' ? 'rgba(224,47,58,0.05)' : 'transparent',
-                  color: '#E02F3A',
-                }}
-                onMouseEnter={() => setHoveredBtn('mu-logout')}
-                onMouseLeave={() => setHoveredBtn(null)}
-              >
-                <span className="material-icons" style={{ fontSize: 16, color: '#E02F3A' }}>logout</span>
-                Log out
-              </button>
-            </div>
-          )}
-        </div>
+        {/* User menu — desktop only */}
+        {!isMobile && (
+          <div style={{ position: 'relative' }} ref={menuRef}>
+            <button
+              style={{
+                ...s.userArea,
+                background: userMenuOpen || hoveredBtn === 'user' ? 'rgba(40,40,40,0.05)' : 'transparent',
+              }}
+              onMouseEnter={() => setHoveredBtn('user')}
+              onMouseLeave={() => setHoveredBtn(null)}
+              onClick={() => setUserMenuOpen(!userMenuOpen)}
+            >
+              <div style={s.userInfo}>
+                <span style={s.userName}>{userName}</span>
+                <span style={s.userRole}>{userRole}</span>
+              </div>
+              <div style={s.avatar}>{userInitials}</div>
+            </button>
+
+            {userMenuOpen && (
+              <div style={s.dropdownMenu}>
+                <button
+                  style={{
+                    ...s.menuItem,
+                    background: hoveredBtn === 'mu-pref' ? 'rgba(131,66,187,0.05)' : 'transparent',
+                  }}
+                  onMouseEnter={() => setHoveredBtn('mu-pref')}
+                  onMouseLeave={() => setHoveredBtn(null)}
+                >
+                  <span className="material-icons" style={{ fontSize: 16, color: '#5E5C75' }}>settings</span>
+                  Preferences
+                </button>
+                <button
+                  style={{
+                    ...s.menuItem,
+                    background: hoveredBtn === 'mu-role' ? 'rgba(131,66,187,0.05)' : 'transparent',
+                  }}
+                  onMouseEnter={() => setHoveredBtn('mu-role')}
+                  onMouseLeave={() => setHoveredBtn(null)}
+                >
+                  <span className="material-icons" style={{ fontSize: 16, color: '#5E5C75' }}>swap_horiz</span>
+                  Switch role
+                  <span className="material-icons" style={{ fontSize: 14, color: '#BFBECE', marginLeft: 'auto' }}>chevron_right</span>
+                </button>
+                <button
+                  style={{
+                    ...s.menuItem,
+                    background: hoveredBtn === 'mu-loc' ? 'rgba(131,66,187,0.05)' : 'transparent',
+                  }}
+                  onMouseEnter={() => setHoveredBtn('mu-loc')}
+                  onMouseLeave={() => setHoveredBtn(null)}
+                >
+                  <span className="material-icons" style={{ fontSize: 16, color: '#5E5C75' }}>location_on</span>
+                  Change location
+                  <span className="material-icons" style={{ fontSize: 14, color: '#BFBECE', marginLeft: 'auto' }}>chevron_right</span>
+                </button>
+                <div style={s.menuDivider} />
+                <button
+                  style={{
+                    ...s.menuItem,
+                    background: hoveredBtn === 'mu-logout' ? 'rgba(224,47,58,0.05)' : 'transparent',
+                    color: '#E02F3A',
+                  }}
+                  onMouseEnter={() => setHoveredBtn('mu-logout')}
+                  onMouseLeave={() => setHoveredBtn(null)}
+                >
+                  <span className="material-icons" style={{ fontSize: 16, color: '#E02F3A' }}>logout</span>
+                  Log out
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </header>
   )

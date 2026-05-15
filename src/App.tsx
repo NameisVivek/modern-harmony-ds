@@ -1814,6 +1814,7 @@ export default function App() {
         userRole="System Admin"
         userInitials="DS"
         notificationCount={2}
+        isMobile={isMobile}
       />
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden', position: 'relative' }}>
         <Sidebar
@@ -1827,6 +1828,8 @@ export default function App() {
           userName="Design Team"
           userRole="System Admin"
           userInitials="DS"
+          notificationCount={2}
+          isMobile={isMobile}
         />
         <main style={{
           flex: 1,

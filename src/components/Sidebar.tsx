@@ -237,7 +237,6 @@ export function Sidebar({
           // On mobile, surface notifications + assistant above Help since they're hidden from the header
           ...(isMobile ? [
             { id: '_notif', icon: 'notifications_none', label: 'Notifications', badge: notificationCount },
-            { id: '_assistant', icon: 'auto_awesome', label: 'Assistant', accent: true },
           ] : []),
           { id: '_help', icon: 'help_outline', label: 'Help' },
           { id: '_settings', icon: 'settings', label: 'Settings' },

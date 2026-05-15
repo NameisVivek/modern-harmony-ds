@@ -253,17 +253,16 @@ export function AppHeader({
 
       {/* Right controls */}
       <div style={s.headerRight}>
-        {/* AI Assistant */}
+        {/* AI Assistant — icon only */}
         <button
           style={{
-            ...s.aiBtn,
-            background: hoveredBtn === 'ai' ? '#F8F8FB' : 'transparent',
+            ...s.iconBtn,
+            background: hoveredBtn === 'ai' ? 'rgba(40,40,40,0.06)' : 'transparent',
           }}
           onMouseEnter={() => setHoveredBtn('ai')}
           onMouseLeave={() => setHoveredBtn(null)}
         >
-          <span className="material-icons" style={{ fontSize: 14, color: '#8342BB' }}>auto_awesome</span>
-          Assistant
+          <span className="material-icons" style={{ fontSize: 18, color: '#8342BB' }}>auto_awesome</span>
         </button>
 
         {/* Notifications — desktop only */}

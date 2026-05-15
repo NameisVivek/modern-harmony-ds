@@ -130,8 +130,8 @@ function SemanticGroup({ label, ramp, keys }: { label: string; ramp: string[]; k
   return (
     <div style={{ flex: 1 }}>
       <div style={{ fontSize: 9, fontWeight: 500, color: '#8C8C8C', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 5, fontFamily: 'var(--font-ui)' }}>{label}</div>
-      <div style={{ display: 'flex', gap: 3, marginBottom: 8 }}>
-        {ramp.map((c, i) => <div key={i} style={{ flex: 1, height: 28, borderRadius: 4, background: c, border: '1px solid rgba(0,0,0,0.06)' }} />)}
+      <div className="ds-palette-row" style={{ gap: 3, marginBottom: 8 }}>
+        {ramp.map((c, i) => <div key={i} style={{ flex: 1, minWidth: 28, height: 28, borderRadius: 4, background: c, border: '1px solid rgba(0,0,0,0.06)' }} />)}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         {keys.map((k) => (
@@ -157,7 +157,7 @@ function ColorsSection() {
         <div style={SL}>Group 1 — Brand Colors</div>
         <div style={{ marginBottom: 10 }}>
           <div style={{ fontSize: 10, fontWeight: 600, color: '#282828', fontFamily: 'var(--font-ui)', marginBottom: 6 }}>Violet — Brand Accent</div>
-          <div style={{ display: 'flex', gap: 3 }}>
+          <div className="ds-palette-row" style={{ gap: 3 }}>
             {[
               ['10','#FCFCFF'],['25','#F9F6FE'],['50','#F2ECF8'],['75','#ECE4F5'],
               ['100','#CABAEF'],['200','#C0B4E8'],['225','#B4A4E0'],['300','#B49AD6'],
@@ -169,7 +169,7 @@ function ColorsSection() {
         <div style={DIVIDER} />
         <div style={{ marginTop: 10 }}>
           <div style={{ fontSize: 10, fontWeight: 600, color: '#282828', fontFamily: 'var(--font-ui)', marginBottom: 6 }}>Carbon — Brand near-black &amp; neutral gray</div>
-          <div style={{ display: 'flex', gap: 3 }}>
+          <div className="ds-palette-row" style={{ gap: 3 }}>
             {[
               ['10','#F6F6F6'],['25','#EAEAEA'],['50','#DCDCDC'],['100','#C8C8C8'],
               ['200','#A8A8A8'],['400','#787878'],['600','#484848'],['800','#282828'],['900','#141414'],
@@ -183,7 +183,7 @@ function ColorsSection() {
         <div style={SL}>Group 2 — Neutral Colors</div>
         <div style={{ marginBottom: 10 }}>
           <div style={{ fontSize: 10, fontWeight: 600, color: '#282828', fontFamily: 'var(--font-ui)', marginBottom: 6 }}>Cool Gray — Purple-tinted (borders, surfaces, grid)</div>
-          <div style={{ display: 'flex', gap: 3 }}>
+          <div className="ds-palette-row" style={{ gap: 3 }}>
             {[
               ['25','#F8F8FA'],['50 ★','#F0F0F4'],['75','#E5E5EC'],['100 ★','#DDDDE5'],
               ['150 ★','#C6C7D2'],['200 ★','#BFBECE'],['300','#A4A3B9'],['400 ★','#8B8AA5'],
@@ -194,7 +194,7 @@ function ColorsSection() {
         <div style={DIVIDER} />
         <div style={{ marginTop: 10 }}>
           <div style={{ fontSize: 10, fontWeight: 600, color: '#282828', fontFamily: 'var(--font-ui)', marginBottom: 6 }}>Gray — No color cast (text, icons, disabled)</div>
-          <div style={{ display: 'flex', gap: 3 }}>
+          <div className="ds-palette-row" style={{ gap: 3 }}>
             {[
               ['25 ★','#FBFBFB'],['50','#F7F7F7'],['75','#EBEBEB'],['100','#DDDDDD'],
               ['150','#CCCCCC'],['200','#BFBFBF'],['300','#A4A4A4'],['400','#8C8C8C'],
@@ -1119,7 +1119,7 @@ function DataSection() {
 
       <div style={EC}>
         <div style={SL}>DataGrid</div>
-        <DataGrid
+        <div className="ds-scroll-x"><DataGrid
           columns={columns}
           rows={rows}
           selectable
@@ -1139,7 +1139,7 @@ function DataSection() {
               <Button variant="primary" size="sm" iconLeft="add">New Record</Button>
             </div>
           }
-        />
+        /></div>
       </div>
 
       <div style={{ ...EC, marginTop: 12 }}>
@@ -1194,7 +1194,7 @@ function LayoutSection() {
           <div style={EC}>
             <div style={SL}>Well</div>
             <Well>
-              <div style={{ display: 'flex', gap: 24 }}>
+              <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
                 {[['Total Orders', '12,847'], ['On Time', '11,203'], ['Delayed', '1,644']].map(([l, v]) => (
                   <div key={l}>
                     <div style={{ fontSize: 10, fontWeight: 600, color: '#8C8C8C', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3, fontFamily: 'var(--font-ui)' }}>{l}</div>
@@ -1286,7 +1286,7 @@ function CompositesSection() {
 
       <div style={EC}>
         <div style={SL}>KPI Widgets</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+        <div className="ds-grid-4" style={{ gap: 12 }}>
           <KPIWidget
             variant="simple"
             title="On-Time Delivery"
@@ -1336,12 +1336,12 @@ function CompositesSection() {
       <div style={{ ...EC, marginTop: 12 }}>
         <div style={SL}>Avatars</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
             {(['xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const).map((size) => (
               <Avatar key={size} name="Burton Guster" size={size} />
             ))}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
             {(['violet', 'blue', 'green', 'amber', 'teal', 'red', 'sage', 'dark'] as const).map((color) => (
               <Avatar key={color} name={color} color={color} size="md" />
             ))}

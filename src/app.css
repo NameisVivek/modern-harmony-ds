@@ -3,20 +3,50 @@ html, body { height: 100%; overflow: hidden; }
 body { font-family: var(--font-ui); font-size: var(--text-base); color: var(--dec-color-text-body); background: var(--dec-color-surface-subtle); -webkit-font-smoothing: antialiased; }
 #root { height: 100%; overflow: hidden; }
 
-/* Responsive 2-column grid — collapses to 1-col on mobile */
+/* ── Responsive utilities ─────────────────────────────────────────────────── */
+
+/* Horizontally scrollable row for color palettes */
+.ds-palette-row {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(131,66,187,0.25) transparent;
+  padding-bottom: 4px;
+}
+.ds-palette-row::-webkit-scrollbar { height: 3px; }
+.ds-palette-row::-webkit-scrollbar-thumb { background: rgba(131,66,187,0.25); border-radius: 2px; }
+
+/* 2-col grid → 1-col on mobile */
 .ds-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
 
-/* Horizontally scrollable container for wide content (tables, color charts) */
+/* 4-col grid → 2-col on mobile */
+.ds-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Horizontally scrollable container */
 .ds-scroll-x {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(131,66,187,0.2) transparent;
 }
+.ds-scroll-x::-webkit-scrollbar { height: 4px; }
+.ds-scroll-x::-webkit-scrollbar-thumb { background: rgba(131,66,187,0.2); border-radius: 2px; }
 
 @media (max-width: 767px) {
-  .ds-grid-2 {
-    grid-template-columns: 1fr;
+  /* Palette swatches get a minimum width so text doesn't crush */
+  .ds-palette-row > * {
+    min-width: 44px !important;
+    flex-shrink: 0 !important;
   }
+
+  /* Grids collapse */
+  .ds-grid-2 { grid-template-columns: 1fr; }
+  .ds-grid-4 { grid-template-columns: 1fr 1fr; }
 }

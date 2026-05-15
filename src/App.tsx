@@ -1804,10 +1804,6 @@ export default function App() {
       <AppHeader
         sidebarExpanded={sidebarExpanded}
         onToggleSidebar={() => setSidebarExpanded((e) => !e)}
-        breadcrumbs={[
-          { label: 'Design System' },
-          { label: sectionMeta[activeSection].label },
-        ]}
         envLabel="Design System"
         envVariant="dev"
         userName="Design Team"

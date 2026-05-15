@@ -33,7 +33,7 @@ export type { FileUploadProps, UploadFile } from './FileUpload'
 
 // Navigation
 export { AppHeader } from './AppHeader'
-export type { AppHeaderProps, BreadcrumbItem } from './AppHeader'
+export type { AppHeaderProps } from './AppHeader'
 export { Sidebar } from './Sidebar'
 export type { SidebarProps, NavItem } from './Sidebar'
 export { Breadcrumbs } from './Breadcrumbs'

@@ -1,16 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 
-export interface BreadcrumbItem {
-  label: string
-  href?: string
-  onClick?: () => void
-  children?: BreadcrumbItem[]
-}
 
 export interface AppHeaderProps {
   sidebarExpanded?: boolean
   onToggleSidebar?: () => void
-  breadcrumbs?: BreadcrumbItem[]
   envLabel?: string
   envVariant?: 'production' | 'staging' | 'dev'
   onNotifications?: () => void
@@ -64,45 +57,6 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     color: '#282828',
     letterSpacing: '-0.01em',
-  },
-  breadcrumbs: {
-    display: 'flex',
-    alignItems: 'center',
-    height: '100%',
-    overflow: 'hidden',
-    flexShrink: 1,
-    minWidth: 0,
-    paddingLeft: 4,
-    gap: 0,
-  },
-  bcSep: {
-    fontSize: 13,
-    color: '#BFBECE',
-    padding: '0 2px',
-    flexShrink: 0,
-    userSelect: 'none',
-    fontWeight: 400,
-  },
-  bcBtn: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 3,
-    height: 30,
-    padding: '0 7px',
-    background: 'transparent',
-    border: 'none',
-    cursor: 'pointer',
-    borderRadius: 6,
-    whiteSpace: 'nowrap',
-    fontFamily: 'var(--font-ui)',
-    fontSize: 13,
-    color: '#282828',
-    transition: 'background 0.1s',
-    fontWeight: 400,
-  },
-  bcBtnActive: {
-    color: '#7239A4',
-    fontWeight: 500,
   },
   headerRight: {
     marginLeft: 'auto',
@@ -248,10 +202,6 @@ const envStyles: Record<string, React.CSSProperties> = {
 export function AppHeader({
   sidebarExpanded = true,
   onToggleSidebar,
-  breadcrumbs = [
-    { label: 'S&OP Planning', children: [{ label: 'Dashboard' }, { label: 'Forecast' }] },
-    { label: 'Demand planning' },
-  ],
   envLabel,
   envVariant = 'staging',
   onNotifications,
@@ -262,18 +212,13 @@ export function AppHeader({
   isMobile = false,
 }: AppHeaderProps) {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
-  const [openDropdown, setOpenDropdown] = useState<number | null>(null)
   const [hoveredBtn, setHoveredBtn] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
-  const bcRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setUserMenuOpen(false)
-      }
-      if (bcRef.current && !bcRef.current.contains(e.target as Node)) {
-        setOpenDropdown(null)
       }
     }
     document.addEventListener('mousedown', handleClick)
@@ -305,87 +250,6 @@ export function AppHeader({
           </span>
         )}
       </div>
-
-      {/* Breadcrumbs */}
-      <nav style={s.breadcrumbs} ref={bcRef}>
-        {breadcrumbs.map((item, i) => {
-          const isLast = i === breadcrumbs.length - 1
-          const hasDropdown = !!(item.children?.length)
-          const dropdownOpen = openDropdown === i
-          return (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', height: '100%', position: 'relative' }}>
-              {i > 0 && <span style={s.bcSep}>/</span>}
-              <button
-                style={{
-                  ...s.bcBtn,
-                  ...(isLast ? s.bcBtnActive : {}),
-                  background: hoveredBtn === `bc-${i}` || dropdownOpen ? 'rgba(40,40,40,0.06)' : 'transparent',
-                  cursor: (item.onClick || hasDropdown) ? 'pointer' : 'default',
-                }}
-                onMouseEnter={() => setHoveredBtn(`bc-${i}`)}
-                onMouseLeave={() => setHoveredBtn(null)}
-                onClick={() => {
-                  if (hasDropdown) {
-                    setOpenDropdown(dropdownOpen ? null : i)
-                  } else if (item.onClick) {
-                    item.onClick()
-                  } else if (item.href) {
-                    window.location.href = item.href
-                  }
-                }}
-              >
-                {item.label}
-                {hasDropdown && (
-                  <span className="material-icons" style={{
-                    fontSize: 14,
-                    color: '#8C8C8C',
-                    transform: dropdownOpen ? 'rotate(180deg)' : 'none',
-                    transition: 'transform 0.15s',
-                  }}>
-                    expand_more
-                  </span>
-                )}
-              </button>
-
-              {/* Dropdown for items with children */}
-              {hasDropdown && dropdownOpen && (
-                <div style={{
-                  position: 'absolute',
-                  top: 'calc(100% + 2px)',
-                  left: 0,
-                  background: '#fff',
-                  borderRadius: 8,
-                  border: '1px solid #E5E5EC',
-                  boxShadow: '0 4px 16px rgba(55,23,78,0.12)',
-                  minWidth: 180,
-                  padding: '4px 0',
-                  zIndex: 300,
-                }}>
-                  {item.children!.map((child, ci) => (
-                    <button
-                      key={ci}
-                      style={{
-                        ...s.menuItem,
-                        background: hoveredBtn === `bc-${i}-${ci}` ? 'rgba(131,66,187,0.05)' : 'transparent',
-                        fontSize: 13,
-                      }}
-                      onMouseEnter={() => setHoveredBtn(`bc-${i}-${ci}`)}
-                      onMouseLeave={() => setHoveredBtn(null)}
-                      onClick={() => {
-                        setOpenDropdown(null)
-                        if (child.onClick) child.onClick()
-                        else if (child.href) window.location.href = child.href
-                      }}
-                    >
-                      {child.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          )
-        })}
-      </nav>
 
       {/* Right controls */}
       <div style={s.headerRight}>

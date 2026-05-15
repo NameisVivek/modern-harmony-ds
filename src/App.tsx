@@ -65,6 +65,11 @@ import {
   Notification,
   NotificationList,
   EmptyState,
+  LineChart,
+  BarChart,
+  DonutChart,
+  HorizontalBarChart,
+  AreaChart,
 } from './components'
 
 // ── Shared style tokens ────────────────────────────────────────────────────────
@@ -1719,6 +1724,115 @@ function TokensSection() {
   )
 }
 
+// ── Section: Charts ────────────────────────────────────────────────────────────
+
+const MONTHS_12 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const MONTHS_Q = ['Q1 Jan', 'Q1 Feb', 'Q1 Mar', 'Q2 Apr', 'Q2 May', 'Q2 Jun', 'Q3 Jul', 'Q3 Aug', 'Q3 Sep', 'Q4 Oct', 'Q4 Nov', 'Q4 Dec']
+
+function ChartsSection() {
+  return (
+    <div>
+      <div style={PAGE_TITLE}>Charts</div>
+      <div style={PAGE_SUB}>Scalable data visualization components — line, bar, donut, area, and horizontal bar</div>
+
+      {/* ── Row 1: Line + Bar ── */}
+      <div className="ds-grid-2" style={{ gap: 16, marginBottom: 16 }}>
+        <LineChart
+          title="Shipment Volume"
+          subtitle="Air · Ocean · Ground — last 12 months"
+          labels={MONTHS_12}
+          series={[
+            { name: 'Air', data: [3200, 3600, 3100, 4200, 3900, 4600, 5100, 4800, 5400, 4900, 5600, 6100] },
+            { name: 'Ocean', data: [8100, 7800, 8600, 9200, 8700, 9800, 10200, 9600, 10800, 11200, 10600, 12000] },
+            { name: 'Ground', data: [5400, 5100, 5800, 6200, 5900, 6600, 7100, 6800, 7400, 7800, 7200, 8200] },
+          ]}
+          showArea
+        />
+        <BarChart
+          title="Order Fulfillment by Region"
+          subtitle="Target vs. actual — this quarter"
+          labels={['APAC', 'EMEA', 'LATAM', 'NA', 'MEA']}
+          series={[
+            { name: 'Target', data: [4200, 3800, 2100, 5600, 1800] },
+            { name: 'Actual', data: [3900, 3600, 2400, 5200, 1600] },
+          ]}
+          grouped
+        />
+      </div>
+
+      {/* ── Row 2: Donut + Horizontal Bar ── */}
+      <div className="ds-grid-2" style={{ gap: 16, marginBottom: 16 }}>
+        <DonutChart
+          title="Inventory by Category"
+          subtitle="Current stock allocation across product lines"
+          centerLabel="SKUs"
+          centerValue="28.4K"
+          slices={[
+            { name: 'Electronics',   value: 9200 },
+            { name: 'Apparel',       value: 6800 },
+            { name: 'Perishables',   value: 4100 },
+            { name: 'Industrial',    value: 5300 },
+            { name: 'Consumables',   value: 3000 },
+          ]}
+        />
+        <HorizontalBarChart
+          title="On-Time Delivery Rate"
+          subtitle="Top carriers — trailing 90 days"
+          entries={[
+            { label: 'FedEx Express',  value: 97.4, annotation: '% OTD' },
+            { label: 'DHL Supply',     value: 95.8, annotation: '% OTD' },
+            { label: 'UPS Freight',    value: 94.2, annotation: '% OTD' },
+            { label: 'XPO Logistics',  value: 92.1, annotation: '% OTD' },
+            { label: 'DB Schenker',    value: 91.6, annotation: '% OTD' },
+            { label: 'Kuehne+Nagel',   value: 89.3, annotation: '% OTD' },
+            { label: 'CEVA Logistics', value: 87.0, annotation: '% OTD' },
+          ]}
+          formatValue={(v) => `${v.toFixed(1)}%`}
+        />
+      </div>
+
+      {/* ── Row 3: Area (stacked) + single-series Bar ── */}
+      <div className="ds-grid-2" style={{ gap: 16, marginBottom: 16 }}>
+        <AreaChart
+          title="Revenue by Channel"
+          subtitle="Direct · Partner · Marketplace — stacked"
+          labels={MONTHS_12}
+          stacked
+          series={[
+            { name: 'Direct',      data: [2100, 2300, 2000, 2700, 2500, 3100, 3400, 3200, 3700, 3500, 4000, 4400] },
+            { name: 'Partner',     data: [1400, 1500, 1300, 1800, 1700, 2000, 2200, 2100, 2400, 2300, 2600, 2900] },
+            { name: 'Marketplace', data: [600, 700, 650, 900, 800, 1100, 1200, 1100, 1300, 1200, 1400, 1600] },
+          ]}
+          formatY={(v) => `$${v >= 1000 ? `${(v / 1000).toFixed(0)}K` : v}`}
+        />
+        <BarChart
+          title="Warehouse Throughput"
+          subtitle="Units processed per day — last 12 months"
+          labels={MONTHS_Q}
+          series={[
+            { name: 'Units', data: [14200, 13800, 15100, 16400, 15700, 17200, 18600, 17900, 19400, 20100, 19300, 21500] },
+          ]}
+        />
+      </div>
+
+      {/* ── Row 4: Full-width multi-series line (dense) ── */}
+      <LineChart
+        title="Demand Forecast vs. Actuals"
+        subtitle="Weekly units — forecast (violet) · actuals (blue) · baseline (green)"
+        labels={['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12','W13','W14','W15','W16']}
+        height={200}
+        showArea={false}
+        showDots={false}
+        series={[
+          { name: 'Forecast',  data: [4200,4400,4100,4600,4900,5200,5000,5400,5700,5500,5900,6200,6000,6400,6700,7000] },
+          { name: 'Actuals',   data: [4100,4350,4250,4500,4800,5100,4950,5300,5600,5450,5800,6100,5950,6350,6650,6900] },
+          { name: 'Baseline',  data: [4000,4000,4000,4500,4500,4500,5000,5000,5000,5500,5500,5500,6000,6000,6000,6500] },
+        ]}
+      />
+    </div>
+  )
+}
+
 // ── Section registry ───────────────────────────────────────────────────────────
 
 type SectionId =
@@ -1734,6 +1848,7 @@ type SectionId =
   | 'composites'
   | 'advanced'
   | 'tokens'
+  | 'charts'
 
 const sectionMeta: Record<SectionId, { label: string; icon: string }> = {
   colors:     { label: 'Colors & Tokens',  icon: 'palette' },
@@ -1748,11 +1863,13 @@ const sectionMeta: Record<SectionId, { label: string; icon: string }> = {
   layout:     { label: 'Layout',            icon: 'dashboard' },
   composites: { label: 'Composites',        icon: 'widgets' },
   advanced:   { label: 'Advanced',          icon: 'tune' },
+  charts:     { label: 'Charts',            icon: 'insert_chart' },
 }
 
 const sectionOrder: SectionId[] = [
   'colors', 'tokens', 'typography', 'buttons', 'forms',
   'feedback', 'navigation', 'overlays', 'data', 'layout', 'composites', 'advanced',
+  'charts',
 ]
 
 function SectionContent({ id }: { id: SectionId }) {
@@ -1769,6 +1886,7 @@ function SectionContent({ id }: { id: SectionId }) {
     case 'layout':     return <LayoutSection />
     case 'composites': return <CompositesSection />
     case 'advanced':   return <AdvancedSection />
+    case 'charts':     return <ChartsSection />
   }
 }
 

@@ -51,6 +51,10 @@ export type { KPIWidgetProps } from './KPIWidget'
 export { FieldValuePairs } from './FieldValuePairs'
 export type { FieldValuePairsProps, FieldDef, FieldValueType } from './FieldValuePairs'
 
+// Charts & data visualization
+export { LineChart, BarChart, DonutChart, HorizontalBarChart, AreaChart, CHART_PALETTE } from './Charts'
+export type { LineChartProps, BarChartProps, DonutChartProps, HorizontalBarChartProps, AreaChartProps, ChartSeries, DonutSlice, BarEntry } from './Charts'
+
 // Layout / containers
 export { Accordion, AccordionItem } from './Accordion'
 export { Card } from './Card'

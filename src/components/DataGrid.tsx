@@ -156,7 +156,7 @@ export function DataGrid<T extends Record<string, unknown>>({
 
       {/* Table */}
       <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <table style={{ width: '100%', minWidth: 'max-content', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
               {selectable && (
@@ -263,6 +263,7 @@ export function DataGrid<T extends Record<string, unknown>>({
                           borderBottom: '1px solid #F0F0F4',
                           verticalAlign: 'middle',
                           textAlign: col.align ?? 'left',
+                          whiteSpace: 'nowrap',
                           borderLeft: ci === 0 ? `3px solid ${rowIndicator[variant]}` : undefined,
                           paddingLeft: ci === 0 ? (rowIndicator[variant] !== 'transparent' ? 7 : 10) : undefined,
                         }}

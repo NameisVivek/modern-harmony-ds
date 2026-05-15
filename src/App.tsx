@@ -3014,7 +3014,7 @@ export default function App() {
           background: '#F0F0F4',
           minWidth: 0,
         }}>
-          <div style={{ maxWidth: 960, width: '100%' }}>
+          <div style={{ width: '100%' }}>
             <SectionContent id={activeSection} />
           </div>
           <div style={{ height: isMobile ? 16 : 48 }} />

@@ -2545,6 +2545,142 @@ function ExampleDesignsSection() {
   )
 }
 
+// ── Page Layouts ───────────────────────────────────────────────────────────────
+
+interface LayoutImageCardProps {
+  number: string;
+  name: string;
+  description: string;
+  tags: string[];
+  src: string;
+}
+
+function LayoutImageCard({ number, name, description, tags, src }: LayoutImageCardProps) {
+  const [hover, setHover] = useState(false);
+  return (
+    <div
+      style={{
+        background: 'var(--dec-color-surface)',
+        borderRadius: 14,
+        border: `1px solid ${hover ? '#C4B5E8' : 'var(--core-gray-75)'}`,
+        boxShadow: hover ? '0 4px 24px rgba(131,66,187,0.13)' : 'var(--elevation-2)',
+        overflow: 'hidden',
+        transition: 'box-shadow 0.18s, border-color 0.18s',
+        cursor: 'default',
+      }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      {/* Image area */}
+      <div style={{ background: '#F7F5FC', borderBottom: '1px solid var(--core-gray-75)', overflow: 'hidden', position: 'relative' }}>
+        <img
+          src={src}
+          alt={name}
+          style={{
+            width: '100%',
+            display: 'block',
+            transition: 'transform 0.3s ease',
+            transform: hover ? 'scale(1.02)' : 'scale(1)',
+          }}
+        />
+      </div>
+      {/* Info area */}
+      <div style={{ padding: '14px 16px 16px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10, marginBottom: 6 }}>
+          <div>
+            <div style={{ fontSize: 10, fontWeight: 600, color: '#9B72CF', fontFamily: 'var(--font-ui)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 3 }}>
+              Layout {number}
+            </div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: '#1C1C2E', fontFamily: 'Switzer, var(--font-ui)', letterSpacing: '-0.01em' }}>
+              {name}
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'flex-end', flexShrink: 0 }}>
+            {tags.map(t => (
+              <span key={t} style={{ padding: '2px 7px', borderRadius: 4, background: '#F2ECF8', color: '#4E2975', fontSize: 10, fontWeight: 600, fontFamily: 'var(--font-ui)', border: '1px solid #CABAEF' }}>{t}</span>
+            ))}
+          </div>
+        </div>
+        <div style={{ fontSize: 11.5, color: '#5E5C75', fontFamily: 'var(--font-ui)', lineHeight: 1.55 }}>
+          {description}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PageLayoutsSection() {
+  const layouts: LayoutImageCardProps[] = [
+    {
+      number: '01',
+      name: 'Scroll Behaviour',
+      description: 'Page anatomy and scroll state documentation — sticky header area, scrollable body region, and guidelines for avoiding double scroll.',
+      tags: ['Scrolling', 'Page Anatomy'],
+      src: '/layouts/scroll-behaviour.png',
+    },
+    {
+      number: '02',
+      name: 'Layout Guidelines',
+      description: 'Structural layout principles covering page on load, scroll down and scroll up states with annotated component regions.',
+      tags: ['Guidelines', 'Structure'],
+      src: '/layouts/layout-guidelines.png',
+    },
+    {
+      number: '03',
+      name: 'Empty States',
+      description: 'Empty state patterns for data grids, decision interfaces, and modal dialogs — with clear calls-to-action and contextual messaging.',
+      tags: ['Empty State', 'UX Patterns'],
+      src: '/layouts/empty-states.png',
+    },
+    {
+      number: '04',
+      name: 'Filter & Form Layout',
+      description: 'Filter panel layout with inline form controls, Advanced Filter expansion, Apply/Save/Clear actions, and grid integration.',
+      tags: ['Filters', 'Forms', 'Grid'],
+      src: '/layouts/filter-form-layout.png',
+    },
+  ];
+
+  return (
+    <div style={{ padding: '28px 24px 40px', maxWidth: 1100, margin: '0 auto' }}>
+      {/* Header */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+          <span className="material-icons" style={{ fontSize: 22, color: 'var(--dec-color-brand-base)', fontFamily: 'Material Icons', lineHeight: 1 }}>photo_library</span>
+          <h1 style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 22, fontWeight: 700, color: '#1C1C2E', letterSpacing: '-0.03em', margin: 0 }}>Page Layouts</h1>
+        </div>
+        <p style={{ fontFamily: 'var(--font-ui)', fontSize: 13, color: '#5E5C75', margin: 0, lineHeight: 1.6, maxWidth: 560 }}>
+          Reference layouts and UX pattern documentation. More layouts will be added as the design system evolves.
+        </p>
+      </div>
+
+      {/* Gallery grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
+        {layouts.map(l => (
+          <LayoutImageCard key={l.number} {...l} />
+        ))}
+      </div>
+
+      {/* More coming banner */}
+      <div style={{
+        marginTop: 28,
+        padding: '14px 18px',
+        borderRadius: 10,
+        background: 'linear-gradient(135deg, #F5F0FC 0%, #EDE6F8 100%)',
+        border: '1px dashed #C4B5E8',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+      }}>
+        <span className="material-icons" style={{ fontSize: 18, color: '#9B72CF', fontFamily: 'Material Icons', lineHeight: 1, flexShrink: 0 }}>add_photo_alternate</span>
+        <span style={{ fontSize: 12, color: '#4E2975', fontFamily: 'var(--font-ui)', fontWeight: 500 }}>
+          More layout references coming soon — additional patterns will be added here.
+        </span>
+      </div>
+    </div>
+  );
+}
+
 // ── Section registry ───────────────────────────────────────────────────────────
 
 type SectionId =
@@ -2562,6 +2698,7 @@ type SectionId =
   | 'tokens'
   | 'charts'
   | 'example-designs'
+  | 'page-layouts'
 
 const sectionMeta: Record<SectionId, { label: string; icon: string }> = {
   colors:     { label: 'Colors & Tokens',  icon: 'palette' },
@@ -2578,12 +2715,13 @@ const sectionMeta: Record<SectionId, { label: string; icon: string }> = {
   advanced:   { label: 'Advanced',          icon: 'tune' },
   charts:       { label: 'Charts',         icon: 'insert_chart' },
   'example-designs': { label: 'Example Designs', icon: 'view_quilt' },
+  'page-layouts':    { label: 'Page Layouts',    icon: 'photo_library' },
 }
 
 const sectionOrder: SectionId[] = [
   'colors', 'tokens', 'typography', 'buttons', 'forms',
   'feedback', 'navigation', 'overlays', 'data', 'layout', 'composites', 'advanced',
-  'charts', 'example-designs',
+  'charts', 'example-designs', 'page-layouts',
 ]
 
 function SectionContent({ id }: { id: SectionId }) {
@@ -2602,6 +2740,7 @@ function SectionContent({ id }: { id: SectionId }) {
     case 'advanced':   return <AdvancedSection />
     case 'charts':        return <ChartsSection />
     case 'example-designs': return <ExampleDesignsSection />
+    case 'page-layouts':    return <PageLayoutsSection />
   }
 }
 

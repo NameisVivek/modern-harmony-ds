@@ -50,6 +50,26 @@ export function Sidebar({
   const [tooltip, setTooltip] = useState<{ label: string; y: number } | null>(null)
   const sidebarRef = useRef<HTMLDivElement>(null)
 
+  // onMouseOver bubbles from any child element (icons, spans, etc.)
+  // closest() walks up from the actual target to find the nav item wrapper
+  function handleSidebarMouseOver(e: React.MouseEvent<HTMLDivElement>) {
+    if (expanded) return
+    const item = (e.target as HTMLElement).closest<HTMLElement>('[data-navid]')
+    if (!item) { setTooltip(null); return }
+    const rect = item.getBoundingClientRect()
+    const y = rect.top + rect.height / 2
+    const label = item.dataset.navlabel ?? ''
+    setTooltip(prev => (prev?.label === label ? prev : { label, y }))
+  }
+
+  // onMouseOut fires when leaving any child — only clear when cursor exits the sidebar entirely
+  function handleSidebarMouseOut(e: React.MouseEvent<HTMLDivElement>) {
+    if (!sidebarRef.current?.contains(e.relatedTarget as Node)) {
+      setTooltip(null)
+      setHoveredId(null)
+    }
+  }
+
   const width = expanded ? 216 : 48
 
   const sidebarStyle: React.CSSProperties = {
@@ -67,29 +87,6 @@ export function Sidebar({
     flexShrink: 0,
   }
 
-  // Track tooltip by scanning data-navid elements on every mouse move within the sidebar.
-  // This is more reliable than per-item onMouseEnter which can be suppressed by overflow:hidden.
-  function handleSidebarMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    if (expanded) { setTooltip(null); return }
-    const els = sidebarRef.current?.querySelectorAll<HTMLElement>('[data-navid]')
-    if (!els) return
-    let found: { label: string; y: number } | null = null
-    els.forEach((el) => {
-      const rect = el.getBoundingClientRect()
-      if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
-        found = { label: el.dataset.navlabel ?? '', y: rect.top + rect.height / 2 }
-      }
-    })
-    setTooltip((prev) => {
-      if (prev?.label === found?.label && prev?.y === found?.y) return prev
-      return found
-    })
-  }
-
-  function handleSidebarMouseLeave() {
-    setTooltip(null)
-    setHoveredId(null)
-  }
 
   function getItemStyle(item: NavItem): React.CSSProperties {
     const isActive = item.id === activeId
@@ -181,8 +178,8 @@ export function Sidebar({
       <div
         ref={sidebarRef}
         style={sidebarStyle}
-        onMouseMove={handleSidebarMouseMove}
-        onMouseLeave={handleSidebarMouseLeave}
+        onMouseOver={handleSidebarMouseOver}
+        onMouseOut={handleSidebarMouseOut}
       >
         {items.map(renderItem)}
 

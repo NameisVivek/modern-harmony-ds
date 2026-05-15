@@ -2621,23 +2621,30 @@ function PageLayoutsSection() {
     {
       number: '02',
       name: 'Layout Guidelines',
-      description: 'Structural layout principles covering page on load, scroll down and scroll up states with annotated component regions.',
-      tags: ['Guidelines', 'Structure'],
+      description: 'Margin & spacing scale, visual rhythm, page layout patterns, filter UI, page drill-in behaviour, form layout, and workspace dashboard reference.',
+      tags: ['Spacing', 'Guidelines', 'Patterns'],
       src: '/layouts/layout-guidelines.png',
     },
     {
       number: '03',
       name: 'Empty States',
-      description: 'Empty state patterns for data grids, decision interfaces, and modal dialogs — with clear calls-to-action and contextual messaging.',
-      tags: ['Empty State', 'UX Patterns'],
+      description: 'Empty state patterns across data grids (Item Master), decision builder (e2open Intelligence), and expression modals — each with distinct CTA guidance.',
+      tags: ['Empty State', 'Data Grid', 'Modals'],
       src: '/layouts/empty-states.png',
     },
     {
       number: '04',
       name: 'Filter & Form Layout',
-      description: 'Filter panel layout with inline form controls, Advanced Filter expansion, Apply/Save/Clear actions, and grid integration.',
-      tags: ['Filters', 'Forms', 'Grid'],
+      description: 'Responsive filter patterns across four breakpoints (Large/Medium/Small/Extra-small) with collapsed filter states and truncation behaviour.',
+      tags: ['Filters', 'Responsive', 'Breakpoints'],
       src: '/layouts/filter-form-layout.png',
+    },
+    {
+      number: '05',
+      name: 'Form Layout',
+      description: 'Single-column form layout principles — clear labels, inline validation, minimal fields, and accordion grouping for long multi-section forms.',
+      tags: ['Forms', 'Accordion', 'UX'],
+      src: '/layouts/form-layout.png',
     },
   ];
 

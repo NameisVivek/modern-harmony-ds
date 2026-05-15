@@ -1,3 +1,22 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { height: 100%; }
+html, body { height: 100%; overflow: hidden; }
 body { font-family: var(--font-ui); font-size: var(--text-base); color: var(--dec-color-text-body); background: var(--dec-color-surface-subtle); -webkit-font-smoothing: antialiased; }
+#root { height: 100%; overflow: hidden; }
+
+/* Responsive 2-column grid — collapses to 1-col on mobile */
+.ds-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Horizontally scrollable container for wide content (tables, color charts) */
+.ds-scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 767px) {
+  .ds-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}

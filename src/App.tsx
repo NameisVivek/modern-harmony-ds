@@ -1,4 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
+function useIsMobile() {
+  const [m, setM] = useState(() => window.innerWidth < 768)
+  useEffect(() => {
+    const fn = () => setM(window.innerWidth < 768)
+    window.addEventListener('resize', fn)
+    return () => window.removeEventListener('resize', fn)
+  }, [])
+  return m
+}
 import {
   AppHeader,
   Sidebar,
@@ -212,7 +222,7 @@ function ColorsSection() {
       {/* ── Group 4: Forecast Colors ── */}
       <div style={{ ...EC, marginTop: 12 }}>
         <div style={SL}>Group 4 — Forecast / Time Series Colors</div>
-        <div style={{ display: 'flex', gap: 0, border: '1px solid #EBEBEB', borderRadius: 8, overflow: 'hidden', marginBottom: 12 }}>
+        <div className="ds-scroll-x" style={{ marginBottom: 12 }}><div style={{ display: 'flex', gap: 0, border: '1px solid #EBEBEB', borderRadius: 8, overflow: 'hidden', minWidth: 480 }}>
           {[
             { month: 'Aug', bg: '#8B8AA5', val: '48,291', lbl: 'cool-400', dark: true },
             { month: 'Sep', bg: '#BFBECE', val: '51,034', lbl: 'cool-200', dark: false },
@@ -234,8 +244,8 @@ function ColorsSection() {
               </div>
             </div>
           ))}
-        </div>
-        <div style={{ display: 'flex', gap: 20 }}>
+        </div></div>{/* /ds-scroll-x */}
+        <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
           <div>
             <div style={{ fontSize: 9, fontWeight: 500, color: '#8C8C8C', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 5, fontFamily: 'var(--font-ui)' }}>Past — cool gray scale</div>
             {[['cool-50','#F0F0F4'],['cool-100','#DDDDE5'],['cool-150','#C6C7D2'],['cool-200','#BFBECE'],['cool-400','#8B8AA5']].map(([n,c]) => (
@@ -325,7 +335,7 @@ function TypographySection() {
 
       <div style={{ ...EC, marginTop: 12 }}>
         <div style={SL}>UI Scale — System Font</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        <div className="ds-grid-2" style={{ gap: 16 }}>
           {([
             ['Body / 14px Regular', 14, 400, 'Inventory levels are within acceptable thresholds across all regional warehouses.'],
             ['Body / 14px Medium', 14, 500, 'Updated shipment status requires your immediate attention.'],
@@ -371,7 +381,7 @@ function ButtonsSection() {
       <div style={PAGE_TITLE}>Buttons</div>
       <div style={PAGE_SUB}>Interactive action components across variants, sizes and states</div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+      <div className="ds-grid-2" style={{ gap: 12 }}>
         <div style={EC}>
           <div style={SL}>Variants</div>
           <div style={ROW}>
@@ -506,7 +516,7 @@ function FormSection() {
       <div style={PAGE_TITLE}>Form Controls</div>
       <div style={PAGE_SUB}>Inputs, selects, checkboxes, radios, switches, textarea, date picker</div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+      <div className="ds-grid-2" style={{ gap: 12 }}>
         <div style={EC}>
           <div style={SL}>Text Input</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -652,7 +662,7 @@ function FeedbackSection() {
       <div style={PAGE_TITLE}>Feedback</div>
       <div style={PAGE_SUB}>Alerts, badges, tags, progress indicators, and steppers</div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+      <div className="ds-grid-2" style={{ gap: 12 }}>
         <div style={EC}>
           <div style={SL}>Alert Variants</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -936,7 +946,7 @@ function OverlaysSection() {
       <div style={PAGE_TITLE}>Overlays</div>
       <div style={PAGE_SUB}>Modals, drawers, tooltips, command bar, and action sheets</div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+      <div className="ds-grid-2" style={{ gap: 12 }}>
         <div style={EC}>
           <div style={SL}>Modal</div>
           <Button variant="primary" onClick={() => setModalOpen(true)}>Open Modal</Button>
@@ -1166,7 +1176,7 @@ function LayoutSection() {
       <div style={PAGE_TITLE}>Layout</div>
       <div style={PAGE_SUB}>Cards, Wells, Accordions, and Section Headings</div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+      <div className="ds-grid-2" style={{ gap: 12 }}>
         <div style={EC}>
           <div style={SL}>Card Elevations</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -1375,7 +1385,7 @@ function CompositesSection() {
 
       <div style={{ ...EC, marginTop: 12 }}>
         <div style={SL}>Empty States</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        <div className="ds-grid-2" style={{ gap: 12 }}>
           <EmptyState
             icon={<span className="material-icons" style={{ fontSize: 32, color: '#BFBECE' }}>inbox</span>}
             title="No orders found"
@@ -1601,7 +1611,7 @@ function TokensSection() {
         <div style={SL}>Elevation &amp; Shadows</div>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           {elevations.map((e) => (
-            <div key={e.name} style={{ flex: 1, minWidth: 160, background: '#fff', borderRadius: 8, padding: 14, border: e.border ?? 'none', boxShadow: e.shadow === 'none' ? 'none' : e.shadow }}>
+            <div key={e.name} style={{ flex: 1, minWidth: 120, background: '#fff', borderRadius: 8, padding: 14, border: e.border ?? 'none', boxShadow: e.shadow === 'none' ? 'none' : e.shadow }}>
               <div style={{ fontSize: 10, fontWeight: 500, color: '#8342BB', marginBottom: 4, fontFamily: 'var(--font-ui)' }}>{e.name}</div>
               <div style={{ fontSize: 8, color: '#767676', lineHeight: 1.4, fontFamily: 'Roboto Mono, monospace', whiteSpace: 'pre-line' }}>{e.spec}</div>
               <div style={{ fontSize: 9, color: '#8C8C8C', marginTop: 6, fontFamily: 'var(--font-ui)' }}>{e.use}</div>
@@ -1765,8 +1775,14 @@ function SectionContent({ id }: { id: SectionId }) {
 // ── App ────────────────────────────────────────────────────────────────────────
 
 export default function App() {
-  const [sidebarExpanded, setSidebarExpanded] = useState(true)
+  const isMobile = useIsMobile()
+  const [sidebarExpanded, setSidebarExpanded] = useState(() => window.innerWidth >= 768)
   const [activeSection, setActiveSection] = useState<SectionId>('colors')
+
+  // Auto-collapse sidebar when viewport shrinks to mobile
+  useEffect(() => {
+    if (isMobile) setSidebarExpanded(false)
+  }, [isMobile])
 
   const navItems: NavItem[] = sectionOrder.map((id) => ({
     id,
@@ -1774,8 +1790,17 @@ export default function App() {
     label: sectionMeta[id].label,
   }))
 
+  const handleNavigate = (id: string) => {
+    if (id === '_source') { window.open('https://github.com/NameisVivek/modern-harmony-ds', '_blank'); return }
+    setActiveSection(id as SectionId)
+    // Close sidebar after navigating on mobile
+    if (isMobile) setSidebarExpanded(false)
+  }
+
+  const pad = isMobile ? 12 : 24
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', fontFamily: 'var(--font-ui)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', fontFamily: 'var(--font-ui)' }}>
       <AppHeader
         sidebarExpanded={sidebarExpanded}
         onToggleSidebar={() => setSidebarExpanded((e) => !e)}
@@ -1790,7 +1815,7 @@ export default function App() {
         userInitials="DS"
         notificationCount={2}
       />
-      <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+      <div style={{ display: 'flex', flex: 1, overflow: 'hidden', position: 'relative' }}>
         <Sidebar
           expanded={sidebarExpanded}
           activeId={activeSection}
@@ -1798,19 +1823,23 @@ export default function App() {
           bottomItems={[
             { id: '_source', icon: 'code', label: 'Source code' },
           ]}
-          onNavigate={(id) => {
-            if (id === '_source') { window.open('https://github.com/NameisVivek/modern-harmony-ds', '_blank'); return }
-            setActiveSection(id as SectionId)
-          }}
+          onNavigate={handleNavigate}
           userName="Design Team"
           userRole="System Admin"
           userInitials="DS"
         />
-        <main style={{ flex: 1, overflowY: 'auto', padding: 24, background: '#F0F0F4' }}>
-          <div style={{ maxWidth: 960 }}>
+        <main style={{
+          flex: 1,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          padding: pad,
+          background: '#F0F0F4',
+          minWidth: 0,
+        }}>
+          <div style={{ maxWidth: 960, width: '100%' }}>
             <SectionContent id={activeSection} />
           </div>
-          <div style={{ height: 48 }} />
+          <div style={{ height: isMobile ? 16 : 48 }} />
         </main>
       </div>
     </div>

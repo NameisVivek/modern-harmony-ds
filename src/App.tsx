@@ -2785,20 +2785,6 @@ function PageLayoutsSection() {
         ))}
       </div>
 
-      {/* More coming banner */}
-      <div style={{
-        marginTop: 20,
-        padding: '12px 16px',
-        borderRadius: 10,
-        background: 'linear-gradient(135deg, #F5F0FC 0%, #EDE6F8 100%)',
-        border: '1px dashed #C4B5E8',
-        display: 'flex', alignItems: 'center', gap: 10,
-      }}>
-        <span className="material-icons" style={{ fontSize: 17, color: '#9B72CF', fontFamily: 'Material Icons', lineHeight: 1, flexShrink: 0 }}>add_photo_alternate</span>
-        <span style={{ fontSize: 12, color: '#4E2975', fontFamily: 'var(--font-ui)', fontWeight: 500 }}>
-          More layout references coming soon — additional patterns will be added here.
-        </span>
-      </div>
     </div>
   );
 }

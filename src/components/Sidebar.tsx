@@ -54,11 +54,11 @@ export function Sidebar({
   function showTooltip(label: string, y: number) {
     if (tooltipTimer.current) clearTimeout(tooltipTimer.current)
     setTooltip(prev => (prev?.label === label ? prev : { label, y }))
-    // Auto-dismiss after 2 s on touch devices (desktop hides on mouse-leave)
+    // Auto-dismiss after 1 s on touch devices (desktop hides on mouse-leave)
     tooltipTimer.current = setTimeout(() => {
       setTooltip(null)
       tooltipTimer.current = null
-    }, 2000)
+    }, 1000)
   }
 
   function hideTooltip() {

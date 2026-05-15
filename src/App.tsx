@@ -1833,7 +1833,7 @@ function ChartsSection() {
   )
 }
 
-// ── Section: Page Layouts ─────────────────────────────────────────────────────
+// ── Section: Example Designs ──────────────────────────────────────────────────
 
 function LayoutFrame({ number, name, description, tags, path, children }: {
   number: string; name: string; description: string; tags: string[]; path: string; children: React.ReactNode
@@ -1888,7 +1888,7 @@ const PS: React.CSSProperties = { fontSize: 11, color: '#5E5C75', fontFamily: 'v
 const MONTHS_8 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
 const WEEKS_6  = ['Wk 44', 'Wk 45', 'Wk 46', 'Wk 47', 'Wk 48', 'Wk 49']
 
-function PageLayoutsSection() {
+function ExampleDesignsSection() {
   const [dashSeg, setDashSeg] = useState('month')
   const [analyticsSeg, setAnalyticsSeg] = useState('quarter')
   const [detailTab, setDetailTab] = useState('shipments')
@@ -1927,7 +1927,7 @@ function PageLayoutsSection() {
 
   return (
     <div>
-      <div style={PAGE_TITLE}>Page Layouts</div>
+      <div style={PAGE_TITLE}>Example Designs</div>
       <div style={PAGE_SUB}>Enterprise page templates — composable patterns for real application screens</div>
 
       {/* ── intro grid ── */}
@@ -2541,6 +2541,68 @@ function PageLayoutsSection() {
           </div>
         </div>
       </LayoutFrame>
+
+      {/* ════════════════════════════════════════════════════════
+          LAYOUT 07 — FIGMA REFERENCE
+      ════════════════════════════════════════════════════════ */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10, gap: 16, flexWrap: 'wrap' }}>
+          <div>
+            <div style={SL}>Layout 07</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: '#282828', fontFamily: 'Switzer, var(--font-ui)', letterSpacing: '-0.01em' }}>Figma Reference — Modern Components</div>
+            <div style={{ fontSize: 12, color: '#5E5C75', fontFamily: 'var(--font-ui)', marginTop: 3, lineHeight: 1.5 }}>
+              Original page layout reference from the Modern Components Figma file. Requires Figma account access to view.
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+            {['Figma', 'node-id 60217-26610', 'Modern Components'].map(t => (
+              <span key={t} style={{ padding: '2px 8px', borderRadius: 4, background: '#F2ECF8', color: '#4E2975', fontSize: 10, fontWeight: 600, fontFamily: 'var(--font-ui)', border: '1px solid #CABAEF' }}>{t}</span>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid #DDDDE5', boxShadow: 'var(--elevation-2)' }}>
+          {/* chrome bar */}
+          <div style={{ background: '#1C1C2E', height: 32, display: 'flex', alignItems: 'center', padding: '0 14px', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 5 }}>
+              {(['#FF5F57','#FFBD2E','#28CA41'] as const).map(c => <div key={c} style={{ width: 9, height: 9, borderRadius: '50%', background: c }} />)}
+            </div>
+            <div style={{ flex: 1, background: 'rgba(255,255,255,0.07)', height: 20, borderRadius: 4, marginLeft: 4, display: 'flex', alignItems: 'center', padding: '0 10px', gap: 5 }}>
+              <span className="material-icons" style={{ fontSize: 9, color: 'rgba(255,255,255,0.25)', fontFamily: 'Material Icons', lineHeight: 1 }}>lock</span>
+              <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', fontFamily: 'Roboto Mono, monospace' }}>figma.com/design/OimYjkrOf4hzQRzNqH03EN/Modern-Components</span>
+            </div>
+            <a href="https://www.figma.com/design/OimYjkrOf4hzQRzNqH03EN/Modern-Components?node-id=60217-26610" target="_blank" rel="noreferrer"
+              style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-ui)', textDecoration: 'none', padding: '3px 8px', borderRadius: 4, background: 'rgba(255,255,255,0.08)' }}>
+              <span className="material-icons" style={{ fontSize: 12, fontFamily: 'Material Icons', lineHeight: 1 }}>open_in_new</span>
+              Open in Figma
+            </a>
+          </div>
+
+          {/* figma embed */}
+          <div style={{ position: 'relative', background: '#F0F0F4' }}>
+            <iframe
+              title="Modern Components — Page Layouts"
+              style={{ display: 'block', width: '100%', height: 640, border: 'none' }}
+              src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FOimYjkrOf4hzQRzNqH03EN%2FModern-Components%3Fnode-id%3D60217-26610%26t%3DXrg6N70QgysNfnRw-1"
+              allowFullScreen
+            />
+          </div>
+
+          {/* footer note */}
+          <div style={{ background: '#fff', borderTop: '1px solid #EBEBEB', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span className="material-icons" style={{ fontSize: 15, color: '#8C8C8C', fontFamily: 'Material Icons', lineHeight: 1 }}>info_outline</span>
+            <span style={{ fontSize: 11, color: '#767676', fontFamily: 'var(--font-ui)' }}>
+              This embed requires a Figma account with access to the Modern Components file. If you see a sign-in prompt, log in and reload.
+            </span>
+            <a href="https://www.figma.com/design/OimYjkrOf4hzQRzNqH03EN/Modern-Components?node-id=60217-26610"
+              target="_blank" rel="noreferrer"
+              style={{ marginLeft: 'auto', fontSize: 11, color: '#8342BB', fontFamily: 'var(--font-ui)', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span className="material-icons" style={{ fontSize: 13, fontFamily: 'Material Icons', lineHeight: 1 }}>open_in_new</span>
+              View full file
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
@@ -2561,7 +2623,7 @@ type SectionId =
   | 'advanced'
   | 'tokens'
   | 'charts'
-  | 'page-layouts'
+  | 'example-designs'
 
 const sectionMeta: Record<SectionId, { label: string; icon: string }> = {
   colors:     { label: 'Colors & Tokens',  icon: 'palette' },
@@ -2577,13 +2639,13 @@ const sectionMeta: Record<SectionId, { label: string; icon: string }> = {
   composites: { label: 'Composites',        icon: 'widgets' },
   advanced:   { label: 'Advanced',          icon: 'tune' },
   charts:       { label: 'Charts',         icon: 'insert_chart' },
-  'page-layouts': { label: 'Page Layouts', icon: 'view_quilt'   },
+  'example-designs': { label: 'Example Designs', icon: 'view_quilt' },
 }
 
 const sectionOrder: SectionId[] = [
   'colors', 'tokens', 'typography', 'buttons', 'forms',
   'feedback', 'navigation', 'overlays', 'data', 'layout', 'composites', 'advanced',
-  'charts', 'page-layouts',
+  'charts', 'example-designs',
 ]
 
 function SectionContent({ id }: { id: SectionId }) {
@@ -2601,7 +2663,7 @@ function SectionContent({ id }: { id: SectionId }) {
     case 'composites': return <CompositesSection />
     case 'advanced':   return <AdvancedSection />
     case 'charts':        return <ChartsSection />
-    case 'page-layouts':  return <PageLayoutsSection />
+    case 'example-designs': return <ExampleDesignsSection />
   }
 }
 

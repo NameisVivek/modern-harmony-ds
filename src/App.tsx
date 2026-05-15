@@ -128,7 +128,7 @@ function Swatch({ hex, name, star }: { hex: string; name: string; star?: boolean
 
 function SemanticGroup({ label, ramp, keys }: { label: string; ramp: string[]; keys: { name: string; hex: string; dark?: boolean }[] }) {
   return (
-    <div style={{ flex: '1 1 140px' }}>
+    <div style={{ minWidth: 0 }}>
       <div style={{ fontSize: 9, fontWeight: 500, color: '#8C8C8C', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 5, fontFamily: 'var(--font-ui)' }}>{label}</div>
       <div className="ds-palette-row" style={{ gap: 3, marginBottom: 8 }}>
         {ramp.map((c, i) => <div key={i} style={{ flex: 1, minWidth: 28, height: 28, borderRadius: 4, background: c, border: '1px solid rgba(0,0,0,0.06)' }} />)}
@@ -207,7 +207,7 @@ function ColorsSection() {
       {/* ── Group 3: Semantic Colors ── */}
       <div style={{ ...EC, marginTop: 12 }}>
         <div style={SL}>Group 3 — Semantic Colors</div>
-        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+        <div className="ds-grid-4" style={{ gap: 16 }}>
           <SemanticGroup label="Error" ramp={['#FEF7F4','#FBECE9','#F9E3DF','#F6D7D6','#F0B0AE','#ED8885','#EA5F5B','#E02F3A','#C0172D','#9A112C','#760824','#420519']}
             keys={[{name:'subtle',hex:'#FEF7F4'},{name:'base',hex:'#F6D7D6'},{name:'strong',hex:'#E02F3A',dark:true},{name:'fg',hex:'#9A112C',dark:true}]} />
           <SemanticGroup label="Success" ramp={['#EEFEF9','#DDFAEE','#C5F3DF','#A1EECC','#5BD6A0','#02A15A','#027B44','#27854D','#1A6B39','#12512A','#0B3A1E','#072411']}

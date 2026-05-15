@@ -9,6 +9,7 @@ function useIsMobile() {
   }, [])
   return m
 }
+import { SearchItem } from './components/AppHeader'
 import {
   AppHeader,
   Sidebar,
@@ -2852,6 +2853,102 @@ function SectionContent({ id }: { id: SectionId }) {
   }
 }
 
+// ── Search index ──────────────────────────────────────────────────────────────
+
+const SEARCH_INDEX: SearchItem[] = [
+  // ── Sections ──
+  { id: 'colors',     label: 'Colors & Tokens',      section: 'Section',          icon: 'palette',            keywords: ['color', 'palette', 'brand', 'semantic', 'core', 'swatch'] },
+  { id: 'tokens',     label: 'Design Tokens',         section: 'Section',          icon: 'design_services',    keywords: ['token', 'css variable', 'spacing', 'radius', 'shadow', 'elevation'] },
+  { id: 'typography', label: 'Typography',            section: 'Section',          icon: 'text_fields',        keywords: ['font', 'heading', 'body', 'label', 'mono', 'switzer', 'type scale'] },
+  { id: 'buttons',    label: 'Buttons',               section: 'Section',          icon: 'smart_button',       keywords: ['button', 'cta', 'primary', 'secondary', 'borderless', 'ghost', 'icon only'] },
+  { id: 'forms',      label: 'Form Controls',         section: 'Section',          icon: 'edit_note',          keywords: ['input', 'select', 'checkbox', 'radio', 'switch', 'toggle', 'textarea', 'datepicker', 'date', 'searchbar'] },
+  { id: 'feedback',   label: 'Feedback',              section: 'Section',          icon: 'notifications_active', keywords: ['alert', 'toast', 'notification', 'badge', 'progress', 'spinner', 'loading', 'tag', 'chip'] },
+  { id: 'navigation', label: 'Navigation',            section: 'Section',          icon: 'navigation',         keywords: ['tabs', 'tab', 'breadcrumb', 'stepper', 'pagination', 'sidebar', 'segments', 'segmented control'] },
+  { id: 'overlays',   label: 'Overlays',              section: 'Section',          icon: 'layers',             keywords: ['modal', 'dialog', 'drawer', 'tooltip', 'popover', 'overlay'] },
+  { id: 'data',       label: 'Data Display',          section: 'Section',          icon: 'table_chart',        keywords: ['datagrid', 'table', 'grid', 'fieldvaluepairs', 'accordion', 'list', 'column'] },
+  { id: 'layout',     label: 'Layout',                section: 'Section',          icon: 'dashboard',          keywords: ['card', 'divider', 'section heading', 'well', 'page footer', 'grid', 'spacing'] },
+  { id: 'composites', label: 'Composites',            section: 'Section',          icon: 'widgets',            keywords: ['kpi', 'widget', 'tree', 'searchbar', 'composite', 'combined'] },
+  { id: 'advanced',   label: 'Advanced',              section: 'Section',          icon: 'tune',               keywords: ['advanced', 'app header', 'header', 'navigation bar'] },
+  { id: 'charts',     label: 'Charts',                section: 'Section',          icon: 'insert_chart',       keywords: ['chart', 'graph', 'line', 'area', 'bar', 'donut', 'pie', 'horizontal', 'scatter', 'visualisation'] },
+  { id: 'example-designs', label: 'Example Designs', section: 'Section',          icon: 'view_quilt',         keywords: ['example', 'template', 'page', 'screen', 'dashboard', 'enterprise'] },
+  { id: 'page-layouts', label: 'Page Layouts',        section: 'Section',          icon: 'photo_library',      keywords: ['layout', 'reference', 'pattern', 'guideline', 'documentation'] },
+
+  // ── Buttons ──
+  { id: 'buttons', label: 'Primary Button',           section: 'Buttons',          icon: 'smart_button',       keywords: ['primary', 'cta', 'submit', 'action'] },
+  { id: 'buttons', label: 'Secondary Button',         section: 'Buttons',          icon: 'smart_button',       keywords: ['secondary', 'default', 'outlined'] },
+  { id: 'buttons', label: 'Borderless Button',        section: 'Buttons',          icon: 'smart_button',       keywords: ['borderless', 'ghost', 'text button'] },
+  { id: 'buttons', label: 'Icon Button',              section: 'Buttons',          icon: 'smart_button',       keywords: ['icon only', 'icon button', 'toolbar'] },
+  { id: 'buttons', label: 'Button Sizes',             section: 'Buttons',          icon: 'smart_button',       keywords: ['sm', 'md', 'lg', 'size', 'small', 'large'] },
+
+  // ── Form Controls ──
+  { id: 'forms', label: 'Input',                      section: 'Form Controls',    icon: 'edit_note',          keywords: ['text field', 'text input', 'field', 'label', 'placeholder', 'error', 'validation'] },
+  { id: 'forms', label: 'Select',                     section: 'Form Controls',    icon: 'edit_note',          keywords: ['dropdown', 'select', 'option', 'picker'] },
+  { id: 'forms', label: 'Checkbox',                   section: 'Form Controls',    icon: 'edit_note',          keywords: ['checkbox', 'check', 'tick', 'multi select'] },
+  { id: 'forms', label: 'Radio',                      section: 'Form Controls',    icon: 'edit_note',          keywords: ['radio', 'radio button', 'single select'] },
+  { id: 'forms', label: 'Switch',                     section: 'Form Controls',    icon: 'edit_note',          keywords: ['toggle', 'switch', 'on off', 'boolean'] },
+  { id: 'forms', label: 'Textarea',                   section: 'Form Controls',    icon: 'edit_note',          keywords: ['textarea', 'multiline', 'text area', 'long text'] },
+  { id: 'forms', label: 'DatePicker',                 section: 'Form Controls',    icon: 'edit_note',          keywords: ['date', 'calendar', 'picker', 'date picker'] },
+  { id: 'forms', label: 'SearchBar',                  section: 'Form Controls',    icon: 'edit_note',          keywords: ['search', 'search bar', 'search input', 'find'] },
+
+  // ── Feedback ──
+  { id: 'feedback', label: 'Alert',                   section: 'Feedback',         icon: 'notifications_active', keywords: ['alert', 'warning', 'error', 'info', 'success', 'banner', 'notification'] },
+  { id: 'feedback', label: 'Toast',                   section: 'Feedback',         icon: 'notifications_active', keywords: ['toast', 'snackbar', 'notification', 'message'] },
+  { id: 'feedback', label: 'Badge',                   section: 'Feedback',         icon: 'notifications_active', keywords: ['badge', 'count', 'dot', 'status indicator'] },
+  { id: 'feedback', label: 'Progress',                section: 'Feedback',         icon: 'notifications_active', keywords: ['progress', 'loading bar', 'linear', 'circular', 'spinner'] },
+  { id: 'feedback', label: 'Tag',                     section: 'Feedback',         icon: 'notifications_active', keywords: ['tag', 'chip', 'label', 'category'] },
+
+  // ── Navigation ──
+  { id: 'navigation', label: 'Tabs',                  section: 'Navigation',       icon: 'navigation',         keywords: ['tab', 'tablist', 'tabpanel', 'tab bar'] },
+  { id: 'navigation', label: 'Breadcrumbs',           section: 'Navigation',       icon: 'navigation',         keywords: ['breadcrumb', 'trail', 'path', 'hierarchy'] },
+  { id: 'navigation', label: 'Stepper',               section: 'Navigation',       icon: 'navigation',         keywords: ['stepper', 'wizard', 'step', 'multi step', 'progress steps'] },
+  { id: 'navigation', label: 'Pagination',            section: 'Navigation',       icon: 'navigation',         keywords: ['pagination', 'page', 'next', 'previous', 'pager'] },
+  { id: 'navigation', label: 'Segments',              section: 'Navigation',       icon: 'navigation',         keywords: ['segments', 'segmented control', 'toggle group', 'pill'] },
+
+  // ── Overlays ──
+  { id: 'overlays', label: 'Modal',                   section: 'Overlays',         icon: 'layers',             keywords: ['modal', 'dialog', 'popup', 'lightbox'] },
+  { id: 'overlays', label: 'Drawer',                  section: 'Overlays',         icon: 'layers',             keywords: ['drawer', 'side panel', 'slide out', 'panel'] },
+  { id: 'overlays', label: 'Tooltip',                 section: 'Overlays',         icon: 'layers',             keywords: ['tooltip', 'hover', 'hint', 'popover'] },
+
+  // ── Data ──
+  { id: 'data', label: 'DataGrid',                    section: 'Data Display',     icon: 'table_chart',        keywords: ['data grid', 'table', 'grid', 'column', 'row', 'sort', 'filter'] },
+  { id: 'data', label: 'FieldValuePairs',             section: 'Data Display',     icon: 'table_chart',        keywords: ['field value', 'key value', 'label value', 'detail', 'pairs'] },
+  { id: 'data', label: 'Accordion',                   section: 'Data Display',     icon: 'table_chart',        keywords: ['accordion', 'expand', 'collapse', 'collapsible', 'disclosure'] },
+
+  // ── Layout ──
+  { id: 'layout', label: 'Card',                      section: 'Layout',           icon: 'dashboard',          keywords: ['card', 'surface', 'container', 'panel'] },
+  { id: 'layout', label: 'SectionHeading',            section: 'Layout',           icon: 'dashboard',          keywords: ['section heading', 'heading', 'divider label'] },
+  { id: 'layout', label: 'Well',                      section: 'Layout',           icon: 'dashboard',          keywords: ['well', 'inset', 'recessed', 'background'] },
+  { id: 'layout', label: 'PageFooter',                section: 'Layout',           icon: 'dashboard',          keywords: ['page footer', 'footer', 'action bar', 'bottom bar'] },
+
+  // ── Composites ──
+  { id: 'composites', label: 'KPI Widget',            section: 'Composites',       icon: 'widgets',            keywords: ['kpi', 'metric', 'sparkline', 'ratio', 'multi metric', 'status bar'] },
+  { id: 'composites', label: 'Tree View',             section: 'Composites',       icon: 'widgets',            keywords: ['tree', 'tree view', 'hierarchy', 'nested', 'folder'] },
+
+  // ── Charts ──
+  { id: 'charts', label: 'Line Chart',                section: 'Charts',           icon: 'insert_chart',       keywords: ['line chart', 'line graph', 'trend', 'time series'] },
+  { id: 'charts', label: 'Area Chart',                section: 'Charts',           icon: 'insert_chart',       keywords: ['area chart', 'stacked area', 'filled line'] },
+  { id: 'charts', label: 'Bar Chart',                 section: 'Charts',           icon: 'insert_chart',       keywords: ['bar chart', 'column chart', 'grouped', 'stacked bar'] },
+  { id: 'charts', label: 'Horizontal Bar Chart',      section: 'Charts',           icon: 'insert_chart',       keywords: ['horizontal bar', 'bar chart', 'ranking'] },
+  { id: 'charts', label: 'Donut Chart',               section: 'Charts',           icon: 'insert_chart',       keywords: ['donut', 'pie chart', 'ring', 'proportion'] },
+
+  // ── Example Designs ──
+  { id: 'example-designs', label: 'Operational Dashboard',  section: 'Example Designs', icon: 'view_quilt', keywords: ['dashboard', 'kpi', 'operations', 'overview'] },
+  { id: 'example-designs', label: 'Analytics Overview',     section: 'Example Designs', icon: 'view_quilt', keywords: ['analytics', 'revenue', 'channel', 'overview'] },
+  { id: 'example-designs', label: 'Record Detail',          section: 'Example Designs', icon: 'view_quilt', keywords: ['record', 'detail', 'order', 'split view', 'metadata'] },
+  { id: 'example-designs', label: 'Data Management',        section: 'Example Designs', icon: 'view_quilt', keywords: ['data management', 'table', 'filter', 'search', 'records'] },
+  { id: 'example-designs', label: 'Multi-Step Workflow',    section: 'Example Designs', icon: 'view_quilt', keywords: ['workflow', 'wizard', 'stepper', 'form', 'multi step'] },
+  { id: 'example-designs', label: 'Settings & Config',      section: 'Example Designs', icon: 'view_quilt', keywords: ['settings', 'config', 'preferences', 'toggle'] },
+
+  // ── Page Layouts ──
+  { id: 'page-layouts', label: 'Scroll Behaviour',          section: 'Page Layouts', icon: 'photo_library', keywords: ['scroll', 'sticky header', 'page anatomy', 'scrollbar'] },
+  { id: 'page-layouts', label: 'Layout Guidelines',         section: 'Page Layouts', icon: 'photo_library', keywords: ['margin', 'spacing', 'rhythm', 'visual rhythm', 'guideline'] },
+  { id: 'page-layouts', label: 'Empty States',              section: 'Page Layouts', icon: 'photo_library', keywords: ['empty state', 'no data', 'zero state', 'placeholder'] },
+  { id: 'page-layouts', label: 'Filter & Form Layout',      section: 'Page Layouts', icon: 'photo_library', keywords: ['filter', 'form', 'responsive', 'breakpoint', 'grid'] },
+  { id: 'page-layouts', label: 'Form Layout',               section: 'Page Layouts', icon: 'photo_library', keywords: ['form', 'single column', 'validation', 'accordion form'] },
+  { id: 'page-layouts', label: 'Page Header',               section: 'Page Layouts', icon: 'photo_library', keywords: ['page header', 'breadcrumb', 'title', 'toolbar', 'sub navigation'] },
+  { id: 'page-layouts', label: 'App Header Responsive',     section: 'Page Layouts', icon: 'photo_library', keywords: ['app header', 'responsive', 'mobile', 'breakpoint', 'navigation bar'] },
+]
+
 // ── App ────────────────────────────────────────────────────────────────────────
 
 export default function App() {
@@ -2890,6 +2987,11 @@ export default function App() {
         userInitials="DS"
         notificationCount={2}
         isMobile={isMobile}
+        searchItems={SEARCH_INDEX}
+        onSearchNavigate={(id) => {
+          setActiveSection(id as SectionId)
+          if (isMobile) setSidebarExpanded(false)
+        }}
       />
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden', position: 'relative' }}>
         <Sidebar

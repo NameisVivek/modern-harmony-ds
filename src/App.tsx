@@ -2871,7 +2871,6 @@ export default function App() {
   }))
 
   const handleNavigate = (id: string) => {
-    if (id === '_source') { window.open('https://github.com/NameisVivek/modern-harmony-ds', '_blank'); return }
     setActiveSection(id as SectionId)
     // Close sidebar after navigating on mobile
     if (isMobile) setSidebarExpanded(false)
@@ -2897,9 +2896,7 @@ export default function App() {
           expanded={sidebarExpanded}
           activeId={activeSection}
           items={navItems}
-          bottomItems={[
-            { id: '_source', icon: 'code', label: 'Source code' },
-          ]}
+          bottomItems={[]}
           onNavigate={handleNavigate}
           userName="Design Team"
           userRole="System Admin"

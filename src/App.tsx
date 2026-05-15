@@ -3009,7 +3009,7 @@ export default function App() {
         <main style={{
           flex: 1,
           overflowY: 'auto',
-          overflowX: 'hidden',
+          overflowX: 'auto',
           padding: pad,
           background: '#F0F0F4',
           minWidth: 0,

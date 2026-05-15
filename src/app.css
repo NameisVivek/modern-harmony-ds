@@ -17,16 +17,18 @@ body { font-family: var(--font-ui); font-size: var(--text-base); color: var(--de
 .ds-palette-row::-webkit-scrollbar { height: 3px; }
 .ds-palette-row::-webkit-scrollbar-thumb { background: rgba(131,66,187,0.25); border-radius: 2px; }
 
-/* 2-col grid → 1-col on mobile */
+/* 2-col grid — minimum width prevents compression, scrolls instead */
 .ds-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  min-width: 480px;
 }
 
-/* 4-col grid → 2-col on mobile */
+/* 4-col grid — minimum width prevents compression, scrolls instead */
 .ds-grid-4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  min-width: 560px;
 }
 
 /* Horizontally scrollable container */
@@ -45,8 +47,4 @@ body { font-family: var(--font-ui); font-size: var(--text-base); color: var(--de
     min-width: 44px !important;
     flex-shrink: 0 !important;
   }
-
-  /* Grids collapse */
-  .ds-grid-2 { grid-template-columns: 1fr; }
-  .ds-grid-4 { grid-template-columns: 1fr 1fr; }
 }

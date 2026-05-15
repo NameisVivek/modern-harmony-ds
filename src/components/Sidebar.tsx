@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { createPortal } from 'react-dom'
 
 export interface NavItem {
@@ -47,7 +47,8 @@ export function Sidebar({
   onNavigate,
 }: SidebarProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null)
-  const [tooltip, setTooltip] = useState<{ id: string; y: number } | null>(null)
+  const [tooltip, setTooltip] = useState<{ label: string; y: number } | null>(null)
+  const sidebarRef = useRef<HTMLDivElement>(null)
 
   const width = expanded ? 216 : 48
 
@@ -66,17 +67,40 @@ export function Sidebar({
     flexShrink: 0,
   }
 
+  // Track tooltip by scanning data-navid elements on every mouse move within the sidebar.
+  // This is more reliable than per-item onMouseEnter which can be suppressed by overflow:hidden.
+  function handleSidebarMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    if (expanded) { setTooltip(null); return }
+    const els = sidebarRef.current?.querySelectorAll<HTMLElement>('[data-navid]')
+    if (!els) return
+    let found: { label: string; y: number } | null = null
+    els.forEach((el) => {
+      const rect = el.getBoundingClientRect()
+      if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
+        found = { label: el.dataset.navlabel ?? '', y: rect.top + rect.height / 2 }
+      }
+    })
+    setTooltip((prev) => {
+      if (prev?.label === found?.label && prev?.y === found?.y) return prev
+      return found
+    })
+  }
+
+  function handleSidebarMouseLeave() {
+    setTooltip(null)
+    setHoveredId(null)
+  }
+
   function getItemStyle(item: NavItem): React.CSSProperties {
     const isActive = item.id === activeId
     const isHovered = hoveredId === item.id
-
     return {
       display: 'flex',
       alignItems: 'center',
       height: 40,
       cursor: item.disabled ? 'not-allowed' : 'pointer',
       borderLeft: `3px solid ${isActive ? '#8342BB' : 'transparent'}`,
-      paddingLeft: expanded ? (isActive ? 11 : 13) : isActive ? 11 : 13,
+      paddingLeft: isActive ? 11 : 13,
       gap: 10,
       background: isActive
         ? 'rgba(131,66,187,0.08)'
@@ -117,25 +141,18 @@ export function Sidebar({
     return (
       <div
         key={item.id}
+        data-navid={item.id}
+        data-navlabel={item.label}
         style={getItemStyle(item)}
-        onMouseEnter={(e) => {
-          if (!item.disabled) setHoveredId(item.id)
-          if (!expanded) {
-            const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
-            setTooltip({ id: item.id, y: rect.top + rect.height / 2 })
-          }
-        }}
-        onMouseLeave={() => {
-          setHoveredId(null)
-          setTooltip(null)
-        }}
+        onMouseEnter={() => { if (!item.disabled) setHoveredId(item.id) }}
+        onMouseLeave={() => setHoveredId(null)}
         onClick={() => !item.disabled && onNavigate?.(item.id)}
         role="button"
         tabIndex={item.disabled ? -1 : 0}
         aria-disabled={item.disabled}
       >
         <span className="material-icons" style={getIconStyle(item)}>{item.icon}</span>
-        {expanded && <span style={getLabelStyle(item)}>{item.label}</span>}
+        <span style={getLabelStyle(item)}>{item.label}</span>
         {expanded && item.badge && item.badge > 0 && (
           <span style={{
             marginLeft: 'auto',
@@ -159,33 +176,30 @@ export function Sidebar({
     )
   }
 
-  const allLabels = [...items, ...bottomItems,
-    { id: '_help', label: 'Help' },
-    { id: '_settings', label: 'Settings' },
-  ]
-
   return (
     <>
-      <div style={sidebarStyle}>
-        {/* Main nav items */}
+      <div
+        ref={sidebarRef}
+        style={sidebarStyle}
+        onMouseMove={handleSidebarMouseMove}
+        onMouseLeave={handleSidebarMouseLeave}
+      >
         {items.map(renderItem)}
 
-        {/* Divider */}
         <div style={{ height: 1, background: '#F0F0F4', margin: '4px 0', flexShrink: 0 }} />
 
-        {/* Bottom utility items */}
         {bottomItems.map(renderItem)}
 
-        {/* Spacer */}
         <div style={{ flex: 1, minHeight: 20 }} />
 
-        {/* Help + Settings */}
         {[
           { id: '_help', icon: 'help_outline', label: 'Help' },
           { id: '_settings', icon: 'settings', label: 'Settings' },
         ].map((item) => (
           <div
             key={item.id}
+            data-navid={item.id}
+            data-navlabel={item.label}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -198,14 +212,8 @@ export function Sidebar({
               transition: 'background 0.1s',
               flexShrink: 0,
             }}
-            onMouseEnter={(e) => {
-              setHoveredId(item.id)
-              if (!expanded) {
-                const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
-                setTooltip({ id: item.id, y: rect.top + rect.height / 2 })
-              }
-            }}
-            onMouseLeave={() => { setHoveredId(null); setTooltip(null) }}
+            onMouseEnter={() => setHoveredId(item.id)}
+            onMouseLeave={() => setHoveredId(null)}
           >
             <span className="material-icons" style={{ fontSize: 20, flexShrink: 0, color: '#5E5C75' }}>{item.icon}</span>
             {expanded && (
@@ -214,20 +222,20 @@ export function Sidebar({
           </div>
         ))}
 
-        {/* User area */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          height: 44,
-          padding: expanded ? '0 10px' : '0 12px',
-          gap: 8,
-          cursor: 'pointer',
-          borderTop: '1px solid #F0F0F4',
-          justifyContent: expanded ? 'flex-start' : 'center',
-          flexShrink: 0,
-          background: hoveredId === '_user' ? 'rgba(40,40,40,0.04)' : 'transparent',
-          transition: 'background 0.1s',
-        }}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            height: 44,
+            padding: expanded ? '0 10px' : '0 12px',
+            gap: 8,
+            cursor: 'pointer',
+            borderTop: '1px solid #F0F0F4',
+            justifyContent: expanded ? 'flex-start' : 'center',
+            flexShrink: 0,
+            background: hoveredId === '_user' ? 'rgba(40,40,40,0.04)' : 'transparent',
+            transition: 'background 0.1s',
+          }}
           onMouseEnter={() => setHoveredId('_user')}
           onMouseLeave={() => setHoveredId(null)}
         >
@@ -255,7 +263,6 @@ export function Sidebar({
         </div>
       </div>
 
-      {/* Tooltip — rendered in document.body so sidebar overflow:hidden never clips it */}
       {!expanded && tooltip && createPortal(
         <div style={{
           position: 'fixed',
@@ -271,7 +278,7 @@ export function Sidebar({
           zIndex: 9999,
           boxShadow: '0 2px 8px rgba(20,16,41,0.2)',
         }}>
-          {allLabels.find((i) => i.id === tooltip.id)?.label ?? ''}
+          {tooltip.label}
         </div>,
         document.body
       )}

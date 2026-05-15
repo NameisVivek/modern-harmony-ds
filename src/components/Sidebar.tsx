@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 
 export interface NavItem {
   id: string
@@ -158,97 +159,104 @@ export function Sidebar({
     )
   }
 
+  const allLabels = [...items, ...bottomItems,
+    { id: '_help', label: 'Help' },
+    { id: '_settings', label: 'Settings' },
+  ]
+
   return (
-    <div style={sidebarStyle}>
-      {/* Main nav items */}
-      {items.map(renderItem)}
+    <>
+      <div style={sidebarStyle}>
+        {/* Main nav items */}
+        {items.map(renderItem)}
 
-      {/* Divider */}
-      <div style={{ height: 1, background: '#F0F0F4', margin: '4px 0', flexShrink: 0 }} />
+        {/* Divider */}
+        <div style={{ height: 1, background: '#F0F0F4', margin: '4px 0', flexShrink: 0 }} />
 
-      {/* Bottom utility items */}
-      {bottomItems.map(renderItem)}
+        {/* Bottom utility items */}
+        {bottomItems.map(renderItem)}
 
-      {/* Spacer */}
-      <div style={{ flex: 1, minHeight: 20 }} />
+        {/* Spacer */}
+        <div style={{ flex: 1, minHeight: 20 }} />
 
-      {/* Help + Settings */}
-      {[
-        { id: '_help', icon: 'help_outline', label: 'Help' },
-        { id: '_settings', icon: 'settings', label: 'Settings' },
-      ].map((item) => (
-        <div
-          key={item.id}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            height: 40,
-            cursor: 'pointer',
-            borderLeft: '3px solid transparent',
-            paddingLeft: 13,
-            gap: 10,
-            background: hoveredId === item.id ? 'rgba(40,40,40,0.05)' : 'transparent',
-            transition: 'background 0.1s',
-            flexShrink: 0,
-          }}
-          onMouseEnter={(e) => {
-            setHoveredId(item.id)
-            if (!expanded) {
-              const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
-              setTooltip({ id: item.id, y: rect.top + rect.height / 2 })
-            }
-          }}
-          onMouseLeave={() => { setHoveredId(null); setTooltip(null) }}
-        >
-          <span className="material-icons" style={{ fontSize: 20, flexShrink: 0, color: '#5E5C75' }}>{item.icon}</span>
-          {expanded && (
-            <span style={{ fontSize: 14, color: '#282828', whiteSpace: 'nowrap' }}>{item.label}</span>
-          )}
-        </div>
-      ))}
+        {/* Help + Settings */}
+        {[
+          { id: '_help', icon: 'help_outline', label: 'Help' },
+          { id: '_settings', icon: 'settings', label: 'Settings' },
+        ].map((item) => (
+          <div
+            key={item.id}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              height: 40,
+              cursor: 'pointer',
+              borderLeft: '3px solid transparent',
+              paddingLeft: 13,
+              gap: 10,
+              background: hoveredId === item.id ? 'rgba(40,40,40,0.05)' : 'transparent',
+              transition: 'background 0.1s',
+              flexShrink: 0,
+            }}
+            onMouseEnter={(e) => {
+              setHoveredId(item.id)
+              if (!expanded) {
+                const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+                setTooltip({ id: item.id, y: rect.top + rect.height / 2 })
+              }
+            }}
+            onMouseLeave={() => { setHoveredId(null); setTooltip(null) }}
+          >
+            <span className="material-icons" style={{ fontSize: 20, flexShrink: 0, color: '#5E5C75' }}>{item.icon}</span>
+            {expanded && (
+              <span style={{ fontSize: 14, color: '#282828', whiteSpace: 'nowrap' }}>{item.label}</span>
+            )}
+          </div>
+        ))}
 
-      {/* User area */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        height: 44,
-        padding: expanded ? '0 10px' : '0 12px',
-        gap: 8,
-        cursor: 'pointer',
-        borderTop: '1px solid #F0F0F4',
-        justifyContent: expanded ? 'flex-start' : 'center',
-        flexShrink: 0,
-        background: hoveredId === '_user' ? 'rgba(40,40,40,0.04)' : 'transparent',
-        transition: 'background 0.1s',
-      }}
-        onMouseEnter={() => setHoveredId('_user')}
-        onMouseLeave={() => setHoveredId(null)}
-      >
+        {/* User area */}
         <div style={{
-          width: 24,
-          height: 24,
-          borderRadius: '50%',
-          background: '#8342BB',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 9,
-          fontWeight: 500,
-          color: '#fff',
+          height: 44,
+          padding: expanded ? '0 10px' : '0 12px',
+          gap: 8,
+          cursor: 'pointer',
+          borderTop: '1px solid #F0F0F4',
+          justifyContent: expanded ? 'flex-start' : 'center',
           flexShrink: 0,
-        }}>
-          {userInitials}
-        </div>
-        {expanded && (
-          <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <span style={{ fontSize: 13, fontWeight: 500, color: '#282828', whiteSpace: 'nowrap' }}>{userName}</span>
-            <span style={{ fontSize: 10, color: '#8C8C8C', whiteSpace: 'nowrap' }}>{userRole}</span>
+          background: hoveredId === '_user' ? 'rgba(40,40,40,0.04)' : 'transparent',
+          transition: 'background 0.1s',
+        }}
+          onMouseEnter={() => setHoveredId('_user')}
+          onMouseLeave={() => setHoveredId(null)}
+        >
+          <div style={{
+            width: 24,
+            height: 24,
+            borderRadius: '50%',
+            background: '#8342BB',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 9,
+            fontWeight: 500,
+            color: '#fff',
+            flexShrink: 0,
+          }}>
+            {userInitials}
           </div>
-        )}
+          {expanded && (
+            <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <span style={{ fontSize: 13, fontWeight: 500, color: '#282828', whiteSpace: 'nowrap' }}>{userName}</span>
+              <span style={{ fontSize: 10, color: '#8C8C8C', whiteSpace: 'nowrap' }}>{userRole}</span>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Tooltip for collapsed state */}
-      {!expanded && tooltip && (
+      {/* Tooltip — rendered in document.body so sidebar overflow:hidden never clips it */}
+      {!expanded && tooltip && createPortal(
         <div style={{
           position: 'fixed',
           left: 56,
@@ -260,13 +268,13 @@ export function Sidebar({
           borderRadius: 5,
           whiteSpace: 'nowrap',
           pointerEvents: 'none',
-          zIndex: 1000,
+          zIndex: 9999,
           boxShadow: '0 2px 8px rgba(20,16,41,0.2)',
         }}>
-          {[...items, ...bottomItems, { id: '_help', label: 'Help' }, { id: '_settings', label: 'Settings' }]
-            .find((i) => i.id === tooltip.id)?.label ?? ''}
-        </div>
+          {allLabels.find((i) => i.id === tooltip.id)?.label ?? ''}
+        </div>,
+        document.body
       )}
-    </div>
+    </>
   )
 }

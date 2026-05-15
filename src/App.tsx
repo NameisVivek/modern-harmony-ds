@@ -1888,6 +1888,53 @@ const PS: React.CSSProperties = { fontSize: 11, color: '#5E5C75', fontFamily: 'v
 const MONTHS_8 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
 const WEEKS_6  = ['Wk 44', 'Wk 45', 'Wk 46', 'Wk 47', 'Wk 48', 'Wk 49']
 
+/* Collapsible dashboard section used inside LayoutFrame previews */
+interface DashSectionProps {
+  title: string;
+  summary?: string;
+  open: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+  noBorder?: boolean;
+}
+function DashSection({ title, summary, open, onToggle, children, noBorder }: DashSectionProps) {
+  return (
+    <div style={{ marginBottom: 14 }}>
+      <button
+        onClick={onToggle}
+        style={{
+          display: 'flex', alignItems: 'center', width: '100%', gap: 7,
+          padding: '6px 0',
+          background: 'transparent', border: 'none',
+          borderBottom: noBorder ? 'none' : `1px solid ${open ? '#EBEBEB' : '#F0F0F4'}`,
+          cursor: 'pointer', marginBottom: open ? 10 : 0,
+          transition: 'border-color 0.2s',
+        }}
+      >
+        <span className="material-icons" style={{
+          fontSize: 14, color: '#8342BB', fontFamily: 'Material Icons', lineHeight: 1,
+          transform: open ? 'rotate(90deg)' : 'rotate(0deg)',
+          transition: 'transform 0.22s ease',
+        }}>chevron_right</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: '#282828', fontFamily: 'var(--font-ui)' }}>{title}</span>
+        {summary && <span style={{ fontSize: 10, color: '#9B9BAA', fontFamily: 'var(--font-ui)' }}>{summary}</span>}
+        <div style={{ flex: 1 }} />
+        <span style={{ fontSize: 10, color: open ? '#8342BB' : '#BBBBC8', fontFamily: 'var(--font-ui)', fontWeight: 500 }}>
+          {open ? 'Collapse' : 'Expand'}
+        </span>
+      </button>
+      <div style={{
+        overflow: 'hidden',
+        maxHeight: open ? '3000px' : '0',
+        opacity: open ? 1 : 0,
+        transition: 'max-height 0.3s ease, opacity 0.22s ease',
+      }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function ExampleDesignsSection() {
   const [dashSeg, setDashSeg] = useState('month')
   const [analyticsSeg, setAnalyticsSeg] = useState('quarter')
@@ -1896,8 +1943,15 @@ function ExampleDesignsSection() {
   const [tableSearch, setTableSearch] = useState('')
   const [tablePage, setTablePage] = useState(1)
   const [settingsTab, setSettingsTab] = useState('general')
-  const [open1, setOpen1] = useState(true)
-  const [open2, setOpen2] = useState(false)
+  // Layout 01 accordion state
+  const [dashKPI, setDashKPI]       = useState(true)
+  const [dashCharts, setDashCharts] = useState(true)
+  const [dashGrid, setDashGrid]     = useState(true)
+  // Layout 03 accordion state
+  const [detailInfo, setDetailInfo]       = useState(true)
+  const [detailItems, setDetailItems]     = useState(true)
+  const [detailFinance, setDetailFinance] = useState(false)
+  const [detailRelated, setDetailRelated] = useState(true)
   const [notif, setNotif] = useState(false)
   const [darkMode, setDarkMode] = useState(false)
   const [autoSave, setAutoSave] = useState(true)
@@ -1976,56 +2030,63 @@ function ExampleDesignsSection() {
         </div>
 
         <div style={LP}>
-          <div style={PT}>Supply Chain Operations</div>
-          <div style={PS}>Live view · Updated just now · Showing {dashSeg === 'week' ? 'this week' : dashSeg === 'month' ? 'this month' : 'this quarter'}</div>
-
-          {/* KPI row */}
-          <div className="ds-grid-4" style={{ gap: 10, marginBottom: 14 }}>
-            <KPIWidget variant="simple" title="Active Orders" value="2,847"
-              change="+12.4% vs last period" changeDirection="up"
-              icon="shopping_cart" iconBg="#EAF3FC" iconColor="#3999E4" />
-            <KPIWidget variant="simple" title="On-Time Delivery" value="94.2" unit="%"
-              change="-1.8% vs target" changeDirection="down"
-              icon="local_shipping" iconBg="#FFF4DC" iconColor="#F0A008" />
-            <KPIWidget variant="ratio" title="Fulfillment Rate"
-              value="11,204" total="12,847" percentage={87}
-              barColor="var(--core-green-300)" labelLeft="Fulfilled" labelRight="87%" />
-            <KPIWidget variant="sparkline" title="Avg Lead Time (days)" value="4.2"
-              change="-0.3d" changeDirection="up"
-              data={[{value:5.1},{value:4.8},{value:5.2},{value:4.9},{value:4.6},{value:4.4},{value:4.2}]}
-              labelStart="6w ago" labelEnd="Now" />
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
+            <div>
+              <div style={PT}>Supply Chain Operations</div>
+              <div style={PS}>Live view · Updated just now · Showing {dashSeg === 'week' ? 'this week' : dashSeg === 'month' ? 'this month' : 'this quarter'}</div>
+            </div>
           </div>
 
-          {/* charts row */}
-          <div className="ds-grid-2" style={{ gap: 10, marginBottom: 14 }}>
-            <LineChart title="Shipment Volume" subtitle="Air · Ocean · Ground — 8 months"
-              labels={MONTHS_8}
-              series={[
-                { name: 'Air',    data: [3200,3600,3100,4200,3900,4600,5100,4800] },
-                { name: 'Ocean',  data: [8100,7800,8600,9200,8700,9800,10200,9600] },
-                { name: 'Ground', data: [5400,5100,5800,6200,5900,6600,7100,6800] },
-              ]}
-              showArea />
-            <DonutChart title="Orders by Status" subtitle="Current pipeline distribution"
-              centerLabel="Orders" centerValue="2,847"
-              slices={[
-                { name: 'On Track',  value: 1620 },
-                { name: 'Fulfilled', value: 842  },
-                { name: 'Delayed',   value: 294  },
-                { name: 'Critical',  value: 91   },
-              ]} />
-          </div>
+          <DashSection title="Key Metrics" summary="4 indicators" open={dashKPI} onToggle={() => setDashKPI(o => !o)}>
+            <div className="ds-grid-4" style={{ gap: 10 }}>
+              <KPIWidget variant="simple" title="Active Orders" value="2,847"
+                change="+12.4% vs last period" changeDirection="up"
+                icon="shopping_cart" iconBg="#EAF3FC" iconColor="#3999E4" />
+              <KPIWidget variant="simple" title="On-Time Delivery" value="94.2" unit="%"
+                change="-1.8% vs target" changeDirection="down"
+                icon="local_shipping" iconBg="#FFF4DC" iconColor="#F0A008" />
+              <KPIWidget variant="ratio" title="Fulfillment Rate"
+                value="11,204" total="12,847" percentage={87}
+                barColor="var(--core-green-300)" labelLeft="Fulfilled" labelRight="87%" />
+              <KPIWidget variant="sparkline" title="Avg Lead Time (days)" value="4.2"
+                change="-0.3d" changeDirection="up"
+                data={[{value:5.1},{value:4.8},{value:5.2},{value:4.9},{value:4.6},{value:4.4},{value:4.2}]}
+                labelStart="6w ago" labelEnd="Now" />
+            </div>
+          </DashSection>
 
-          {/* data grid */}
-          <SectionHeading title="Recent Orders" subtitle="Last 7 · sorted by urgency" action="View all" onAction={() => {}} />
-          <div className="ds-scroll-x">
-            <DataGrid columns={tableColumns} rows={tableRows.slice(0, 5)}
-              rowVariant={(r) => r.status === 'Critical' ? 'error' : r.status === 'Delayed' ? 'warning' : 'default'}
-              toolbar={<div style={{ display: 'flex', gap: 6 }}>
-                <Button variant="borderless" size="sm" iconOnly="filter_list" />
-                <Button variant="borderless" size="sm" iconOnly="refresh" />
-              </div>} />
-          </div>
+          <DashSection title="Performance Trends" summary="Shipment volume · order mix" open={dashCharts} onToggle={() => setDashCharts(o => !o)}>
+            <div className="ds-grid-2" style={{ gap: 10 }}>
+              <LineChart title="Shipment Volume" subtitle="Air · Ocean · Ground — 8 months"
+                labels={MONTHS_8}
+                series={[
+                  { name: 'Air',    data: [3200,3600,3100,4200,3900,4600,5100,4800] },
+                  { name: 'Ocean',  data: [8100,7800,8600,9200,8700,9800,10200,9600] },
+                  { name: 'Ground', data: [5400,5100,5800,6200,5900,6600,7100,6800] },
+                ]}
+                showArea />
+              <DonutChart title="Orders by Status" subtitle="Current pipeline distribution"
+                centerLabel="Orders" centerValue="2,847"
+                slices={[
+                  { name: 'On Track',  value: 1620 },
+                  { name: 'Fulfilled', value: 842  },
+                  { name: 'Delayed',   value: 294  },
+                  { name: 'Critical',  value: 91   },
+                ]} />
+            </div>
+          </DashSection>
+
+          <DashSection title="Recent Orders" summary="Last 7 · sorted by urgency" open={dashGrid} onToggle={() => setDashGrid(o => !o)} noBorder>
+            <div className="ds-scroll-x">
+              <DataGrid columns={tableColumns} rows={tableRows.slice(0, 5)}
+                rowVariant={(r) => r.status === 'Critical' ? 'error' : r.status === 'Delayed' ? 'warning' : 'default'}
+                toolbar={<div style={{ display: 'flex', gap: 6 }}>
+                  <Button variant="borderless" size="sm" iconOnly="filter_list" />
+                  <Button variant="borderless" size="sm" iconOnly="refresh" />
+                  <Button variant="borderless" size="sm">View all</Button>
+                </div>} />
+            </div>
+          </DashSection>
         </div>
       </LayoutFrame>
 
@@ -2135,8 +2196,8 @@ function ExampleDesignsSection() {
         </div>
 
         <div style={LP}>
-          {/* page header */}
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
+          {/* page header — always visible */}
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
                 <div style={PT}>Order ORD-48201</div>
@@ -2152,59 +2213,67 @@ function ExampleDesignsSection() {
             </div>
           </div>
 
-          {/* split layout */}
-          <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: 14 }}>
-            {/* left: metadata */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, minWidth: 0 }}>
-              <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '14px 16px' }}>
-                <div style={SL}>Order Details</div>
+          {/* Order Details — collapsible */}
+          <DashSection title="Order Details" summary="8 fields" open={detailInfo} onToggle={() => setDetailInfo(o => !o)}>
+            <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '14px 16px', marginBottom: 2 }}>
+              <div className="ds-grid-2" style={{ gap: '0 24px' }}>
                 <FieldValuePairs layout="stack" fields={[
                   { label: 'Order ID',    value: 'ORD-48201',            type: 'mono'      },
                   { label: 'PO Number',   value: 'PO-2024-08912'                            },
                   { label: 'Created',     value: '12 May 2024, 09:23'                       },
+                  { label: 'Total Value', value: '$124,680.00',           type: 'highlight' },
+                ]} />
+                <FieldValuePairs layout="stack" fields={[
                   { label: 'Ship-to',     value: 'Rotterdam, Netherlands'                   },
                   { label: 'Incoterms',   value: 'DAP'                                      },
-                  { label: 'Total Value', value: '$124,680.00',           type: 'highlight' },
                   { label: 'Priority',    value: <Tag variant="warning">High</Tag>          },
                   { label: 'Account Mgr', value: 'Alex Mercer'                              },
                 ]} />
               </div>
+            </div>
+          </DashSection>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <AccordionItem title="Line Items" icon="inventory_2" open={open1} onToggle={() => setOpen1(o => !o)}
-                  content={
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                      {[
-                        ['SKU-7821', 'Enterprise Unit A', 240, '$52,800'],
-                        ['SKU-3319', 'Industrial Component B', 180, '$39,600'],
-                        ['SKU-9104', 'Distribution Pack C', 420, '$32,280'],
-                      ].map(([sku, name, qty, val]) => (
-                        <div key={sku as string} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', background: '#F8F8FA', borderRadius: 6 }}>
-                          <div>
-                            <div style={{ fontSize: 11, fontWeight: 600, color: '#282828', fontFamily: 'Roboto Mono, monospace' }}>{sku}</div>
-                            <div style={{ fontSize: 10, color: '#767676', fontFamily: 'var(--font-ui)' }}>{name} · {qty} units</div>
-                          </div>
-                          <div style={{ fontSize: 12, fontWeight: 600, color: '#282828', fontFamily: 'Roboto Mono, monospace' }}>{val}</div>
-                        </div>
-                      ))}
+          {/* Line Items — collapsible */}
+          <DashSection title="Line Items" summary="3 items · $124,680.00" open={detailItems} onToggle={() => setDetailItems(o => !o)}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 2 }}>
+              {[
+                ['SKU-7821', 'Enterprise Unit A',       240, '$52,800'],
+                ['SKU-3319', 'Industrial Component B',  180, '$39,600'],
+                ['SKU-9104', 'Distribution Pack C',     420, '$32,280'],
+              ].map(([sku, name, qty, val]) => (
+                <div key={sku as string} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: '#F8F8FA', borderRadius: 8, border: '1px solid #EBEBEB' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span className="material-icons" style={{ fontSize: 15, color: '#8342BB', fontFamily: 'Material Icons', lineHeight: 1 }}>inventory_2</span>
+                    <div>
+                      <div style={{ fontSize: 11, fontWeight: 600, color: '#282828', fontFamily: 'Roboto Mono, monospace' }}>{sku}</div>
+                      <div style={{ fontSize: 10, color: '#767676', fontFamily: 'var(--font-ui)' }}>{name} · {qty} units</div>
                     </div>
-                  } />
-                <AccordionItem title="Financial Summary" icon="payments" open={open2} onToggle={() => setOpen2(o => !o)}
-                  content={
-                    <FieldValuePairs layout="stack" fields={[
-                      { label: 'Subtotal',  value: '$118,680.00', type: 'highlight' },
-                      { label: 'Freight',   value: '$4,200.00'                      },
-                      { label: 'Insurance', value: '$1,800.00'                      },
-                      { label: 'Total',     value: '$124,680.00', type: 'highlight' },
-                      { label: 'Currency',  value: 'USD'                            },
-                      { label: 'Payment',   value: 'Net 30'                         },
-                    ]} />
-                  } />
+                  </div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: '#282828', fontFamily: 'Roboto Mono, monospace' }}>{val}</div>
+                </div>
+              ))}
+            </div>
+          </DashSection>
+
+          {/* Financial Summary — collapsed by default */}
+          <DashSection title="Financial Summary" summary="Net 30 · USD" open={detailFinance} onToggle={() => setDetailFinance(o => !o)}>
+            <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '14px 16px', marginBottom: 2 }}>
+              <div style={{ maxWidth: 320 }}>
+                <FieldValuePairs layout="stack" fields={[
+                  { label: 'Subtotal',  value: '$118,680.00', type: 'highlight' },
+                  { label: 'Freight',   value: '$4,200.00'                      },
+                  { label: 'Insurance', value: '$1,800.00'                      },
+                  { label: 'Total',     value: '$124,680.00', type: 'highlight' },
+                  { label: 'Currency',  value: 'USD'                            },
+                  { label: 'Payment',   value: 'Net 30'                         },
+                ]} />
               </div>
             </div>
+          </DashSection>
 
-            {/* right: tabbed context */}
-            <div style={{ minWidth: 0, background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', overflow: 'hidden' }}>
+          {/* Related Records — tabs inside collapsible */}
+          <DashSection title="Related Records" summary="Shipments · Documents · History" open={detailRelated} onToggle={() => setDetailRelated(o => !o)} noBorder>
+            <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', overflow: 'hidden' }}>
               <div style={{ padding: '14px 16px 0' }}>
                 <TabList>
                   <Tab id="shipments" label="Shipments" badge={3} active={detailTab === 'shipments'} onClick={() => setDetailTab('shipments')} />
@@ -2221,14 +2290,14 @@ function ExampleDesignsSection() {
                       { key: 'carrier', header: 'Carrier',      width: 110 },
                       { key: 'origin',  header: 'Origin',       sortable: true },
                       { key: 'eta',     header: 'ETA',          width: 110 },
-                      { key: 'status',  header: 'Status',       width: 100,
+                      { key: 'status',  header: 'Status',       width: 110,
                         render: (v) => <Badge variant={v === 'In Transit' ? 'info' : v === 'Delivered' ? 'success' : 'warning'}>{v as string}</Badge>
                       },
                     ]}
                     rows={[
-                      { id: 'SHP-10291', carrier: 'FedEx',  origin: 'Chicago, IL',   eta: '16 May', status: 'In Transit' },
-                      { id: 'SHP-10292', carrier: 'DHL',    origin: 'New York, NY',  eta: '17 May', status: 'In Transit' },
-                      { id: 'SHP-10293', carrier: 'UPS',    origin: 'Los Angeles',   eta: '19 May', status: 'Pending'    },
+                      { id: 'SHP-10291', carrier: 'FedEx', origin: 'Chicago, IL',  eta: '16 May', status: 'In Transit' },
+                      { id: 'SHP-10292', carrier: 'DHL',   origin: 'New York, NY', eta: '17 May', status: 'In Transit' },
+                      { id: 'SHP-10293', carrier: 'UPS',   origin: 'Los Angeles',  eta: '19 May', status: 'Pending'    },
                     ]}
                   />
                 </div>
@@ -2237,11 +2306,11 @@ function ExampleDesignsSection() {
               <TabPanel id="documents" active={detailTab === 'documents'}>
                 <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {[
-                    { name: 'Commercial Invoice.pdf',   size: '284 KB', date: '12 May' },
-                    { name: 'Packing List.pdf',         size: '108 KB', date: '12 May' },
-                    { name: 'Bill of Lading.pdf',       size: '196 KB', date: '13 May' },
-                    { name: 'Customs Declaration.pdf',  size: '412 KB', date: '14 May' },
-                    { name: 'Insurance Certificate.pdf', size: '88 KB', date: '14 May' },
+                    { name: 'Commercial Invoice.pdf',    size: '284 KB', date: '12 May' },
+                    { name: 'Packing List.pdf',          size: '108 KB', date: '12 May' },
+                    { name: 'Bill of Lading.pdf',        size: '196 KB', date: '13 May' },
+                    { name: 'Customs Declaration.pdf',   size: '412 KB', date: '14 May' },
+                    { name: 'Insurance Certificate.pdf', size: '88 KB',  date: '14 May' },
                   ].map(doc => (
                     <div key={doc.name} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 7, background: '#F8F8FA', cursor: 'pointer' }}>
                       <span className="material-icons" style={{ fontSize: 18, color: '#E02F3A', fontFamily: 'Material Icons', lineHeight: 1, flexShrink: 0 }}>picture_as_pdf</span>
@@ -2258,11 +2327,11 @@ function ExampleDesignsSection() {
               <TabPanel id="history" active={detailTab === 'history'}>
                 <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 0 }}>
                   {[
-                    { time: 'Today, 10:41', actor: 'System',     action: 'Status updated to Fulfilled',              icon: 'check_circle', color: '#027B44' },
-                    { time: 'Today, 09:14', actor: 'Alex Mercer', action: 'Approved financial summary',              icon: 'approval',     color: '#8342BB' },
-                    { time: '14 May, 16:22', actor: 'System',    action: 'All 3 shipments confirmed',               icon: 'local_shipping', color: '#3999E4' },
-                    { time: '13 May, 11:05', actor: 'Emma Liu',  action: 'Documents uploaded (5 files)',            icon: 'upload_file', color: '#5E5C75' },
-                    { time: '12 May, 09:23', actor: 'Alex Mercer', action: 'Order created from PO-2024-08912',      icon: 'add_circle',   color: '#767676' },
+                    { time: 'Today, 10:41',    actor: 'System',      action: 'Status updated to Fulfilled',         icon: 'check_circle',   color: '#027B44' },
+                    { time: 'Today, 09:14',    actor: 'Alex Mercer', action: 'Approved financial summary',          icon: 'approval',       color: '#8342BB' },
+                    { time: '14 May, 16:22',   actor: 'System',      action: 'All 3 shipments confirmed',           icon: 'local_shipping', color: '#3999E4' },
+                    { time: '13 May, 11:05',   actor: 'Emma Liu',    action: 'Documents uploaded (5 files)',        icon: 'upload_file',    color: '#5E5C75' },
+                    { time: '12 May, 09:23',   actor: 'Alex Mercer', action: 'Order created from PO-2024-08912',   icon: 'add_circle',     color: '#767676' },
                   ].map((ev, i, arr) => (
                     <div key={i} style={{ display: 'flex', gap: 10, paddingBottom: i < arr.length - 1 ? 12 : 0 }}>
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
@@ -2280,7 +2349,7 @@ function ExampleDesignsSection() {
                 </div>
               </TabPanel>
             </div>
-          </div>
+          </DashSection>
         </div>
       </LayoutFrame>
 
@@ -2645,6 +2714,20 @@ function PageLayoutsSection() {
       description: 'Single-column form layout principles — clear labels, inline validation, minimal fields, and accordion grouping for long multi-section forms.',
       tags: ['Forms', 'Accordion', 'UX'],
       src: '/layouts/form-layout.jpg',
+    },
+    {
+      number: '06',
+      name: 'Page Header',
+      description: 'Page-level header anatomy — breadcrumbs, page title, sub-navigation tabs, toolbar actions, and context-aware status indicators.',
+      tags: ['Header', 'Navigation', 'Breadcrumbs'],
+      src: '/layouts/page-header.jpg',
+    },
+    {
+      number: '07',
+      name: 'App Header — Responsive',
+      description: 'Application header responsive behaviour across Large, Medium, Small, and Extra-small breakpoints — showing how the global nav adapts.',
+      tags: ['App Header', 'Responsive', 'Breakpoints'],
+      src: '/layouts/app-header-responsive.jpg',
     },
   ];
 

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 
 export interface NavItem {
@@ -52,8 +52,33 @@ export function Sidebar({
 }: SidebarProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [tooltip, setTooltip] = useState<{ label: string; y: number } | null>(null)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [userMenuPos, setUserMenuPos] = useState<{ bottom: number; left: number; width: number } | null>(null)
   const sidebarRef = useRef<HTMLDivElement>(null)
+  const userBtnRef = useRef<HTMLDivElement>(null)
   const tooltipTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    if (!userMenuOpen) return
+    function onPointerDown(e: PointerEvent) {
+      if (userBtnRef.current?.contains(e.target as Node)) return
+      setUserMenuOpen(false)
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    return () => document.removeEventListener('pointerdown', onPointerDown)
+  }, [userMenuOpen])
+
+  function openUserMenu() {
+    if (!userBtnRef.current) return
+    const r = userBtnRef.current.getBoundingClientRect()
+    // Open upward from the user area
+    setUserMenuPos({
+      bottom: window.innerHeight - r.top + 4,
+      left: r.left,
+      width: Math.max(r.width, 220),
+    })
+    setUserMenuOpen(true)
+  }
 
   function showTooltip(label: string, y: number) {
     if (tooltipTimer.current) clearTimeout(tooltipTimer.current)
@@ -281,45 +306,57 @@ export function Sidebar({
           </div>
         ))}
 
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            height: 44,
-            padding: expanded ? '0 10px' : '0 12px',
-            gap: 8,
-            cursor: 'pointer',
-            borderTop: '1px solid #F0F0F4',
-            justifyContent: expanded ? 'flex-start' : 'center',
-            flexShrink: 0,
-            background: hoveredId === '_user' ? 'rgba(40,40,40,0.04)' : 'transparent',
-            transition: 'background 0.1s',
-          }}
-          onMouseEnter={() => setHoveredId('_user')}
-          onMouseLeave={() => setHoveredId(null)}
-        >
-          <div style={{
-            width: 24,
-            height: 24,
-            borderRadius: '50%',
-            background: '#8342BB',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 9,
-            fontWeight: 500,
-            color: '#fff',
-            flexShrink: 0,
-          }}>
-            {userInitials}
-          </div>
-          {expanded && (
-            <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-              <span style={{ fontSize: 13, fontWeight: 500, color: '#282828', whiteSpace: 'nowrap' }}>{userName}</span>
-              <span style={{ fontSize: 10, color: '#8C8C8C', whiteSpace: 'nowrap' }}>{userRole}</span>
+        {/* User area — mobile only (desktop has this in the AppHeader) */}
+        {isMobile && (
+          <div
+            ref={userBtnRef}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              height: 52,
+              padding: expanded ? '0 12px' : '0 12px',
+              gap: 10,
+              cursor: 'pointer',
+              borderTop: '1px solid #F0F0F4',
+              justifyContent: expanded ? 'flex-start' : 'center',
+              flexShrink: 0,
+              background: userMenuOpen || hoveredId === '_user' ? 'rgba(131,66,187,0.05)' : 'transparent',
+              transition: 'background 0.1s',
+            }}
+            onMouseEnter={() => setHoveredId('_user')}
+            onMouseLeave={() => setHoveredId(null)}
+            onClick={openUserMenu}
+          >
+            <div style={{
+              width: 32,
+              height: 32,
+              borderRadius: '50%',
+              background: '#8342BB',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 11,
+              fontWeight: 600,
+              color: '#fff',
+              flexShrink: 0,
+              boxShadow: userMenuOpen ? '0 0 0 2px rgba(131,66,187,0.3)' : 'none',
+              transition: 'box-shadow 0.15s',
+            }}>
+              {userInitials}
             </div>
-          )}
-        </div>
+            {expanded && (
+              <>
+                <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', flex: 1 }}>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: '#282828', whiteSpace: 'nowrap' }}>{userName}</span>
+                  <span style={{ fontSize: 11, color: '#8C8C8C', whiteSpace: 'nowrap' }}>{userRole}</span>
+                </div>
+                <span className="material-icons" style={{ fontSize: 16, color: '#BFBECE', flexShrink: 0 }}>
+                  expand_less
+                </span>
+              </>
+            )}
+          </div>
+        )}
       </div>
 
       {!expanded && tooltip && createPortal(
@@ -338,6 +375,82 @@ export function Sidebar({
           boxShadow: '0 2px 8px rgba(20,16,41,0.2)',
         }}>
           {tooltip.label}
+        </div>,
+        document.body
+      )}
+
+      {/* Mobile user menu — opens upward from avatar, rendered in portal to escape overflow:hidden */}
+      {isMobile && userMenuOpen && userMenuPos && createPortal(
+        <div style={{
+          position: 'fixed',
+          bottom: userMenuPos.bottom,
+          left: userMenuPos.left,
+          width: userMenuPos.width,
+          background: '#fff',
+          borderRadius: 10,
+          border: '1px solid #E5E5EC',
+          boxShadow: '0 -4px 24px rgba(55,23,78,0.13)',
+          zIndex: 9999,
+          overflow: 'hidden',
+        }}>
+          {/* User info header */}
+          <div style={{ padding: '12px 14px 10px', borderBottom: '1px solid #F0F0F4' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{
+                width: 36, height: 36, borderRadius: '50%',
+                background: '#8342BB', display: 'flex', alignItems: 'center',
+                justifyContent: 'center', fontSize: 12, fontWeight: 700, color: '#fff', flexShrink: 0,
+              }}>
+                {userInitials}
+              </div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: '#282828' }}>{userName}</div>
+                <div style={{ fontSize: 11, color: '#8C8C8C', marginTop: 1 }}>{userRole}</div>
+              </div>
+            </div>
+          </div>
+          {/* Menu items */}
+          {[
+            { id: 'pref',     icon: 'settings',    label: 'Preferences',      chevron: false },
+            { id: 'role',     icon: 'swap_horiz',  label: 'Switch role',      chevron: true  },
+            { id: 'location', icon: 'location_on', label: 'Change location',  chevron: true  },
+          ].map((item) => (
+            <button
+              key={item.id}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                width: '100%', padding: '11px 14px',
+                background: hoveredId === `um-${item.id}` ? 'rgba(131,66,187,0.05)' : 'transparent',
+                border: 'none', cursor: 'pointer',
+                fontFamily: 'var(--font-ui)', fontSize: 14, color: '#282828', textAlign: 'left',
+                transition: 'background 0.1s',
+              }}
+              onMouseEnter={() => setHoveredId(`um-${item.id}`)}
+              onMouseLeave={() => setHoveredId(null)}
+              onClick={() => setUserMenuOpen(false)}
+            >
+              <span className="material-icons" style={{ fontSize: 18, color: '#5E5C75' }}>{item.icon}</span>
+              <span style={{ flex: 1 }}>{item.label}</span>
+              {item.chevron && <span className="material-icons" style={{ fontSize: 16, color: '#BFBECE' }}>chevron_right</span>}
+            </button>
+          ))}
+          <div style={{ height: 1, background: '#F0F0F4', margin: '2px 0' }} />
+          <button
+            style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              width: '100%', padding: '11px 14px',
+              background: hoveredId === 'um-logout' ? 'rgba(224,47,58,0.05)' : 'transparent',
+              border: 'none', cursor: 'pointer',
+              fontFamily: 'var(--font-ui)', fontSize: 14, color: '#E02F3A', textAlign: 'left',
+              transition: 'background 0.1s',
+            }}
+            onMouseEnter={() => setHoveredId('um-logout')}
+            onMouseLeave={() => setHoveredId(null)}
+            onClick={() => setUserMenuOpen(false)}
+          >
+            <span className="material-icons" style={{ fontSize: 18, color: '#E02F3A' }}>logout</span>
+            Log out
+          </button>
         </div>,
         document.body
       )}

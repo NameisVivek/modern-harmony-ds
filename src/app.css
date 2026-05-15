@@ -17,21 +17,19 @@ body { font-family: var(--font-ui); font-size: var(--text-base); color: var(--de
 .ds-palette-row::-webkit-scrollbar { height: 3px; }
 .ds-palette-row::-webkit-scrollbar-thumb { background: rgba(131,66,187,0.25); border-radius: 2px; }
 
-/* 2-col grid — minimum width prevents compression, scrolls instead */
+/* 2-col grid */
 .ds-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  min-width: 480px;
 }
 
-/* 4-col grid — minimum width prevents compression, scrolls instead */
+/* 4-col grid */
 .ds-grid-4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  min-width: 560px;
 }
 
-/* Horizontally scrollable container */
+/* Horizontally scrollable container (used for DataGrid etc.) */
 .ds-scroll-x {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -47,4 +45,8 @@ body { font-family: var(--font-ui); font-size: var(--text-base); color: var(--de
     min-width: 44px !important;
     flex-shrink: 0 !important;
   }
+
+  /* Stack all grids to a single column on mobile */
+  .ds-grid-2 { grid-template-columns: 1fr; }
+  .ds-grid-4 { grid-template-columns: 1fr; }
 }

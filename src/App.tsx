@@ -128,7 +128,7 @@ function Swatch({ hex, name, star }: { hex: string; name: string; star?: boolean
 
 function SemanticGroup({ label, ramp, keys }: { label: string; ramp: string[]; keys: { name: string; hex: string; dark?: boolean }[] }) {
   return (
-    <div style={{ flex: 1 }}>
+    <div style={{ flex: '1 1 140px' }}>
       <div style={{ fontSize: 9, fontWeight: 500, color: '#8C8C8C', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 5, fontFamily: 'var(--font-ui)' }}>{label}</div>
       <div className="ds-palette-row" style={{ gap: 3, marginBottom: 8 }}>
         {ramp.map((c, i) => <div key={i} style={{ flex: 1, minWidth: 28, height: 28, borderRadius: 4, background: c, border: '1px solid rgba(0,0,0,0.06)' }} />)}

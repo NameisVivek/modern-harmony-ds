@@ -1833,6 +1833,718 @@ function ChartsSection() {
   )
 }
 
+// ── Section: Page Layouts ─────────────────────────────────────────────────────
+
+function LayoutFrame({ number, name, description, tags, path, children }: {
+  number: string; name: string; description: string; tags: string[]; path: string; children: React.ReactNode
+}) {
+  return (
+    <div style={{ marginBottom: 28 }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10, gap: 16, flexWrap: 'wrap' }}>
+        <div>
+          <div style={SL}>Layout {number}</div>
+          <div style={{ fontSize: 15, fontWeight: 700, color: '#282828', fontFamily: 'Switzer, var(--font-ui)', letterSpacing: '-0.01em' }}>{name}</div>
+          <div style={{ fontSize: 12, color: '#5E5C75', fontFamily: 'var(--font-ui)', marginTop: 3, lineHeight: 1.5 }}>{description}</div>
+        </div>
+        <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+          {tags.map(t => (
+            <span key={t} style={{ padding: '2px 8px', borderRadius: 4, background: '#F2ECF8', color: '#4E2975', fontSize: 10, fontWeight: 600, fontFamily: 'var(--font-ui)', border: '1px solid #CABAEF' }}>{t}</span>
+          ))}
+        </div>
+      </div>
+      <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid #DDDDE5', boxShadow: 'var(--elevation-2)' }}>
+        <div style={{ background: '#1C1C2E', height: 32, display: 'flex', alignItems: 'center', padding: '0 14px', gap: 8 }}>
+          <div style={{ display: 'flex', gap: 5 }}>
+            {(['#FF5F57','#FFBD2E','#28CA41'] as const).map(c => <div key={c} style={{ width: 9, height: 9, borderRadius: '50%', background: c }} />)}
+          </div>
+          <div style={{ flex: 1, background: 'rgba(255,255,255,0.07)', height: 20, borderRadius: 4, marginLeft: 4, display: 'flex', alignItems: 'center', padding: '0 10px', gap: 5 }}>
+            <span className="material-icons" style={{ fontSize: 9, color: 'rgba(255,255,255,0.25)', fontFamily: 'Material Icons', lineHeight: 1 }}>lock</span>
+            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', fontFamily: 'Roboto Mono, monospace' }}>app.modernharmony.io/{path}</span>
+          </div>
+        </div>
+        <div style={{ background: '#F0F0F4' }}>{children}</div>
+      </div>
+    </div>
+  )
+}
+
+const LH: React.CSSProperties = {
+  background: '#282828', height: 48, display: 'flex', alignItems: 'center',
+  padding: '0 20px', gap: 12, flexShrink: 0,
+}
+const LH_LOGO: React.CSSProperties = {
+  width: 26, height: 26, borderRadius: 7, background: '#8342BB',
+  display: 'flex', alignItems: 'center', justifyContent: 'center',
+  fontSize: 11, fontWeight: 700, color: 'white', fontFamily: 'var(--font-ui)',
+}
+const LH_DIVIDER: React.CSSProperties = { width: 1, height: 16, background: 'rgba(255,255,255,0.15)' }
+const LH_TITLE: React.CSSProperties = { color: 'white', fontWeight: 600, fontSize: 13, fontFamily: 'var(--font-ui)' }
+const LH_SUB: React.CSSProperties = { color: 'rgba(255,255,255,0.45)', fontSize: 12, fontFamily: 'var(--font-ui)' }
+
+const LP: React.CSSProperties = { padding: '16px 20px' }
+const PT: React.CSSProperties = { fontSize: 17, fontWeight: 700, color: '#282828', fontFamily: 'Switzer, var(--font-ui)', letterSpacing: '-0.02em', marginBottom: 2 }
+const PS: React.CSSProperties = { fontSize: 11, color: '#5E5C75', fontFamily: 'var(--font-ui)', marginBottom: 14 }
+
+const MONTHS_8 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
+const WEEKS_6  = ['Wk 44', 'Wk 45', 'Wk 46', 'Wk 47', 'Wk 48', 'Wk 49']
+
+function PageLayoutsSection() {
+  const [dashSeg, setDashSeg] = useState('month')
+  const [analyticsSeg, setAnalyticsSeg] = useState('quarter')
+  const [detailTab, setDetailTab] = useState('shipments')
+  const [formStep, setFormStep] = useState(1)
+  const [tableSearch, setTableSearch] = useState('')
+  const [tablePage, setTablePage] = useState(1)
+  const [settingsTab, setSettingsTab] = useState('general')
+  const [open1, setOpen1] = useState(true)
+  const [open2, setOpen2] = useState(false)
+  const [notif, setNotif] = useState(false)
+  const [darkMode, setDarkMode] = useState(false)
+  const [autoSave, setAutoSave] = useState(true)
+
+  const tableColumns: Column[] = [
+    { key: 'id',      header: 'Order ID',   width: 130, sortable: true },
+    { key: 'product', header: 'Product',     sortable: true },
+    { key: 'region',  header: 'Region',      width: 130 },
+    { key: 'qty',     header: 'Qty',         width: 80, align: 'right', sortable: true },
+    { key: 'carrier', header: 'Carrier',     width: 120 },
+    { key: 'status',  header: 'Status',      width: 110,
+      render: (v) => {
+        const m: Record<string, 'success'|'warning'|'error'|'secondary'> = { 'On Track': 'success', 'Delayed': 'warning', 'Critical': 'error', 'Fulfilled': 'secondary' }
+        return <Badge variant={m[v as string] ?? 'default'}>{v as string}</Badge>
+      }
+    },
+  ]
+  const tableRows = [
+    { id: 'ORD-48201', product: 'Enterprise Unit A',   region: 'North America', qty: 840,  carrier: 'FedEx',     status: 'On Track'  },
+    { id: 'ORD-48202', product: 'Industrial Pack B',   region: 'Europe',        qty: 290,  carrier: 'DHL',       status: 'Delayed'   },
+    { id: 'ORD-48203', product: 'Distribution Kit C',  region: 'Asia Pacific',  qty: 1620, carrier: 'Kuehne+N',  status: 'Fulfilled' },
+    { id: 'ORD-48204', product: 'Precision Module D',  region: 'North America', qty: 55,   carrier: 'UPS',       status: 'Critical'  },
+    { id: 'ORD-48205', product: 'Logistics Container', region: 'LATAM',         qty: 430,  carrier: 'CEVA',      status: 'On Track'  },
+    { id: 'ORD-48206', product: 'Smart Sensor Array',  region: 'Middle East',   qty: 180,  carrier: 'Aramex',    status: 'Delayed'   },
+    { id: 'ORD-48207', product: 'Cold Chain Unit E',   region: 'Europe',        qty: 720,  carrier: 'DB Schen.', status: 'On Track'  },
+  ]
+
+  return (
+    <div>
+      <div style={PAGE_TITLE}>Page Layouts</div>
+      <div style={PAGE_SUB}>Enterprise page templates — composable patterns for real application screens</div>
+
+      {/* ── intro grid ── */}
+      <div className="ds-grid-2" style={{ gap: 10, marginBottom: 24 }}>
+        {[
+          { icon: 'dashboard',     name: 'Operational Dashboard',   desc: 'KPI strip · charts · data grid' },
+          { icon: 'analytics',     name: 'Analytics Overview',      desc: 'Segments · area chart · comparison' },
+          { icon: 'article',       name: 'Record Detail',           desc: 'Split view · metadata · activity' },
+          { icon: 'table_view',    name: 'Data Management',         desc: 'Search · filter · grid · pagination' },
+          { icon: 'account_tree',  name: 'Multi-Step Workflow',     desc: 'Stepper · form · footer actions' },
+          { icon: 'settings',      name: 'Settings & Config',       desc: 'Sidebar nav · sections · toggles' },
+        ].map((l, i) => (
+          <div key={l.name} style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#fff', borderRadius: 10, padding: '12px 14px', border: '1px solid #EBEBEB' }}>
+            <div style={{ width: 36, height: 36, borderRadius: 9, background: '#F2ECF8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <span className="material-icons" style={{ fontSize: 18, color: '#8342BB', fontFamily: 'Material Icons', lineHeight: 1 }}>{l.icon}</span>
+            </div>
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#282828', fontFamily: 'var(--font-ui)' }}>
+                <span style={{ color: '#8342BB', marginRight: 6, fontVariantNumeric: 'tabular-nums' }}>0{i + 1}</span>{l.name}
+              </div>
+              <div style={{ fontSize: 11, color: '#767676', fontFamily: 'var(--font-ui)', marginTop: 1 }}>{l.desc}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* ════════════════════════════════════════════════════════
+          LAYOUT 01 — OPERATIONAL DASHBOARD
+      ════════════════════════════════════════════════════════ */}
+      <LayoutFrame number="01" name="Operational Dashboard"
+        description="Real-time operations view. KPI strip surfaces headline metrics; charts provide trend context; data grid supports action on individual records."
+        tags={['KPIWidget', 'LineChart', 'DonutChart', 'DataGrid', 'Segments', 'SectionHeading']}
+        path="operations/dashboard"
+      >
+        {/* simulated app header */}
+        <div style={LH}>
+          <div style={LH_LOGO}>MH</div>
+          <span style={LH_TITLE}>Modern Harmony</span>
+          <div style={LH_DIVIDER} />
+          <span style={LH_SUB}>Operations</span>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, alignItems: 'center' }}>
+            <Segments options={[{ value: 'week', label: 'Week' }, { value: 'month', label: 'Month' }, { value: 'quarter', label: 'Quarter' }]} value={dashSeg} onChange={setDashSeg} size="sm" />
+            <Button variant="default" size="sm" iconLeft="download">Export</Button>
+            <Button variant="primary" size="sm" iconLeft="add">New Order</Button>
+          </div>
+        </div>
+
+        <div style={LP}>
+          <div style={PT}>Supply Chain Operations</div>
+          <div style={PS}>Live view · Updated just now · Showing {dashSeg === 'week' ? 'this week' : dashSeg === 'month' ? 'this month' : 'this quarter'}</div>
+
+          {/* KPI row */}
+          <div className="ds-grid-4" style={{ gap: 10, marginBottom: 14 }}>
+            <KPIWidget variant="simple" title="Active Orders" value="2,847"
+              change="+12.4% vs last period" changeDirection="up"
+              icon="shopping_cart" iconBg="#EAF3FC" iconColor="#3999E4" />
+            <KPIWidget variant="simple" title="On-Time Delivery" value="94.2" unit="%"
+              change="-1.8% vs target" changeDirection="down"
+              icon="local_shipping" iconBg="#FFF4DC" iconColor="#F0A008" />
+            <KPIWidget variant="ratio" title="Fulfillment Rate"
+              value="11,204" total="12,847" percentage={87}
+              barColor="var(--core-green-300)" labelLeft="Fulfilled" labelRight="87%" />
+            <KPIWidget variant="sparkline" title="Avg Lead Time (days)" value="4.2"
+              change="-0.3d" changeDirection="up"
+              data={[{value:5.1},{value:4.8},{value:5.2},{value:4.9},{value:4.6},{value:4.4},{value:4.2}]}
+              labelStart="6w ago" labelEnd="Now" />
+          </div>
+
+          {/* charts row */}
+          <div className="ds-grid-2" style={{ gap: 10, marginBottom: 14 }}>
+            <LineChart title="Shipment Volume" subtitle="Air · Ocean · Ground — 8 months"
+              labels={MONTHS_8}
+              series={[
+                { name: 'Air',    data: [3200,3600,3100,4200,3900,4600,5100,4800] },
+                { name: 'Ocean',  data: [8100,7800,8600,9200,8700,9800,10200,9600] },
+                { name: 'Ground', data: [5400,5100,5800,6200,5900,6600,7100,6800] },
+              ]}
+              showArea />
+            <DonutChart title="Orders by Status" subtitle="Current pipeline distribution"
+              centerLabel="Orders" centerValue="2,847"
+              slices={[
+                { name: 'On Track',  value: 1620 },
+                { name: 'Fulfilled', value: 842  },
+                { name: 'Delayed',   value: 294  },
+                { name: 'Critical',  value: 91   },
+              ]} />
+          </div>
+
+          {/* data grid */}
+          <SectionHeading title="Recent Orders" subtitle="Last 7 · sorted by urgency" action="View all" onAction={() => {}} />
+          <div className="ds-scroll-x">
+            <DataGrid columns={tableColumns} rows={tableRows.slice(0, 5)}
+              rowVariant={(r) => r.status === 'Critical' ? 'error' : r.status === 'Delayed' ? 'warning' : 'default'}
+              toolbar={<div style={{ display: 'flex', gap: 6 }}>
+                <Button variant="borderless" size="sm" iconOnly="filter_list" />
+                <Button variant="borderless" size="sm" iconOnly="refresh" />
+              </div>} />
+          </div>
+        </div>
+      </LayoutFrame>
+
+      {/* ════════════════════════════════════════════════════════
+          LAYOUT 02 — ANALYTICS OVERVIEW
+      ════════════════════════════════════════════════════════ */}
+      <LayoutFrame number="02" name="Analytics Overview"
+        description="Deep-dive analytics page. Segmented time controls let users shift granularity; stacked area shows cumulative trends; comparison charts reveal regional and category performance."
+        tags={['AreaChart', 'BarChart', 'HorizontalBarChart', 'KPIWidget', 'Segments', 'Alert']}
+        path="analytics/overview"
+      >
+        <div style={LH}>
+          <div style={LH_LOGO}>MH</div>
+          <span style={LH_TITLE}>Modern Harmony</span>
+          <div style={LH_DIVIDER} />
+          <span style={LH_SUB}>Analytics</span>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
+            <Button variant="borderless" size="sm" iconLeft="tune">Filters</Button>
+            <Button variant="default"    size="sm" iconLeft="share">Share</Button>
+          </div>
+        </div>
+
+        <div style={LP}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
+            <div>
+              <div style={PT}>Analytics Overview</div>
+              <div style={PS}>FY 2024 · All regions · All product lines</div>
+            </div>
+            <Segments
+              options={[{ value: 'week', label: 'Week' }, { value: 'month', label: 'Month' }, { value: 'quarter', label: 'Quarter' }, { value: 'year', label: 'Year' }]}
+              value={analyticsSeg} onChange={setAnalyticsSeg} />
+          </div>
+
+          <div style={{ marginBottom: 14 }}>
+            <Alert variant="info" message="Showing data through end of Q3 · Q4 forecast data available in the Demand Planning module." />
+          </div>
+
+          {/* full-width area chart */}
+          <div style={{ marginBottom: 14 }}>
+            <AreaChart title="Revenue by Channel" subtitle="Direct · Partner · Marketplace — stacked cumulative"
+              labels={MONTHS_8}
+              series={[
+                { name: 'Direct',      data: [4200,4600,4100,5200,4900,5600,6100,5800] },
+                { name: 'Partner',     data: [2800,3100,2900,3400,3200,3600,3900,3700] },
+                { name: 'Marketplace', data: [1400,1600,1500,1800,1700,2000,2200,2100] },
+              ]}
+              stacked />
+          </div>
+
+          {/* KPI row */}
+          <div className="ds-grid-4" style={{ gap: 10, marginBottom: 14 }}>
+            <KPIWidget variant="simple" title="Total Revenue" value="$48.2M"
+              change="+18.6% YoY" changeDirection="up" icon="attach_money" iconBg="#DDFAEE" iconColor="#027B44" />
+            <KPIWidget variant="simple" title="Gross Margin" value="34.7" unit="%"
+              change="+2.1pp vs prior year" changeDirection="up" icon="trending_up" iconBg="#F2ECF8" iconColor="#8342BB" />
+            <KPIWidget variant="multi" title="Channel Mix"
+              metrics={[
+                { value: '58%', label: 'Direct',      color: '#8342BB' },
+                { value: '29%', label: 'Partner',     color: '#3999E4' },
+                { value: '13%', label: 'Marketplace', color: '#02A15A' },
+                { value: '3.2×', label: 'ROI avg',   color: '#282828' },
+              ]} />
+            <KPIWidget variant="status" title="Regional Targets"
+              items={[
+                { label: 'North America', value: '103%', percentage: 100, color: '#02A15A' },
+                { label: 'Europe',        value: '91%',  percentage: 91,  color: '#F0A008' },
+                { label: 'Asia Pacific',  value: '78%',  percentage: 78,  color: '#E02F3A' },
+              ]} />
+          </div>
+
+          {/* 2-col charts */}
+          <div className="ds-grid-2" style={{ gap: 10 }}>
+            <BarChart title="Orders by Region" subtitle="Target vs actual — current period"
+              labels={['APAC', 'EMEA', 'LATAM', 'NA', 'MEA']}
+              series={[
+                { name: 'Target', data: [4200,3800,2100,5600,1800] },
+                { name: 'Actual', data: [3900,3600,2400,5200,1600] },
+              ]}
+              grouped />
+            <HorizontalBarChart title="On-Time Delivery by Carrier"
+              subtitle="Trailing 90 days"
+              entries={[
+                { label: 'FedEx Express', value: 97.4, annotation: '% OTD' },
+                { label: 'DHL Supply',    value: 95.8, annotation: '% OTD' },
+                { label: 'UPS Freight',   value: 94.2, annotation: '% OTD' },
+                { label: 'XPO Logistics', value: 92.1, annotation: '% OTD' },
+                { label: 'DB Schenker',   value: 91.6, annotation: '% OTD' },
+              ]}
+              formatValue={(v) => `${v.toFixed(1)}%`} />
+          </div>
+        </div>
+      </LayoutFrame>
+
+      {/* ════════════════════════════════════════════════════════
+          LAYOUT 03 — RECORD DETAIL
+      ════════════════════════════════════════════════════════ */}
+      <LayoutFrame number="03" name="Record Detail"
+        description="Split-panel detail view. Left panel anchors entity metadata; right panel provides tabbed context — related shipments, documents, and history — without leaving the page."
+        tags={['FieldValuePairs', 'Accordion', 'Tabs', 'DataGrid', 'Badge', 'Tag', 'Button']}
+        path="operations/orders/ORD-48201"
+      >
+        <div style={LH}>
+          <div style={LH_LOGO}>MH</div>
+          <span style={LH_TITLE}>Modern Harmony</span>
+          <div style={LH_DIVIDER} />
+          <span style={LH_SUB}>Operations › Orders</span>
+        </div>
+
+        <div style={LP}>
+          {/* page header */}
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+                <div style={PT}>Order ORD-48201</div>
+                <Badge variant="success" dot>Fulfilled</Badge>
+                <Tag variant="info">Air Freight</Tag>
+              </div>
+              <div style={PS}>Created 12 May 2024 · Last updated 3 hours ago · North America → Europe</div>
+            </div>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <Button variant="borderless" size="sm" iconLeft="share">Share</Button>
+              <Button variant="default"    size="sm" iconLeft="edit">Edit</Button>
+              <Button variant="primary"    size="sm" iconLeft="check_circle">Approve</Button>
+            </div>
+          </div>
+
+          {/* split layout */}
+          <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: 14 }}>
+            {/* left: metadata */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, minWidth: 0 }}>
+              <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '14px 16px' }}>
+                <div style={SL}>Order Details</div>
+                <FieldValuePairs layout="stack" fields={[
+                  { label: 'Order ID',    value: 'ORD-48201',            type: 'mono'      },
+                  { label: 'PO Number',   value: 'PO-2024-08912'                            },
+                  { label: 'Created',     value: '12 May 2024, 09:23'                       },
+                  { label: 'Ship-to',     value: 'Rotterdam, Netherlands'                   },
+                  { label: 'Incoterms',   value: 'DAP'                                      },
+                  { label: 'Total Value', value: '$124,680.00',           type: 'highlight' },
+                  { label: 'Priority',    value: <Tag variant="warning">High</Tag>          },
+                  { label: 'Account Mgr', value: 'Alex Mercer'                              },
+                ]} />
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <AccordionItem title="Line Items" icon="inventory_2" open={open1} onToggle={() => setOpen1(o => !o)}
+                  content={
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      {[
+                        ['SKU-7821', 'Enterprise Unit A', 240, '$52,800'],
+                        ['SKU-3319', 'Industrial Component B', 180, '$39,600'],
+                        ['SKU-9104', 'Distribution Pack C', 420, '$32,280'],
+                      ].map(([sku, name, qty, val]) => (
+                        <div key={sku as string} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', background: '#F8F8FA', borderRadius: 6 }}>
+                          <div>
+                            <div style={{ fontSize: 11, fontWeight: 600, color: '#282828', fontFamily: 'Roboto Mono, monospace' }}>{sku}</div>
+                            <div style={{ fontSize: 10, color: '#767676', fontFamily: 'var(--font-ui)' }}>{name} · {qty} units</div>
+                          </div>
+                          <div style={{ fontSize: 12, fontWeight: 600, color: '#282828', fontFamily: 'Roboto Mono, monospace' }}>{val}</div>
+                        </div>
+                      ))}
+                    </div>
+                  } />
+                <AccordionItem title="Financial Summary" icon="payments" open={open2} onToggle={() => setOpen2(o => !o)}
+                  content={
+                    <FieldValuePairs layout="stack" fields={[
+                      { label: 'Subtotal',  value: '$118,680.00', type: 'highlight' },
+                      { label: 'Freight',   value: '$4,200.00'                      },
+                      { label: 'Insurance', value: '$1,800.00'                      },
+                      { label: 'Total',     value: '$124,680.00', type: 'highlight' },
+                      { label: 'Currency',  value: 'USD'                            },
+                      { label: 'Payment',   value: 'Net 30'                         },
+                    ]} />
+                  } />
+              </div>
+            </div>
+
+            {/* right: tabbed context */}
+            <div style={{ minWidth: 0, background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', overflow: 'hidden' }}>
+              <div style={{ padding: '14px 16px 0' }}>
+                <TabList>
+                  <Tab id="shipments" label="Shipments" badge={3} active={detailTab === 'shipments'} onClick={() => setDetailTab('shipments')} />
+                  <Tab id="documents" label="Documents" badge={5} active={detailTab === 'documents'} onClick={() => setDetailTab('documents')} />
+                  <Tab id="history"   label="History"   active={detailTab === 'history'}   onClick={() => setDetailTab('history')} />
+                </TabList>
+              </div>
+
+              <TabPanel id="shipments" active={detailTab === 'shipments'}>
+                <div style={{ padding: '12px 16px' }}>
+                  <DataGrid
+                    columns={[
+                      { key: 'id',      header: 'Shipment ID',  width: 130, sortable: true },
+                      { key: 'carrier', header: 'Carrier',      width: 110 },
+                      { key: 'origin',  header: 'Origin',       sortable: true },
+                      { key: 'eta',     header: 'ETA',          width: 110 },
+                      { key: 'status',  header: 'Status',       width: 100,
+                        render: (v) => <Badge variant={v === 'In Transit' ? 'info' : v === 'Delivered' ? 'success' : 'warning'}>{v as string}</Badge>
+                      },
+                    ]}
+                    rows={[
+                      { id: 'SHP-10291', carrier: 'FedEx',  origin: 'Chicago, IL',   eta: '16 May', status: 'In Transit' },
+                      { id: 'SHP-10292', carrier: 'DHL',    origin: 'New York, NY',  eta: '17 May', status: 'In Transit' },
+                      { id: 'SHP-10293', carrier: 'UPS',    origin: 'Los Angeles',   eta: '19 May', status: 'Pending'    },
+                    ]}
+                  />
+                </div>
+              </TabPanel>
+
+              <TabPanel id="documents" active={detailTab === 'documents'}>
+                <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {[
+                    { name: 'Commercial Invoice.pdf',   size: '284 KB', date: '12 May' },
+                    { name: 'Packing List.pdf',         size: '108 KB', date: '12 May' },
+                    { name: 'Bill of Lading.pdf',       size: '196 KB', date: '13 May' },
+                    { name: 'Customs Declaration.pdf',  size: '412 KB', date: '14 May' },
+                    { name: 'Insurance Certificate.pdf', size: '88 KB', date: '14 May' },
+                  ].map(doc => (
+                    <div key={doc.name} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 7, background: '#F8F8FA', cursor: 'pointer' }}>
+                      <span className="material-icons" style={{ fontSize: 18, color: '#E02F3A', fontFamily: 'Material Icons', lineHeight: 1, flexShrink: 0 }}>picture_as_pdf</span>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: 12, fontWeight: 500, color: '#282828', fontFamily: 'var(--font-ui)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{doc.name}</div>
+                        <div style={{ fontSize: 10, color: '#767676', fontFamily: 'var(--font-ui)' }}>{doc.size} · Added {doc.date}</div>
+                      </div>
+                      <Button variant="borderless" size="sm" iconOnly="download" />
+                    </div>
+                  ))}
+                </div>
+              </TabPanel>
+
+              <TabPanel id="history" active={detailTab === 'history'}>
+                <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 0 }}>
+                  {[
+                    { time: 'Today, 10:41', actor: 'System',     action: 'Status updated to Fulfilled',              icon: 'check_circle', color: '#027B44' },
+                    { time: 'Today, 09:14', actor: 'Alex Mercer', action: 'Approved financial summary',              icon: 'approval',     color: '#8342BB' },
+                    { time: '14 May, 16:22', actor: 'System',    action: 'All 3 shipments confirmed',               icon: 'local_shipping', color: '#3999E4' },
+                    { time: '13 May, 11:05', actor: 'Emma Liu',  action: 'Documents uploaded (5 files)',            icon: 'upload_file', color: '#5E5C75' },
+                    { time: '12 May, 09:23', actor: 'Alex Mercer', action: 'Order created from PO-2024-08912',      icon: 'add_circle',   color: '#767676' },
+                  ].map((ev, i, arr) => (
+                    <div key={i} style={{ display: 'flex', gap: 10, paddingBottom: i < arr.length - 1 ? 12 : 0 }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
+                        <div style={{ width: 28, height: 28, borderRadius: '50%', background: `${ev.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <span className="material-icons" style={{ fontSize: 14, color: ev.color, fontFamily: 'Material Icons', lineHeight: 1 }}>{ev.icon}</span>
+                        </div>
+                        {i < arr.length - 1 && <div style={{ width: 1, flex: 1, background: '#EBEBEB', marginTop: 4 }} />}
+                      </div>
+                      <div style={{ paddingBottom: 4 }}>
+                        <div style={{ fontSize: 12, fontWeight: 500, color: '#282828', fontFamily: 'var(--font-ui)' }}>{ev.action}</div>
+                        <div style={{ fontSize: 10, color: '#767676', fontFamily: 'var(--font-ui)', marginTop: 1 }}>{ev.actor} · {ev.time}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </TabPanel>
+            </div>
+          </div>
+        </div>
+      </LayoutFrame>
+
+      {/* ════════════════════════════════════════════════════════
+          LAYOUT 04 — DATA MANAGEMENT
+      ════════════════════════════════════════════════════════ */}
+      <LayoutFrame number="04" name="Data Management"
+        description="Table-first layout for managing large record sets. Toolbar provides search, filter, and bulk actions; the grid supports sorting, row variants, and selection; pagination anchors below."
+        tags={['DataGrid', 'SearchBar', 'Select', 'Badge', 'Button', 'Pagination', 'Alert']}
+        path="inventory/records"
+      >
+        <div style={LH}>
+          <div style={LH_LOGO}>MH</div>
+          <span style={LH_TITLE}>Modern Harmony</span>
+          <div style={LH_DIVIDER} />
+          <span style={LH_SUB}>Inventory Management</span>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
+            <Button variant="default" size="sm" iconLeft="upload">Import</Button>
+            <Button variant="default" size="sm" iconLeft="download">Export</Button>
+            <Button variant="primary" size="sm" iconLeft="add">New Record</Button>
+          </div>
+        </div>
+
+        <div style={LP}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
+            <div>
+              <div style={PT}>Order Records</div>
+              <div style={{ fontSize: 11, color: '#5E5C75', fontFamily: 'var(--font-ui)' }}>
+                <strong style={{ color: '#282828' }}>7 records</strong> · <span style={{ color: '#E02F3A' }}>1 critical</span> · <span style={{ color: '#F0A008' }}>2 delayed</span>
+              </div>
+            </div>
+          </div>
+
+          {/* toolbar */}
+          <div style={{ background: '#fff', borderRadius: '10px 10px 0 0', border: '1px solid #EBEBEB', borderBottom: 'none', padding: '10px 14px', display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ flex: 1, minWidth: 200 }}>
+              <SearchBar placeholder="Search orders, SKUs, carriers…" value={tableSearch} onChange={setTableSearch} results={[]} onSelect={() => {}} />
+            </div>
+            <div style={{ width: 130 }}><Select options={[{ value: '', label: 'All statuses' }, { value: 'on-track', label: 'On Track' }, { value: 'delayed', label: 'Delayed' }, { value: 'critical', label: 'Critical' }, { value: 'fulfilled', label: 'Fulfilled' }]} value="" onChange={() => {}} placeholder="Status" /></div>
+            <div style={{ width: 130 }}><Select options={[{ value: '', label: 'All regions' }, { value: 'na', label: 'North America' }, { value: 'eu', label: 'Europe' }, { value: 'apac', label: 'Asia Pacific' }]} value="" onChange={() => {}} placeholder="Region" /></div>
+            <Button variant="borderless" size="sm" iconLeft="filter_list">Filters</Button>
+            <Button variant="borderless" size="sm" iconLeft="view_column">Columns</Button>
+          </div>
+
+          <Alert variant="warning" message="2 orders have missed their delivery window and need immediate attention." />
+
+          <div className="ds-scroll-x" style={{ background: '#fff', borderRadius: '0 0 10px 10px', border: '1px solid #EBEBEB', borderTop: 'none' }}>
+            <DataGrid
+              columns={tableColumns}
+              rows={tableRows}
+              selectable
+              selectedKeys={[]}
+              onSelectionChange={() => {}}
+              rowVariant={(r) => r.status === 'Critical' ? 'error' : r.status === 'Delayed' ? 'warning' : 'default'}
+            />
+          </div>
+
+          <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
+            <div style={{ fontSize: 11, color: '#767676', fontFamily: 'var(--font-ui)' }}>Showing 1–7 of 7 records</div>
+            <Pagination total={7} page={tablePage} pageSize={25} onChange={setTablePage} />
+          </div>
+        </div>
+      </LayoutFrame>
+
+      {/* ════════════════════════════════════════════════════════
+          LAYOUT 05 — MULTI-STEP WORKFLOW
+      ════════════════════════════════════════════════════════ */}
+      <LayoutFrame number="05" name="Multi-Step Workflow"
+        description="Guided task completion for complex enterprise forms. Vertical stepper provides orientation; summary well reinforces key inputs; footer actions enable safe navigation between steps."
+        tags={['Stepper', 'Input', 'Select', 'Textarea', 'Well', 'Progress', 'PageFooter']}
+        path="orders/new"
+      >
+        <div style={LH}>
+          <div style={LH_LOGO}>MH</div>
+          <span style={LH_TITLE}>Modern Harmony</span>
+          <div style={LH_DIVIDER} />
+          <span style={LH_SUB}>New Order</span>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, alignItems: 'center' }}>
+            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-ui)' }}>Step {formStep} of 4</span>
+            <Button variant="default" size="sm">Save draft</Button>
+          </div>
+        </div>
+
+        <div style={{ ...LP, display: 'grid', gridTemplateColumns: '220px 1fr', gap: 16 }}>
+          {/* left: stepper nav */}
+          <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '16px 14px', height: 'fit-content' }}>
+            <div style={{ ...SL, marginBottom: 12 }}>Workflow Steps</div>
+            <Stepper orientation="vertical" current={formStep - 1}
+              steps={[
+                { label: 'Shipment Info',    sublabel: 'Origin, destination, incoterms'  },
+                { label: 'Product Details',  sublabel: 'SKUs, quantities, packaging'      },
+                { label: 'Carrier & Routing',sublabel: 'Service type, transit time'       },
+                { label: 'Review & Submit',  sublabel: 'Confirm and place order'          },
+              ]} />
+            <div style={{ marginTop: 16, padding: '10px 12px', background: '#F2ECF8', borderRadius: 8 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: '#4E2975', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 4, fontFamily: 'var(--font-ui)' }}>Overall Progress</div>
+              <Progress value={((formStep - 1) / 4) * 100} color="violet" size="sm" label={`${Math.round(((formStep - 1) / 4) * 100)}%`} />
+            </div>
+            <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 4 }}>
+              {[
+                ['Timeline',  formStep > 1 ? '14–18 days' : '—'],
+                ['Priority',  formStep > 1 ? 'Standard'   : '—'],
+                ['Est. Cost', formStep > 2 ? '$14,200'    : '—'],
+              ].map(([k, v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontFamily: 'var(--font-ui)' }}>
+                  <span style={{ color: '#767676' }}>{k}</span>
+                  <span style={{ color: v === '—' ? '#C6C6C6' : '#282828', fontWeight: v !== '—' ? 600 : 400 }}>{v}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* right: form content */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '16px 18px' }}>
+              <SectionHeading title="Shipment Information" subtitle="Step 1 of 4 — Origin, destination, and trade terms" />
+              <div className="ds-grid-2" style={{ gap: 12, marginBottom: 12 }}>
+                <Input label="Origin Port / Facility"   value="Chicago, IL — O'Hare Cargo"    onChange={() => {}} />
+                <Input label="Destination Port / Facility" value="Rotterdam, Netherlands"     onChange={() => {}} />
+                <Select label="Service Type"
+                  options={[{ value: 'air', label: 'Air Freight' }, { value: 'ocean', label: 'Ocean FCL' }, { value: 'ground', label: 'Ground' }]}
+                  value="air" onChange={() => {}} />
+                <Select label="Incoterms"
+                  options={[{ value: 'dap', label: 'DAP — Delivered at Place' }, { value: 'fob', label: 'FOB — Free on Board' }, { value: 'exw', label: 'EXW — Ex Works' }]}
+                  value="dap" onChange={() => {}} />
+                <DatePicker label="Pickup Date"         value={null} onChange={() => {}} />
+                <DatePicker label="Required Delivery"   value={null} onChange={() => {}} />
+              </div>
+              <Textarea label="Special Instructions" value="" onChange={() => {}} placeholder="Fragile items, temperature requirements, customs notes…" rows={3} />
+            </div>
+
+            <Well>
+              <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+                {[
+                  ['Route',     'ORD → RTM'],
+                  ['Service',   'Air Freight'],
+                  ['Incoterms', 'DAP'],
+                  ['Transit',   '14–18 days'],
+                ].map(([l, v]) => (
+                  <div key={l}>
+                    <div style={{ fontSize: 9, fontWeight: 700, color: '#8C8C8C', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 3, fontFamily: 'var(--font-ui)' }}>{l}</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: '#282828', fontFamily: 'Switzer, sans-serif' }}>{v}</div>
+                  </div>
+                ))}
+              </div>
+            </Well>
+          </div>
+        </div>
+
+        <PageFooter
+          actions={[
+            { id: 'continue', label: 'Continue', variant: 'primary', icon: 'arrow_forward', onClick: () => setFormStep(s => Math.min(s + 1, 4)) },
+            { id: 'back',     label: 'Back',     variant: 'default',                        onClick: () => setFormStep(s => Math.max(s - 1, 1)) },
+            { id: 'draft',    label: 'Save draft', variant: 'default',                      onClick: () => {} },
+          ]}
+          recordCount={formStep}
+          recordLabel="of 4 steps completed"
+        />
+      </LayoutFrame>
+
+      {/* ════════════════════════════════════════════════════════
+          LAYOUT 06 — SETTINGS & CONFIGURATION
+      ════════════════════════════════════════════════════════ */}
+      <LayoutFrame number="06" name="Settings & Configuration"
+        description="Left-navigated settings page. Vertical tab list provides quick section switching; the main area renders sectioned forms with clear hierarchy; save/cancel anchor to footer."
+        tags={['Tabs', 'Input', 'Switch', 'Select', 'Alert', 'Button', 'SectionHeading']}
+        path="settings/general"
+      >
+        <div style={LH}>
+          <div style={LH_LOGO}>MH</div>
+          <span style={LH_TITLE}>Modern Harmony</span>
+          <div style={LH_DIVIDER} />
+          <span style={LH_SUB}>Settings</span>
+        </div>
+
+        <div style={{ ...LP, display: 'grid', gridTemplateColumns: '180px 1fr', gap: 16 }}>
+          {/* left nav */}
+          <div>
+            {[
+              { id: 'general',       icon: 'tune',           label: 'General'       },
+              { id: 'notifications', icon: 'notifications',  label: 'Notifications' },
+              { id: 'integrations',  icon: 'electrical_services', label: 'Integrations' },
+              { id: 'security',      icon: 'lock',           label: 'Security'      },
+              { id: 'team',          icon: 'group',          label: 'Team'          },
+            ].map(item => (
+              <button key={item.id} onClick={() => setSettingsTab(item.id)}
+                style={{ display: 'flex', alignItems: 'center', gap: 9, width: '100%', padding: '8px 10px', borderRadius: 7, border: 'none', cursor: 'pointer', textAlign: 'left', marginBottom: 2, fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: settingsTab === item.id ? 600 : 400, background: settingsTab === item.id ? '#F2ECF8' : 'transparent', color: settingsTab === item.id ? '#8342BB' : '#282828' }}>
+                <span className="material-icons" style={{ fontSize: 16, fontFamily: 'Material Icons', lineHeight: 1, color: settingsTab === item.id ? '#8342BB' : '#767676' }}>{item.icon}</span>
+                {item.label}
+              </button>
+            ))}
+          </div>
+
+          {/* right content */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0 }}>
+            {settingsTab === 'general' && (<>
+              <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '16px 18px' }}>
+                <SectionHeading title="Workspace" subtitle="Organization name, timezone, and locale preferences" />
+                <div className="ds-grid-2" style={{ gap: 12 }}>
+                  <Input label="Workspace Name" value="Modern Harmony DS" onChange={() => {}} />
+                  <Input label="Primary Domain"  value="modernharmony.io" onChange={() => {}} />
+                  <Select label="Timezone"
+                    options={[{ value: 'utc', label: 'UTC' }, { value: 'est', label: 'UTC−5 Eastern' }, { value: 'pst', label: 'UTC−8 Pacific' }]}
+                    value="utc" onChange={() => {}} />
+                  <Select label="Date Format"
+                    options={[{ value: 'dmy', label: 'DD/MM/YYYY' }, { value: 'mdy', label: 'MM/DD/YYYY' }]}
+                    value="dmy" onChange={() => {}} />
+                </div>
+              </div>
+
+              <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '16px 18px' }}>
+                <SectionHeading title="Preferences" subtitle="Display and behaviour settings" />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <Switch label="Dark mode" checked={darkMode} onChange={setDarkMode} hint="Use dark theme across the application" />
+                  <Switch label="Auto-save drafts" checked={autoSave} onChange={setAutoSave} hint="Automatically save form progress every 30 seconds" />
+                  <Switch label="Notifications" checked={notif} onChange={setNotif} hint="Receive in-app notifications for critical alerts" />
+                  <div style={{ height: 1, background: '#F0F0F4' }} />
+                  <Select label="Default landing page"
+                    options={[{ value: 'dashboard', label: 'Operations Dashboard' }, { value: 'orders', label: 'Order Records' }, { value: 'analytics', label: 'Analytics' }]}
+                    value="dashboard" onChange={() => {}} />
+                </div>
+              </div>
+
+              <Alert variant="info" message="Changes to workspace settings take effect immediately for all team members." />
+            </>)}
+
+            {settingsTab === 'notifications' && (
+              <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '16px 18px' }}>
+                <SectionHeading title="Notification Channels" subtitle="Control how and when you receive alerts" />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {[
+                    ['In-app notifications',   'Show notifications in the sidebar',     true  ],
+                    ['Email digest',            'Daily summary of activity',             false ],
+                    ['Critical order alerts',   'Immediate alerts for critical status',  true  ],
+                    ['System maintenance',      'Planned downtime and updates',          true  ],
+                    ['Weekly report',           'Performance summary every Monday',      false ],
+                  ].map(([label, desc, checked]) => (
+                    <Switch key={label as string} label={label as string} hint={desc as string} checked={checked as boolean} onChange={() => {}} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {settingsTab !== 'general' && settingsTab !== 'notifications' && (
+              <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '16px 18px' }}>
+                <SectionHeading title={settingsTab.charAt(0).toUpperCase() + settingsTab.slice(1)} subtitle="Configure your preferences for this section" />
+                <div style={{ padding: '24px 0', textAlign: 'center' }}>
+                  <span className="material-icons" style={{ fontSize: 32, color: '#DDDDE5', fontFamily: 'Material Icons', lineHeight: 1, display: 'block', marginBottom: 8 }}>settings</span>
+                  <div style={{ fontSize: 13, color: '#767676', fontFamily: 'var(--font-ui)' }}>Select General or Notifications to see live settings</div>
+                </div>
+              </div>
+            )}
+
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+              <Button variant="default" size="sm">Discard changes</Button>
+              <Button variant="primary" size="sm" iconLeft="save">Save settings</Button>
+            </div>
+          </div>
+        </div>
+      </LayoutFrame>
+    </div>
+  )
+}
+
 // ── Section registry ───────────────────────────────────────────────────────────
 
 type SectionId =
@@ -1849,6 +2561,7 @@ type SectionId =
   | 'advanced'
   | 'tokens'
   | 'charts'
+  | 'page-layouts'
 
 const sectionMeta: Record<SectionId, { label: string; icon: string }> = {
   colors:     { label: 'Colors & Tokens',  icon: 'palette' },
@@ -1863,13 +2576,14 @@ const sectionMeta: Record<SectionId, { label: string; icon: string }> = {
   layout:     { label: 'Layout',            icon: 'dashboard' },
   composites: { label: 'Composites',        icon: 'widgets' },
   advanced:   { label: 'Advanced',          icon: 'tune' },
-  charts:     { label: 'Charts',            icon: 'insert_chart' },
+  charts:       { label: 'Charts',         icon: 'insert_chart' },
+  'page-layouts': { label: 'Page Layouts', icon: 'view_quilt'   },
 }
 
 const sectionOrder: SectionId[] = [
   'colors', 'tokens', 'typography', 'buttons', 'forms',
   'feedback', 'navigation', 'overlays', 'data', 'layout', 'composites', 'advanced',
-  'charts',
+  'charts', 'page-layouts',
 ]
 
 function SectionContent({ id }: { id: SectionId }) {
@@ -1886,7 +2600,8 @@ function SectionContent({ id }: { id: SectionId }) {
     case 'layout':     return <LayoutSection />
     case 'composites': return <CompositesSection />
     case 'advanced':   return <AdvancedSection />
-    case 'charts':     return <ChartsSection />
+    case 'charts':        return <ChartsSection />
+    case 'page-layouts':  return <PageLayoutsSection />
   }
 }
 

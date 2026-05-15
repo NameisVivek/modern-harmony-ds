@@ -49,23 +49,37 @@ export function Sidebar({
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [tooltip, setTooltip] = useState<{ label: string; y: number } | null>(null)
   const sidebarRef = useRef<HTMLDivElement>(null)
+  const tooltipTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  function showTooltip(label: string, y: number) {
+    if (tooltipTimer.current) clearTimeout(tooltipTimer.current)
+    setTooltip(prev => (prev?.label === label ? prev : { label, y }))
+    // Auto-dismiss after 2 s on touch devices (desktop hides on mouse-leave)
+    tooltipTimer.current = setTimeout(() => {
+      setTooltip(null)
+      tooltipTimer.current = null
+    }, 2000)
+  }
+
+  function hideTooltip() {
+    if (tooltipTimer.current) { clearTimeout(tooltipTimer.current); tooltipTimer.current = null }
+    setTooltip(null)
+  }
 
   // onMouseOver bubbles from any child element (icons, spans, etc.)
   // closest() walks up from the actual target to find the nav item wrapper
   function handleSidebarMouseOver(e: React.MouseEvent<HTMLDivElement>) {
     if (expanded) return
     const item = (e.target as HTMLElement).closest<HTMLElement>('[data-navid]')
-    if (!item) { setTooltip(null); return }
+    if (!item) { hideTooltip(); return }
     const rect = item.getBoundingClientRect()
-    const y = rect.top + rect.height / 2
-    const label = item.dataset.navlabel ?? ''
-    setTooltip(prev => (prev?.label === label ? prev : { label, y }))
+    showTooltip(item.dataset.navlabel ?? '', rect.top + rect.height / 2)
   }
 
   // onMouseOut fires when leaving any child — only clear when cursor exits the sidebar entirely
   function handleSidebarMouseOut(e: React.MouseEvent<HTMLDivElement>) {
     if (!sidebarRef.current?.contains(e.relatedTarget as Node)) {
-      setTooltip(null)
+      hideTooltip()
       setHoveredId(null)
     }
   }

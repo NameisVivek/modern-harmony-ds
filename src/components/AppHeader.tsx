@@ -360,9 +360,9 @@ export function AppHeader({
           )}
         </div>
 
-        {/* Desktop search bar */}
+        {/* Desktop search — left-aligned, after logo */}
         {!isMobile && (
-          <div ref={searchRef} style={{ flex: 1, maxWidth: 380, margin: '0 16px', position: 'relative' }}>
+          <div ref={searchRef} style={{ width: 320, marginLeft: 16, position: 'relative', flexShrink: 0 }}>
             <div style={{
               display: 'flex', alignItems: 'center', gap: 8,
               height: 34, padding: '0 10px',
@@ -383,8 +383,11 @@ export function AppHeader({
           </div>
         )}
 
-        {/* Right controls */}
-        <div style={{ ...s.headerRight, marginLeft: isMobile ? 'auto' : 0 }}>
+        {/* Center spacer */}
+        <div style={{ flex: 1 }} />
+
+        {/* Right controls — user profile at far right */}
+        <div style={s.headerRight}>
           {/* Mobile: search icon */}
           {isMobile && (
             <button

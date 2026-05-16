@@ -2625,7 +2625,21 @@ interface LayoutAccordionItem {
   src: string;
 }
 
-function LayoutAccordion({ item, open, onToggle }: { item: LayoutAccordionItem; open: boolean; onToggle: () => void }) {
+function LayoutAccordion({ item, open, onToggle, isMobile }: { item: LayoutAccordionItem; open: boolean; onToggle: () => void; isMobile: boolean }) {
+  const tagChips = (
+    <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+      {item.tags.map(t => (
+        <span key={t} style={{
+          padding: '3px 8px', borderRadius: 4,
+          background: open ? '#EDE0FA' : '#F2ECF8',
+          color: 'var(--th-brand)', fontSize: 10, fontWeight: 600,
+          fontFamily: 'var(--font-ui)', border: '1px solid var(--th-border-strong)',
+          whiteSpace: 'nowrap', lineHeight: '16px',
+        }}>{t}</span>
+      ))}
+    </div>
+  );
+
   return (
     <div style={{
       background: 'var(--dec-color-surface)',
@@ -2639,8 +2653,12 @@ function LayoutAccordion({ item, open, onToggle }: { item: LayoutAccordionItem; 
       <button
         onClick={onToggle}
         style={{
-          display: 'flex', alignItems: 'center', width: '100%', gap: 14,
-          padding: '14px 18px',
+          display: 'flex',
+          alignItems: isMobile ? 'flex-start' : 'center',
+          flexWrap: isMobile ? 'wrap' : 'nowrap',
+          width: '100%',
+          gap: isMobile ? 10 : 14,
+          padding: isMobile ? '14px 14px' : '14px 18px',
           background: open ? 'linear-gradient(135deg, #FAF7FF 0%, #F4EEFF 100%)' : 'transparent',
           border: 'none', borderBottom: open ? '1px solid #E8DFFA' : '1px solid transparent',
           cursor: 'pointer', textAlign: 'left',
@@ -2653,34 +2671,46 @@ function LayoutAccordion({ item, open, onToggle }: { item: LayoutAccordionItem; 
           background: open ? '#8342BB' : '#F2ECF8',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           transition: 'background 0.2s',
+          marginTop: isMobile ? 1 : 0,
         }}>
           <span style={{ fontSize: 11, fontWeight: 700, color: open ? '#fff' : '#8342BB', fontFamily: 'var(--font-ui)' }}>
             {item.number}
           </span>
         </div>
 
-        {/* Title + description */}
+        {/* Title + description (+ tags inline on desktop) */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 14, fontWeight: 700, color: '#1C1C2E', fontFamily: 'Switzer, var(--font-ui)', letterSpacing: '-0.01em', marginBottom: 2 }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: '#1C1C2E', fontFamily: 'Switzer, var(--font-ui)', letterSpacing: '-0.01em', marginBottom: isMobile ? 3 : 2 }}>
             {item.name}
           </div>
-          <div style={{ fontSize: 11, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)', lineHeight: 1.4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <div style={{
+            fontSize: 11, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)', lineHeight: 1.5,
+            ...(isMobile
+              ? { whiteSpace: 'normal', marginBottom: 8 }
+              : { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }),
+          }}>
             {item.description}
           </div>
+          {/* Tags below description on mobile */}
+          {isMobile && tagChips}
         </div>
 
-        {/* Tags */}
-        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'flex-end', flexShrink: 0, maxWidth: 220 }}>
-          {item.tags.map(t => (
-            <span key={t} style={{ padding: '2px 7px', borderRadius: 4, background: open ? '#EDE0FA' : '#F2ECF8', color: 'var(--th-brand)', fontSize: 10, fontWeight: 600, fontFamily: 'var(--font-ui)', border: '1px solid var(--th-border-strong)', whiteSpace: 'nowrap' }}>{t}</span>
-          ))}
-        </div>
+        {/* Tags on desktop — right-aligned beside chevron */}
+        {!isMobile && (
+          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'flex-end', flexShrink: 0, maxWidth: 220 }}>
+            {item.tags.map(t => (
+              <span key={t} style={{ padding: '2px 7px', borderRadius: 4, background: open ? '#EDE0FA' : '#F2ECF8', color: 'var(--th-brand)', fontSize: 10, fontWeight: 600, fontFamily: 'var(--font-ui)', border: '1px solid var(--th-border-strong)', whiteSpace: 'nowrap' }}>{t}</span>
+            ))}
+          </div>
+        )}
 
-        {/* Chevron */}
+        {/* Chevron — always top-right on mobile, centered on desktop */}
         <span className="material-icons" style={{
           fontSize: 20, color: open ? '#8342BB' : '#BBBBC8', fontFamily: 'Material Icons', lineHeight: 1, flexShrink: 0,
           transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
           transition: 'transform 0.25s ease, color 0.2s',
+          alignSelf: isMobile ? 'flex-start' : 'center',
+          marginTop: isMobile ? 6 : 0,
         }}>expand_more</span>
       </button>
 
@@ -2690,7 +2720,7 @@ function LayoutAccordion({ item, open, onToggle }: { item: LayoutAccordionItem; 
         maxHeight: open ? '9999px' : '0',
         transition: 'max-height 0.35s ease',
       }}>
-        <div style={{ background: 'var(--th-bg-search)', padding: '16px 18px' }}>
+        <div style={{ background: 'var(--th-bg-search)', padding: isMobile ? '14px 14px' : '16px 18px' }}>
           {/* Full description when expanded */}
           <p style={{ margin: '0 0 14px', fontSize: 12, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)', lineHeight: 1.6 }}>
             {item.description}
@@ -2710,6 +2740,7 @@ function LayoutAccordion({ item, open, onToggle }: { item: LayoutAccordionItem; 
 }
 
 function PageLayoutsSection() {
+  const isMobile = useIsMobile();
   const layouts: LayoutAccordionItem[] = [
     {
       number: '01',
@@ -2767,12 +2798,12 @@ function PageLayoutsSection() {
   const toggle = (i: number) => setOpenIndex(prev => prev === i ? null : i);
 
   return (
-    <div style={{ padding: '28px 24px 40px', maxWidth: 900, margin: '0 auto' }}>
+    <div style={{ padding: isMobile ? '20px 12px 32px' : '28px 24px 40px', maxWidth: 900, margin: '0 auto' }}>
       {/* Header */}
-      <div style={{ marginBottom: 24 }}>
+      <div style={{ marginBottom: isMobile ? 16 : 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
           <span className="material-icons" style={{ fontSize: 22, color: 'var(--dec-color-brand-base)', fontFamily: 'Material Icons', lineHeight: 1 }}>photo_library</span>
-          <h1 style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 22, fontWeight: 700, color: '#1C1C2E', letterSpacing: '-0.03em', margin: 0 }}>Page Layouts</h1>
+          <h1 style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: isMobile ? 18 : 22, fontWeight: 700, color: '#1C1C2E', letterSpacing: '-0.03em', margin: 0 }}>Page Layouts</h1>
         </div>
         <p style={{ fontFamily: 'var(--font-ui)', fontSize: 13, color: 'var(--th-text-secondary)', margin: 0, lineHeight: 1.6, maxWidth: 560 }}>
           Reference layouts and UX pattern documentation. Click any layout to expand and view the full reference.
@@ -2780,9 +2811,9 @@ function PageLayoutsSection() {
       </div>
 
       {/* Accordion list */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 10 : 8 }}>
         {layouts.map((l, i) => (
-          <LayoutAccordion key={l.number} item={l} open={openIndex === i} onToggle={() => toggle(i)} />
+          <LayoutAccordion key={l.number} item={l} open={openIndex === i} onToggle={() => toggle(i)} isMobile={isMobile} />
         ))}
       </div>
 

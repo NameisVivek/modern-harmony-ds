@@ -155,18 +155,21 @@ export function DataGrid<T extends Record<string, unknown>>({
       )}
 
       {/* Table */}
-      <div style={{ overflowX: 'auto' }}>
+      <div style={{ overflowX: 'auto', overflowY: 'auto', maxHeight: 480 }}>
         <table style={{ width: '100%', minWidth: 'max-content', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
               {selectable && (
                 <th style={{
                   width: 32,
-                  height: 'calc(28px + var(--th-density-offset, 0px))',
+                  height: 28,
                   padding: '0 8px',
                   background: 'var(--th-bg-grid-header)',
                   borderBottom: '1px solid var(--th-border-strong)',
                   textAlign: 'left',
+                  position: 'sticky',
+                  top: 0,
+                  zIndex: 2,
                 }}>
                   <Checkbox3
                     checked={allSelected}
@@ -179,7 +182,7 @@ export function DataGrid<T extends Record<string, unknown>>({
                 <th
                   key={col.key}
                   style={{
-                    height: 'calc(28px + var(--th-density-offset, 0px))',
+                    height: 28,
                     padding: '0 10px',
                     fontFamily: 'var(--font-data)',
                     fontSize: 10,
@@ -193,6 +196,9 @@ export function DataGrid<T extends Record<string, unknown>>({
                     userSelect: 'none',
                     cursor: col.sortable ? 'pointer' : 'default',
                     width: col.width,
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 2,
                   }}
                   onClick={() => handleSort(col)}
                 >
@@ -206,7 +212,14 @@ export function DataGrid<T extends Record<string, unknown>>({
                   </span>
                 </th>
               ))}
-              <th style={{ width: 32, background: 'var(--th-bg-grid-header)', borderBottom: '1px solid var(--th-border-strong)' }} />
+              <th style={{
+                width: 32,
+                background: 'var(--th-bg-grid-header)',
+                borderBottom: '1px solid var(--th-border-strong)',
+                position: 'sticky',
+                top: 0,
+                zIndex: 2,
+              }} />
             </tr>
           </thead>
           <tbody>

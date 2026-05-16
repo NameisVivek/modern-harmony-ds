@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 function useIsMobile() {
   const [m, setM] = useState(() => window.innerWidth < 768)
@@ -9,7 +9,7 @@ function useIsMobile() {
   }, [])
   return m
 }
-import { SearchItem } from './components/AppHeader'
+import { SearchItem, Theme, Density } from './components/AppHeader'
 import {
   AppHeader,
   Sidebar,
@@ -78,7 +78,7 @@ import {
 const SL: React.CSSProperties = {
   fontSize: 9,
   fontWeight: 600,
-  color: '#8C8C8C',
+  color: 'var(--th-text-hint)',
   textTransform: 'uppercase',
   letterSpacing: '0.08em',
   marginBottom: 12,
@@ -86,9 +86,9 @@ const SL: React.CSSProperties = {
 }
 
 const EC: React.CSSProperties = {
-  background: '#fff',
+  background: 'var(--th-bg-surface)',
   borderRadius: 10,
-  border: '1px solid #EBEBEB',
+  border: '1px solid var(--th-border)',
   padding: '16px 18px',
 }
 
@@ -99,12 +99,12 @@ const ROW: React.CSSProperties = {
   flexWrap: 'wrap',
 }
 
-const DIVIDER: React.CSSProperties = { height: 1, background: '#F0F0F4', margin: '4px 0' }
+const DIVIDER: React.CSSProperties = { height: 1, background: 'var(--th-border-subtle)', margin: '4px 0' }
 
 const PAGE_TITLE: React.CSSProperties = {
   fontSize: 22,
   fontWeight: 700,
-  color: '#282828',
+  color: 'var(--th-text-primary)',
   fontFamily: 'Switzer, var(--font-ui)',
   marginBottom: 4,
   letterSpacing: '-0.02em',
@@ -112,7 +112,7 @@ const PAGE_TITLE: React.CSSProperties = {
 
 const PAGE_SUB: React.CSSProperties = {
   fontSize: 13,
-  color: '#5E5C75',
+  color: 'var(--th-text-secondary)',
   fontFamily: 'var(--font-ui)',
   marginBottom: 20,
 }
@@ -2955,6 +2955,28 @@ export default function App() {
   const isMobile = useIsMobile()
   const [sidebarExpanded, setSidebarExpanded] = useState(() => window.innerWidth >= 768)
   const [activeSection, setActiveSection] = useState<SectionId>('colors')
+  const [theme, setTheme] = useState<Theme>(() => {
+    const saved = localStorage.getItem('ds-theme')
+    return (saved === 'dark' || saved === 'light') ? saved : 'light'
+  })
+  const [density, setDensity] = useState<Density>(() => {
+    const saved = localStorage.getItem('ds-density')
+    return (saved === 'compact' || saved === 'cozy' || saved === 'comfortable') ? saved : 'comfortable'
+  })
+
+  // Apply theme + density to <html> so portals (tooltips, modals) pick them up
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem('ds-theme', theme)
+  }, [theme])
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-density', density)
+    localStorage.setItem('ds-density', density)
+  }, [density])
+
+  const handleThemeChange = useCallback((t: Theme) => setTheme(t), [])
+  const handleDensityChange = useCallback((d: Density) => setDensity(d), [])
 
   // Auto-collapse sidebar when viewport shrinks to mobile
   useEffect(() => {
@@ -2992,6 +3014,10 @@ export default function App() {
           setActiveSection(id as SectionId)
           if (isMobile) setSidebarExpanded(false)
         }}
+        theme={theme}
+        density={density}
+        onThemeChange={handleThemeChange}
+        onDensityChange={handleDensityChange}
       />
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden', position: 'relative' }}>
         <Sidebar
@@ -3011,8 +3037,9 @@ export default function App() {
           overflowY: 'auto',
           overflowX: isMobile ? 'hidden' : 'auto',
           padding: pad,
-          background: '#F0F0F4',
+          background: 'var(--th-bg-page)',
           minWidth: 0,
+          transition: 'background 0.2s',
         }}>
           <div style={{ width: '100%' }}>
             <SectionContent id={activeSection} />

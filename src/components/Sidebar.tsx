@@ -118,13 +118,13 @@ export function Sidebar({
   const sidebarStyle: React.CSSProperties = {
     width,
     minWidth: width,
-    background: '#fff',
-    border: '1px solid #EBEBEB',
-    boxShadow: '0 2px 4px rgba(55,23,78,0.06), 0 4px 8px -2px rgba(55,23,78,0.10)',
+    background: 'var(--th-bg-sidebar)',
+    border: '1px solid var(--th-border)',
+    boxShadow: 'var(--th-shadow-sidebar)',
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    transition: 'width 0.25s cubic-bezier(0.4,0,0.2,1)',
+    transition: 'width 0.25s cubic-bezier(0.4,0,0.2,1), background 0.2s, border-color 0.2s',
     fontFamily: 'var(--font-ui)',
     position: 'relative',
     flexShrink: 0,
@@ -137,15 +137,15 @@ export function Sidebar({
     return {
       display: 'flex',
       alignItems: 'center',
-      height: 40,
+      height: 'var(--th-nav-item-height)',
       cursor: item.disabled ? 'not-allowed' : 'pointer',
-      borderLeft: `3px solid ${isActive ? '#8342BB' : 'transparent'}`,
+      borderLeft: `3px solid ${isActive ? 'var(--th-brand)' : 'transparent'}`,
       paddingLeft: isActive ? 11 : 13,
       gap: 10,
       background: isActive
-        ? 'rgba(131,66,187,0.08)'
+        ? 'var(--th-brand-subtle)'
         : isHovered && !item.disabled
-        ? 'rgba(40,40,40,0.05)'
+        ? 'var(--th-hover-overlay)'
         : 'transparent',
       transition: 'background 0.1s',
       overflow: 'hidden',
@@ -158,7 +158,7 @@ export function Sidebar({
     return {
       fontSize: 20,
       flexShrink: 0,
-      color: item.disabled ? '#BFBECE' : isActive ? '#8342BB' : '#5E5C75',
+      color: item.disabled ? 'var(--th-text-disabled)' : isActive ? 'var(--th-brand)' : 'var(--th-icon-neutral)',
     }
   }
 
@@ -169,7 +169,7 @@ export function Sidebar({
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
-      color: item.disabled ? '#BFBECE' : isActive ? '#7239A4' : '#282828',
+      color: item.disabled ? 'var(--th-text-disabled)' : isActive ? 'var(--th-brand-medium)' : 'var(--th-text-primary)',
       fontWeight: item.disabled ? 400 : isActive ? 500 : 400,
       opacity: expanded ? 1 : 0,
       transition: 'opacity 0.15s',
@@ -197,7 +197,7 @@ export function Sidebar({
           <span style={{
             marginLeft: 'auto',
             marginRight: 8,
-            background: '#8342BB',
+            background: 'var(--th-brand)',
             color: '#fff',
             fontSize: 10,
             fontWeight: 600,
@@ -228,14 +228,14 @@ export function Sidebar({
         <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', scrollbarWidth: 'none' }}>
           {items.map(renderItem)}
 
-          <div style={{ height: 1, background: '#F0F0F4', margin: '4px 0', flexShrink: 0 }} />
+          <div style={{ height: 1, background: 'var(--th-border-subtle)', margin: '4px 0', flexShrink: 0 }} />
 
           {bottomItems.map(renderItem)}
         </div>
 
         {/* Pinned bottom controls — always visible */}
         <div style={{ flexShrink: 0 }}>
-          {isMobile && <div style={{ height: 1, background: '#F0F0F4', margin: '4px 0' }} />}
+          {isMobile && <div style={{ height: 1, background: 'var(--th-border-subtle)', margin: '4px 0' }} />}
           {[
             ...(isMobile ? [
               { id: '_notif', icon: 'notifications_none', label: 'Notifications', badge: notificationCount },
@@ -250,12 +250,12 @@ export function Sidebar({
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                height: 40,
+                height: 'var(--th-nav-item-height)',
                 cursor: 'pointer',
                 borderLeft: '3px solid transparent',
                 paddingLeft: 13,
                 gap: 10,
-                background: hoveredId === item.id ? 'rgba(40,40,40,0.05)' : 'transparent',
+                background: hoveredId === item.id ? 'var(--th-hover-overlay)' : 'transparent',
                 transition: 'background 0.1s',
                 flexShrink: 0,
                 position: 'relative',
@@ -265,19 +265,19 @@ export function Sidebar({
             >
             <span
               className="material-icons"
-              style={{ fontSize: 20, flexShrink: 0, color: (item as {accent?:boolean}).accent ? '#8342BB' : '#5E5C75' }}
+              style={{ fontSize: 20, flexShrink: 0, color: (item as {accent?:boolean}).accent ? 'var(--th-brand)' : 'var(--th-icon-neutral)' }}
             >
               {item.icon}
             </span>
             {expanded && (
-              <span style={{ fontSize: 14, color: '#282828', whiteSpace: 'nowrap', flex: 1 }}>{item.label}</span>
+              <span style={{ fontSize: 14, color: 'var(--th-text-primary)', whiteSpace: 'nowrap', flex: 1 }}>{item.label}</span>
             )}
             {/* Notification badge */}
             {(item as {badge?:number}).badge != null && (item as {badge?:number}).badge! > 0 && (
               expanded ? (
                 <span style={{
                   marginRight: 10,
-                  background: '#E02F3A',
+                  background: 'var(--th-error)',
                   color: '#fff',
                   fontSize: 10,
                   fontWeight: 600,
@@ -298,9 +298,9 @@ export function Sidebar({
                   left: 26,
                   width: 8,
                   height: 8,
-                  background: '#E02F3A',
+                  background: 'var(--th-error)',
                   borderRadius: '50%',
-                  border: '1.5px solid #fff',
+                  border: '1.5px solid var(--th-bg-sidebar)',
                 }} />
               )
             )}
@@ -318,10 +318,10 @@ export function Sidebar({
               padding: expanded ? '0 12px' : '0 12px',
               gap: 10,
               cursor: 'pointer',
-              borderTop: '1px solid #F0F0F4',
+              borderTop: '1px solid var(--th-border)',
               justifyContent: expanded ? 'flex-start' : 'center',
               flexShrink: 0,
-              background: userMenuOpen || hoveredId === '_user' ? 'rgba(131,66,187,0.05)' : 'transparent',
+              background: userMenuOpen || hoveredId === '_user' ? 'var(--th-brand-hover)' : 'transparent',
               transition: 'background 0.1s',
             }}
             onMouseEnter={() => setHoveredId('_user')}
@@ -332,7 +332,7 @@ export function Sidebar({
               width: 32,
               height: 32,
               borderRadius: '50%',
-              background: '#8342BB',
+              background: 'var(--th-brand)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -340,7 +340,7 @@ export function Sidebar({
               fontWeight: 600,
               color: '#fff',
               flexShrink: 0,
-              boxShadow: userMenuOpen ? '0 0 0 2px rgba(131,66,187,0.3)' : 'none',
+              boxShadow: userMenuOpen ? '0 0 0 2px var(--th-brand-subtle)' : 'none',
               transition: 'box-shadow 0.15s',
             }}>
               {userInitials}
@@ -348,10 +348,10 @@ export function Sidebar({
             {expanded && (
               <>
                 <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', flex: 1 }}>
-                  <span style={{ fontSize: 13, fontWeight: 600, color: '#282828', whiteSpace: 'nowrap' }}>{userName}</span>
-                  <span style={{ fontSize: 11, color: '#8C8C8C', whiteSpace: 'nowrap' }}>{userRole}</span>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--th-text-primary)', whiteSpace: 'nowrap' }}>{userName}</span>
+                  <span style={{ fontSize: 11, color: 'var(--th-text-hint)', whiteSpace: 'nowrap' }}>{userRole}</span>
                 </div>
-                <span className="material-icons" style={{ fontSize: 16, color: '#BFBECE', flexShrink: 0 }}>
+                <span className="material-icons" style={{ fontSize: 16, color: 'var(--th-icon-muted)', flexShrink: 0 }}>
                   expand_less
                 </span>
               </>
@@ -366,8 +366,8 @@ export function Sidebar({
           position: 'fixed',
           left: 56,
           top: tooltip.y - 12,
-          background: '#282828',
-          color: '#fff',
+          background: 'var(--th-text-primary)',
+          color: 'var(--th-bg-page)',
           fontSize: 11,
           padding: '3px 8px',
           borderRadius: 5,
@@ -388,26 +388,26 @@ export function Sidebar({
           bottom: userMenuPos.bottom,
           left: userMenuPos.left,
           width: userMenuPos.width,
-          background: '#fff',
+          background: 'var(--th-bg-surface)',
           borderRadius: 10,
-          border: '1px solid #E5E5EC',
-          boxShadow: '0 -4px 24px rgba(55,23,78,0.13)',
+          border: '1px solid var(--th-border-strong)',
+          boxShadow: 'var(--th-shadow-dropdown)',
           zIndex: 9999,
           overflow: 'hidden',
         }}>
           {/* User info header */}
-          <div style={{ padding: '12px 14px 10px', borderBottom: '1px solid #F0F0F4' }}>
+          <div style={{ padding: '12px 14px 10px', borderBottom: '1px solid var(--th-border)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{
                 width: 36, height: 36, borderRadius: '50%',
-                background: '#8342BB', display: 'flex', alignItems: 'center',
+                background: 'var(--th-brand)', display: 'flex', alignItems: 'center',
                 justifyContent: 'center', fontSize: 12, fontWeight: 700, color: '#fff', flexShrink: 0,
               }}>
                 {userInitials}
               </div>
               <div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: '#282828' }}>{userName}</div>
-                <div style={{ fontSize: 11, color: '#8C8C8C', marginTop: 1 }}>{userRole}</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--th-text-primary)' }}>{userName}</div>
+                <div style={{ fontSize: 11, color: 'var(--th-text-hint)', marginTop: 1 }}>{userRole}</div>
               </div>
             </div>
           </div>
@@ -422,35 +422,35 @@ export function Sidebar({
               style={{
                 display: 'flex', alignItems: 'center', gap: 10,
                 width: '100%', padding: '11px 14px',
-                background: hoveredId === `um-${item.id}` ? 'rgba(131,66,187,0.05)' : 'transparent',
+                background: hoveredId === `um-${item.id}` ? 'var(--th-brand-hover)' : 'transparent',
                 border: 'none', cursor: 'pointer',
-                fontFamily: 'var(--font-ui)', fontSize: 14, color: '#282828', textAlign: 'left',
+                fontFamily: 'var(--font-ui)', fontSize: 14, color: 'var(--th-text-primary)', textAlign: 'left',
                 transition: 'background 0.1s',
               }}
               onMouseEnter={() => setHoveredId(`um-${item.id}`)}
               onMouseLeave={() => setHoveredId(null)}
               onClick={() => setUserMenuOpen(false)}
             >
-              <span className="material-icons" style={{ fontSize: 18, color: '#5E5C75' }}>{item.icon}</span>
+              <span className="material-icons" style={{ fontSize: 18, color: 'var(--th-icon-neutral)' }}>{item.icon}</span>
               <span style={{ flex: 1 }}>{item.label}</span>
-              {item.chevron && <span className="material-icons" style={{ fontSize: 16, color: '#BFBECE' }}>chevron_right</span>}
+              {item.chevron && <span className="material-icons" style={{ fontSize: 16, color: 'var(--th-icon-muted)' }}>chevron_right</span>}
             </button>
           ))}
-          <div style={{ height: 1, background: '#F0F0F4', margin: '2px 0' }} />
+          <div style={{ height: 1, background: 'var(--th-border-subtle)', margin: '2px 0' }} />
           <button
             style={{
               display: 'flex', alignItems: 'center', gap: 10,
               width: '100%', padding: '11px 14px',
               background: hoveredId === 'um-logout' ? 'rgba(224,47,58,0.05)' : 'transparent',
               border: 'none', cursor: 'pointer',
-              fontFamily: 'var(--font-ui)', fontSize: 14, color: '#E02F3A', textAlign: 'left',
+              fontFamily: 'var(--font-ui)', fontSize: 14, color: 'var(--th-error)', textAlign: 'left',
               transition: 'background 0.1s',
             }}
             onMouseEnter={() => setHoveredId('um-logout')}
             onMouseLeave={() => setHoveredId(null)}
             onClick={() => setUserMenuOpen(false)}
           >
-            <span className="material-icons" style={{ fontSize: 18, color: '#E02F3A' }}>logout</span>
+            <span className="material-icons" style={{ fontSize: 18, color: 'var(--th-error)' }}>logout</span>
             Log out
           </button>
         </div>,

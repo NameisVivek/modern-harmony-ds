@@ -27,19 +27,19 @@ export interface DataGridProps<T extends Record<string, unknown> = Record<string
 }
 
 const rowBg: Record<RowVariant, string> = {
-  default: '#fff',
-  error: '#FEF7F4',
-  warning: '#FFFDEF',
-  success: '#EEFEF9',
-  selected: 'rgba(131,66,187,0.08)',
+  default: 'var(--th-bg-surface)',
+  error: 'var(--th-row-error-bg)',
+  warning: 'var(--th-row-warning-bg)',
+  success: 'var(--th-row-success-bg)',
+  selected: 'var(--th-row-selected-bg)',
 }
 
 const rowIndicator: Record<RowVariant, string> = {
   default: 'transparent',
-  error: '#E02F3A',
-  warning: '#FDBF14',
-  success: '#5BD6A0',
-  selected: '#8342BB',
+  error: 'var(--th-error)',
+  warning: 'var(--th-warning)',
+  success: 'var(--th-success)',
+  selected: 'var(--th-brand)',
 }
 
 export function DataGrid<T extends Record<string, unknown>>({
@@ -102,37 +102,37 @@ export function DataGrid<T extends Record<string, unknown>>({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    border: `1px solid ${hoveredIconBtn === id ? '#BFBECE' : '#DDDDE5'}`,
+    border: `1px solid ${hoveredIconBtn === id ? 'var(--th-icon-muted)' : 'var(--th-border-strong)'}`,
     borderRadius: 5,
-    background: hoveredIconBtn === id ? '#F8F8FB' : '#fff',
+    background: hoveredIconBtn === id ? 'var(--th-bg-surface-subtle)' : 'var(--th-bg-surface)',
     cursor: 'pointer',
     transition: 'background 0.1s, border-color 0.1s',
   })
 
   return (
     <div style={{
-      background: '#fff',
+      background: 'var(--th-bg-surface)',
       borderRadius: 12,
-      border: '1px solid #EBEBEB',
+      border: '1px solid var(--th-border)',
       overflow: 'hidden',
-      boxShadow: '0 1px 3px rgba(55,23,78,0.08)',
+      boxShadow: 'var(--th-shadow-card)',
       fontFamily: 'var(--font-ui)',
     }}>
       {/* Toolbar */}
       {(title || toolbar) && (
         <div style={{
           padding: '8px 12px',
-          borderBottom: '1px solid #EBEBEB',
+          borderBottom: '1px solid var(--th-border)',
           display: 'flex',
           alignItems: 'center',
           gap: 8,
-          background: '#fff',
+          background: 'var(--th-bg-surface)',
         }}>
           {title && (
-            <span style={{ fontSize: 12, fontWeight: 500, color: '#282828' }}>{title}</span>
+            <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--th-text-primary)' }}>{title}</span>
           )}
           {subtitle && (
-            <span style={{ fontSize: 11, color: '#8C8C8C' }}>{subtitle}</span>
+            <span style={{ fontSize: 11, color: 'var(--th-text-hint)' }}>{subtitle}</span>
           )}
           {toolbar && <>{toolbar}</>}
           <div style={{ flex: 1 }} />
@@ -148,7 +148,7 @@ export function DataGrid<T extends Record<string, unknown>>({
               onMouseEnter={() => setHoveredIconBtn(btn.id)}
               onMouseLeave={() => setHoveredIconBtn(null)}
             >
-              <span className="material-icons" style={{ fontSize: 14, color: '#5E5C75' }}>{btn.icon}</span>
+              <span className="material-icons" style={{ fontSize: 14, color: 'var(--th-icon-neutral)' }}>{btn.icon}</span>
             </button>
           ))}
         </div>
@@ -164,8 +164,8 @@ export function DataGrid<T extends Record<string, unknown>>({
                   width: 32,
                   height: 28,
                   padding: '0 8px',
-                  background: '#F0F0F4',
-                  borderBottom: '1px solid #DDDDE5',
+                  background: 'var(--th-bg-grid-header)',
+                  borderBottom: '1px solid var(--th-border-strong)',
                   textAlign: 'left',
                 }}>
                   <Checkbox3
@@ -184,11 +184,11 @@ export function DataGrid<T extends Record<string, unknown>>({
                     fontFamily: 'var(--font-data)',
                     fontSize: 10,
                     fontWeight: 500,
-                    color: '#5E5C75',
+                    color: 'var(--th-text-secondary)',
                     letterSpacing: '0.04em',
                     textAlign: col.align ?? 'left',
-                    background: '#F0F0F4',
-                    borderBottom: '1px solid #DDDDE5',
+                    background: 'var(--th-bg-grid-header)',
+                    borderBottom: '1px solid var(--th-border-strong)',
                     whiteSpace: 'nowrap',
                     userSelect: 'none',
                     cursor: col.sortable ? 'pointer' : 'default',
@@ -199,26 +199,26 @@ export function DataGrid<T extends Record<string, unknown>>({
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2 }}>
                     {col.header}
                     {col.sortable && (
-                      <span className="material-icons" style={{ fontSize: 12, color: '#8B8AA5', verticalAlign: 'middle' }}>
+                      <span className="material-icons" style={{ fontSize: 12, color: 'var(--th-text-hint)', verticalAlign: 'middle' }}>
                         {sortKey === col.key ? (sortDir === 'asc' ? 'arrow_upward' : 'arrow_downward') : 'unfold_more'}
                       </span>
                     )}
                   </span>
                 </th>
               ))}
-              <th style={{ width: 32, background: '#F0F0F4', borderBottom: '1px solid #DDDDE5' }} />
+              <th style={{ width: 32, background: 'var(--th-bg-grid-header)', borderBottom: '1px solid var(--th-border-strong)' }} />
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={columns.length + (selectable ? 2 : 1)} style={{ padding: '24px', textAlign: 'center', color: '#8C8C8C', fontSize: 12 }}>
+                <td colSpan={columns.length + (selectable ? 2 : 1)} style={{ padding: '24px', textAlign: 'center', color: 'var(--th-text-hint)', fontSize: 12 }}>
                   Loading…
                 </td>
               </tr>
             ) : sortedRows.length === 0 ? (
               <tr>
-                <td colSpan={columns.length + (selectable ? 2 : 1)} style={{ padding: '24px', textAlign: 'center', color: '#8C8C8C', fontSize: 12 }}>
+                <td colSpan={columns.length + (selectable ? 2 : 1)} style={{ padding: '24px', textAlign: 'center', color: 'var(--th-text-hint)', fontSize: 12 }}>
                   {emptyMessage}
                 </td>
               </tr>
@@ -227,14 +227,14 @@ export function DataGrid<T extends Record<string, unknown>>({
                 const key = String(row[rowKey] ?? ri)
                 const variant = getVariant(row)
                 const isHovered = hoveredRow === key
-                const bg = isHovered && variant === 'default' ? 'rgba(40,40,40,0.04)' : rowBg[variant]
+                const bg = isHovered && variant === 'default' ? 'var(--th-row-hover-bg)' : rowBg[variant]
 
                 return (
                   <tr
                     key={key}
                     style={{
                       background: bg,
-                      outline: variant === 'selected' ? '1px solid #8342BB' : 'none',
+                      outline: variant === 'selected' ? '1px solid var(--th-brand)' : 'none',
                       outlineOffset: -1,
                       cursor: selectable ? 'pointer' : 'default',
                     }}
@@ -243,7 +243,7 @@ export function DataGrid<T extends Record<string, unknown>>({
                     onClick={() => selectable && toggleRow(key)}
                   >
                     {selectable && (
-                      <td style={{ height: 30, padding: '0 8px', borderBottom: '1px solid #F0F0F4', verticalAlign: 'middle' }}
+                      <td style={{ height: 'var(--th-row-height)', padding: '0 8px', borderBottom: '1px solid var(--th-border-subtle)', verticalAlign: 'middle' }}
                         onClick={(e) => { e.stopPropagation(); toggleRow(key) }}
                       >
                         <Checkbox3
@@ -256,11 +256,11 @@ export function DataGrid<T extends Record<string, unknown>>({
                       <td
                         key={col.key}
                         style={{
-                          height: 30,
+                          height: 'var(--th-row-height)',
                           padding: '0 10px',
                           fontSize: 12,
-                          color: '#282828',
-                          borderBottom: '1px solid #F0F0F4',
+                          color: 'var(--th-text-primary)',
+                          borderBottom: '1px solid var(--th-border-subtle)',
                           verticalAlign: 'middle',
                           textAlign: col.align ?? 'left',
                           whiteSpace: 'nowrap',
@@ -271,8 +271,8 @@ export function DataGrid<T extends Record<string, unknown>>({
                         {col.render ? col.render(row[col.key], row) : String(row[col.key] ?? '')}
                       </td>
                     ))}
-                    <td style={{ height: 30, width: 32, borderBottom: '1px solid #F0F0F4', verticalAlign: 'middle', textAlign: 'center' }}>
-                      <span className="material-icons" style={{ fontSize: 15, color: '#BFBECE', display: 'none' }}>more_vert</span>
+                    <td style={{ height: 'var(--th-row-height)', width: 32, borderBottom: '1px solid var(--th-border-subtle)', verticalAlign: 'middle', textAlign: 'center' }}>
+                      <span className="material-icons" style={{ fontSize: 15, color: 'var(--th-icon-muted)', display: 'none' }}>more_vert</span>
                     </td>
                   </tr>
                 )
@@ -294,8 +294,8 @@ function Checkbox3({ checked, indeterminate, onChange }: { checked: boolean; ind
         width: 14,
         height: 14,
         borderRadius: 3,
-        border: `1.5px solid ${checked || indeterminate ? '#8342BB' : '#BFBECE'}`,
-        background: checked || indeterminate ? '#8342BB' : '#fff',
+        border: `1.5px solid ${checked || indeterminate ? 'var(--th-brand)' : 'var(--th-icon-muted)'}`,
+        background: checked || indeterminate ? 'var(--th-brand)' : 'var(--th-bg-surface)',
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',

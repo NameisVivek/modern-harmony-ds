@@ -459,6 +459,174 @@ small {
 }
 
 /* ================================================================
+   THEME TOKENS (--th-*)  Light defaults  →  overridden in [data-theme="dark"]
+   ================================================================ */
+:root {
+  /* backgrounds */
+  --th-bg-page:            #F0F0F4;
+  --th-bg-surface:         #ffffff;
+  --th-bg-surface-subtle:  #F8F8FA;
+  --th-bg-header:          #ffffff;
+  --th-bg-sidebar:         #ffffff;
+  --th-bg-grid-header:     #F0F0F4;
+  --th-bg-search:          #F5F3FA;
+  --th-bg-muted:           #F0F0F4;
+
+  /* borders */
+  --th-border:             #EBEBEB;
+  --th-border-strong:      #DDDDE5;
+  --th-border-subtle:      #F0F0F4;
+
+  /* text */
+  --th-text-primary:       #282828;
+  --th-text-secondary:     #5E5C75;
+  --th-text-hint:          #8C8C8C;
+  --th-text-disabled:      #BFBECE;
+
+  /* brand */
+  --th-brand:              #8342BB;
+  --th-brand-medium:       #7239A4;
+  --th-brand-subtle:       rgba(131,66,187,0.08);
+  --th-brand-hover:        rgba(131,66,187,0.05);
+
+  /* semantic */
+  --th-error:              #E02F3A;
+  --th-warning:            #FDBF14;
+  --th-success:            #5BD6A0;
+
+  /* row states */
+  --th-row-error-bg:       #FEF7F4;
+  --th-row-warning-bg:     #FFFDEF;
+  --th-row-success-bg:     #EEFEF9;
+  --th-row-selected-bg:    rgba(131,66,187,0.08);
+  --th-row-hover-bg:       rgba(40,40,40,0.04);
+
+  /* icons */
+  --th-icon-neutral:       #5E5C75;
+  --th-icon-muted:         #BFBECE;
+  --th-icon-brand:         #8342BB;
+
+  /* overlays */
+  --th-overlay-modal:      rgba(28,28,46,0.45);
+  --th-hover-overlay:      rgba(40,40,40,0.05);
+
+  /* shadows */
+  --th-shadow-card:        0 1px 3px rgba(55,23,78,0.08);
+  --th-shadow-header:      0 1px 4px rgba(55,23,78,0.08);
+  --th-shadow-sidebar:     0 2px 4px rgba(55,23,78,0.06), 0 4px 8px -2px rgba(55,23,78,0.10);
+  --th-shadow-dropdown:    0 4px 16px rgba(55,23,78,0.12);
+  --th-shadow-search:      0 8px 24px rgba(55,23,78,0.14);
+
+  /* search highlight */
+  --th-mark-bg:            #EDE0FA;
+  --th-mark-text:          #4E2975;
+
+  /* density — comfortable defaults */
+  --th-row-height:         30px;
+  --th-header-height:      48px;
+  --th-nav-item-height:    40px;
+  --th-page-padding:       24px;
+  --th-section-gap:        16px;
+}
+
+/* ── Dark mode overrides ─────────────────────────────────────── */
+[data-theme="dark"] {
+  /* backgrounds */
+  --th-bg-page:            #0F0E18;
+  --th-bg-surface:         #1A1929;
+  --th-bg-surface-subtle:  #201F32;
+  --th-bg-header:          #13121F;
+  --th-bg-sidebar:         #13121F;
+  --th-bg-grid-header:     #201F32;
+  --th-bg-search:          #201F32;
+  --th-bg-muted:           #201F32;
+
+  /* borders */
+  --th-border:             #2B2943;
+  --th-border-strong:      #363456;
+  --th-border-subtle:      #201F32;
+
+  /* text */
+  --th-text-primary:       #E4E2F0;
+  --th-text-secondary:     #9895B8;
+  --th-text-hint:          #63608A;
+  --th-text-disabled:      #38355A;
+
+  /* brand (lightened for dark bg) */
+  --th-brand:              #B07FDE;
+  --th-brand-medium:       #9B6BCB;
+  --th-brand-subtle:       rgba(176,127,222,0.12);
+  --th-brand-hover:        rgba(176,127,222,0.08);
+
+  /* semantic (brightened for dark bg) */
+  --th-error:              #FF7077;
+  --th-warning:            #FFD04D;
+  --th-success:            #7EEBBE;
+
+  /* row states */
+  --th-row-error-bg:       rgba(255,112,119,0.07);
+  --th-row-warning-bg:     rgba(255,208,77,0.05);
+  --th-row-success-bg:     rgba(126,235,190,0.05);
+  --th-row-selected-bg:    rgba(176,127,222,0.12);
+  --th-row-hover-bg:       rgba(255,255,255,0.04);
+
+  /* icons */
+  --th-icon-neutral:       #9895B8;
+  --th-icon-muted:         #38355A;
+  --th-icon-brand:         #B07FDE;
+
+  /* overlays */
+  --th-overlay-modal:      rgba(0,0,0,0.65);
+  --th-hover-overlay:      rgba(255,255,255,0.05);
+
+  /* shadows */
+  --th-shadow-card:        0 1px 3px rgba(0,0,0,0.35);
+  --th-shadow-header:      0 1px 4px rgba(0,0,0,0.4);
+  --th-shadow-sidebar:     0 2px 8px rgba(0,0,0,0.35);
+  --th-shadow-dropdown:    0 4px 20px rgba(0,0,0,0.45);
+  --th-shadow-search:      0 8px 28px rgba(0,0,0,0.5);
+
+  /* search highlight */
+  --th-mark-bg:            rgba(176,127,222,0.25);
+  --th-mark-text:          #D4ADFF;
+
+  /* also override dec-color tokens so KPIWidget, etc. pick up dark mode */
+  --dec-color-surface:         #1A1929;
+  --dec-color-surface-subtle:  #201F32;
+  --dec-color-panel:           #1A1929;
+  --dec-color-panel-alt:       #201F32;
+  --dec-color-text-body:       #E4E2F0;
+  --dec-color-text-label:      #9895B8;
+  --dec-color-text-hint:       #63608A;
+  --dec-color-neutral-base:    #2B2943;
+  --dec-color-neutral-foreground: #9895B8;
+  --dec-color-neutral-strong:  #E4E2F0;
+  --dec-color-brand-base:      #B07FDE;
+  --dec-color-brand-subtle:    rgba(176,127,222,0.12);
+  --dec-color-grid-alt-row:    #201F32;
+  --dec-color-grid-header-fill: #201F32;
+  --dec-color-grid-border:     #2B2943;
+}
+
+/* ── Density: Compact ────────────────────────────────────────── */
+[data-density="compact"] {
+  --th-row-height:       26px;
+  --th-header-height:    40px;
+  --th-nav-item-height:  32px;
+  --th-page-padding:     14px;
+  --th-section-gap:      10px;
+}
+
+/* ── Density: Cozy ───────────────────────────────────────────── */
+[data-density="cozy"] {
+  --th-row-height:       28px;
+  --th-header-height:    44px;
+  --th-nav-item-height:  36px;
+  --th-page-padding:     18px;
+  --th-section-gap:      12px;
+}
+
+/* ================================================================
    MOTION TOKENS
    ================================================================ */
 :root {

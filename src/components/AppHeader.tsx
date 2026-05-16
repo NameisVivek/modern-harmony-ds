@@ -1,12 +1,15 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 
 export interface SearchItem {
-  id: string        // section to navigate to
-  label: string     // component or layout name
-  section: string   // parent section label
-  icon: string      // material icon name
+  id: string
+  label: string
+  section: string
+  icon: string
   keywords?: string[]
 }
+
+export type Theme = 'light' | 'dark'
+export type Density = 'comfortable' | 'cozy' | 'compact'
 
 export interface AppHeaderProps {
   sidebarExpanded?: boolean
@@ -21,21 +24,26 @@ export interface AppHeaderProps {
   isMobile?: boolean
   searchItems?: SearchItem[]
   onSearchNavigate?: (id: string) => void
+  theme?: Theme
+  density?: Density
+  onThemeChange?: (t: Theme) => void
+  onDensityChange?: (d: Density) => void
 }
 
 const s: Record<string, React.CSSProperties> = {
   header: {
-    height: 48,
-    background: '#fff',
+    height: 'var(--th-header-height)',
+    background: 'var(--th-bg-header)',
     display: 'flex',
     alignItems: 'center',
     gap: 0,
     padding: '0 16px 0 0',
-    borderBottom: '1px solid #EBEBEB',
-    boxShadow: '0 1px 4px rgba(55,23,78,0.08)',
+    borderBottom: '1px solid var(--th-border)',
+    boxShadow: 'var(--th-shadow-header)',
     position: 'relative',
     zIndex: 100,
     fontFamily: 'var(--font-ui)',
+    transition: 'background 0.2s, border-color 0.2s',
   },
   logoArea: {
     display: 'flex',
@@ -44,7 +52,7 @@ const s: Record<string, React.CSSProperties> = {
     padding: '0 12px',
     height: '100%',
     flexShrink: 0,
-    borderRight: '1px solid #EBEBEB',
+    borderRight: '1px solid var(--th-border)',
   },
   toggleBtn: {
     width: 32,
@@ -56,7 +64,7 @@ const s: Record<string, React.CSSProperties> = {
     border: 'none',
     cursor: 'pointer',
     borderRadius: 6,
-    color: '#5E5C75',
+    color: 'var(--th-icon-neutral)',
     transition: 'background 0.1s',
     flexShrink: 0,
   },
@@ -64,7 +72,7 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: 'var(--font-ui)',
     fontSize: 14,
     fontWeight: 700,
-    color: '#282828',
+    color: 'var(--th-text-primary)',
     letterSpacing: '-0.01em',
   },
   headerRight: {
@@ -83,7 +91,7 @@ const s: Record<string, React.CSSProperties> = {
     border: 'none',
     cursor: 'pointer',
     borderRadius: 6,
-    color: '#5E5C75',
+    color: 'var(--th-icon-neutral)',
     position: 'relative',
     transition: 'background 0.1s',
   },
@@ -93,9 +101,9 @@ const s: Record<string, React.CSSProperties> = {
     right: 4,
     width: 8,
     height: 8,
-    background: '#E02F3A',
+    background: 'var(--th-error)',
     borderRadius: '50%',
-    border: '1.5px solid #fff',
+    border: '1.5px solid var(--th-bg-header)',
   },
   userArea: {
     display: 'flex',
@@ -116,13 +124,13 @@ const s: Record<string, React.CSSProperties> = {
   userName: {
     fontSize: 12,
     fontWeight: 500,
-    color: '#282828',
+    color: 'var(--th-text-primary)',
     lineHeight: 1.2,
     whiteSpace: 'nowrap',
   },
   userRole: {
     fontSize: 10,
-    color: '#8C8C8C',
+    color: 'var(--th-text-hint)',
     lineHeight: 1.2,
     whiteSpace: 'nowrap',
   },
@@ -130,7 +138,7 @@ const s: Record<string, React.CSSProperties> = {
     width: 28,
     height: 28,
     borderRadius: '50%',
-    background: '#8342BB',
+    background: 'var(--th-brand)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -155,11 +163,11 @@ const s: Record<string, React.CSSProperties> = {
     position: 'absolute',
     top: 'calc(100% + 6px)',
     right: 0,
-    background: '#fff',
+    background: 'var(--th-bg-surface)',
     borderRadius: 8,
-    border: '1px solid #E5E5EC',
-    boxShadow: '0 4px 16px rgba(55,23,78,0.12)',
-    minWidth: 200,
+    border: '1px solid var(--th-border-strong)',
+    boxShadow: 'var(--th-shadow-dropdown)',
+    minWidth: 220,
     padding: '4px 0',
     zIndex: 300,
   },
@@ -169,7 +177,7 @@ const s: Record<string, React.CSSProperties> = {
     gap: 8,
     padding: '7px 14px',
     fontSize: 13,
-    color: '#282828',
+    color: 'var(--th-text-primary)',
     cursor: 'pointer',
     fontFamily: 'var(--font-ui)',
     transition: 'background 0.1s',
@@ -180,7 +188,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   menuDivider: {
     height: 1,
-    background: '#F0F0F4',
+    background: 'var(--th-border-subtle)',
     margin: '3px 0',
   },
 }
@@ -198,13 +206,19 @@ function highlight(text: string, query: string) {
   return (
     <>
       {text.slice(0, idx)}
-      <mark style={{ background: '#EDE0FA', color: '#4E2975', borderRadius: 2, padding: '0 1px' }}>
+      <mark style={{ background: 'var(--th-mark-bg)', color: 'var(--th-mark-text)', borderRadius: 2, padding: '0 1px' }}>
         {text.slice(idx, idx + query.length)}
       </mark>
       {text.slice(idx + query.length)}
     </>
   )
 }
+
+const DENSITY_OPTIONS: { value: Density; label: string }[] = [
+  { value: 'compact',     label: 'Compact'     },
+  { value: 'cozy',        label: 'Cozy'        },
+  { value: 'comfortable', label: 'Comfortable' },
+]
 
 export function AppHeader({
   sidebarExpanded = true,
@@ -219,6 +233,10 @@ export function AppHeader({
   isMobile = false,
   searchItems = [],
   onSearchNavigate,
+  theme = 'light',
+  density = 'comfortable',
+  onThemeChange,
+  onDensityChange,
 }: AppHeaderProps) {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [hoveredBtn, setHoveredBtn] = useState<string | null>(null)
@@ -290,7 +308,7 @@ export function AppHeader({
         background: 'transparent',
         fontFamily: 'var(--font-ui)',
         fontSize: 13,
-        color: '#282828',
+        color: 'var(--th-text-primary)',
       }}
     />
   )
@@ -300,10 +318,10 @@ export function AppHeader({
       position: 'absolute',
       top: 'calc(100% + 4px)',
       left: 0, right: 0,
-      background: '#fff',
-      border: '1px solid #E0D9F5',
+      background: 'var(--th-bg-surface)',
+      border: '1px solid var(--th-border-strong)',
       borderRadius: 10,
-      boxShadow: '0 8px 24px rgba(55,23,78,0.14)',
+      boxShadow: 'var(--th-shadow-search)',
       overflow: 'hidden',
       zIndex: 500,
     }}>
@@ -315,30 +333,32 @@ export function AppHeader({
           style={{
             display: 'flex', alignItems: 'center', gap: 10,
             width: '100%', padding: '9px 12px',
-            background: i === activeIdx ? '#F5F0FC' : 'transparent',
+            background: i === activeIdx ? 'var(--th-brand-subtle)' : 'transparent',
             border: 'none', cursor: 'pointer', textAlign: 'left',
-            borderBottom: i < results.length - 1 ? '1px solid #F5F0FC' : 'none',
+            borderBottom: i < results.length - 1 ? '1px solid var(--th-border-subtle)' : 'none',
             transition: 'background 0.1s',
           }}
         >
           <div style={{
             width: 28, height: 28, borderRadius: 7, flexShrink: 0,
-            background: i === activeIdx ? '#EDE0FA' : '#F2ECF8',
+            background: i === activeIdx ? 'var(--th-brand-subtle)' : 'var(--th-bg-muted)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <span className="material-icons" style={{ fontSize: 14, color: '#8342BB', fontFamily: 'Material Icons', lineHeight: 1 }}>{item.icon}</span>
+            <span className="material-icons" style={{ fontSize: 14, color: 'var(--th-brand)', fontFamily: 'Material Icons', lineHeight: 1 }}>{item.icon}</span>
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 13, fontWeight: 500, color: '#1C1C2E', fontFamily: 'var(--font-ui)', marginBottom: 1 }}>
+            <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)', marginBottom: 1 }}>
               {highlight(item.label, query)}
             </div>
-            <div style={{ fontSize: 11, color: '#9B9BAA', fontFamily: 'var(--font-ui)' }}>{item.section}</div>
+            <div style={{ fontSize: 11, color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>{item.section}</div>
           </div>
-          <span className="material-icons" style={{ fontSize: 14, color: '#C4B5E8', fontFamily: 'Material Icons', lineHeight: 1 }}>arrow_forward</span>
+          <span className="material-icons" style={{ fontSize: 14, color: 'var(--th-icon-muted)', fontFamily: 'Material Icons', lineHeight: 1 }}>arrow_forward</span>
         </button>
       ))}
     </div>
   )
+
+  const isDark = theme === 'dark'
 
   return (
     <>
@@ -346,7 +366,7 @@ export function AppHeader({
         {/* Logo + toggle */}
         <div style={s.logoArea}>
           <button
-            style={{ ...s.toggleBtn, background: hoveredBtn === 'toggle' ? 'rgba(40,40,40,0.06)' : 'transparent' }}
+            style={{ ...s.toggleBtn, background: hoveredBtn === 'toggle' ? 'var(--th-hover-overlay)' : 'transparent' }}
             onMouseEnter={() => setHoveredBtn('toggle')}
             onMouseLeave={() => setHoveredBtn(null)}
             onClick={onToggleSidebar}
@@ -366,16 +386,16 @@ export function AppHeader({
             <div style={{
               display: 'flex', alignItems: 'center', gap: 8,
               height: 34, padding: '0 10px',
-              background: searchFocused ? '#fff' : '#F5F3FA',
-              border: `1.5px solid ${searchFocused ? '#8342BB' : '#E5E0F0'}`,
+              background: searchFocused ? 'var(--th-bg-surface)' : 'var(--th-bg-search)',
+              border: `1.5px solid ${searchFocused ? 'var(--th-brand)' : 'var(--th-border-strong)'}`,
               borderRadius: 8,
               transition: 'border-color 0.15s, background 0.15s',
             }}>
-              <span className="material-icons" style={{ fontSize: 16, color: searchFocused ? '#8342BB' : '#9B9BAA', fontFamily: 'Material Icons', lineHeight: 1, flexShrink: 0, transition: 'color 0.15s' }}>search</span>
+              <span className="material-icons" style={{ fontSize: 16, color: searchFocused ? 'var(--th-brand)' : 'var(--th-text-hint)', fontFamily: 'Material Icons', lineHeight: 1, flexShrink: 0, transition: 'color 0.15s' }}>search</span>
               <SearchInput inputRefProp={inputRef} />
               {query && (
                 <button onMouseDown={() => { setQuery(''); inputRef.current?.focus() }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}>
-                  <span className="material-icons" style={{ fontSize: 14, color: '#BBBBC8', fontFamily: 'Material Icons', lineHeight: 1 }}>close</span>
+                  <span className="material-icons" style={{ fontSize: 14, color: 'var(--th-icon-muted)', fontFamily: 'Material Icons', lineHeight: 1 }}>close</span>
                 </button>
               )}
             </div>
@@ -386,12 +406,12 @@ export function AppHeader({
         {/* Center spacer */}
         <div style={{ flex: 1 }} />
 
-        {/* Right controls — user profile at far right */}
+        {/* Right controls */}
         <div style={s.headerRight}>
           {/* Mobile: search icon */}
           {isMobile && (
             <button
-              style={{ ...s.iconBtn, background: hoveredBtn === 'msearch' ? 'rgba(40,40,40,0.06)' : 'transparent' }}
+              style={{ ...s.iconBtn, background: hoveredBtn === 'msearch' ? 'var(--th-hover-overlay)' : 'transparent' }}
               onMouseEnter={() => setHoveredBtn('msearch')}
               onMouseLeave={() => setHoveredBtn(null)}
               onClick={() => { setMobileSearchOpen(true); setTimeout(() => mobileInputRef.current?.focus(), 50) }}
@@ -400,19 +420,32 @@ export function AppHeader({
             </button>
           )}
 
+          {/* Theme toggle */}
+          <button
+            style={{ ...s.iconBtn, background: hoveredBtn === 'theme' ? 'var(--th-hover-overlay)' : 'transparent' }}
+            onMouseEnter={() => setHoveredBtn('theme')}
+            onMouseLeave={() => setHoveredBtn(null)}
+            onClick={() => onThemeChange?.(isDark ? 'light' : 'dark')}
+            title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            <span className="material-icons" style={{ fontSize: 18, color: isDark ? '#FFD04D' : 'var(--th-icon-neutral)' }}>
+              {isDark ? 'light_mode' : 'dark_mode'}
+            </span>
+          </button>
+
           {/* AI Assistant */}
           <button
-            style={{ ...s.iconBtn, background: hoveredBtn === 'ai' ? 'rgba(40,40,40,0.06)' : 'transparent' }}
+            style={{ ...s.iconBtn, background: hoveredBtn === 'ai' ? 'var(--th-hover-overlay)' : 'transparent' }}
             onMouseEnter={() => setHoveredBtn('ai')}
             onMouseLeave={() => setHoveredBtn(null)}
           >
-            <span className="material-icons" style={{ fontSize: 18, color: '#8342BB' }}>auto_awesome</span>
+            <span className="material-icons" style={{ fontSize: 18, color: 'var(--th-brand)' }}>auto_awesome</span>
           </button>
 
           {/* Notifications — desktop only */}
           {!isMobile && (
             <button
-              style={{ ...s.iconBtn, background: hoveredBtn === 'notif' ? 'rgba(40,40,40,0.06)' : 'transparent' }}
+              style={{ ...s.iconBtn, background: hoveredBtn === 'notif' ? 'var(--th-hover-overlay)' : 'transparent' }}
               onMouseEnter={() => setHoveredBtn('notif')}
               onMouseLeave={() => setHoveredBtn(null)}
               onClick={onNotifications}
@@ -426,7 +459,7 @@ export function AppHeader({
           {!isMobile && (
             <div style={{ position: 'relative' }} ref={menuRef}>
               <button
-                style={{ ...s.userArea, background: userMenuOpen || hoveredBtn === 'user' ? 'rgba(40,40,40,0.05)' : 'transparent' }}
+                style={{ ...s.userArea, background: userMenuOpen || hoveredBtn === 'user' ? 'var(--th-hover-overlay)' : 'transparent' }}
                 onMouseEnter={() => setHoveredBtn('user')}
                 onMouseLeave={() => setHoveredBtn(null)}
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
@@ -446,22 +479,56 @@ export function AppHeader({
                     { id: 'loc',    icon: 'location_on', label: 'Change location',   chevron: true },
                   ].map(item => (
                     <button key={item.id}
-                      style={{ ...s.menuItem, background: hoveredBtn === `mu-${item.id}` ? 'rgba(131,66,187,0.05)' : 'transparent' }}
+                      style={{ ...s.menuItem, background: hoveredBtn === `mu-${item.id}` ? 'var(--th-brand-hover)' : 'transparent' }}
                       onMouseEnter={() => setHoveredBtn(`mu-${item.id}`)}
                       onMouseLeave={() => setHoveredBtn(null)}
                     >
-                      <span className="material-icons" style={{ fontSize: 16, color: '#5E5C75' }}>{item.icon}</span>
+                      <span className="material-icons" style={{ fontSize: 16, color: 'var(--th-icon-neutral)' }}>{item.icon}</span>
                       {item.label}
-                      {item.chevron && <span className="material-icons" style={{ fontSize: 14, color: '#BFBECE', marginLeft: 'auto' }}>chevron_right</span>}
+                      {item.chevron && <span className="material-icons" style={{ fontSize: 14, color: 'var(--th-icon-muted)', marginLeft: 'auto' }}>chevron_right</span>}
                     </button>
                   ))}
+
                   <div style={s.menuDivider} />
+
+                  {/* Density switcher */}
+                  <div style={{ padding: '6px 14px 8px' }}>
+                    <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--th-text-hint)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6, fontFamily: 'var(--font-ui)' }}>
+                      Density
+                    </div>
+                    <div style={{ display: 'flex', gap: 4 }}>
+                      {DENSITY_OPTIONS.map(opt => (
+                        <button
+                          key={opt.value}
+                          onClick={() => onDensityChange?.(opt.value)}
+                          style={{
+                            flex: 1,
+                            padding: '4px 0',
+                            fontSize: 11,
+                            fontFamily: 'var(--font-ui)',
+                            fontWeight: density === opt.value ? 600 : 400,
+                            color: density === opt.value ? 'var(--th-brand)' : 'var(--th-text-secondary)',
+                            background: density === opt.value ? 'var(--th-brand-subtle)' : 'var(--th-bg-muted)',
+                            border: `1px solid ${density === opt.value ? 'var(--th-brand)' : 'var(--th-border)'}`,
+                            borderRadius: 5,
+                            cursor: 'pointer',
+                            transition: 'all 0.12s',
+                          }}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div style={s.menuDivider} />
+
                   <button
-                    style={{ ...s.menuItem, background: hoveredBtn === 'mu-logout' ? 'rgba(224,47,58,0.05)' : 'transparent', color: '#E02F3A' }}
+                    style={{ ...s.menuItem, background: hoveredBtn === 'mu-logout' ? 'rgba(224,47,58,0.05)' : 'transparent', color: 'var(--th-error)' }}
                     onMouseEnter={() => setHoveredBtn('mu-logout')}
                     onMouseLeave={() => setHoveredBtn(null)}
                   >
-                    <span className="material-icons" style={{ fontSize: 16, color: '#E02F3A' }}>logout</span>
+                    <span className="material-icons" style={{ fontSize: 16, color: 'var(--th-error)' }}>logout</span>
                     Log out
                   </button>
                 </div>
@@ -475,30 +542,30 @@ export function AppHeader({
       {isMobile && mobileSearchOpen && (
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(28,28,46,0.45)',
+          background: 'var(--th-overlay-modal)',
           zIndex: 200,
           backdropFilter: 'blur(2px)',
         }}
           onMouseDown={() => { setMobileSearchOpen(false); setQuery(''); setSearchFocused(false) }}
         >
-          <div style={{ background: '#fff', borderBottom: '1px solid #EBEBEB', padding: '10px 12px' }}
+          <div style={{ background: 'var(--th-bg-header)', borderBottom: '1px solid var(--th-border)', padding: '10px 12px' }}
             onMouseDown={e => e.stopPropagation()}
           >
             <div ref={searchRef} style={{ position: 'relative' }}>
               <div style={{
                 display: 'flex', alignItems: 'center', gap: 8,
                 height: 40, padding: '0 12px',
-                background: '#F5F3FA',
-                border: '1.5px solid #8342BB',
+                background: 'var(--th-bg-search)',
+                border: '1.5px solid var(--th-brand)',
                 borderRadius: 10,
               }}>
-                <span className="material-icons" style={{ fontSize: 18, color: '#8342BB', fontFamily: 'Material Icons', lineHeight: 1, flexShrink: 0 }}>search</span>
+                <span className="material-icons" style={{ fontSize: 18, color: 'var(--th-brand)', fontFamily: 'Material Icons', lineHeight: 1, flexShrink: 0 }}>search</span>
                 <SearchInput inputRefProp={mobileInputRef} autoFocus />
                 <button
                   onMouseDown={() => { setMobileSearchOpen(false); setQuery(''); setActiveIdx(-1) }}
                   style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', flexShrink: 0 }}
                 >
-                  <span className="material-icons" style={{ fontSize: 18, color: '#9B9BAA', fontFamily: 'Material Icons', lineHeight: 1 }}>close</span>
+                  <span className="material-icons" style={{ fontSize: 18, color: 'var(--th-text-hint)', fontFamily: 'Material Icons', lineHeight: 1 }}>close</span>
                 </button>
               </div>
               {showDropdown && <Dropdown />}

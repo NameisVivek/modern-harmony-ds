@@ -521,12 +521,19 @@ small {
   --th-mark-bg:            #EDE0FA;
   --th-mark-text:          #4E2975;
 
-  /* density — comfortable defaults */
-  --th-row-height:         30px;
-  --th-header-height:      48px;
-  --th-nav-item-height:    40px;
-  --th-page-padding:       24px;
-  --th-section-gap:        16px;
+  /* ── Chrome dimensions — NEVER altered by density ───────────── */
+  --th-header-height:      48px;   /* app header: fixed */
+  --th-nav-item-height:    40px;   /* sidebar nav items: fixed */
+
+  /* ── Content density tokens — Comfortable defaults ───────────── */
+  --th-row-height:         32px;   /* data grid / table rows */
+  --th-page-padding:       28px;   /* content area outer padding */
+  --th-section-gap:        20px;   /* gap between content sections */
+  --th-card-padding:       20px;   /* card / widget inner padding */
+  --th-form-gap:           14px;   /* gap between form field rows */
+  --th-input-height:       34px;   /* text inputs, selects */
+  --th-btn-height:         34px;   /* buttons */
+  --th-list-item-height:   44px;   /* list rows, accordion headers */
 
   /* badge semantic colors */
   --badge-error-bg:       #FFCDD0;
@@ -636,21 +643,29 @@ small {
 }
 
 /* ── Density: Compact ────────────────────────────────────────── */
+/* Affects only content & components — chrome dimensions unchanged */
 [data-density="compact"] {
-  --th-row-height:       26px;
-  --th-header-height:    40px;
-  --th-nav-item-height:  32px;
-  --th-page-padding:     14px;
-  --th-section-gap:      10px;
+  --th-row-height:         26px;
+  --th-page-padding:       16px;
+  --th-section-gap:        10px;
+  --th-card-padding:       12px;
+  --th-form-gap:            8px;
+  --th-input-height:       28px;
+  --th-btn-height:         28px;
+  --th-list-item-height:   34px;
 }
 
 /* ── Density: Cozy ───────────────────────────────────────────── */
+/* Affects only content & components — chrome dimensions unchanged */
 [data-density="cozy"] {
-  --th-row-height:       28px;
-  --th-header-height:    44px;
-  --th-nav-item-height:  36px;
-  --th-page-padding:     18px;
-  --th-section-gap:      12px;
+  --th-row-height:         28px;
+  --th-page-padding:       22px;
+  --th-section-gap:        14px;
+  --th-card-padding:       16px;
+  --th-form-gap:           11px;
+  --th-input-height:       31px;
+  --th-btn-height:         31px;
+  --th-list-item-height:   40px;
 }
 
 /* ================================================================

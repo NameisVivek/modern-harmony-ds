@@ -3026,7 +3026,7 @@ export default function App() {
     if (isMobile) setSidebarExpanded(false)
   }
 
-  const pad = isMobile ? 12 : 24
+  const pad = isMobile ? 12 : 'var(--th-page-padding)'
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', fontFamily: 'var(--font-ui)' }}>

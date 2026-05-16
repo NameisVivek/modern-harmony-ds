@@ -386,7 +386,7 @@ export function LineChart({
                 key={i}
                 x={PAD.left - 7} y={yOf(v)}
                 textAnchor="end" dominantBaseline="middle"
-                fontSize={9} fill="var(--core-cool-400)" fontFamily="var(--font-ui)"
+                fontSize={9} fill="var(--th-text-hint)" fontFamily="var(--font-ui)"
               >
                 {formatY(v)}
               </text>
@@ -401,7 +401,7 @@ export function LineChart({
                   key={i}
                   x={xOf(i)} y={H - PAD.bottom + 14}
                   textAnchor={anchor}
-                  fontSize={9} fill="var(--core-cool-400)" fontFamily="var(--font-ui)"
+                  fontSize={9} fill="var(--th-text-hint)" fontFamily="var(--font-ui)"
                 >
                   {lbl}
                 </text>
@@ -561,7 +561,7 @@ export function BarChart({
                 key={i}
                 x={PAD.left - 7} y={yOf(v)}
                 textAnchor="end" dominantBaseline="middle"
-                fontSize={9} fill="var(--core-cool-400)" fontFamily="var(--font-ui)"
+                fontSize={9} fill="var(--th-text-hint)" fontFamily="var(--font-ui)"
               >
                 {formatY(v)}
               </text>
@@ -575,7 +575,7 @@ export function BarChart({
                   key={i}
                   x={groupCx(i)} y={H - PAD.bottom + 14}
                   textAnchor="middle"
-                  fontSize={9} fill="var(--core-cool-400)" fontFamily="var(--font-ui)"
+                  fontSize={9} fill="var(--th-text-hint)" fontFamily="var(--font-ui)"
                 >
                   {lbl}
                 </text>
@@ -1024,7 +1024,7 @@ export function AreaChart({
                 key={i}
                 x={PAD.left - 7} y={yOf(v)}
                 textAnchor="end" dominantBaseline="middle"
-                fontSize={9} fill="var(--core-cool-400)" fontFamily="var(--font-ui)"
+                fontSize={9} fill="var(--th-text-hint)" fontFamily="var(--font-ui)"
               >
                 {formatY(v)}
               </text>
@@ -1039,7 +1039,7 @@ export function AreaChart({
                   key={i}
                   x={xOf(i)} y={H - PAD.bottom + 14}
                   textAnchor={anchor}
-                  fontSize={9} fill="var(--core-cool-400)" fontFamily="var(--font-ui)"
+                  fontSize={9} fill="var(--th-text-hint)" fontFamily="var(--font-ui)"
                 >
                   {lbl}
                 </text>

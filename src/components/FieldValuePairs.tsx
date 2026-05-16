@@ -27,7 +27,7 @@ export interface FieldValuePairsProps {
 const labelStyle: React.CSSProperties = {
   fontSize: '11px',
   fontWeight: 500,
-  color: 'var(--core-gray-400)',
+  color: 'var(--th-text-secondary)',
   lineHeight: 1.4,
   whiteSpace: 'nowrap',
   overflow: 'hidden',
@@ -146,7 +146,7 @@ function InlineEditField({ field }: InlineEditFieldProps) {
             <span className="material-icons" style={{ fontSize: '13px', fontFamily: 'Material Icons', lineHeight: 1 }}>check</span>
             Save
           </button>
-          <button style={{ ...editActionStyle, color: 'var(--core-gray-400)' }} onClick={cancel}>
+          <button style={{ ...editActionStyle, color: 'var(--th-text-secondary)' }} onClick={cancel}>
             Cancel
           </button>
         </div>

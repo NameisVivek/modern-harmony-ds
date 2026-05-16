@@ -101,7 +101,7 @@ const styles = {
 
   dropTypes: {
     fontSize: '10px',
-    color: 'var(--core-gray-400)',
+    color: 'var(--th-text-hint)',
     marginTop: '2px',
   } as React.CSSProperties,
 
@@ -155,7 +155,7 @@ const styles = {
 
   fileSize: (status: FileStatus): React.CSSProperties => ({
     fontSize: '10px',
-    color: status === 'error' ? 'var(--dec-color-error-foreground)' : 'var(--core-gray-400)',
+    color: status === 'error' ? 'var(--dec-color-error-foreground)' : 'var(--th-text-hint)',
     marginTop: '1px',
   }),
 
@@ -169,7 +169,7 @@ const styles = {
     border: 'none',
     cursor: 'pointer',
     borderRadius: '4px',
-    color: 'var(--core-gray-400)',
+    color: 'var(--th-text-hint)',
     flexShrink: 0,
     padding: 0,
     transition: 'background 0.1s, color 0.1s',
@@ -243,7 +243,7 @@ function FileItemRow({ file, onRemove }: FileItemProps) {
             style={styles.removeBtn}
             onClick={() => onRemove(file.id)}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--core-cool-50)'; (e.currentTarget as HTMLElement).style.color = 'var(--dec-color-text-body)'; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = 'var(--core-gray-400)'; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = 'var(--th-text-hint)'; }}
           >
             <span className="material-icons" style={{ fontSize: '16px', fontFamily: 'Material Icons', lineHeight: 1 }}>close</span>
           </button>
@@ -285,7 +285,7 @@ function FileItemRow({ file, onRemove }: FileItemProps) {
           style={styles.removeBtn}
           onClick={() => onRemove(file.id)}
           onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--core-cool-50)'; (e.currentTarget as HTMLElement).style.color = 'var(--dec-color-text-body)'; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = 'var(--core-gray-400)'; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = 'var(--th-text-hint)'; }}
         >
           <span className="material-icons" style={{ fontSize: '16px', fontFamily: 'Material Icons', lineHeight: 1 }}>close</span>
         </button>

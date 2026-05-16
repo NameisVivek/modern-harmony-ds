@@ -1203,8 +1203,8 @@ function LayoutSection() {
               <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
                 {[['Total Orders', '12,847'], ['On Time', '11,203'], ['Delayed', '1,644']].map(([l, v]) => (
                   <div key={l}>
-                    <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--th-text-hint)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3, fontFamily: 'var(--font-ui)' }}>{l}</div>
-                    <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--th-text-primary)', fontFamily: 'Switzer, sans-serif' }}>{v}</div>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--th-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3, fontFamily: 'var(--font-ui)' }}>{l}</div>
+                    <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)' }}>{v}</div>
                   </div>
                 ))}
               </div>

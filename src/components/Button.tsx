@@ -96,12 +96,12 @@ const variantActive: Record<string, React.CSSProperties> = {
 }
 
 const variantDisabled: Record<string, React.CSSProperties> = {
-  primary: { background: 'var(--core-cool-100)', color: 'var(--core-gray-400)', boxShadow: 'none', backgroundImage: 'none', border: 'none' },
-  default: { background: 'var(--core-cool-50)', color: 'var(--core-gray-400)', border: '1px solid transparent', boxShadow: 'none' },
-  borderless: { background: 'transparent', color: 'var(--core-gray-400)', border: '1px solid transparent', boxShadow: 'none' },
-  inline: { color: 'var(--core-gray-400)', opacity: 0.6 },
-  selected: { background: 'var(--core-cool-50)', color: 'var(--core-gray-400)', border: '1px solid transparent', boxShadow: 'none' },
-  destructive: { background: 'var(--core-cool-50)', color: 'var(--core-gray-400)', boxShadow: 'none', border: 'none' },
+  primary: { background: 'var(--core-cool-100)', color: 'var(--th-text-disabled)', boxShadow: 'none', backgroundImage: 'none', border: 'none' },
+  default: { background: 'var(--core-cool-50)', color: 'var(--th-text-disabled)', border: '1px solid transparent', boxShadow: 'none' },
+  borderless: { background: 'transparent', color: 'var(--th-text-disabled)', border: '1px solid transparent', boxShadow: 'none' },
+  inline: { color: 'var(--th-text-disabled)', opacity: 0.7 },
+  selected: { background: 'var(--core-cool-50)', color: 'var(--th-text-disabled)', border: '1px solid transparent', boxShadow: 'none' },
+  destructive: { background: 'var(--core-cool-50)', color: 'var(--th-text-disabled)', boxShadow: 'none', border: 'none' },
   'on-dark': { background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.3)', border: '1px solid rgba(255,255,255,0.08)' },
 }
 

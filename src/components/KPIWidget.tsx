@@ -108,7 +108,7 @@ const refreshBtn: React.CSSProperties = {
   alignItems: 'center',
   gap: '3px',
   fontSize: '10px',
-  color: 'var(--core-gray-400)',
+  color: 'var(--th-text-hint)',
   cursor: 'pointer',
   background: 'transparent',
   border: 'none',
@@ -150,7 +150,7 @@ function WidgetHeader({ title, onRefresh, action }: WidgetHeaderProps) {
           style={refreshBtn}
           onClick={onRefresh}
           onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--dec-color-secondary-foreground)'; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--core-gray-400)'; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--th-text-hint)'; }}
         >
           <span className="material-icons" style={{ fontSize: '13px', fontFamily: 'Material Icons', lineHeight: 1 }}>refresh</span>
           Refresh
@@ -210,7 +210,7 @@ function RatioWidget({ title, value, total, unit, percentage, barColor, labelLef
         <div style={{ height: '100%', borderRadius: '3px', width: `${Math.min(percentage, 100)}%`, background: barColor ?? 'var(--dec-color-brand-base)' }} />
       </div>
       {(labelLeft || labelRight) && (
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--core-gray-400)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--th-text-secondary)' }}>
           <span>{labelLeft}</span>
           <span>{labelRight}</span>
         </div>
@@ -263,7 +263,7 @@ function SparklineWidget({ title, value, change, changeDirection, data, labelSta
         <circle cx={lastX} cy={lastY} r="3" fill="var(--core-violet-600)" />
       </svg>
       {(labelStart || labelEnd) && (
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: 'var(--core-gray-400)', marginTop: '2px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: 'var(--th-text-secondary)', marginTop: '2px' }}>
           <span>{labelStart}</span>
           <span>{labelEnd}</span>
         </div>
@@ -282,7 +282,7 @@ function MultiMetricWidget({ title, metrics, onRefresh }: MultiMetricKPIProps) {
         {metrics.map((m, i) => (
           <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
             <span style={{ ...monoValue, fontSize: '18px', color: m.color ?? 'var(--dec-color-text-body)' }}>{m.value}</span>
-            <span style={{ fontSize: '10px', color: 'var(--core-gray-400)', fontFamily: 'var(--font-ui)' }}>{m.label}</span>
+            <span style={{ fontSize: '10px', color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)' }}>{m.label}</span>
           </div>
         ))}
       </div>

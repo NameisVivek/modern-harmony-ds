@@ -63,7 +63,7 @@ const styles = {
 
   toggleIcon: (open: boolean): React.CSSProperties => ({
     fontSize: '16px',
-    color: 'var(--core-gray-400)',
+    color: 'var(--th-text-hint)',
     fontFamily: 'Material Icons',
     transition: 'transform 0.15s',
     transform: open ? 'rotate(90deg)' : 'none',
@@ -101,7 +101,7 @@ const styles = {
 
   meta: {
     fontSize: '10px',
-    color: 'var(--core-gray-400)',
+    color: 'var(--th-text-hint)',
     paddingRight: '10px',
     flexShrink: 0,
   } as React.CSSProperties,

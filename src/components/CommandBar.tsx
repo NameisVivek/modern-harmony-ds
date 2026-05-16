@@ -56,7 +56,7 @@ const styles = {
     alignItems: 'center',
     flexShrink: 0,
     fontSize: '20px',
-    color: 'var(--core-gray-400)',
+    color: 'var(--th-icon-neutral)',
     fontFamily: 'Material Icons',
     lineHeight: 1,
   } as React.CSSProperties,
@@ -74,7 +74,7 @@ const styles = {
 
   kbdBadge: {
     fontSize: '10px',
-    color: 'var(--core-gray-400)',
+    color: 'var(--th-text-secondary)',
     border: '1px solid var(--dec-color-neutral-base)',
     borderRadius: '4px',
     padding: '2px 5px',
@@ -91,8 +91,8 @@ const styles = {
   section: {
     padding: '8px 14px 4px',
     fontSize: '9px',
-    fontWeight: 500,
-    color: 'var(--core-gray-400)',
+    fontWeight: 600,
+    color: 'var(--th-text-secondary)',
     letterSpacing: '0.08em',
     textTransform: 'uppercase' as const,
     fontFamily: 'var(--font-ui)',
@@ -146,7 +146,7 @@ const styles = {
 
   itemHint: {
     fontSize: '11px',
-    color: 'var(--core-gray-400)',
+    color: 'var(--th-text-hint)',
     marginTop: '1px',
   } as React.CSSProperties,
 
@@ -158,7 +158,7 @@ const styles = {
 
   shortcutKey: {
     fontSize: '9px',
-    color: 'var(--core-gray-400)',
+    color: 'var(--th-text-secondary)',
     border: '1px solid var(--dec-color-neutral-base)',
     borderRadius: '4px',
     padding: '1px 5px',

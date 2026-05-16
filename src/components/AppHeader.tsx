@@ -239,6 +239,7 @@ export function AppHeader({
   onDensityChange,
 }: AppHeaderProps) {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [densityMenuOpen, setDensityMenuOpen] = useState(false)
   const [hoveredBtn, setHoveredBtn] = useState<string | null>(null)
   const [query, setQuery] = useState('')
   const [searchFocused, setSearchFocused] = useState(false)
@@ -246,6 +247,7 @@ export function AppHeader({
   const [activeIdx, setActiveIdx] = useState(-1)
 
   const menuRef = useRef<HTMLDivElement>(null)
+  const densityRef = useRef<HTMLDivElement>(null)
   const searchRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const mobileInputRef = useRef<HTMLInputElement>(null)
@@ -254,6 +256,9 @@ export function AppHeader({
     function handleClick(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setUserMenuOpen(false)
+      }
+      if (densityRef.current && !densityRef.current.contains(e.target as Node)) {
+        setDensityMenuOpen(false)
       }
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
         setSearchFocused(false)
@@ -420,45 +425,129 @@ export function AppHeader({
             </button>
           )}
 
-          {/* Density switcher — visible segmented control */}
-          {!isMobile && (
+          {/* Density switcher — segmented pill on desktop, popover on mobile */}
+          {!isMobile ? (
             <div style={{
               display: 'flex',
               alignItems: 'center',
               gap: 1,
               background: 'var(--th-bg-muted)',
-              borderRadius: 7,
+              border: '1px solid var(--th-border-strong)',
+              borderRadius: 8,
               padding: 2,
               marginRight: 2,
             }}>
-              {DENSITY_OPTIONS.map(opt => (
-                <button
-                  key={opt.value}
-                  title={opt.label}
-                  onClick={() => onDensityChange?.(opt.value)}
-                  style={{
-                    width: 28,
-                    height: 26,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    border: 'none',
-                    borderRadius: 5,
-                    cursor: 'pointer',
-                    background: density === opt.value ? 'var(--th-bg-surface)' : 'transparent',
-                    boxShadow: density === opt.value ? 'var(--th-shadow-card)' : 'none',
-                    transition: 'all 0.12s',
-                  }}
-                >
-                  <span className="material-icons" style={{
-                    fontSize: 16,
-                    color: density === opt.value ? 'var(--th-brand)' : 'var(--th-text-hint)',
-                    fontFamily: 'Material Icons',
-                    lineHeight: 1,
-                    transition: 'color 0.12s',
-                  }}>{opt.icon}</span>
-                </button>
-              ))}
+              {DENSITY_OPTIONS.map(opt => {
+                const active = density === opt.value
+                return (
+                  <button
+                    key={opt.value}
+                    title={opt.label}
+                    onClick={() => onDensityChange?.(opt.value)}
+                    onMouseEnter={() => setHoveredBtn(`dens-${opt.value}`)}
+                    onMouseLeave={() => setHoveredBtn(null)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 5,
+                      height: 26,
+                      padding: '0 8px',
+                      border: 'none',
+                      borderRadius: 6,
+                      cursor: 'pointer',
+                      background: active
+                        ? 'var(--th-bg-surface)'
+                        : hoveredBtn === `dens-${opt.value}` ? 'var(--th-hover-overlay)' : 'transparent',
+                      boxShadow: active ? 'var(--th-shadow-card)' : 'none',
+                      transition: 'background 0.12s, box-shadow 0.12s',
+                    }}
+                  >
+                    <span className="material-icons" style={{
+                      fontSize: 15,
+                      color: active ? 'var(--th-brand)' : 'var(--th-text-hint)',
+                      fontFamily: 'Material Icons',
+                      lineHeight: 1,
+                      transition: 'color 0.12s',
+                    }}>{opt.icon}</span>
+                    <span style={{
+                      fontSize: 11,
+                      fontWeight: active ? 600 : 400,
+                      color: active ? 'var(--th-brand)' : 'var(--th-text-secondary)',
+                      fontFamily: 'var(--font-ui)',
+                      transition: 'color 0.12s',
+                      whiteSpace: 'nowrap',
+                    }}>{opt.label}</span>
+                  </button>
+                )
+              })}
+            </div>
+          ) : (
+            /* Mobile density picker */
+            <div style={{ position: 'relative' }} ref={densityRef}>
+              <button
+                style={{ ...s.iconBtn, background: densityMenuOpen || hoveredBtn === 'density' ? 'var(--th-hover-overlay)' : 'transparent' }}
+                onMouseEnter={() => setHoveredBtn('density')}
+                onMouseLeave={() => setHoveredBtn(null)}
+                onClick={() => setDensityMenuOpen(v => !v)}
+                title="Display density"
+              >
+                <span className="material-icons" style={{
+                  fontSize: 20,
+                  color: densityMenuOpen ? 'var(--th-brand)' : 'var(--th-icon-neutral)',
+                  fontFamily: 'Material Icons',
+                  lineHeight: 1,
+                }}>
+                  {DENSITY_OPTIONS.find(o => o.value === density)?.icon ?? 'density_medium'}
+                </span>
+              </button>
+
+              {densityMenuOpen && (
+                <div style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 6px)',
+                  right: 0,
+                  background: 'var(--th-bg-surface)',
+                  borderRadius: 10,
+                  border: '1px solid var(--th-border-strong)',
+                  boxShadow: 'var(--th-shadow-dropdown)',
+                  overflow: 'hidden',
+                  zIndex: 300,
+                  minWidth: 172,
+                }}>
+                  <div style={{ padding: '8px 12px 6px', fontSize: 10, fontWeight: 600, color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                    Display Density
+                  </div>
+                  {DENSITY_OPTIONS.map(opt => {
+                    const active = density === opt.value
+                    return (
+                      <button
+                        key={opt.value}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 10,
+                          width: '100%', padding: '9px 12px',
+                          background: active ? 'var(--th-brand-subtle)' : hoveredBtn === `dm-${opt.value}` ? 'var(--th-hover-overlay)' : 'transparent',
+                          border: 'none', cursor: 'pointer', textAlign: 'left',
+                          fontFamily: 'var(--font-ui)', transition: 'background 0.1s',
+                        }}
+                        onMouseEnter={() => setHoveredBtn(`dm-${opt.value}`)}
+                        onMouseLeave={() => setHoveredBtn(null)}
+                        onClick={() => { onDensityChange?.(opt.value); setDensityMenuOpen(false) }}
+                      >
+                        <span className="material-icons" style={{ fontSize: 18, color: active ? 'var(--th-brand)' : 'var(--th-icon-neutral)', fontFamily: 'Material Icons', lineHeight: 1, flexShrink: 0 }}>
+                          {opt.icon}
+                        </span>
+                        <span style={{ fontSize: 13, color: active ? 'var(--th-brand)' : 'var(--th-text-primary)', fontWeight: active ? 600 : 400, flex: 1 }}>
+                          {opt.label}
+                        </span>
+                        {active && (
+                          <span className="material-icons" style={{ fontSize: 14, color: 'var(--th-brand)', fontFamily: 'Material Icons', lineHeight: 1 }}>check</span>
+                        )}
+                      </button>
+                    )
+                  })}
+                  <div style={{ height: 4 }} />
+                </div>
+              )}
             </div>
           )}
 
@@ -473,15 +562,6 @@ export function AppHeader({
             <span className="material-icons" style={{ fontSize: 18, color: isDark ? '#FFD04D' : 'var(--th-icon-neutral)' }}>
               {isDark ? 'light_mode' : 'dark_mode'}
             </span>
-          </button>
-
-          {/* AI Assistant */}
-          <button
-            style={{ ...s.iconBtn, background: hoveredBtn === 'ai' ? 'var(--th-hover-overlay)' : 'transparent' }}
-            onMouseEnter={() => setHoveredBtn('ai')}
-            onMouseLeave={() => setHoveredBtn(null)}
-          >
-            <span className="material-icons" style={{ fontSize: 18, color: 'var(--th-brand)' }}>auto_awesome</span>
           </button>
 
           {/* Notifications — desktop only */}

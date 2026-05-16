@@ -169,7 +169,7 @@ export function Modal({ open, onClose, title, footer, size = 'md', children }: M
               onClick={onClose}
               aria-label="Close"
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'var(--core-cool-50)';
+                e.currentTarget.style.background = 'var(--th-bg-muted)';
                 e.currentTarget.style.color = 'var(--dec-color-text-body)';
               }}
               onMouseLeave={(e) => {

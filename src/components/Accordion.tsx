@@ -22,7 +22,7 @@ const styles = {
   },
   item: (open: boolean): React.CSSProperties => ({
     borderRadius: '8px',
-    background: open ? 'var(--core-cool-50)' : 'transparent',
+    background: open ? 'var(--th-bg-muted)' : 'transparent',
     transition: 'background 0.1s',
   }),
   title: (open: boolean): React.CSSProperties => ({
@@ -32,12 +32,12 @@ const styles = {
     fontSize: 'var(--text-base)',
     fontWeight: 'var(--weight-medium)' as unknown as number,
     lineHeight: 'var(--leading-base)',
-    border: `1px solid ${open ? 'var(--core-cool-50)' : 'var(--core-cool-100)'}`,
+    border: `1px solid ${open ? 'var(--th-border-subtle)' : 'var(--th-border)'}`,
     borderRadius: open ? '8px 8px 0 0' : '8px',
     padding: 'calc(10px + var(--th-density-offset, 0px)) 12px',
     cursor: 'pointer',
     userSelect: 'none' as const,
-    background: open ? 'var(--core-cool-50)' : 'var(--core-white)',
+    background: open ? 'var(--th-bg-muted)' : 'var(--th-bg-surface)',
     color: 'var(--dec-color-text-body)',
     transition: 'background 0.1s, border-color 0.1s',
     outline: 'none',
@@ -116,13 +116,13 @@ export function AccordionItem({ title, content, icon, open, onToggle }: Accordio
         onKeyUp={handleKeyUp}
         onMouseEnter={(e) => {
           const el = e.currentTarget as HTMLElement;
-          el.style.background = 'rgba(40,40,40,0.04)';
-          el.style.borderColor = open ? 'transparent' : 'var(--core-cool-200)';
+          el.style.background = 'rgba(128,128,128,0.08)';
+          el.style.borderColor = open ? 'transparent' : 'var(--th-border-strong)';
         }}
         onMouseLeave={(e) => {
           const el = e.currentTarget as HTMLElement;
-          el.style.background = open ? 'var(--core-cool-50)' : 'var(--core-white)';
-          el.style.borderColor = open ? 'var(--core-cool-50)' : 'var(--core-cool-100)';
+          el.style.background = open ? 'var(--th-bg-muted)' : 'var(--th-bg-surface)';
+          el.style.borderColor = open ? 'var(--th-border-subtle)' : 'var(--th-border)';
         }}
         onFocus={(e) => { e.currentTarget.style.boxShadow = 'var(--focus-ring)'; }}
         onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}

@@ -80,7 +80,7 @@ const s = {
     display: 'inline-flex', alignItems: 'center', gap: 4, height: 'calc(28px + var(--th-density-offset, 0px))', padding: '0 10px',
     border: `1px solid ${active ? 'var(--th-brand)' : 'var(--th-border-strong)'}`,
     borderRadius: 6,
-    background: active ? 'rgba(131,66,187,0.08)' : '#fff',
+    background: active ? 'rgba(131,66,187,0.08)' : 'var(--th-bg-surface)',
     fontSize: 12, color: active ? '#7239A4' : '#282828',
     cursor: 'pointer', whiteSpace: 'nowrap' as const,
     fontFamily: 'var(--font-ui)', fontWeight: 500,
@@ -246,7 +246,7 @@ export function SearchBar({
               style={s.chip(false)}
               onClick={() => onFilterToggle?.(f)}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--th-icon-muted)'; (e.currentTarget as HTMLElement).style.background = 'var(--th-bg-surface-subtle)' }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#DDDDE5'; (e.currentTarget as HTMLElement).style.background = '#fff' }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--th-border-strong)'; (e.currentTarget as HTMLElement).style.background = 'var(--th-bg-surface)' }}
             >
               {f.icon && <span className="material-icons" style={{ fontSize: 14, color: 'var(--th-text-hint)' }}>{f.icon}</span>}
               {f.label}

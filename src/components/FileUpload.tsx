@@ -242,7 +242,7 @@ function FileItemRow({ file, onRemove }: FileItemProps) {
             aria-label={`Remove ${file.name}`}
             style={styles.removeBtn}
             onClick={() => onRemove(file.id)}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--core-cool-50)'; (e.currentTarget as HTMLElement).style.color = 'var(--dec-color-text-body)'; }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--th-bg-muted)'; (e.currentTarget as HTMLElement).style.color = 'var(--dec-color-text-body)'; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = 'var(--th-text-hint)'; }}
           >
             <span className="material-icons" style={{ fontSize: '16px', fontFamily: 'Material Icons', lineHeight: 1 }}>close</span>
@@ -284,7 +284,7 @@ function FileItemRow({ file, onRemove }: FileItemProps) {
           aria-label={`Remove ${file.name}`}
           style={styles.removeBtn}
           onClick={() => onRemove(file.id)}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--core-cool-50)'; (e.currentTarget as HTMLElement).style.color = 'var(--dec-color-text-body)'; }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--th-bg-muted)'; (e.currentTarget as HTMLElement).style.color = 'var(--dec-color-text-body)'; }}
           onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = 'var(--th-text-hint)'; }}
         >
           <span className="material-icons" style={{ fontSize: '16px', fontFamily: 'Material Icons', lineHeight: 1 }}>close</span>

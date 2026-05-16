@@ -19,7 +19,7 @@ export function Well({ children, padding, style, className }: WellProps) {
     <div
       className={className}
       style={{
-        background: 'var(--core-cool-50)',
+        background: 'var(--th-bg-muted)',
         borderRadius: 'var(--dec-crn-panel)',
         border: '1px solid var(--dec-color-neutral-base)',
         padding: resolvedPadding,

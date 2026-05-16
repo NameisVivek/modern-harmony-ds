@@ -343,7 +343,7 @@ export const Select: React.FC<SelectProps> = ({
   const triggerStyle: React.CSSProperties = {
     ...css.trigger,
     ...(disabled ? css.triggerDisabled : {}),
-    ...(open ? { borderColor: 'var(--core-violet-600)', boxShadow: '0 0 0 2px var(--core-white), 0 0 0 4px rgba(131,66,187,0.25)' } : {}),
+    ...(open ? { borderColor: 'var(--core-violet-600)', boxShadow: '0 0 0 2px var(--th-bg-surface), 0 0 0 4px rgba(131,66,187,0.25)' } : {}),
     ...(error && !open ? { borderColor: 'var(--dec-color-error-strong)' } : {}),
   };
 

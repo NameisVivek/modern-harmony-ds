@@ -137,7 +137,7 @@ function IndentLines({ depth, isLast }: IndentLinesProps) {
           <style>{`
             .tree-indent-inner {
               position: absolute; left: 8px; top: 0; bottom: 0; width: 1px;
-              background: var(--core-cool-75);
+              background: var(--th-border);
             }
             .tree-indent-inner.last { bottom: 50%; }
           `}</style>
@@ -215,7 +215,7 @@ function TreeNodeItem({
             aria-label={isExpanded ? 'Collapse' : 'Expand'}
             style={styles.toggle}
             onClick={handleToggleClick}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--core-cool-50)'; }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--th-bg-muted)'; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
           >
             <span className="material-icons" style={styles.toggleIcon(isExpanded)}>

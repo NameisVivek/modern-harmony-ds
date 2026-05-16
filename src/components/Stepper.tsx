@@ -28,14 +28,14 @@ const circleColors: Record<StepState, React.CSSProperties> = {
     color: 'var(--core-white)',
   },
   active: {
-    background: 'var(--core-white)',
+    background: 'var(--th-bg-surface)',
     borderColor: 'var(--dec-color-brand-base)',
     color: 'var(--dec-color-brand-base)',
     boxShadow: '0 0 0 3px rgba(131,66,187,0.15)',
   },
   pending: {
-    background: 'var(--core-white)',
-    borderColor: 'var(--core-cool-100)',
+    background: 'var(--th-bg-surface)',
+    borderColor: 'var(--th-border-strong)',
     color: 'var(--dec-color-text-hint)',
   },
   error: {
@@ -261,7 +261,7 @@ function VerticalStepper({ steps, current }: StepperProps) {
               {step.content && state === 'active' && (
                 <div
                   style={{
-                    background: 'var(--core-cool-50)',
+                    background: 'var(--th-bg-muted)',
                     borderRadius: '8px',
                     padding: '10px 12px',
                     marginTop: '8px',

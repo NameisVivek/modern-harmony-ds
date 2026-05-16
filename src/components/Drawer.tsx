@@ -143,7 +143,7 @@ export function Drawer({ open, onClose, title, width = '280px', children, footer
               onClick={onClose}
               aria-label="Close drawer"
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'var(--core-cool-50)';
+                e.currentTarget.style.background = 'var(--th-bg-muted)';
                 e.currentTarget.style.color = 'var(--dec-color-text-body)';
               }}
               onMouseLeave={(e) => {

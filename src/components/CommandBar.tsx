@@ -47,7 +47,7 @@ const styles = {
     alignItems: 'center',
     gap: 0,
     padding: '10px 14px',
-    borderBottom: '1px solid var(--core-cool-50)',
+    borderBottom: '1px solid var(--th-border-subtle)',
     flexShrink: 0,
   } as React.CSSProperties,
 
@@ -80,7 +80,7 @@ const styles = {
     padding: '2px 5px',
     flexShrink: 0,
     fontFamily: 'var(--font-ui)',
-    background: 'var(--core-white)',
+    background: 'var(--th-bg-surface)',
   } as React.CSSProperties,
 
   results: {
@@ -100,7 +100,7 @@ const styles = {
 
   separator: {
     height: '1px',
-    background: 'var(--core-cool-50)',
+    background: 'var(--th-border-subtle)',
     margin: '4px 0',
   } as React.CSSProperties,
 
@@ -122,7 +122,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
-    background: active ? 'rgba(131,66,187,0.1)' : 'var(--core-cool-50)',
+    background: active ? 'rgba(131,66,187,0.1)' : 'var(--th-bg-muted)',
   }),
 
   itemIconEl: (active: boolean): React.CSSProperties => ({

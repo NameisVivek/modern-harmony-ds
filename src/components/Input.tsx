@@ -166,7 +166,7 @@ export const Input: React.FC<InputProps> = ({
           onFocus={(e) => {
             if (!disabled) {
               e.currentTarget.style.borderColor = 'var(--core-violet-600)';
-              e.currentTarget.style.boxShadow = '0 0 0 2px var(--core-white), 0 0 0 4px rgba(131,66,187,0.3)';
+              e.currentTarget.style.boxShadow = '0 0 0 2px var(--th-bg-surface), 0 0 0 4px rgba(131,66,187,0.3)';
             }
           }}
           onBlur={(e) => {

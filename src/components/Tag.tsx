@@ -22,9 +22,9 @@ const tagVariantStyles: Record<TagVariant, TagVariantStyle> = {
     borderColor: 'var(--core-cool-200)',
   },
   neutral: {
-    background: 'var(--core-cool-50)',
+    background: 'var(--th-bg-muted)',
     color: 'var(--dec-color-text-body)',
-    borderColor: 'var(--core-cool-100)',
+    borderColor: 'var(--th-border)',
   },
   success: {
     background: 'var(--core-green-25)',

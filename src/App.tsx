@@ -1853,7 +1853,7 @@ function LayoutFrame({ number, name, description, tags, path, children }: {
           ))}
         </div>
       </div>
-      <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--th-border-strong)', boxShadow: 'var(--elevation-2)' }}>
+      <div style={{ borderRadius: 12, overflow: 'clip', border: '1px solid var(--th-border-strong)', boxShadow: 'var(--elevation-2)' }}>
         <div style={{ background: '#1C1C2E', height: 32, display: 'flex', alignItems: 'center', padding: '0 14px', gap: 8 }}>
           <div style={{ display: 'flex', gap: 5 }}>
             {(['#FF5F57','#FFBD2E','#28CA41'] as const).map(c => <div key={c} style={{ width: 9, height: 9, borderRadius: '50%', background: c }} />)}
@@ -1863,7 +1863,9 @@ function LayoutFrame({ number, name, description, tags, path, children }: {
             <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', fontFamily: 'Roboto Mono, monospace' }}>app.modernharmony.io/{path}</span>
           </div>
         </div>
-        <div style={{ background: 'var(--th-bg-muted)' }}>{children}</div>
+        <div className="layout-frame-body" style={{ background: 'var(--th-bg-muted)', overflowX: 'auto', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
+          <div style={{ minWidth: 760 }}>{children}</div>
+        </div>
       </div>
     </div>
   )
@@ -3066,7 +3068,7 @@ export default function App() {
         <main style={{
           flex: 1,
           overflowY: 'auto',
-          overflowX: isMobile ? 'hidden' : 'auto',
+          overflowX: 'auto',
           padding: pad,
           background: 'var(--th-bg-page)',
           minWidth: 0,

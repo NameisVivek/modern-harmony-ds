@@ -62,4 +62,8 @@ body { font-family: var(--font-ui); font-size: var(--text-base); color: var(--de
   /* Stack all grids to a single column on mobile */
   .ds-grid-2 { grid-template-columns: 1fr; }
   .ds-grid-4 { grid-template-columns: 1fr; }
+
+  /* Example designs: keep desktop grid layout so previews look like desktop */
+  .layout-frame-body .ds-grid-2 { grid-template-columns: 1fr 1fr; }
+  .layout-frame-body .ds-grid-4 { grid-template-columns: repeat(4, 1fr); }
 }

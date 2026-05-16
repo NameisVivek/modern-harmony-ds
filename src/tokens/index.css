@@ -542,15 +542,15 @@ small {
   --th-bg-muted:           #201F32;
 
   /* borders */
-  --th-border:             #2B2943;
-  --th-border-strong:      #363456;
-  --th-border-subtle:      #201F32;
+  --th-border:             #302E4E;
+  --th-border-strong:      #3D3B60;
+  --th-border-subtle:      #231F38;
 
   /* text */
-  --th-text-primary:       #E4E2F0;
-  --th-text-secondary:     #9895B8;
-  --th-text-hint:          #63608A;
-  --th-text-disabled:      #38355A;
+  --th-text-primary:       #E8E6F4;
+  --th-text-secondary:     #A8A5C8;
+  --th-text-hint:          #7A7899;
+  --th-text-disabled:      #3A3758;
 
   /* brand (lightened for dark bg) */
   --th-brand:              #B07FDE;

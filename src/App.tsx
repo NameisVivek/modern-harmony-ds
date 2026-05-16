@@ -124,10 +124,10 @@ function Swatch({ hex, name, star }: { hex: string; name: string; star?: boolean
   return (
     <div style={{ flex: 1, minWidth: 0 }}>
       <div style={{ height: 40, borderRadius: 6, background: hex, border: '1px solid rgba(0,0,0,0.06)' }} />
-      <div style={{ marginTop: 4, fontSize: 8, fontWeight: 600, color: '#282828', fontFamily: 'var(--font-ui)' }}>
+      <div style={{ marginTop: 4, fontSize: 8, fontWeight: 600, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)' }}>
         {name}{star ? ' ★' : ''}
       </div>
-      <div style={{ fontSize: 7.5, color: '#767676', fontFamily: 'Roboto Mono, monospace' }}>{hex}</div>
+      <div style={{ fontSize: 7.5, color: 'var(--th-text-secondary)', fontFamily: 'Roboto Mono, monospace' }}>{hex}</div>
     </div>
   )
 }
@@ -135,15 +135,15 @@ function Swatch({ hex, name, star }: { hex: string; name: string; star?: boolean
 function SemanticGroup({ label, ramp, keys }: { label: string; ramp: string[]; keys: { name: string; hex: string; dark?: boolean }[] }) {
   return (
     <div style={{ minWidth: 0 }}>
-      <div style={{ fontSize: 9, fontWeight: 500, color: '#8C8C8C', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 5, fontFamily: 'var(--font-ui)' }}>{label}</div>
+      <div style={{ fontSize: 9, fontWeight: 500, color: 'var(--th-text-hint)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 5, fontFamily: 'var(--font-ui)' }}>{label}</div>
       <div className="ds-palette-row" style={{ gap: 3, marginBottom: 8 }}>
         {ramp.map((c, i) => <div key={i} style={{ flex: 1, minWidth: 28, height: 28, borderRadius: 4, background: c, border: '1px solid rgba(0,0,0,0.06)' }} />)}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         {keys.map((k) => (
           <div key={k.name} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 7px', borderRadius: 5, border: '1px solid rgba(0,0,0,0.06)', background: k.hex }}>
-            <div style={{ width: 8, height: 8, borderRadius: '50%', flexShrink: 0, background: k.dark ? '#fff' : k.hex === '#fff' ? '#ccc' : '#282828', border: k.dark ? 'none' : '1px solid rgba(0,0,0,0.15)' }} />
-            <div style={{ fontSize: 9, fontWeight: 500, flex: 1, color: k.dark ? '#fff' : '#282828', fontFamily: 'var(--font-ui)' }}>{k.name}</div>
+            <div style={{ width: 8, height: 8, borderRadius: '50%', flexShrink: 0, background: k.dark ? '#fff' : k.hex === '#fff' ? '#ccc' : 'var(--th-text-primary)', border: k.dark ? 'none' : '1px solid rgba(0,0,0,0.15)' }} />
+            <div style={{ fontSize: 9, fontWeight: 500, flex: 1, color: k.dark ? '#fff' : 'var(--th-text-primary)', fontFamily: 'var(--font-ui)' }}>{k.name}</div>
             <div style={{ fontSize: 8, color: k.dark ? 'rgba(255,255,255,0.7)' : '#8C8C8C', fontFamily: 'Roboto Mono, monospace' }}>{k.hex}</div>
           </div>
         ))}
@@ -162,7 +162,7 @@ function ColorsSection() {
       <div style={EC}>
         <div style={SL}>Group 1 — Brand Colors</div>
         <div style={{ marginBottom: 10 }}>
-          <div style={{ fontSize: 10, fontWeight: 600, color: '#282828', fontFamily: 'var(--font-ui)', marginBottom: 6 }}>Violet — Brand Accent</div>
+          <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)', marginBottom: 6 }}>Violet — Brand Accent</div>
           <div className="ds-palette-row" style={{ gap: 3 }}>
             {[
               ['10','#FCFCFF'],['25','#F9F6FE'],['50','#F2ECF8'],['75','#ECE4F5'],
@@ -174,7 +174,7 @@ function ColorsSection() {
         </div>
         <div style={DIVIDER} />
         <div style={{ marginTop: 10 }}>
-          <div style={{ fontSize: 10, fontWeight: 600, color: '#282828', fontFamily: 'var(--font-ui)', marginBottom: 6 }}>Carbon — Brand near-black &amp; neutral gray</div>
+          <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)', marginBottom: 6 }}>Carbon — Brand near-black &amp; neutral gray</div>
           <div className="ds-palette-row" style={{ gap: 3 }}>
             {[
               ['10','#F6F6F6'],['25','#EAEAEA'],['50','#DCDCDC'],['100','#C8C8C8'],
@@ -188,7 +188,7 @@ function ColorsSection() {
       <div style={{ ...EC, marginTop: 12 }}>
         <div style={SL}>Group 2 — Neutral Colors</div>
         <div style={{ marginBottom: 10 }}>
-          <div style={{ fontSize: 10, fontWeight: 600, color: '#282828', fontFamily: 'var(--font-ui)', marginBottom: 6 }}>Cool Gray — Purple-tinted (borders, surfaces, grid)</div>
+          <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)', marginBottom: 6 }}>Cool Gray — Purple-tinted (borders, surfaces, grid)</div>
           <div className="ds-palette-row" style={{ gap: 3 }}>
             {[
               ['25','#F8F8FA'],['50 ★','#F0F0F4'],['75','#E5E5EC'],['100 ★','#DDDDE5'],
@@ -199,7 +199,7 @@ function ColorsSection() {
         </div>
         <div style={DIVIDER} />
         <div style={{ marginTop: 10 }}>
-          <div style={{ fontSize: 10, fontWeight: 600, color: '#282828', fontFamily: 'var(--font-ui)', marginBottom: 6 }}>Gray — No color cast (text, icons, disabled)</div>
+          <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)', marginBottom: 6 }}>Gray — No color cast (text, icons, disabled)</div>
           <div className="ds-palette-row" style={{ gap: 3 }}>
             {[
               ['25 ★','#FBFBFB'],['50','#F7F7F7'],['75','#EBEBEB'],['100','#DDDDDD'],
@@ -228,7 +228,7 @@ function ColorsSection() {
       {/* ── Group 4: Forecast Colors ── */}
       <div style={{ ...EC, marginTop: 12 }}>
         <div style={SL}>Group 4 — Forecast / Time Series Colors</div>
-        <div className="ds-scroll-x" style={{ marginBottom: 12 }}><div style={{ display: 'flex', gap: 0, border: '1px solid #EBEBEB', borderRadius: 8, overflow: 'hidden', minWidth: 480 }}>
+        <div className="ds-scroll-x" style={{ marginBottom: 12 }}><div style={{ display: 'flex', gap: 0, border: '1px solid var(--th-border)', borderRadius: 8, overflow: 'hidden', minWidth: 480 }}>
           {[
             { month: 'Aug', bg: '#8B8AA5', val: '48,291', lbl: 'cool-400', dark: true },
             { month: 'Sep', bg: '#BFBECE', val: '51,034', lbl: 'cool-200', dark: false },
@@ -242,43 +242,43 @@ function ColorsSection() {
           ].map((col, i) => (
             <div key={i} style={{ flex: 1, border: col.today ? '2px solid #27854D' : 'none', marginLeft: col.today ? -1 : 0 }}>
               <div style={{ padding: '5px 4px', background: col.bg, textAlign: 'center', borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
-                <div style={{ fontSize: 9, fontWeight: 500, color: col.dark ? '#fff' : col.today ? '#27854D' : '#282828', fontFamily: 'var(--font-ui)', whiteSpace: 'nowrap' }}>{col.month}</div>
+                <div style={{ fontSize: 9, fontWeight: 500, color: col.dark ? '#fff' : col.today ? '#27854D' : 'var(--th-text-primary)', fontFamily: 'var(--font-ui)', whiteSpace: 'nowrap' }}>{col.month}</div>
               </div>
               <div style={{ padding: '8px 4px', background: col.bg, textAlign: 'center' }}>
-                <div style={{ fontFamily: 'Roboto Mono, monospace', fontSize: 9, fontWeight: 500, color: col.dark ? '#fff' : col.today ? '#27854D' : '#282828' }}>{col.val}</div>
-                <div style={{ fontSize: 7, color: col.dark ? 'rgba(255,255,255,0.65)' : col.today ? '#27854D' : '#5E5C75', marginTop: 2, fontFamily: 'var(--font-ui)' }}>{col.lbl}</div>
+                <div style={{ fontFamily: 'Roboto Mono, monospace', fontSize: 9, fontWeight: 500, color: col.dark ? '#fff' : col.today ? '#27854D' : 'var(--th-text-primary)' }}>{col.val}</div>
+                <div style={{ fontSize: 7, color: col.dark ? 'rgba(255,255,255,0.65)' : col.today ? '#27854D' : 'var(--th-text-secondary)', marginTop: 2, fontFamily: 'var(--font-ui)' }}>{col.lbl}</div>
               </div>
             </div>
           ))}
         </div></div>{/* /ds-scroll-x */}
         <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
           <div>
-            <div style={{ fontSize: 9, fontWeight: 500, color: '#8C8C8C', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 5, fontFamily: 'var(--font-ui)' }}>Past — cool gray scale</div>
+            <div style={{ fontSize: 9, fontWeight: 500, color: 'var(--th-text-hint)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 5, fontFamily: 'var(--font-ui)' }}>Past — cool gray scale</div>
             {[['cool-50','#F0F0F4'],['cool-100','#DDDDE5'],['cool-150','#C6C7D2'],['cool-200','#BFBECE'],['cool-400','#8B8AA5']].map(([n,c]) => (
               <div key={n} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
                 <div style={{ width: 18, height: 18, borderRadius: 3, background: c, border: '1px solid rgba(0,0,0,0.07)', flexShrink: 0 }} />
-                <span style={{ fontSize: 9, color: '#282828', fontFamily: 'var(--font-ui)' }}>{n}</span>
-                <span style={{ fontSize: 8, color: '#767676', fontFamily: 'Roboto Mono, monospace', marginLeft: 'auto' }}>{c}</span>
+                <span style={{ fontSize: 9, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)' }}>{n}</span>
+                <span style={{ fontSize: 8, color: 'var(--th-text-secondary)', fontFamily: 'Roboto Mono, monospace', marginLeft: 'auto' }}>{c}</span>
               </div>
             ))}
           </div>
           <div>
-            <div style={{ fontSize: 9, fontWeight: 500, color: '#8C8C8C', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 5, fontFamily: 'var(--font-ui)' }}>Present — green</div>
+            <div style={{ fontSize: 9, fontWeight: 500, color: 'var(--th-text-hint)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 5, fontFamily: 'var(--font-ui)' }}>Present — green</div>
             {[['green-100','#A1EECC'],['green-500','#027B44']].map(([n,c]) => (
               <div key={n} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
                 <div style={{ width: 18, height: 18, borderRadius: 3, background: c, border: '1px solid rgba(0,0,0,0.07)', flexShrink: 0 }} />
-                <span style={{ fontSize: 9, color: '#282828', fontFamily: 'var(--font-ui)' }}>{n}</span>
-                <span style={{ fontSize: 8, color: '#767676', fontFamily: 'Roboto Mono, monospace', marginLeft: 'auto' }}>{c}</span>
+                <span style={{ fontSize: 9, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)' }}>{n}</span>
+                <span style={{ fontSize: 8, color: 'var(--th-text-secondary)', fontFamily: 'Roboto Mono, monospace', marginLeft: 'auto' }}>{c}</span>
               </div>
             ))}
           </div>
           <div>
-            <div style={{ fontSize: 9, fontWeight: 500, color: '#8C8C8C', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 5, fontFamily: 'var(--font-ui)' }}>Future — violet scale</div>
+            <div style={{ fontSize: 9, fontWeight: 500, color: 'var(--th-text-hint)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 5, fontFamily: 'var(--font-ui)' }}>Future — violet scale</div>
             {[['violet-75','#ECE4F5'],['violet-100','#CABAEF'],['violet-225','#B4A4E0'],['violet-300','#B49AD6']].map(([n,c]) => (
               <div key={n} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
                 <div style={{ width: 18, height: 18, borderRadius: 3, background: c, border: '1px solid rgba(0,0,0,0.07)', flexShrink: 0 }} />
-                <span style={{ fontSize: 9, color: '#282828', fontFamily: 'var(--font-ui)' }}>{n}</span>
-                <span style={{ fontSize: 8, color: '#767676', fontFamily: 'Roboto Mono, monospace', marginLeft: 'auto' }}>{c}</span>
+                <span style={{ fontSize: 9, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)' }}>{n}</span>
+                <span style={{ fontSize: 8, color: 'var(--th-text-secondary)', fontFamily: 'Roboto Mono, monospace', marginLeft: 'auto' }}>{c}</span>
               </div>
             ))}
           </div>
@@ -302,12 +302,12 @@ function ColorsSection() {
             { token: '--dec-color-info-strong',       hex: '#0070CC', label: 'Info Strong' },
           ].map((t) => (
             <div key={t.token} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 28, height: 28, borderRadius: 6, background: t.hex, border: '1px solid #EBEBEB', flexShrink: 0 }} />
+              <div style={{ width: 28, height: 28, borderRadius: 6, background: t.hex, border: '1px solid var(--th-border)', flexShrink: 0 }} />
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: 'Roboto Mono, monospace', fontSize: 11, color: '#7239A4' }}>{t.token}</div>
-                <div style={{ fontSize: 11, color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>{t.label}</div>
+                <div style={{ fontFamily: 'Roboto Mono, monospace', fontSize: 11, color: 'var(--th-brand-medium)' }}>{t.token}</div>
+                <div style={{ fontSize: 11, color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>{t.label}</div>
               </div>
-              <div style={{ fontFamily: 'Roboto Mono, monospace', fontSize: 11, color: '#5E5C75' }}>{t.hex}</div>
+              <div style={{ fontFamily: 'Roboto Mono, monospace', fontSize: 11, color: 'var(--th-text-secondary)' }}>{t.hex}</div>
             </div>
           ))}
         </div>
@@ -333,7 +333,7 @@ function TypographySection() {
           [18, 500, 'Forecast variance by SKU and region'],
           [15, 400, 'Inventory levels are within acceptable thresholds across all active warehouses.'],
         ] as [number, number, string][]).map(([size, weight, text]) => (
-          <div key={size} style={{ fontFamily: 'Switzer, sans-serif', fontSize: size, fontWeight: weight, color: '#282828', marginBottom: 10, lineHeight: 1.3, letterSpacing: '-0.01em' }}>
+          <div key={size} style={{ fontFamily: 'Switzer, sans-serif', fontSize: size, fontWeight: weight, color: 'var(--th-text-primary)', marginBottom: 10, lineHeight: 1.3, letterSpacing: '-0.01em' }}>
             {text}
           </div>
         ))}
@@ -350,7 +350,7 @@ function TypographySection() {
           ] as [string, number, number, string][]).map(([label, sz, wt, text]) => (
             <div key={label}>
               <div style={SL}>{label}</div>
-              <div style={{ fontSize: sz, fontWeight: wt, color: '#282828', fontFamily: 'var(--font-ui)', lineHeight: 1.5 }}>{text}</div>
+              <div style={{ fontSize: sz, fontWeight: wt, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)', lineHeight: 1.5 }}>{text}</div>
             </div>
           ))}
         </div>
@@ -358,8 +358,8 @@ function TypographySection() {
 
       <div style={{ ...EC, marginTop: 12 }}>
         <div style={SL}>Monospace — Roboto Mono</div>
-        <div style={{ fontFamily: 'Roboto Mono, monospace', fontSize: 13, color: '#5E5C75', background: '#F5F5F9', borderRadius: 6, padding: '14px 16px', lineHeight: 1.8 }}>
-          <span style={{ color: '#8342BB' }}>const</span>{' '}forecast = <span style={{ color: '#027B44' }}>await</span>{' '}
+        <div style={{ fontFamily: 'Roboto Mono, monospace', fontSize: 13, color: 'var(--th-text-secondary)', background: 'var(--th-bg-search)', borderRadius: 6, padding: '14px 16px', lineHeight: 1.8 }}>
+          <span style={{ color: 'var(--th-brand)' }}>const</span>{' '}forecast = <span style={{ color: '#027B44' }}>await</span>{' '}
           planningEngine.<span style={{ color: '#0D4C89' }}>compute</span>({'{'}<br />
           &nbsp;&nbsp;horizon: <span style={{ color: '#C47A00' }}>90</span>, unit: <span style={{ color: '#E02F3A' }}>"days"</span>, sku: <span style={{ color: '#E02F3A' }}>"SKU-42A"</span><br />
           {'}'})
@@ -789,7 +789,7 @@ function NavigationSection() {
 
       {/* MegaNav */}
       <div style={{ ...EC, padding: 0, overflow: 'hidden', marginBottom: 12 }}>
-        <div style={{ padding: '10px 14px 8px', borderBottom: '1px solid #F0F0F4' }}>
+        <div style={{ padding: '10px 14px 8px', borderBottom: '1px solid var(--th-border-subtle)' }}>
           <div style={SL}>Mega Navigation</div>
         </div>
         <MegaNav
@@ -810,15 +810,15 @@ function NavigationSection() {
                   heading: 'Planning',
                   items: [
                     { id: 'sop', label: 'S&OP Planning', description: 'Sales and operations planning cycles', icon: 'assessment', iconBg: 'rgba(131,66,187,0.1)', iconColor: '#8342BB' },
-                    { id: 'demand', label: 'Demand Forecast', description: 'AI-powered demand prediction', icon: 'trending_up', iconBg: '#F0F0F4', iconColor: '#5E5C75' },
-                    { id: 'capacity', label: 'Capacity Planning', description: 'Resource and capacity management', icon: 'speed', iconBg: '#F0F0F4', iconColor: '#5E5C75' },
+                    { id: 'demand', label: 'Demand Forecast', description: 'AI-powered demand prediction', icon: 'trending_up', iconBg: 'var(--th-bg-muted)', iconColor: 'var(--th-text-secondary)' },
+                    { id: 'capacity', label: 'Capacity Planning', description: 'Resource and capacity management', icon: 'speed', iconBg: 'var(--th-bg-muted)', iconColor: 'var(--th-text-secondary)' },
                   ],
                 },
                 {
                   heading: 'Execution',
                   items: [
-                    { id: 'orders', label: 'Order Management', description: 'End-to-end order lifecycle', icon: 'receipt_long', iconBg: '#F0F0F4', iconColor: '#5E5C75' },
-                    { id: 'inventory', label: 'Inventory Control', description: 'Real-time stock visibility', icon: 'inventory_2', iconBg: '#F0F0F4', iconColor: '#5E5C75' },
+                    { id: 'orders', label: 'Order Management', description: 'End-to-end order lifecycle', icon: 'receipt_long', iconBg: 'var(--th-bg-muted)', iconColor: 'var(--th-text-secondary)' },
+                    { id: 'inventory', label: 'Inventory Control', description: 'Real-time stock visibility', icon: 'inventory_2', iconBg: 'var(--th-bg-muted)', iconColor: 'var(--th-text-secondary)' },
                     { id: 'shipments', label: 'Shipments', description: 'Track and manage shipments', icon: 'local_shipping', iconBg: '#DDFAEE', iconColor: '#027B44' },
                   ],
                 },
@@ -831,8 +831,8 @@ function NavigationSection() {
                 {
                   heading: 'Reports',
                   items: [
-                    { id: 'kpi', label: 'KPI Dashboard', description: 'Real-time performance metrics', icon: 'dashboard', iconBg: '#F0F0F4', iconColor: '#5E5C75' },
-                    { id: 'custom', label: 'Custom Reports', description: 'Build and schedule reports', icon: 'bar_chart', iconBg: '#F0F0F4', iconColor: '#5E5C75' },
+                    { id: 'kpi', label: 'KPI Dashboard', description: 'Real-time performance metrics', icon: 'dashboard', iconBg: 'var(--th-bg-muted)', iconColor: 'var(--th-text-secondary)' },
+                    { id: 'custom', label: 'Custom Reports', description: 'Build and schedule reports', icon: 'bar_chart', iconBg: 'var(--th-bg-muted)', iconColor: 'var(--th-text-secondary)' },
                   ],
                 },
               ],
@@ -861,17 +861,17 @@ function NavigationSection() {
           onChange={setTabId}
           tabs={[
             { id: 'overview', label: 'Overview', content: (
-              <div style={{ padding: '12px 0', color: '#5E5C75', fontSize: 13, fontFamily: 'var(--font-ui)' }}>
+              <div style={{ padding: '12px 0', color: 'var(--th-text-secondary)', fontSize: 13, fontFamily: 'var(--font-ui)' }}>
                 Summary metrics and KPIs for the selected planning horizon.
               </div>
             )},
             { id: 'forecast', label: 'Forecast', badge: 3, content: (
-              <div style={{ padding: '12px 0', color: '#5E5C75', fontSize: 13, fontFamily: 'var(--font-ui)' }}>
+              <div style={{ padding: '12px 0', color: 'var(--th-text-secondary)', fontSize: 13, fontFamily: 'var(--font-ui)' }}>
                 Demand forecast data and variance analysis.
               </div>
             )},
             { id: 'history', label: 'History', content: (
-              <div style={{ padding: '12px 0', color: '#5E5C75', fontSize: 13, fontFamily: 'var(--font-ui)' }}>
+              <div style={{ padding: '12px 0', color: 'var(--th-text-secondary)', fontSize: 13, fontFamily: 'var(--font-ui)' }}>
                 Historical order data and trend analysis.
               </div>
             )},
@@ -889,7 +889,7 @@ function NavigationSection() {
           <Tab id="t-d" label="Disabled" disabled onClick={() => {}} />
         </TabList>
         <TabPanel id="t-a" active>
-          <div style={{ fontSize: 13, color: '#5E5C75', fontFamily: 'var(--font-ui)' }}>
+          <div style={{ fontSize: 13, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)' }}>
             Tab panel content area.
           </div>
         </TabPanel>
@@ -967,8 +967,8 @@ function OverlaysSection() {
               </>
             }
           >
-            <p style={{ margin: 0, fontSize: 13, color: '#5E5C75', fontFamily: 'var(--font-ui)', lineHeight: 1.6 }}>
-              You are about to export <strong style={{ color: '#282828' }}>248 records</strong> from the demand planning dataset. The export will be formatted as XLSX and emailed to your registered address.
+            <p style={{ margin: 0, fontSize: 13, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)', lineHeight: 1.6 }}>
+              You are about to export <strong style={{ color: 'var(--th-text-primary)' }}>248 records</strong> from the demand planning dataset. The export will be formatted as XLSX and emailed to your registered address.
             </p>
           </Modal>
         </div>
@@ -1049,18 +1049,18 @@ function OverlaysSection() {
           <div style={SL}>Command Bar</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
             <Button variant="default" iconLeft="search" onClick={() => setCmdOpen(true)}>Open Command Bar</Button>
-            <span style={{ fontSize: 12, color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>Or press ⌘K</span>
+            <span style={{ fontSize: 12, color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>Or press ⌘K</span>
           </div>
           <CommandBar
             open={cmdOpen}
             onClose={() => setCmdOpen(false)}
             onSelect={() => setCmdOpen(false)}
           />
-          <div style={{ border: '1px solid #EBEBEB', borderRadius: 10, overflow: 'hidden', pointerEvents: 'none' }}>
-            <div style={{ padding: '10px 14px', borderBottom: '1px solid #F0F0F4', display: 'flex', alignItems: 'center', gap: 8, background: '#fff' }}>
-              <span className="material-icons" style={{ fontSize: 20, color: '#8C8C8C', fontFamily: 'Material Icons' }}>search</span>
-              <span style={{ flex: 1, fontSize: 15, color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>Search or type a command…</span>
-              <span style={{ fontSize: 10, color: '#8C8C8C', border: '1px solid #DDDDE5', borderRadius: 4, padding: '2px 5px', fontFamily: 'var(--font-ui)' }}>Esc</span>
+          <div style={{ border: '1px solid var(--th-border)', borderRadius: 10, overflow: 'hidden', pointerEvents: 'none' }}>
+            <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--th-border-subtle)', display: 'flex', alignItems: 'center', gap: 8, background: 'var(--th-bg-surface)' }}>
+              <span className="material-icons" style={{ fontSize: 20, color: 'var(--th-text-hint)', fontFamily: 'Material Icons' }}>search</span>
+              <span style={{ flex: 1, fontSize: 15, color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>Search or type a command…</span>
+              <span style={{ fontSize: 10, color: 'var(--th-text-hint)', border: '1px solid var(--th-border-strong)', borderRadius: 4, padding: '2px 5px', fontFamily: 'var(--font-ui)' }}>Esc</span>
             </div>
             {[
               { icon: 'assessment', label: 'S&OP Planning — December cycle', hint: 'Opened 2 hours ago', group: 'Recent' },
@@ -1070,18 +1070,18 @@ function OverlaysSection() {
             ].map((item, i, arr) => (
               <div key={item.label}>
                 {(i === 0 || arr[i - 1].group !== item.group) && (
-                  <div style={{ padding: '8px 14px 4px', fontSize: 9, fontWeight: 500, color: '#8C8C8C', textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'var(--font-ui)' }}>{item.group}</div>
+                  <div style={{ padding: '8px 14px 4px', fontSize: 9, fontWeight: 500, color: 'var(--th-text-hint)', textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'var(--font-ui)' }}>{item.group}</div>
                 )}
-                {i === 2 && <div style={{ height: 1, background: '#F0F0F4', margin: '4px 0' }} />}
+                {i === 2 && <div style={{ height: 1, background: 'var(--th-bg-muted)', margin: '4px 0' }} />}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 14px', background: i === 0 ? 'rgba(131,66,187,0.06)' : 'transparent' }}>
                   <div style={{ width: 28, height: 28, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', background: i === 0 ? 'rgba(131,66,187,0.1)' : '#F0F0F4' }}>
                     <span className="material-icons" style={{ fontSize: 15, color: i === 0 ? '#8342BB' : '#5E5C75', fontFamily: 'Material Icons' }}>{item.icon}</span>
                   </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 13, color: i === 0 ? '#7239A4' : '#282828', fontFamily: 'var(--font-ui)' }}>{item.label}</div>
-                    {item.hint && <div style={{ fontSize: 11, color: '#8C8C8C', marginTop: 1, fontFamily: 'var(--font-ui)' }}>{item.hint}</div>}
+                    {item.hint && <div style={{ fontSize: 11, color: 'var(--th-text-hint)', marginTop: 1, fontFamily: 'var(--font-ui)' }}>{item.hint}</div>}
                   </div>
-                  {item.shortcut && <span style={{ fontSize: 9, color: '#8C8C8C', border: '1px solid #DDDDE5', borderRadius: 4, padding: '1px 5px', background: '#FBFBFB', fontFamily: 'var(--font-ui)' }}>{item.shortcut}</span>}
+                  {item.shortcut && <span style={{ fontSize: 9, color: 'var(--th-text-hint)', border: '1px solid var(--th-border-strong)', borderRadius: 4, padding: '1px 5px', background: 'var(--th-bg-surface-subtle)', fontFamily: 'var(--font-ui)' }}>{item.shortcut}</span>}
                 </div>
               </div>
             ))}
@@ -1188,7 +1188,7 @@ function LayoutSection() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {([0, 1, 2, 3] as const).map((elev) => (
               <Card key={elev} elevation={elev} title={`Elevation ${elev}`} subtitle="Standard card component">
-                <div style={{ padding: '2px 0 6px', fontSize: 12, color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>
+                <div style={{ padding: '2px 0 6px', fontSize: 12, color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>
                   Card body with elevation level {elev}.
                 </div>
               </Card>
@@ -1203,8 +1203,8 @@ function LayoutSection() {
               <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
                 {[['Total Orders', '12,847'], ['On Time', '11,203'], ['Delayed', '1,644']].map(([l, v]) => (
                   <div key={l}>
-                    <div style={{ fontSize: 10, fontWeight: 600, color: '#8C8C8C', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3, fontFamily: 'var(--font-ui)' }}>{l}</div>
-                    <div style={{ fontSize: 22, fontWeight: 700, color: '#282828', fontFamily: 'Switzer, sans-serif' }}>{v}</div>
+                    <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--th-text-hint)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3, fontFamily: 'var(--font-ui)' }}>{l}</div>
+                    <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--th-text-primary)', fontFamily: 'Switzer, sans-serif' }}>{v}</div>
                   </div>
                 ))}
               </div>
@@ -1259,7 +1259,7 @@ function LayoutSection() {
               open={open3}
               onToggle={() => setOpen3((o) => !o)}
               content={
-                <div style={{ fontSize: 13, color: '#5E5C75', fontFamily: 'var(--font-ui)' }}>
+                <div style={{ fontSize: 13, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)' }}>
                   Connected: ERP System, WMS, External Demand Signal
                 </div>
               }
@@ -1365,7 +1365,7 @@ function CompositesSection() {
               message: 'Q2 demand forecast has been recalculated with new data.',
               timestamp: '2 min ago',
               read: false,
-              icon: <span className="material-icons" style={{ fontSize: 18, color: '#8342BB' }}>insert_chart</span>,
+              icon: <span className="material-icons" style={{ fontSize: 18, color: 'var(--th-brand)' }}>insert_chart</span>,
             },
             {
               id: '2',
@@ -1381,7 +1381,7 @@ function CompositesSection() {
               message: 'Scheduled maintenance window: Sunday 02:00–04:00 UTC.',
               timestamp: '1 hr ago',
               read: true,
-              icon: <span className="material-icons" style={{ fontSize: 18, color: '#8C8C8C' }}>info_outline</span>,
+              icon: <span className="material-icons" style={{ fontSize: 18, color: 'var(--th-text-hint)' }}>info_outline</span>,
             },
           ]}
           onMarkAllRead={() => {}}
@@ -1393,7 +1393,7 @@ function CompositesSection() {
         <div style={SL}>Empty States</div>
         <div className="ds-grid-2" style={{ gap: 12 }}>
           <EmptyState
-            icon={<span className="material-icons" style={{ fontSize: 32, color: '#BFBECE' }}>inbox</span>}
+            icon={<span className="material-icons" style={{ fontSize: 32, color: 'var(--th-icon-muted)' }}>inbox</span>}
             title="No orders found"
             description="Try adjusting your filters or date range to find matching records."
             action="Clear filters"
@@ -1401,7 +1401,7 @@ function CompositesSection() {
             actionVariant="default"
           />
           <EmptyState
-            icon={<span className="material-icons" style={{ fontSize: 32, color: '#8342BB' }}>add_chart</span>}
+            icon={<span className="material-icons" style={{ fontSize: 32, color: 'var(--th-brand)' }}>add_chart</span>}
             title="Start your first forecast"
             description="Upload demand data to generate your first planning forecast."
             action="Upload data"
@@ -1478,7 +1478,7 @@ function AdvancedSection() {
           onChange={(avail, sel) => { setPpAvail(avail); setPpSel(sel) }}
           height={340}
         />
-        <div style={{ marginTop: 6, fontSize: 10, color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>
+        <div style={{ marginTop: 6, fontSize: 10, color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>
           Click items to highlight · Use arrows to transfer · Drag items between lists
         </div>
       </div>
@@ -1505,7 +1505,7 @@ function AdvancedSection() {
           results={searchResults}
           onSelect={(r) => { setSearchVal(r.label) }}
         />
-        <div style={{ marginTop: 8, fontSize: 10, color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>
+        <div style={{ marginTop: 8, fontSize: 10, color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>
           Type anything to see results dropdown
         </div>
       </div>
@@ -1529,7 +1529,7 @@ function AdvancedSection() {
       <div style={{ ...EC, marginTop: 12, padding: 0, overflow: 'hidden' }}>
         <div style={{ padding: '12px 16px 10px' }}>
           <div style={SL}>Page Footer — with Actions and Pagination</div>
-          <div style={{ padding: '20px 0', color: '#8C8C8C', fontSize: 12, fontFamily: 'var(--font-ui)', textAlign: 'center' }}>
+          <div style={{ padding: '20px 0', color: 'var(--th-text-hint)', fontSize: 12, fontFamily: 'var(--font-ui)', textAlign: 'center' }}>
             Page content area
           </div>
         </div>
@@ -1552,7 +1552,7 @@ function AdvancedSection() {
       <div style={{ ...EC, marginTop: 12, padding: 0, overflow: 'hidden' }}>
         <div style={{ padding: '12px 16px 10px' }}>
           <div style={SL}>Page Footer — Danger Action Variant</div>
-          <div style={{ padding: '16px 0', color: '#8C8C8C', fontSize: 12, fontFamily: 'var(--font-ui)', textAlign: 'center' }}>
+          <div style={{ padding: '16px 0', color: 'var(--th-text-hint)', fontSize: 12, fontFamily: 'var(--font-ui)', textAlign: 'center' }}>
             Review form content
           </div>
         </div>
@@ -1583,7 +1583,7 @@ function TokensSection() {
     { name: 'pill', val: '9999px', use: 'Tags, badges, pills' },
   ]
   const elevations = [
-    { name: 'Elevation 0 — flat', spec: 'border: 1px solid #EBEBEB', shadow: 'none', border: '1px solid #EBEBEB', use: 'Table rows, alt rows' },
+    { name: 'Elevation 0 — flat', spec: 'border: 1px solid #EBEBEB', shadow: 'none', border: '1px solid var(--th-border)', use: 'Table rows, alt rows' },
     { name: 'Elevation 1 — raised', spec: '0px 1px 2px rgba(55,23,78,.08)\n0px 1px 3px rgba(55,23,78,.12)', shadow: '0px 1px 2px rgba(55,23,78,.08),0px 1px 3px rgba(55,23,78,.12)', use: 'Buttons, chips, inputs' },
     { name: 'Elevation 2 — floating', spec: '0px 2px 4px rgba(55,23,78,.08)\n0px 4px 8px rgba(55,23,78,.1)', shadow: '0px 2px 4px rgba(55,23,78,.08),0px 4px 8px rgba(55,23,78,.1)', use: 'Dropdowns, tooltips, popovers' },
     { name: 'Elevation 3 — overlay', spec: '0px 4px 8px rgba(55,23,78,.1)\n0px 8px 24px rgba(55,23,78,.14)', shadow: '0px 4px 8px rgba(55,23,78,.1),0px 8px 24px rgba(55,23,78,.14)', use: 'Modals, side drawers' },
@@ -1603,10 +1603,10 @@ function TokensSection() {
         <div style={{ display: 'flex', gap: 20, alignItems: 'flex-end', flexWrap: 'wrap' }}>
           {radii.map((r) => (
             <div key={r.name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-              <div style={{ width: 72, height: 72, background: '#ECE4F5', border: '2px solid #8342BB', borderRadius: r.val }} />
-              <div style={{ fontSize: 10, fontWeight: 500, color: '#282828', fontFamily: 'var(--font-ui)', textAlign: 'center' }}>{r.name}</div>
-              <div style={{ fontSize: 9, color: '#767676', fontFamily: 'Roboto Mono, monospace' }}>{r.val}</div>
-              <div style={{ fontSize: 8, color: '#8C8C8C', textAlign: 'center', maxWidth: 90, lineHeight: 1.3, fontFamily: 'var(--font-ui)' }}>{r.use}</div>
+              <div style={{ width: 72, height: 72, background: 'var(--th-brand-subtle)', border: '2px solid var(--th-brand)', borderRadius: r.val }} />
+              <div style={{ fontSize: 10, fontWeight: 500, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)', textAlign: 'center' }}>{r.name}</div>
+              <div style={{ fontSize: 9, color: 'var(--th-text-secondary)', fontFamily: 'Roboto Mono, monospace' }}>{r.val}</div>
+              <div style={{ fontSize: 8, color: 'var(--th-text-hint)', textAlign: 'center', maxWidth: 90, lineHeight: 1.3, fontFamily: 'var(--font-ui)' }}>{r.use}</div>
             </div>
           ))}
         </div>
@@ -1617,18 +1617,18 @@ function TokensSection() {
         <div style={SL}>Elevation &amp; Shadows</div>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           {elevations.map((e) => (
-            <div key={e.name} style={{ flex: 1, minWidth: 120, background: '#fff', borderRadius: 8, padding: 14, border: e.border ?? 'none', boxShadow: e.shadow === 'none' ? 'none' : e.shadow }}>
-              <div style={{ fontSize: 10, fontWeight: 500, color: '#8342BB', marginBottom: 4, fontFamily: 'var(--font-ui)' }}>{e.name}</div>
-              <div style={{ fontSize: 8, color: '#767676', lineHeight: 1.4, fontFamily: 'Roboto Mono, monospace', whiteSpace: 'pre-line' }}>{e.spec}</div>
-              <div style={{ fontSize: 9, color: '#8C8C8C', marginTop: 6, fontFamily: 'var(--font-ui)' }}>{e.use}</div>
+            <div key={e.name} style={{ flex: 1, minWidth: 120, background: 'var(--th-bg-surface)', borderRadius: 8, padding: 14, border: e.border ?? 'none', boxShadow: e.shadow === 'none' ? 'none' : e.shadow }}>
+              <div style={{ fontSize: 10, fontWeight: 500, color: 'var(--th-brand)', marginBottom: 4, fontFamily: 'var(--font-ui)' }}>{e.name}</div>
+              <div style={{ fontSize: 8, color: 'var(--th-text-secondary)', lineHeight: 1.4, fontFamily: 'Roboto Mono, monospace', whiteSpace: 'pre-line' }}>{e.spec}</div>
+              <div style={{ fontSize: 9, color: 'var(--th-text-hint)', marginTop: 6, fontFamily: 'var(--font-ui)' }}>{e.use}</div>
             </div>
           ))}
         </div>
         <div style={{ marginTop: 12 }}>
-          <div style={{ fontSize: 10, fontWeight: 500, color: '#282828', fontFamily: 'var(--font-ui)', marginBottom: 8 }}>Focus ring</div>
+          <div style={{ fontSize: 10, fontWeight: 500, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)', marginBottom: 8 }}>Focus ring</div>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-            <div style={{ width: 80, height: 28, borderRadius: 6, background: '#fff', border: '1px solid #DDDDE5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: '#282828', fontFamily: 'var(--font-ui)', outline: '2px solid #8342BB', outlineOffset: 2, boxShadow: '0 0 0 4px rgba(131,66,187,0.2)' }}>focused</div>
-            <div style={{ fontSize: 11, color: '#5E5C75', fontFamily: 'var(--font-ui)' }}>outline: 2px solid #8342BB · offset: 2px · ring: rgba(131,66,187,.2)</div>
+            <div style={{ width: 80, height: 28, borderRadius: 6, background: 'var(--th-bg-surface)', border: '1px solid var(--th-border-strong)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)', outline: '2px solid #8342BB', outlineOffset: 2, boxShadow: '0 0 0 4px rgba(131,66,187,0.2)' }}>focused</div>
+            <div style={{ fontSize: 11, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)' }}>outline: 2px solid #8342BB · offset: 2px · ring: rgba(131,66,187,.2)</div>
           </div>
         </div>
       </div>
@@ -1640,8 +1640,8 @@ function TokensSection() {
           {spacing.map(([token, px]) => (
             <div key={token} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
               <div style={{ width: 32, background: '#8342BB', borderRadius: 3, height: px }} />
-              <div style={{ fontSize: 9, fontWeight: 500, color: '#282828', fontFamily: 'var(--font-ui)' }}>sp-{token}</div>
-              <div style={{ fontSize: 8, color: '#767676', fontFamily: 'Roboto Mono, monospace' }}>{px}px</div>
+              <div style={{ fontSize: 9, fontWeight: 500, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)' }}>sp-{token}</div>
+              <div style={{ fontSize: 8, color: 'var(--th-text-secondary)', fontFamily: 'Roboto Mono, monospace' }}>{px}px</div>
             </div>
           ))}
         </div>
@@ -1652,16 +1652,16 @@ function TokensSection() {
         <div style={SL}>Scrollbar Styles</div>
         <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap' }}>
           <div>
-            <div style={{ fontSize: 10, fontWeight: 500, color: '#282828', fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Light (eto-scrollbar__light)</div>
+            <div style={{ fontSize: 10, fontWeight: 500, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Light (eto-scrollbar__light)</div>
             <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-                <div style={{ fontSize: 9, color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>Vertical</div>
+                <div style={{ fontSize: 9, color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>Vertical</div>
                 <div style={{ width: 12, height: 120, borderRadius: 8, background: 'rgba(138,138,138,0.16)', position: 'relative', flexShrink: 0 }}>
                   <div style={{ position: 'absolute', top: 20, left: 2, width: 8, height: 40, borderRadius: 6, background: '#BFBFBF' }} />
                 </div>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-                <div style={{ fontSize: 9, color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>Horizontal</div>
+                <div style={{ fontSize: 9, color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>Horizontal</div>
                 <div style={{ width: 120, height: 12, borderRadius: 8, background: 'rgba(138,138,138,0.16)', position: 'relative' }}>
                   <div style={{ position: 'absolute', left: 20, top: 2, width: 40, height: 8, borderRadius: 6, background: '#BFBFBF' }} />
                 </div>
@@ -1669,16 +1669,16 @@ function TokensSection() {
             </div>
           </div>
           <div>
-            <div style={{ fontSize: 10, fontWeight: 500, color: '#282828', fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Dark (eto-scrollbar__dark)</div>
+            <div style={{ fontSize: 10, fontWeight: 500, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Dark (eto-scrollbar__dark)</div>
             <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-                <div style={{ fontSize: 9, color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>Vertical</div>
+                <div style={{ fontSize: 9, color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>Vertical</div>
                 <div style={{ width: 12, height: 120, borderRadius: 8, background: 'rgba(255,255,255,0.1)', position: 'relative', flexShrink: 0 }}>
                   <div style={{ position: 'absolute', top: 20, left: 2, width: 8, height: 40, borderRadius: 6, background: 'rgba(255,255,255,0.35)' }} />
                 </div>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-                <div style={{ fontSize: 9, color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>Horizontal</div>
+                <div style={{ fontSize: 9, color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>Horizontal</div>
                 <div style={{ width: 120, height: 12, borderRadius: 8, background: 'rgba(255,255,255,0.1)', position: 'relative' }}>
                   <div style={{ position: 'absolute', left: 20, top: 2, width: 40, height: 8, borderRadius: 6, background: 'rgba(255,255,255,0.35)' }} />
                 </div>
@@ -1686,11 +1686,11 @@ function TokensSection() {
             </div>
           </div>
           <div>
-            <div style={{ fontSize: 10, fontWeight: 500, color: '#282828', fontFamily: 'var(--font-ui)', marginBottom: 8 }}>Specs</div>
+            <div style={{ fontSize: 10, fontWeight: 500, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)', marginBottom: 8 }}>Specs</div>
             {[['Width','12px (3× base)'],['Track radius','8px'],['Thumb radius','6px'],['Light track','rgba(138,138,138,0.16)'],['Light thumb','#BFBFBF'],['Dark track','rgba(255,255,255,0.10)'],['Dark thumb','rgba(255,255,255,0.35)']].map(([k,v]) => (
               <div key={k} style={{ display: 'flex', gap: 8, marginBottom: 3, alignItems: 'center' }}>
-                <span style={{ fontSize: 9, color: '#5E5C75', fontFamily: 'var(--font-ui)', width: 80, flexShrink: 0 }}>{k}</span>
-                <span style={{ fontSize: 9, color: '#282828', fontFamily: 'Roboto Mono, monospace' }}>{v}</span>
+                <span style={{ fontSize: 9, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)', width: 80, flexShrink: 0 }}>{k}</span>
+                <span style={{ fontSize: 9, color: 'var(--th-text-primary)', fontFamily: 'Roboto Mono, monospace' }}>{v}</span>
               </div>
             ))}
           </div>
@@ -1700,23 +1700,23 @@ function TokensSection() {
       {/* Brand Logo */}
       <div style={{ ...EC, marginTop: 12 }}>
         <div style={SL}>Brand Logo — on-dark &amp; on-light</div>
-        <div style={{ display: 'flex', gap: 0, borderRadius: 8, overflow: 'hidden', border: '1px solid #EBEBEB' }}>
+        <div style={{ display: 'flex', gap: 0, borderRadius: 8, overflow: 'hidden', border: '1px solid var(--th-border)' }}>
           <div style={{ flex: 1, padding: '20px 24px', background: '#282828', display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div style={{ fontSize: 9, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-ui)' }}>On dark background</div>
             <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 28, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1 }}>leo<sup style={{ fontSize: 10, fontWeight: 400, verticalAlign: 'super' }}>®</sup></div>
             <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 16, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1 }}>leo</div>
             <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#8342BB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-ui)', fontSize: 14, fontWeight: 700, color: '#fff' }}>L</div>
           </div>
-          <div style={{ flex: 1, padding: '20px 24px', background: '#fff', display: 'flex', flexDirection: 'column', gap: 16, borderLeft: '1px solid #EBEBEB' }}>
-            <div style={{ fontSize: 9, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>On light background</div>
-            <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 28, fontWeight: 700, color: '#282828', letterSpacing: '-0.02em', lineHeight: 1 }}>leo<sup style={{ fontSize: 10, fontWeight: 400, verticalAlign: 'super', color: '#8342BB' }}>®</sup></div>
-            <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 16, fontWeight: 700, color: '#282828', letterSpacing: '-0.02em', lineHeight: 1 }}>leo</div>
+          <div style={{ flex: 1, padding: '20px 24px', background: 'var(--th-bg-surface)', display: 'flex', flexDirection: 'column', gap: 16, borderLeft: '1px solid var(--th-border)' }}>
+            <div style={{ fontSize: 9, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>On light background</div>
+            <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 28, fontWeight: 700, color: 'var(--th-text-primary)', letterSpacing: '-0.02em', lineHeight: 1 }}>leo<sup style={{ fontSize: 10, fontWeight: 400, verticalAlign: 'super', color: 'var(--th-brand)' }}>®</sup></div>
+            <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 16, fontWeight: 700, color: 'var(--th-text-primary)', letterSpacing: '-0.02em', lineHeight: 1 }}>leo</div>
             <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#8342BB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-ui)', fontSize: 14, fontWeight: 700, color: '#fff' }}>L</div>
           </div>
-          <div style={{ flex: 1, padding: '20px 24px', background: '#F0F0F4', display: 'flex', flexDirection: 'column', gap: 16, borderLeft: '1px solid #EBEBEB' }}>
-            <div style={{ fontSize: 9, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8C8C8C', fontFamily: 'var(--font-ui)' }}>On subtle background</div>
-            <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 28, fontWeight: 700, color: '#282828', letterSpacing: '-0.02em', lineHeight: 1 }}>leo<sup style={{ fontSize: 10, fontWeight: 400, verticalAlign: 'super', color: '#8342BB' }}>®</sup></div>
-            <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 16, fontWeight: 700, color: '#282828', letterSpacing: '-0.02em', lineHeight: 1 }}>leo</div>
+          <div style={{ flex: 1, padding: '20px 24px', background: 'var(--th-bg-muted)', display: 'flex', flexDirection: 'column', gap: 16, borderLeft: '1px solid var(--th-border)' }}>
+            <div style={{ fontSize: 9, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>On subtle background</div>
+            <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 28, fontWeight: 700, color: 'var(--th-text-primary)', letterSpacing: '-0.02em', lineHeight: 1 }}>leo<sup style={{ fontSize: 10, fontWeight: 400, verticalAlign: 'super', color: 'var(--th-brand)' }}>®</sup></div>
+            <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 16, fontWeight: 700, color: 'var(--th-text-primary)', letterSpacing: '-0.02em', lineHeight: 1 }}>leo</div>
             <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#8342BB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-ui)', fontSize: 14, fontWeight: 700, color: '#fff' }}>L</div>
           </div>
         </div>
@@ -1844,16 +1844,16 @@ function LayoutFrame({ number, name, description, tags, path, children }: {
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10, gap: 16, flexWrap: 'wrap' }}>
         <div>
           <div style={SL}>Layout {number}</div>
-          <div style={{ fontSize: 15, fontWeight: 700, color: '#282828', fontFamily: 'Switzer, var(--font-ui)', letterSpacing: '-0.01em' }}>{name}</div>
-          <div style={{ fontSize: 12, color: '#5E5C75', fontFamily: 'var(--font-ui)', marginTop: 3, lineHeight: 1.5 }}>{description}</div>
+          <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--th-text-primary)', fontFamily: 'Switzer, var(--font-ui)', letterSpacing: '-0.01em' }}>{name}</div>
+          <div style={{ fontSize: 12, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)', marginTop: 3, lineHeight: 1.5 }}>{description}</div>
         </div>
         <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
           {tags.map(t => (
-            <span key={t} style={{ padding: '2px 8px', borderRadius: 4, background: '#F2ECF8', color: '#4E2975', fontSize: 10, fontWeight: 600, fontFamily: 'var(--font-ui)', border: '1px solid #CABAEF' }}>{t}</span>
+            <span key={t} style={{ padding: '2px 8px', borderRadius: 4, background: 'var(--th-brand-subtle)', color: 'var(--th-brand)', fontSize: 10, fontWeight: 600, fontFamily: 'var(--font-ui)', border: '1px solid var(--th-border-strong)' }}>{t}</span>
           ))}
         </div>
       </div>
-      <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid #DDDDE5', boxShadow: 'var(--elevation-2)' }}>
+      <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--th-border-strong)', boxShadow: 'var(--elevation-2)' }}>
         <div style={{ background: '#1C1C2E', height: 32, display: 'flex', alignItems: 'center', padding: '0 14px', gap: 8 }}>
           <div style={{ display: 'flex', gap: 5 }}>
             {(['#FF5F57','#FFBD2E','#28CA41'] as const).map(c => <div key={c} style={{ width: 9, height: 9, borderRadius: '50%', background: c }} />)}
@@ -1863,7 +1863,7 @@ function LayoutFrame({ number, name, description, tags, path, children }: {
             <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', fontFamily: 'Roboto Mono, monospace' }}>app.modernharmony.io/{path}</span>
           </div>
         </div>
-        <div style={{ background: '#F0F0F4' }}>{children}</div>
+        <div style={{ background: 'var(--th-bg-muted)' }}>{children}</div>
       </div>
     </div>
   )
@@ -1883,8 +1883,8 @@ const LH_TITLE: React.CSSProperties = { color: 'white', fontWeight: 600, fontSiz
 const LH_SUB: React.CSSProperties = { color: 'rgba(255,255,255,0.45)', fontSize: 12, fontFamily: 'var(--font-ui)' }
 
 const LP: React.CSSProperties = { padding: '16px 20px' }
-const PT: React.CSSProperties = { fontSize: 17, fontWeight: 700, color: '#282828', fontFamily: 'Switzer, var(--font-ui)', letterSpacing: '-0.02em', marginBottom: 2 }
-const PS: React.CSSProperties = { fontSize: 11, color: '#5E5C75', fontFamily: 'var(--font-ui)', marginBottom: 14 }
+const PT: React.CSSProperties = { fontSize: 17, fontWeight: 700, color: 'var(--th-text-primary)', fontFamily: 'Switzer, var(--font-ui)', letterSpacing: '-0.02em', marginBottom: 2 }
+const PS: React.CSSProperties = { fontSize: 11, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)', marginBottom: 14 }
 
 const MONTHS_8 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
 const WEEKS_6  = ['Wk 44', 'Wk 45', 'Wk 46', 'Wk 47', 'Wk 48', 'Wk 49']
@@ -1907,18 +1907,18 @@ function DashSection({ title, summary, open, onToggle, children, noBorder }: Das
           display: 'flex', alignItems: 'center', width: '100%', gap: 7,
           padding: '6px 0',
           background: 'transparent', border: 'none',
-          borderBottom: noBorder ? 'none' : `1px solid ${open ? '#EBEBEB' : '#F0F0F4'}`,
+          borderBottom: noBorder ? 'none' : `1px solid ${open ? 'var(--th-border)' : 'var(--th-border-subtle)'}`,
           cursor: 'pointer', marginBottom: open ? 10 : 0,
           transition: 'border-color 0.2s',
         }}
       >
         <span className="material-icons" style={{
-          fontSize: 14, color: '#8342BB', fontFamily: 'Material Icons', lineHeight: 1,
+          fontSize: 14, color: 'var(--th-brand)', fontFamily: 'Material Icons', lineHeight: 1,
           transform: open ? 'rotate(90deg)' : 'rotate(0deg)',
           transition: 'transform 0.22s ease',
         }}>chevron_right</span>
-        <span style={{ fontSize: 12, fontWeight: 600, color: '#282828', fontFamily: 'var(--font-ui)' }}>{title}</span>
-        {summary && <span style={{ fontSize: 10, color: '#9B9BAA', fontFamily: 'var(--font-ui)' }}>{summary}</span>}
+        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)' }}>{title}</span>
+        {summary && <span style={{ fontSize: 10, color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>{summary}</span>}
         <div style={{ flex: 1 }} />
         <span style={{ fontSize: 10, color: open ? '#8342BB' : '#BBBBC8', fontFamily: 'var(--font-ui)', fontWeight: 500 }}>
           {open ? 'Collapse' : 'Expand'}
@@ -1995,15 +1995,15 @@ function ExampleDesignsSection() {
           { icon: 'account_tree',  name: 'Multi-Step Workflow',     desc: 'Stepper · form · footer actions' },
           { icon: 'settings',      name: 'Settings & Config',       desc: 'Sidebar nav · sections · toggles' },
         ].map((l, i) => (
-          <div key={l.name} style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#fff', borderRadius: 10, padding: '12px 14px', border: '1px solid #EBEBEB' }}>
-            <div style={{ width: 36, height: 36, borderRadius: 9, background: '#F2ECF8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <span className="material-icons" style={{ fontSize: 18, color: '#8342BB', fontFamily: 'Material Icons', lineHeight: 1 }}>{l.icon}</span>
+          <div key={l.name} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'var(--th-bg-surface)', borderRadius: 10, padding: '12px 14px', border: '1px solid var(--th-border)' }}>
+            <div style={{ width: 36, height: 36, borderRadius: 9, background: 'var(--th-brand-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <span className="material-icons" style={{ fontSize: 18, color: 'var(--th-brand)', fontFamily: 'Material Icons', lineHeight: 1 }}>{l.icon}</span>
             </div>
             <div>
-              <div style={{ fontSize: 12, fontWeight: 700, color: '#282828', fontFamily: 'var(--font-ui)' }}>
-                <span style={{ color: '#8342BB', marginRight: 6, fontVariantNumeric: 'tabular-nums' }}>0{i + 1}</span>{l.name}
+              <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)' }}>
+                <span style={{ color: 'var(--th-brand)', marginRight: 6, fontVariantNumeric: 'tabular-nums' }}>0{i + 1}</span>{l.name}
               </div>
-              <div style={{ fontSize: 11, color: '#767676', fontFamily: 'var(--font-ui)', marginTop: 1 }}>{l.desc}</div>
+              <div style={{ fontSize: 11, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)', marginTop: 1 }}>{l.desc}</div>
             </div>
           </div>
         ))}
@@ -2145,10 +2145,10 @@ function ExampleDesignsSection() {
               change="+2.1pp vs prior year" changeDirection="up" icon="trending_up" iconBg="#F2ECF8" iconColor="#8342BB" />
             <KPIWidget variant="multi" title="Channel Mix"
               metrics={[
-                { value: '58%', label: 'Direct',      color: '#8342BB' },
+                { value: '58%', label: 'Direct',      color: 'var(--th-brand)' },
                 { value: '29%', label: 'Partner',     color: '#3999E4' },
                 { value: '13%', label: 'Marketplace', color: '#02A15A' },
-                { value: '3.2×', label: 'ROI avg',   color: '#282828' },
+                { value: '3.2×', label: 'ROI avg',   color: 'var(--th-text-primary)' },
               ]} />
             <KPIWidget variant="status" title="Regional Targets"
               items={[
@@ -2216,7 +2216,7 @@ function ExampleDesignsSection() {
 
           {/* Order Details — collapsible */}
           <DashSection title="Order Details" summary="8 fields" open={detailInfo} onToggle={() => setDetailInfo(o => !o)}>
-            <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '14px 16px', marginBottom: 2 }}>
+            <div style={{ background: 'var(--th-bg-surface)', borderRadius: 10, border: '1px solid var(--th-border)', padding: '14px 16px', marginBottom: 2 }}>
               <div className="ds-grid-2" style={{ gap: '0 24px' }}>
                 <FieldValuePairs layout="stack" fields={[
                   { label: 'Order ID',    value: 'ORD-48201',            type: 'mono'      },
@@ -2242,15 +2242,15 @@ function ExampleDesignsSection() {
                 ['SKU-3319', 'Industrial Component B',  180, '$39,600'],
                 ['SKU-9104', 'Distribution Pack C',     420, '$32,280'],
               ].map(([sku, name, qty, val]) => (
-                <div key={sku as string} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: '#F8F8FA', borderRadius: 8, border: '1px solid #EBEBEB' }}>
+                <div key={sku as string} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'var(--th-bg-surface-subtle)', borderRadius: 8, border: '1px solid var(--th-border)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span className="material-icons" style={{ fontSize: 15, color: '#8342BB', fontFamily: 'Material Icons', lineHeight: 1 }}>inventory_2</span>
+                    <span className="material-icons" style={{ fontSize: 15, color: 'var(--th-brand)', fontFamily: 'Material Icons', lineHeight: 1 }}>inventory_2</span>
                     <div>
-                      <div style={{ fontSize: 11, fontWeight: 600, color: '#282828', fontFamily: 'Roboto Mono, monospace' }}>{sku}</div>
-                      <div style={{ fontSize: 10, color: '#767676', fontFamily: 'var(--font-ui)' }}>{name} · {qty} units</div>
+                      <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--th-text-primary)', fontFamily: 'Roboto Mono, monospace' }}>{sku}</div>
+                      <div style={{ fontSize: 10, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)' }}>{name} · {qty} units</div>
                     </div>
                   </div>
-                  <div style={{ fontSize: 12, fontWeight: 600, color: '#282828', fontFamily: 'Roboto Mono, monospace' }}>{val}</div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--th-text-primary)', fontFamily: 'Roboto Mono, monospace' }}>{val}</div>
                 </div>
               ))}
             </div>
@@ -2258,7 +2258,7 @@ function ExampleDesignsSection() {
 
           {/* Financial Summary — collapsed by default */}
           <DashSection title="Financial Summary" summary="Net 30 · USD" open={detailFinance} onToggle={() => setDetailFinance(o => !o)}>
-            <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '14px 16px', marginBottom: 2 }}>
+            <div style={{ background: 'var(--th-bg-surface)', borderRadius: 10, border: '1px solid var(--th-border)', padding: '14px 16px', marginBottom: 2 }}>
               <div style={{ maxWidth: 320 }}>
                 <FieldValuePairs layout="stack" fields={[
                   { label: 'Subtotal',  value: '$118,680.00', type: 'highlight' },
@@ -2274,7 +2274,7 @@ function ExampleDesignsSection() {
 
           {/* Related Records — tabs inside collapsible */}
           <DashSection title="Related Records" summary="Shipments · Documents · History" open={detailRelated} onToggle={() => setDetailRelated(o => !o)} noBorder>
-            <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', overflow: 'hidden' }}>
+            <div style={{ background: 'var(--th-bg-surface)', borderRadius: 10, border: '1px solid var(--th-border)', overflow: 'hidden' }}>
               <div style={{ padding: '14px 16px 0' }}>
                 <TabList>
                   <Tab id="shipments" label="Shipments" badge={3} active={detailTab === 'shipments'} onClick={() => setDetailTab('shipments')} />
@@ -2313,11 +2313,11 @@ function ExampleDesignsSection() {
                     { name: 'Customs Declaration.pdf',   size: '412 KB', date: '14 May' },
                     { name: 'Insurance Certificate.pdf', size: '88 KB',  date: '14 May' },
                   ].map(doc => (
-                    <div key={doc.name} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 7, background: '#F8F8FA', cursor: 'pointer' }}>
+                    <div key={doc.name} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 7, background: 'var(--th-bg-surface-subtle)', cursor: 'pointer' }}>
                       <span className="material-icons" style={{ fontSize: 18, color: '#E02F3A', fontFamily: 'Material Icons', lineHeight: 1, flexShrink: 0 }}>picture_as_pdf</span>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: 12, fontWeight: 500, color: '#282828', fontFamily: 'var(--font-ui)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{doc.name}</div>
-                        <div style={{ fontSize: 10, color: '#767676', fontFamily: 'var(--font-ui)' }}>{doc.size} · Added {doc.date}</div>
+                        <div style={{ fontSize: 12, fontWeight: 500, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{doc.name}</div>
+                        <div style={{ fontSize: 10, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)' }}>{doc.size} · Added {doc.date}</div>
                       </div>
                       <Button variant="borderless" size="sm" iconOnly="download" />
                     </div>
@@ -2329,21 +2329,21 @@ function ExampleDesignsSection() {
                 <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 0 }}>
                   {[
                     { time: 'Today, 10:41',    actor: 'System',      action: 'Status updated to Fulfilled',         icon: 'check_circle',   color: '#027B44' },
-                    { time: 'Today, 09:14',    actor: 'Alex Mercer', action: 'Approved financial summary',          icon: 'approval',       color: '#8342BB' },
+                    { time: 'Today, 09:14',    actor: 'Alex Mercer', action: 'Approved financial summary',          icon: 'approval',       color: 'var(--th-brand)' },
                     { time: '14 May, 16:22',   actor: 'System',      action: 'All 3 shipments confirmed',           icon: 'local_shipping', color: '#3999E4' },
-                    { time: '13 May, 11:05',   actor: 'Emma Liu',    action: 'Documents uploaded (5 files)',        icon: 'upload_file',    color: '#5E5C75' },
-                    { time: '12 May, 09:23',   actor: 'Alex Mercer', action: 'Order created from PO-2024-08912',   icon: 'add_circle',     color: '#767676' },
+                    { time: '13 May, 11:05',   actor: 'Emma Liu',    action: 'Documents uploaded (5 files)',        icon: 'upload_file',    color: 'var(--th-text-secondary)' },
+                    { time: '12 May, 09:23',   actor: 'Alex Mercer', action: 'Order created from PO-2024-08912',   icon: 'add_circle',     color: 'var(--th-text-secondary)' },
                   ].map((ev, i, arr) => (
                     <div key={i} style={{ display: 'flex', gap: 10, paddingBottom: i < arr.length - 1 ? 12 : 0 }}>
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
                         <div style={{ width: 28, height: 28, borderRadius: '50%', background: `${ev.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <span className="material-icons" style={{ fontSize: 14, color: ev.color, fontFamily: 'Material Icons', lineHeight: 1 }}>{ev.icon}</span>
                         </div>
-                        {i < arr.length - 1 && <div style={{ width: 1, flex: 1, background: '#EBEBEB', marginTop: 4 }} />}
+                        {i < arr.length - 1 && <div style={{ width: 1, flex: 1, background: 'var(--th-border)', marginTop: 4 }} />}
                       </div>
                       <div style={{ paddingBottom: 4 }}>
-                        <div style={{ fontSize: 12, fontWeight: 500, color: '#282828', fontFamily: 'var(--font-ui)' }}>{ev.action}</div>
-                        <div style={{ fontSize: 10, color: '#767676', fontFamily: 'var(--font-ui)', marginTop: 1 }}>{ev.actor} · {ev.time}</div>
+                        <div style={{ fontSize: 12, fontWeight: 500, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)' }}>{ev.action}</div>
+                        <div style={{ fontSize: 10, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)', marginTop: 1 }}>{ev.actor} · {ev.time}</div>
                       </div>
                     </div>
                   ))}
@@ -2378,14 +2378,14 @@ function ExampleDesignsSection() {
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
             <div>
               <div style={PT}>Order Records</div>
-              <div style={{ fontSize: 11, color: '#5E5C75', fontFamily: 'var(--font-ui)' }}>
-                <strong style={{ color: '#282828' }}>7 records</strong> · <span style={{ color: '#E02F3A' }}>1 critical</span> · <span style={{ color: '#F0A008' }}>2 delayed</span>
+              <div style={{ fontSize: 11, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)' }}>
+                <strong style={{ color: 'var(--th-text-primary)' }}>7 records</strong> · <span style={{ color: '#E02F3A' }}>1 critical</span> · <span style={{ color: '#F0A008' }}>2 delayed</span>
               </div>
             </div>
           </div>
 
           {/* toolbar */}
-          <div style={{ background: '#fff', borderRadius: '10px 10px 0 0', border: '1px solid #EBEBEB', borderBottom: 'none', padding: '10px 14px', display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <div style={{ background: 'var(--th-bg-surface)', borderRadius: '10px 10px 0 0', border: '1px solid var(--th-border)', borderBottom: 'none', padding: '10px 14px', display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
             <div style={{ flex: 1, minWidth: 200 }}>
               <SearchBar placeholder="Search orders, SKUs, carriers…" value={tableSearch} onChange={setTableSearch} results={[]} onSelect={() => {}} />
             </div>
@@ -2397,7 +2397,7 @@ function ExampleDesignsSection() {
 
           <Alert variant="warning" message="2 orders have missed their delivery window and need immediate attention." />
 
-          <div className="ds-scroll-x" style={{ background: '#fff', borderRadius: '0 0 10px 10px', border: '1px solid #EBEBEB', borderTop: 'none' }}>
+          <div className="ds-scroll-x" style={{ background: 'var(--th-bg-surface)', borderRadius: '0 0 10px 10px', border: '1px solid var(--th-border)', borderTop: 'none' }}>
             <DataGrid
               columns={tableColumns}
               rows={tableRows}
@@ -2409,7 +2409,7 @@ function ExampleDesignsSection() {
           </div>
 
           <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
-            <div style={{ fontSize: 11, color: '#767676', fontFamily: 'var(--font-ui)' }}>Showing 1–7 of 7 records</div>
+            <div style={{ fontSize: 11, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)' }}>Showing 1–7 of 7 records</div>
             <Pagination total={7} page={tablePage} pageSize={25} onChange={setTablePage} />
           </div>
         </div>
@@ -2436,7 +2436,7 @@ function ExampleDesignsSection() {
 
         <div style={{ ...LP, display: 'grid', gridTemplateColumns: '220px 1fr', gap: 16 }}>
           {/* left: stepper nav */}
-          <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '16px 14px', height: 'fit-content' }}>
+          <div style={{ background: 'var(--th-bg-surface)', borderRadius: 10, border: '1px solid var(--th-border)', padding: '16px 14px', height: 'fit-content' }}>
             <div style={{ ...SL, marginBottom: 12 }}>Workflow Steps</div>
             <Stepper orientation="vertical" current={formStep - 1}
               steps={[
@@ -2445,8 +2445,8 @@ function ExampleDesignsSection() {
                 { label: 'Carrier & Routing',sublabel: 'Service type, transit time'       },
                 { label: 'Review & Submit',  sublabel: 'Confirm and place order'          },
               ]} />
-            <div style={{ marginTop: 16, padding: '10px 12px', background: '#F2ECF8', borderRadius: 8 }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: '#4E2975', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 4, fontFamily: 'var(--font-ui)' }}>Overall Progress</div>
+            <div style={{ marginTop: 16, padding: '10px 12px', background: 'var(--th-brand-subtle)', borderRadius: 8 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--th-brand)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 4, fontFamily: 'var(--font-ui)' }}>Overall Progress</div>
               <Progress value={((formStep - 1) / 4) * 100} color="violet" size="sm" label={`${Math.round(((formStep - 1) / 4) * 100)}%`} />
             </div>
             <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -2456,7 +2456,7 @@ function ExampleDesignsSection() {
                 ['Est. Cost', formStep > 2 ? '$14,200'    : '—'],
               ].map(([k, v]) => (
                 <div key={k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontFamily: 'var(--font-ui)' }}>
-                  <span style={{ color: '#767676' }}>{k}</span>
+                  <span style={{ color: 'var(--th-text-secondary)' }}>{k}</span>
                   <span style={{ color: v === '—' ? '#C6C6C6' : '#282828', fontWeight: v !== '—' ? 600 : 400 }}>{v}</span>
                 </div>
               ))}
@@ -2465,7 +2465,7 @@ function ExampleDesignsSection() {
 
           {/* right: form content */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '16px 18px' }}>
+            <div style={{ background: 'var(--th-bg-surface)', borderRadius: 10, border: '1px solid var(--th-border)', padding: '16px 18px' }}>
               <SectionHeading title="Shipment Information" subtitle="Step 1 of 4 — Origin, destination, and trade terms" />
               <div className="ds-grid-2" style={{ gap: 12, marginBottom: 12 }}>
                 <Input label="Origin Port / Facility"   value="Chicago, IL — O'Hare Cargo"    onChange={() => {}} />
@@ -2491,8 +2491,8 @@ function ExampleDesignsSection() {
                   ['Transit',   '14–18 days'],
                 ].map(([l, v]) => (
                   <div key={l}>
-                    <div style={{ fontSize: 9, fontWeight: 700, color: '#8C8C8C', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 3, fontFamily: 'var(--font-ui)' }}>{l}</div>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: '#282828', fontFamily: 'Switzer, sans-serif' }}>{v}</div>
+                    <div style={{ fontSize: 9, fontWeight: 700, color: 'var(--th-text-hint)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 3, fontFamily: 'var(--font-ui)' }}>{l}</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--th-text-primary)', fontFamily: 'Switzer, sans-serif' }}>{v}</div>
                   </div>
                 ))}
               </div>
@@ -2547,7 +2547,7 @@ function ExampleDesignsSection() {
           {/* right content */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0 }}>
             {settingsTab === 'general' && (<>
-              <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '16px 18px' }}>
+              <div style={{ background: 'var(--th-bg-surface)', borderRadius: 10, border: '1px solid var(--th-border)', padding: '16px 18px' }}>
                 <SectionHeading title="Workspace" subtitle="Organization name, timezone, and locale preferences" />
                 <div className="ds-grid-2" style={{ gap: 12 }}>
                   <Input label="Workspace Name" value="Modern Harmony DS" onChange={() => {}} />
@@ -2561,13 +2561,13 @@ function ExampleDesignsSection() {
                 </div>
               </div>
 
-              <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '16px 18px' }}>
+              <div style={{ background: 'var(--th-bg-surface)', borderRadius: 10, border: '1px solid var(--th-border)', padding: '16px 18px' }}>
                 <SectionHeading title="Preferences" subtitle="Display and behaviour settings" />
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                   <Switch label="Dark mode" checked={darkMode} onChange={setDarkMode} hint="Use dark theme across the application" />
                   <Switch label="Auto-save drafts" checked={autoSave} onChange={setAutoSave} hint="Automatically save form progress every 30 seconds" />
                   <Switch label="Notifications" checked={notif} onChange={setNotif} hint="Receive in-app notifications for critical alerts" />
-                  <div style={{ height: 1, background: '#F0F0F4' }} />
+                  <div style={{ height: 1, background: 'var(--th-bg-muted)' }} />
                   <Select label="Default landing page"
                     options={[{ value: 'dashboard', label: 'Operations Dashboard' }, { value: 'orders', label: 'Order Records' }, { value: 'analytics', label: 'Analytics' }]}
                     value="dashboard" onChange={() => {}} />
@@ -2578,7 +2578,7 @@ function ExampleDesignsSection() {
             </>)}
 
             {settingsTab === 'notifications' && (
-              <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '16px 18px' }}>
+              <div style={{ background: 'var(--th-bg-surface)', borderRadius: 10, border: '1px solid var(--th-border)', padding: '16px 18px' }}>
                 <SectionHeading title="Notification Channels" subtitle="Control how and when you receive alerts" />
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                   {[
@@ -2595,11 +2595,11 @@ function ExampleDesignsSection() {
             )}
 
             {settingsTab !== 'general' && settingsTab !== 'notifications' && (
-              <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #EBEBEB', padding: '16px 18px' }}>
+              <div style={{ background: 'var(--th-bg-surface)', borderRadius: 10, border: '1px solid var(--th-border)', padding: '16px 18px' }}>
                 <SectionHeading title={settingsTab.charAt(0).toUpperCase() + settingsTab.slice(1)} subtitle="Configure your preferences for this section" />
                 <div style={{ padding: '24px 0', textAlign: 'center' }}>
                   <span className="material-icons" style={{ fontSize: 32, color: '#DDDDE5', fontFamily: 'Material Icons', lineHeight: 1, display: 'block', marginBottom: 8 }}>settings</span>
-                  <div style={{ fontSize: 13, color: '#767676', fontFamily: 'var(--font-ui)' }}>Select General or Notifications to see live settings</div>
+                  <div style={{ fontSize: 13, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)' }}>Select General or Notifications to see live settings</div>
                 </div>
               </div>
             )}
@@ -2664,7 +2664,7 @@ function LayoutAccordion({ item, open, onToggle }: { item: LayoutAccordionItem; 
           <div style={{ fontSize: 14, fontWeight: 700, color: '#1C1C2E', fontFamily: 'Switzer, var(--font-ui)', letterSpacing: '-0.01em', marginBottom: 2 }}>
             {item.name}
           </div>
-          <div style={{ fontSize: 11, color: '#7B7A8E', fontFamily: 'var(--font-ui)', lineHeight: 1.4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <div style={{ fontSize: 11, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)', lineHeight: 1.4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {item.description}
           </div>
         </div>
@@ -2672,7 +2672,7 @@ function LayoutAccordion({ item, open, onToggle }: { item: LayoutAccordionItem; 
         {/* Tags */}
         <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'flex-end', flexShrink: 0, maxWidth: 220 }}>
           {item.tags.map(t => (
-            <span key={t} style={{ padding: '2px 7px', borderRadius: 4, background: open ? '#EDE0FA' : '#F2ECF8', color: '#4E2975', fontSize: 10, fontWeight: 600, fontFamily: 'var(--font-ui)', border: '1px solid #CABAEF', whiteSpace: 'nowrap' }}>{t}</span>
+            <span key={t} style={{ padding: '2px 7px', borderRadius: 4, background: open ? '#EDE0FA' : '#F2ECF8', color: 'var(--th-brand)', fontSize: 10, fontWeight: 600, fontFamily: 'var(--font-ui)', border: '1px solid var(--th-border-strong)', whiteSpace: 'nowrap' }}>{t}</span>
           ))}
         </div>
 
@@ -2690,9 +2690,9 @@ function LayoutAccordion({ item, open, onToggle }: { item: LayoutAccordionItem; 
         maxHeight: open ? '9999px' : '0',
         transition: 'max-height 0.35s ease',
       }}>
-        <div style={{ background: '#F7F5FC', padding: '16px 18px' }}>
+        <div style={{ background: 'var(--th-bg-search)', padding: '16px 18px' }}>
           {/* Full description when expanded */}
-          <p style={{ margin: '0 0 14px', fontSize: 12, color: '#5E5C75', fontFamily: 'var(--font-ui)', lineHeight: 1.6 }}>
+          <p style={{ margin: '0 0 14px', fontSize: 12, color: 'var(--th-text-secondary)', fontFamily: 'var(--font-ui)', lineHeight: 1.6 }}>
             {item.description}
           </p>
           {/* Image */}
@@ -2774,7 +2774,7 @@ function PageLayoutsSection() {
           <span className="material-icons" style={{ fontSize: 22, color: 'var(--dec-color-brand-base)', fontFamily: 'Material Icons', lineHeight: 1 }}>photo_library</span>
           <h1 style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 22, fontWeight: 700, color: '#1C1C2E', letterSpacing: '-0.03em', margin: 0 }}>Page Layouts</h1>
         </div>
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: 13, color: '#5E5C75', margin: 0, lineHeight: 1.6, maxWidth: 560 }}>
+        <p style={{ fontFamily: 'var(--font-ui)', fontSize: 13, color: 'var(--th-text-secondary)', margin: 0, lineHeight: 1.6, maxWidth: 560 }}>
           Reference layouts and UX pattern documentation. Click any layout to expand and view the full reference.
         </p>
       </div>

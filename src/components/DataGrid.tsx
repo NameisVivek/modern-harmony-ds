@@ -155,7 +155,7 @@ export function DataGrid<T extends Record<string, unknown>>({
       )}
 
       {/* Table */}
-      <div style={{ overflowX: 'auto', overflowY: 'auto', maxHeight: 480 }}>
+      <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', minWidth: 'max-content', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -167,9 +167,6 @@ export function DataGrid<T extends Record<string, unknown>>({
                   background: 'var(--th-bg-grid-header)',
                   borderBottom: '1px solid var(--th-border-strong)',
                   textAlign: 'left',
-                  position: 'sticky',
-                  top: 0,
-                  zIndex: 2,
                 }}>
                   <Checkbox3
                     checked={allSelected}
@@ -196,9 +193,6 @@ export function DataGrid<T extends Record<string, unknown>>({
                     userSelect: 'none',
                     cursor: col.sortable ? 'pointer' : 'default',
                     width: col.width,
-                    position: 'sticky',
-                    top: 0,
-                    zIndex: 2,
                   }}
                   onClick={() => handleSort(col)}
                 >
@@ -212,14 +206,7 @@ export function DataGrid<T extends Record<string, unknown>>({
                   </span>
                 </th>
               ))}
-              <th style={{
-                width: 32,
-                background: 'var(--th-bg-grid-header)',
-                borderBottom: '1px solid var(--th-border-strong)',
-                position: 'sticky',
-                top: 0,
-                zIndex: 2,
-              }} />
+              <th style={{ width: 32, background: 'var(--th-bg-grid-header)', borderBottom: '1px solid var(--th-border-strong)' }} />
             </tr>
           </thead>
           <tbody>

@@ -481,7 +481,7 @@ small {
   --th-text-primary:       #282828;
   --th-text-secondary:     #5E5C75;
   --th-text-hint:          #6E6E6E;
-  --th-text-disabled:      #BFBECE;
+  --th-text-disabled:      #757575;
 
   /* brand */
   --th-brand:              #8342BB;
@@ -491,7 +491,7 @@ small {
 
   /* semantic */
   --th-error:              #E02F3A;
-  --th-warning:            #FDBF14;
+  --th-warning:            #C47A00;
   --th-success:            #5BD6A0;
 
   /* row states */
@@ -503,7 +503,7 @@ small {
 
   /* icons */
   --th-icon-neutral:       #5E5C75;
-  --th-icon-muted:         #BFBECE;
+  --th-icon-muted:         #757575;
   --th-icon-brand:         #8342BB;
 
   /* overlays */
@@ -577,7 +577,7 @@ small {
   --th-text-primary:       #E8E6F4;
   --th-text-secondary:     #A8A5C8;
   --th-text-hint:          #7A7899;
-  --th-text-disabled:      #3A3758;
+  --th-text-disabled:      #8A88A8;
 
   /* brand (lightened for dark bg) */
   --th-brand:              #B07FDE;
@@ -599,7 +599,7 @@ small {
 
   /* icons */
   --th-icon-neutral:       #9895B8;
-  --th-icon-muted:         #38355A;
+  --th-icon-muted:         #8A88A8;
   --th-icon-brand:         #B07FDE;
 
   /* overlays */

@@ -130,7 +130,10 @@ export function TabList({ children, variant = 'default' }: TabListProps) {
         display: 'flex',
         alignItems: 'stretch',
         borderBottom: '1px solid rgba(191,190,206,0.55)',
-      }}
+        overflowX: 'auto',
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
+      } as React.CSSProperties}
       data-variant={variant}
     >
       {children}

@@ -108,8 +108,9 @@ export function PageFooter({
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '8px 14px', gap: 12, minHeight: 48,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+        overflowX: 'auto', scrollbarWidth: 'none',
+      } as React.CSSProperties}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
           {actions.map((action) => (
             <button
               key={action.id}

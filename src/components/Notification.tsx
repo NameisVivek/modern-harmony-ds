@@ -149,7 +149,8 @@ export function NotificationList({
         display: 'flex',
         flexDirection: 'column' as const,
         overflow: 'hidden',
-        width: '320px',
+        width: '100%',
+        maxWidth: '320px',
       }}
     >
       {/* Header */}

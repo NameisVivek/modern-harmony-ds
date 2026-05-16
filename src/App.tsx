@@ -788,7 +788,7 @@ function NavigationSection() {
       <div style={PAGE_SUB}>MegaNav, breadcrumbs, tabs, tree view, pagination, and segment controls</div>
 
       {/* MegaNav */}
-      <div style={{ ...EC, padding: 0, overflow: 'hidden', marginBottom: 12 }}>
+      <div style={{ ...EC, padding: 0, overflow: 'clip', marginBottom: 12 }}>
         <div style={{ padding: '10px 14px 8px', borderBottom: '1px solid var(--th-border-subtle)' }}>
           <div style={SL}>Mega Navigation</div>
         </div>
@@ -1700,20 +1700,20 @@ function TokensSection() {
       {/* Brand Logo */}
       <div style={{ ...EC, marginTop: 12 }}>
         <div style={SL}>Brand Logo — on-dark &amp; on-light</div>
-        <div style={{ display: 'flex', gap: 0, borderRadius: 8, overflow: 'hidden', border: '1px solid var(--th-border)' }}>
-          <div style={{ flex: 1, padding: '20px 24px', background: '#282828', display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 0, borderRadius: 8, overflow: 'hidden', border: '1px solid var(--th-border)' }}>
+          <div style={{ flex: '1 1 180px', padding: '20px 24px', background: '#282828', display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div style={{ fontSize: 9, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-ui)' }}>On dark background</div>
             <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 28, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1 }}>leo<sup style={{ fontSize: 10, fontWeight: 400, verticalAlign: 'super' }}>®</sup></div>
             <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 16, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1 }}>leo</div>
             <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#8342BB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-ui)', fontSize: 14, fontWeight: 700, color: '#fff' }}>L</div>
           </div>
-          <div style={{ flex: 1, padding: '20px 24px', background: 'var(--th-bg-surface)', display: 'flex', flexDirection: 'column', gap: 16, borderLeft: '1px solid var(--th-border)' }}>
+          <div style={{ flex: '1 1 180px', padding: '20px 24px', background: 'var(--th-bg-surface)', display: 'flex', flexDirection: 'column', gap: 16, borderLeft: '1px solid var(--th-border)' }}>
             <div style={{ fontSize: 9, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>On light background</div>
             <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 28, fontWeight: 700, color: 'var(--th-text-primary)', letterSpacing: '-0.02em', lineHeight: 1 }}>leo<sup style={{ fontSize: 10, fontWeight: 400, verticalAlign: 'super', color: 'var(--th-brand)' }}>®</sup></div>
             <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 16, fontWeight: 700, color: 'var(--th-text-primary)', letterSpacing: '-0.02em', lineHeight: 1 }}>leo</div>
             <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#8342BB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-ui)', fontSize: 14, fontWeight: 700, color: '#fff' }}>L</div>
           </div>
-          <div style={{ flex: 1, padding: '20px 24px', background: 'var(--th-bg-muted)', display: 'flex', flexDirection: 'column', gap: 16, borderLeft: '1px solid var(--th-border)' }}>
+          <div style={{ flex: '1 1 180px', padding: '20px 24px', background: 'var(--th-bg-muted)', display: 'flex', flexDirection: 'column', gap: 16, borderLeft: '1px solid var(--th-border)' }}>
             <div style={{ fontSize: 9, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' }}>On subtle background</div>
             <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 28, fontWeight: 700, color: 'var(--th-text-primary)', letterSpacing: '-0.02em', lineHeight: 1 }}>leo<sup style={{ fontSize: 10, fontWeight: 400, verticalAlign: 'super', color: 'var(--th-brand)' }}>®</sup></div>
             <div style={{ fontFamily: 'Switzer, var(--font-ui)', fontSize: 16, fontWeight: 700, color: 'var(--th-text-primary)', letterSpacing: '-0.02em', lineHeight: 1 }}>leo</div>

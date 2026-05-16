@@ -41,9 +41,10 @@ const s = {
     height: 52, background: '#282828',
     display: 'flex', alignItems: 'center',
     padding: '0 20px', gap: 0, position: 'relative' as const, zIndex: 10,
+    overflowX: 'auto' as const,
   } as React.CSSProperties,
   logo: { display: 'flex', alignItems: 'center', marginRight: 24, flexShrink: 0 } as React.CSSProperties,
-  nav: { display: 'flex', alignItems: 'center', gap: 2, flex: 1 } as React.CSSProperties,
+  nav: { display: 'flex', alignItems: 'center', gap: 2, flex: 1, minWidth: 'max-content' } as React.CSSProperties,
   navItem: (active: boolean, open: boolean): React.CSSProperties => ({
     display: 'flex', alignItems: 'center', gap: 6,
     height: 36, padding: '0 14px', borderRadius: 8,
@@ -58,9 +59,11 @@ const s = {
     background: 'var(--th-bg-surface)', borderBottom: '1px solid var(--th-border)',
     boxShadow: '0 8px 32px rgba(20,16,41,0.12), 0 2px 8px rgba(20,16,41,0.06)',
     padding: '28px 28px 32px',
+    overflowX: 'auto' as const,
   } as React.CSSProperties,
   grid: {
     display: 'grid', gridTemplateColumns: '240px 1fr 1fr', gap: 32, maxWidth: 860,
+    minWidth: 'max-content',
   } as React.CSSProperties,
   featured: {
     background: '#282828', borderRadius: 16, padding: '22px 20px',

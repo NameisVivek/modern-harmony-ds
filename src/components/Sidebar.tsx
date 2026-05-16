@@ -224,43 +224,45 @@ export function Sidebar({
         onMouseOver={handleSidebarMouseOver}
         onMouseOut={handleSidebarMouseOut}
       >
-        {items.map(renderItem)}
+        {/* Scrollable nav items */}
+        <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', scrollbarWidth: 'none' }}>
+          {items.map(renderItem)}
 
-        <div style={{ height: 1, background: '#F0F0F4', margin: '4px 0', flexShrink: 0 }} />
+          <div style={{ height: 1, background: '#F0F0F4', margin: '4px 0', flexShrink: 0 }} />
 
-        {bottomItems.map(renderItem)}
+          {bottomItems.map(renderItem)}
+        </div>
 
-        <div style={{ flex: 1, minHeight: 20 }} />
-
-        {isMobile && <div style={{ height: 1, background: '#F0F0F4', margin: '4px 0', flexShrink: 0 }} />}
-        {[
-          // On mobile, surface notifications + assistant above Help since they're hidden from the header
-          ...(isMobile ? [
-            { id: '_notif', icon: 'notifications_none', label: 'Notifications', badge: notificationCount },
-          ] : []),
-          { id: '_help', icon: 'help_outline', label: 'Help' },
-          { id: '_settings', icon: 'settings', label: 'Settings' },
-        ].map((item) => (
-          <div
-            key={item.id}
-            data-navid={item.id}
-            data-navlabel={item.label}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              height: 40,
-              cursor: 'pointer',
-              borderLeft: '3px solid transparent',
-              paddingLeft: 13,
-              gap: 10,
-              background: hoveredId === item.id ? 'rgba(40,40,40,0.05)' : 'transparent',
-              transition: 'background 0.1s',
-              flexShrink: 0,
-              position: 'relative',
-            }}
-            onMouseEnter={() => setHoveredId(item.id)}
-            onMouseLeave={() => setHoveredId(null)}
-          >
+        {/* Pinned bottom controls — always visible */}
+        <div style={{ flexShrink: 0 }}>
+          {isMobile && <div style={{ height: 1, background: '#F0F0F4', margin: '4px 0' }} />}
+          {[
+            ...(isMobile ? [
+              { id: '_notif', icon: 'notifications_none', label: 'Notifications', badge: notificationCount },
+            ] : []),
+            { id: '_help', icon: 'help_outline', label: 'Help' },
+            { id: '_settings', icon: 'settings', label: 'Settings' },
+          ].map((item) => (
+            <div
+              key={item.id}
+              data-navid={item.id}
+              data-navlabel={item.label}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                height: 40,
+                cursor: 'pointer',
+                borderLeft: '3px solid transparent',
+                paddingLeft: 13,
+                gap: 10,
+                background: hoveredId === item.id ? 'rgba(40,40,40,0.05)' : 'transparent',
+                transition: 'background 0.1s',
+                flexShrink: 0,
+                position: 'relative',
+              }}
+              onMouseEnter={() => setHoveredId(item.id)}
+              onMouseLeave={() => setHoveredId(null)}
+            >
             <span
               className="material-icons"
               style={{ fontSize: 20, flexShrink: 0, color: (item as {accent?:boolean}).accent ? '#8342BB' : '#5E5C75' }}
@@ -303,12 +305,12 @@ export function Sidebar({
               )
             )}
           </div>
-        ))}
+          ))}
 
-        {/* User area — mobile only (desktop has this in the AppHeader) */}
-        {isMobile && (
-          <div
-            ref={userBtnRef}
+          {/* User area — mobile only (desktop has this in the AppHeader) */}
+          {isMobile && (
+            <div
+              ref={userBtnRef}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -356,6 +358,7 @@ export function Sidebar({
             )}
           </div>
         )}
+        </div>{/* end pinned bottom */}
       </div>
 
       {!expanded && tooltip && createPortal(

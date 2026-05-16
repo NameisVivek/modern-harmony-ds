@@ -18,7 +18,7 @@ const styles = {
   container: {
     display: 'flex',
     flexDirection: 'column' as const,
-    gap: '4px',
+    gap: 'calc(6px + var(--th-density-offset, 0px))',
   },
   item: (open: boolean): React.CSSProperties => ({
     borderRadius: '8px',
@@ -34,7 +34,7 @@ const styles = {
     lineHeight: 'var(--leading-base)',
     border: `1px solid ${open ? 'var(--core-cool-50)' : 'var(--core-cool-100)'}`,
     borderRadius: open ? '8px 8px 0 0' : '8px',
-    padding: '10px 12px',
+    padding: 'calc(10px + var(--th-density-offset, 0px)) 12px',
     cursor: 'pointer',
     userSelect: 'none' as const,
     background: open ? 'var(--core-cool-50)' : 'var(--core-white)',
@@ -155,7 +155,9 @@ export function AccordionItem({ title, content, icon, open, onToggle }: Accordio
         <div
           ref={innerRef}
           style={{
-            padding: '10px 12px 14px',
+            paddingTop: 'calc(10px + var(--th-density-offset, 0px))',
+            paddingBottom: 'calc(14px + var(--th-density-offset, 0px))',
+            paddingRight: '12px',
             paddingLeft: icon ? '40px' : '12px',
           }}
         >

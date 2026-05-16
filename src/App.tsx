@@ -81,7 +81,7 @@ const SL: React.CSSProperties = {
   color: 'var(--th-text-hint)',
   textTransform: 'uppercase',
   letterSpacing: '0.08em',
-  marginBottom: 12,
+  marginBottom: 'calc(14px + var(--th-density-offset, 0px))' as unknown as number,
   fontFamily: 'var(--font-ui)',
 }
 
@@ -89,7 +89,7 @@ const EC: React.CSSProperties = {
   background: 'var(--th-bg-surface)',
   borderRadius: 10,
   border: '1px solid var(--th-border)',
-  padding: '16px 18px',
+  padding: 'var(--th-card-padding)',
 }
 
 const ROW: React.CSSProperties = {

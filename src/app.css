@@ -39,6 +39,19 @@ body { font-family: var(--font-ui); font-size: var(--text-base); color: var(--de
 .ds-scroll-x::-webkit-scrollbar { height: 4px; }
 .ds-scroll-x::-webkit-scrollbar-thumb { background: rgba(131,66,187,0.2); border-radius: 2px; }
 
+/* ── Density: grid gaps ───────────────────────────────────────── */
+/* Inline gap styles in JSX take precedence over class rules, so
+   we use !important here as the explicit user-preference layer.    */
+[data-density="compact"] .ds-grid-2,
+[data-density="compact"] .ds-grid-3,
+[data-density="compact"] .ds-grid-4 { gap: 8px !important; }
+
+[data-density="cozy"] .ds-grid-2,
+[data-density="cozy"] .ds-grid-3,
+[data-density="cozy"] .ds-grid-4 { gap: 10px !important; }
+
+/* comfortable: let inline values stand (they average ~12–16px) */
+
 @media (max-width: 767px) {
   /* Palette swatches get a minimum width so text doesn't crush */
   .ds-palette-row > * {

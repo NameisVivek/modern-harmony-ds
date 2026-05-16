@@ -529,11 +529,14 @@ small {
   --th-row-height:         32px;   /* data grid / table rows */
   --th-page-padding:       28px;   /* content area outer padding */
   --th-section-gap:        20px;   /* gap between content sections */
-  --th-card-padding:       20px;   /* card / widget inner padding */
+  --th-card-padding:       18px;   /* card / widget inner padding */
   --th-form-gap:           14px;   /* gap between form field rows */
   --th-input-height:       34px;   /* text inputs, selects */
   --th-btn-height:         34px;   /* buttons */
   --th-list-item-height:   44px;   /* list rows, accordion headers */
+
+  /* ── Universal density offset (add to base values in components) ─ */
+  --th-density-offset:     0px;
 
   /* badge semantic colors */
   --badge-error-bg:       #FFCDD0;
@@ -645,10 +648,11 @@ small {
 /* ── Density: Compact ────────────────────────────────────────── */
 /* Affects only content & components — chrome dimensions unchanged */
 [data-density="compact"] {
+  --th-density-offset:     -4px;
   --th-row-height:         26px;
   --th-page-padding:       16px;
   --th-section-gap:        10px;
-  --th-card-padding:       12px;
+  --th-card-padding:       10px;
   --th-form-gap:            8px;
   --th-input-height:       28px;
   --th-btn-height:         28px;
@@ -658,10 +662,11 @@ small {
 /* ── Density: Cozy ───────────────────────────────────────────── */
 /* Affects only content & components — chrome dimensions unchanged */
 [data-density="cozy"] {
+  --th-density-offset:     -2px;
   --th-row-height:         28px;
   --th-page-padding:       22px;
   --th-section-gap:        14px;
-  --th-card-padding:       16px;
+  --th-card-padding:       14px;
   --th-form-gap:           11px;
   --th-input-height:       31px;
   --th-btn-height:         31px;

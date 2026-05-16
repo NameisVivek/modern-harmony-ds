@@ -7,7 +7,7 @@ export const CHART_PALETTE: readonly string[] = [
   '#02A15A', // green-300   — success
   '#F0A008', // amber-400   — warning
   '#E02F3A', // red-500     — danger
-  '#5E5C75', // cool-600    — neutral
+  'var(--th-text-secondary)', // cool-600 — neutral
   '#B49AD6', // violet-300  — soft purple
   '#68ACEB', // blue-300    — soft blue
 ] as const;
@@ -219,8 +219,8 @@ function ChartTooltip({ tt, containerW }: { tt: TT; containerW: number }) {
         left: clampedX,
         top: Math.max(tt.y - 10, 70),
         transform: tt.y < 90 ? 'translate(-50%, 10px)' : 'translate(-50%, -100%)',
-        background: '#1C1B2E',
-        color: '#fff',
+        background: 'var(--th-bg-surface)',
+        color: 'var(--th-text-primary)',
         borderRadius: 8,
         padding: '7px 10px',
         fontSize: 11,

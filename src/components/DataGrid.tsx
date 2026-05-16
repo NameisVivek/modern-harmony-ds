@@ -308,7 +308,7 @@ function Checkbox3({ checked, indeterminate, onChange }: { checked: boolean; ind
         <span className="material-icons" style={{ fontSize: 10, color: '#fff', fontWeight: 700 }}>check</span>
       )}
       {!checked && indeterminate && (
-        <span style={{ width: 8, height: 2, background: '#fff', borderRadius: 1 }} />
+        <span style={{ width: 8, height: 2, background: 'var(--th-bg-surface)', borderRadius: 1 }} />
       )}
     </div>
   )

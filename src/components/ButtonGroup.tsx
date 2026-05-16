@@ -66,9 +66,9 @@ export function ButtonGroup({
     if (opt.disabled) {
       return {
         ...base,
-        background: '#F0F0F4',
-        color: '#8C8C8C',
-        border: '1px solid #DDDDE5',
+        background: 'var(--th-bg-muted)',
+        color: 'var(--th-text-hint)',
+        border: '1px solid var(--th-border-strong)',
         boxShadow: 'none',
         zIndex: 0,
       }
@@ -81,17 +81,17 @@ export function ButtonGroup({
       if (isHovered) {
         return { ...base, background: '#7239A4', color: '#fff', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 1px 2px rgba(55,23,78,0.2)' }
       }
-      return { ...base, background: '#8342BB', backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%)', color: '#fff', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 1px 2px rgba(55,23,78,0.2)' }
+      return { ...base, background: 'var(--th-brand)', backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%)', color: '#fff', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 1px 2px rgba(55,23,78,0.2)' }
     }
 
     // default variant
     if (isActive) {
-      return { ...base, background: 'rgba(131,66,187,0.08)', color: '#7239A4', border: '1px solid #8342BB' }
+      return { ...base, background: 'rgba(131,66,187,0.08)', color: 'var(--th-brand-medium)', border: '1px solid #8342BB' }
     }
     if (isHovered) {
-      return { ...base, background: '#F0F0F4', color: '#282828', border: '1px solid #DDDDE5', boxShadow: '0 1px 2px rgba(55,23,78,0.06)' }
+      return { ...base, background: 'var(--th-bg-muted)', color: 'var(--th-text-primary)', border: '1px solid var(--th-border-strong)', boxShadow: '0 1px 2px rgba(55,23,78,0.06)' }
     }
-    return { ...base, background: '#fff', color: '#282828', border: '1px solid #DDDDE5', boxShadow: '0 1px 2px rgba(55,23,78,0.06)' }
+    return { ...base, background: 'var(--th-bg-surface)', color: 'var(--th-text-primary)', border: '1px solid var(--th-border-strong)', boxShadow: '0 1px 2px rgba(55,23,78,0.06)' }
   }
 
   return (

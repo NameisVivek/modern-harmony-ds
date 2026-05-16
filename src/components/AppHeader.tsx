@@ -214,10 +214,10 @@ function highlight(text: string, query: string) {
   )
 }
 
-const DENSITY_OPTIONS: { value: Density; label: string }[] = [
-  { value: 'compact',     label: 'Compact'     },
-  { value: 'cozy',        label: 'Cozy'        },
-  { value: 'comfortable', label: 'Comfortable' },
+const DENSITY_OPTIONS: { value: Density; label: string; icon: string }[] = [
+  { value: 'compact',     label: 'Compact',     icon: 'density_small'  },
+  { value: 'cozy',        label: 'Cozy',        icon: 'density_medium' },
+  { value: 'comfortable', label: 'Comfortable', icon: 'density_large'  },
 ]
 
 export function AppHeader({
@@ -420,6 +420,48 @@ export function AppHeader({
             </button>
           )}
 
+          {/* Density switcher — visible segmented control */}
+          {!isMobile && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+              background: 'var(--th-bg-muted)',
+              borderRadius: 7,
+              padding: 2,
+              marginRight: 2,
+            }}>
+              {DENSITY_OPTIONS.map(opt => (
+                <button
+                  key={opt.value}
+                  title={opt.label}
+                  onClick={() => onDensityChange?.(opt.value)}
+                  style={{
+                    width: 28,
+                    height: 26,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    border: 'none',
+                    borderRadius: 5,
+                    cursor: 'pointer',
+                    background: density === opt.value ? 'var(--th-bg-surface)' : 'transparent',
+                    boxShadow: density === opt.value ? 'var(--th-shadow-card)' : 'none',
+                    transition: 'all 0.12s',
+                  }}
+                >
+                  <span className="material-icons" style={{
+                    fontSize: 16,
+                    color: density === opt.value ? 'var(--th-brand)' : 'var(--th-text-hint)',
+                    fontFamily: 'Material Icons',
+                    lineHeight: 1,
+                    transition: 'color 0.12s',
+                  }}>{opt.icon}</span>
+                </button>
+              ))}
+            </div>
+          )}
+
           {/* Theme toggle */}
           <button
             style={{ ...s.iconBtn, background: hoveredBtn === 'theme' ? 'var(--th-hover-overlay)' : 'transparent' }}
@@ -488,38 +530,6 @@ export function AppHeader({
                       {item.chevron && <span className="material-icons" style={{ fontSize: 14, color: 'var(--th-icon-muted)', marginLeft: 'auto' }}>chevron_right</span>}
                     </button>
                   ))}
-
-                  <div style={s.menuDivider} />
-
-                  {/* Density switcher */}
-                  <div style={{ padding: '6px 14px 8px' }}>
-                    <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--th-text-hint)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6, fontFamily: 'var(--font-ui)' }}>
-                      Density
-                    </div>
-                    <div style={{ display: 'flex', gap: 4 }}>
-                      {DENSITY_OPTIONS.map(opt => (
-                        <button
-                          key={opt.value}
-                          onClick={() => onDensityChange?.(opt.value)}
-                          style={{
-                            flex: 1,
-                            padding: '4px 0',
-                            fontSize: 11,
-                            fontFamily: 'var(--font-ui)',
-                            fontWeight: density === opt.value ? 600 : 400,
-                            color: density === opt.value ? 'var(--th-brand)' : 'var(--th-text-secondary)',
-                            background: density === opt.value ? 'var(--th-brand-subtle)' : 'var(--th-bg-muted)',
-                            border: `1px solid ${density === opt.value ? 'var(--th-brand)' : 'var(--th-border)'}`,
-                            borderRadius: 5,
-                            cursor: 'pointer',
-                            transition: 'all 0.12s',
-                          }}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
 
                   <div style={s.menuDivider} />
 

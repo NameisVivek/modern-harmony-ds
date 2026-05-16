@@ -25,7 +25,7 @@ interface AlertVariantConfig {
 
 const variantConfig: Record<AlertVariant, AlertVariantConfig> = {
   error: {
-    background: '#FEF7F4',
+    background: 'var(--alert-error-bg)',
     borderColor: 'var(--core-red-500)',
     color: 'var(--core-red-700)',
     iconColor: 'var(--core-red-500)',

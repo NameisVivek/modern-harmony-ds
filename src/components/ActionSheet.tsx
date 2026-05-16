@@ -62,7 +62,7 @@ export function ActionSheet({ open, onClose, title, actions, onAction }: ActionS
           transform: open ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(100%)',
           width: '100%',
           maxWidth: 480,
-          background: '#fff',
+          background: 'var(--th-bg-surface)',
           borderRadius: '16px 16px 0 0',
           boxShadow: '0 -8px 32px rgba(55,23,78,0.16)',
           zIndex: 401,
@@ -74,15 +74,15 @@ export function ActionSheet({ open, onClose, title, actions, onAction }: ActionS
       >
         {/* Handle */}
         <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 10, paddingBottom: 6 }}>
-          <div style={{ width: 32, height: 4, borderRadius: 2, background: '#DDDDE5' }} />
+          <div style={{ width: 32, height: 4, borderRadius: 2, background: 'var(--th-border-strong)' }} />
         </div>
 
         {/* Header */}
         {title && (
-          <div style={{ display: 'flex', alignItems: 'center', padding: '8px 16px 10px', borderBottom: '1px solid #F0F0F4' }}>
-            <span style={{ flex: 1, fontSize: 14, fontWeight: 500, color: '#282828' }}>{title}</span>
+          <div style={{ display: 'flex', alignItems: 'center', padding: '8px 16px 10px', borderBottom: '1px solid var(--th-border-subtle)' }}>
+            <span style={{ flex: 1, fontSize: 14, fontWeight: 500, color: 'var(--th-text-primary)' }}>{title}</span>
             <button
-              style={{ width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', border: 'none', cursor: 'pointer', borderRadius: 6, color: '#5E5C75' }}
+              style={{ width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', border: 'none', cursor: 'pointer', borderRadius: 6, color: 'var(--th-text-secondary)' }}
               onClick={onClose}
             >
               <span className="material-icons" style={{ fontSize: 18 }}>close</span>
@@ -140,7 +140,7 @@ export function ActionSheet({ open, onClose, title, actions, onAction }: ActionS
                     {action.label}
                   </span>
                   {action.description && (
-                    <span style={{ fontSize: 12, color: '#8C8C8C', lineHeight: 1.4 }}>
+                    <span style={{ fontSize: 12, color: 'var(--th-text-hint)', lineHeight: 1.4 }}>
                       {action.description}
                     </span>
                   )}

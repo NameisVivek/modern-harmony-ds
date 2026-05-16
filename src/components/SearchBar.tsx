@@ -36,8 +36,8 @@ const s = {
   bar: (focused: boolean, size: 'sm' | 'md'): React.CSSProperties => ({
     display: 'flex', alignItems: 'center', gap: 0,
     height: size === 'sm' ? 28 : 34,
-    border: `1px solid ${focused ? '#8342BB' : '#DDDDE5'}`,
-    borderRadius: 8, background: '#fff', overflow: 'hidden',
+    border: `1px solid ${focused ? 'var(--th-brand)' : 'var(--th-border-strong)'}`,
+    borderRadius: 8, background: 'var(--th-bg-surface)', overflow: 'hidden',
     boxShadow: focused ? '0 0 0 2px #fff, 0 0 0 4px rgba(131,66,187,0.25)' : undefined,
     transition: 'border-color 0.15s, box-shadow 0.15s',
   }),
@@ -47,19 +47,19 @@ const s = {
   input: (size: 'sm' | 'md'): React.CSSProperties => ({
     flex: 1, border: 'none', outline: 'none',
     fontFamily: 'var(--font-ui)', fontSize: size === 'sm' ? 12 : 13,
-    color: '#282828', background: 'transparent',
+    color: 'var(--th-text-primary)', background: 'transparent',
   }),
   clearBtn: {
     display: 'flex', alignItems: 'center', padding: '0 8px',
-    flexShrink: 0, cursor: 'pointer', color: '#8C8C8C', background: 'transparent', border: 'none',
+    flexShrink: 0, cursor: 'pointer', color: 'var(--th-text-hint)', background: 'transparent', border: 'none',
   } as React.CSSProperties,
   dropdown: {
-    border: '1px solid #DDDDE5', borderRadius: 8, background: '#fff',
+    border: '1px solid var(--th-border-strong)', borderRadius: 8, background: 'var(--th-bg-surface)',
     boxShadow: '0 4px 12px rgba(55,23,78,0.1)', overflow: 'hidden',
     marginTop: 4, position: 'absolute' as const, left: 0, right: 0, zIndex: 200,
   } as React.CSSProperties,
   section: {
-    fontSize: 9, fontWeight: 500, color: '#8C8C8C',
+    fontSize: 9, fontWeight: 500, color: 'var(--th-text-hint)',
     letterSpacing: '0.07em', textTransform: 'uppercase' as const,
     padding: '8px 12px 3px', fontFamily: 'var(--font-ui)',
   } as React.CSSProperties,
@@ -69,16 +69,16 @@ const s = {
     transition: 'background 0.1s',
   }),
   resultIcon: {
-    width: 24, height: 24, borderRadius: 6, background: '#F0F0F4',
+    width: 24, height: 24, borderRadius: 6, background: 'var(--th-bg-muted)',
     display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
   } as React.CSSProperties,
-  resultLabel: { fontSize: 13, color: '#282828', flex: 1, fontFamily: 'var(--font-ui)' } as React.CSSProperties,
-  resultMeta: { fontSize: 10, color: '#8C8C8C', fontFamily: 'var(--font-ui)' } as React.CSSProperties,
-  divider: { height: 1, background: '#F0F0F4' } as React.CSSProperties,
+  resultLabel: { fontSize: 13, color: 'var(--th-text-primary)', flex: 1, fontFamily: 'var(--font-ui)' } as React.CSSProperties,
+  resultMeta: { fontSize: 10, color: 'var(--th-text-hint)', fontFamily: 'var(--font-ui)' } as React.CSSProperties,
+  divider: { height: 1, background: 'var(--th-bg-muted)' } as React.CSSProperties,
   filterBar: { display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' as const, marginTop: 8 } as React.CSSProperties,
   chip: (active: boolean): React.CSSProperties => ({
     display: 'inline-flex', alignItems: 'center', gap: 4, height: 28, padding: '0 10px',
-    border: `1px solid ${active ? '#8342BB' : '#DDDDE5'}`,
+    border: `1px solid ${active ? 'var(--th-brand)' : 'var(--th-border-strong)'}`,
     borderRadius: 6,
     background: active ? 'rgba(131,66,187,0.08)' : '#fff',
     fontSize: 12, color: active ? '#7239A4' : '#282828',
@@ -91,18 +91,18 @@ const s = {
     border: '1px solid #8342BB', borderRadius: 6, overflow: 'hidden',
     background: 'rgba(131,66,187,0.06)', fontFamily: 'var(--font-ui)', fontSize: 12,
   } as React.CSSProperties,
-  chipLabel: { padding: '0 8px', color: '#5E5C75', fontWeight: 400, borderRight: '1px solid #B4A4E0' } as React.CSSProperties,
-  chipValue: { padding: '0 8px', color: '#7239A4', fontWeight: 500 } as React.CSSProperties,
-  chipRemove: { display: 'flex', alignItems: 'center', padding: '0 6px', cursor: 'pointer', color: '#7239A4' } as React.CSSProperties,
-  chipDivider: { width: 1, height: 20, background: '#DDDDE5', flexShrink: 0 } as React.CSSProperties,
+  chipLabel: { padding: '0 8px', color: 'var(--th-text-secondary)', fontWeight: 400, borderRight: '1px solid #B4A4E0' } as React.CSSProperties,
+  chipValue: { padding: '0 8px', color: 'var(--th-brand-medium)', fontWeight: 500 } as React.CSSProperties,
+  chipRemove: { display: 'flex', alignItems: 'center', padding: '0 6px', cursor: 'pointer', color: 'var(--th-brand-medium)' } as React.CSSProperties,
+  chipDivider: { width: 1, height: 20, background: 'var(--th-border-strong)', flexShrink: 0 } as React.CSSProperties,
   addFilter: {
     display: 'inline-flex', alignItems: 'center', gap: 4, height: 28, padding: '0 10px',
     border: '1px dashed #DDDDE5', borderRadius: 6, background: 'transparent',
-    fontFamily: 'var(--font-ui)', fontSize: 12, color: '#767676', cursor: 'pointer',
+    fontFamily: 'var(--font-ui)', fontSize: 12, color: 'var(--th-text-secondary)', cursor: 'pointer',
   } as React.CSSProperties,
   clearAll: {
     height: 26, padding: '0 8px', background: 'transparent', border: 'none',
-    color: '#7239A4', fontFamily: 'var(--font-ui)', fontSize: 11, fontWeight: 500, cursor: 'pointer',
+    color: 'var(--th-brand-medium)', fontFamily: 'var(--font-ui)', fontSize: 11, fontWeight: 500, cursor: 'pointer',
   } as React.CSSProperties,
 }
 
@@ -177,7 +177,7 @@ export function SearchBar({
     <div ref={wrapRef} style={{ position: 'relative' }}>
       <div style={s.bar(focused, size)}>
         <div style={s.iconWrap(size)}>
-          <span className="material-icons" style={{ fontSize: size === 'sm' ? 14 : 17, color: '#8C8C8C' }}>search</span>
+          <span className="material-icons" style={{ fontSize: size === 'sm' ? 14 : 17, color: 'var(--th-text-hint)' }}>search</span>
         </div>
         <input
           style={s.input(size)}
@@ -189,7 +189,7 @@ export function SearchBar({
           onKeyDown={handleKeyDown}
         />
         {value && (
-          <button style={s.clearBtn} onClick={handleClear} onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#282828' }} onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#8C8C8C' }}>
+          <button style={s.clearBtn} onClick={handleClear} onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--th-text-primary)' }} onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--th-text-hint)' }}>
             <span className="material-icons" style={{ fontSize: 16 }}>close</span>
           </button>
         )}
@@ -213,7 +213,7 @@ export function SearchBar({
                   >
                     {r.icon && (
                       <div style={s.resultIcon}>
-                        <span className="material-icons" style={{ fontSize: 14, color: '#5E5C75' }}>{r.icon}</span>
+                        <span className="material-icons" style={{ fontSize: 14, color: 'var(--th-text-secondary)' }}>{r.icon}</span>
                       </div>
                     )}
                     <span style={s.resultLabel}>{r.label}</span>
@@ -245,17 +245,17 @@ export function SearchBar({
               key={f.id}
               style={s.chip(false)}
               onClick={() => onFilterToggle?.(f)}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#BFBECE'; (e.currentTarget as HTMLElement).style.background = '#FBFBFB' }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--th-icon-muted)'; (e.currentTarget as HTMLElement).style.background = 'var(--th-bg-surface-subtle)' }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#DDDDE5'; (e.currentTarget as HTMLElement).style.background = '#fff' }}
             >
-              {f.icon && <span className="material-icons" style={{ fontSize: 14, color: '#8C8C8C' }}>{f.icon}</span>}
+              {f.icon && <span className="material-icons" style={{ fontSize: 14, color: 'var(--th-text-hint)' }}>{f.icon}</span>}
               {f.label}
             </div>
           ))}
           {((filters?.length ?? 0) > 0 || (activeFilters?.length ?? 0) > 0) && <div style={s.chipDivider} />}
           <button style={s.addFilter} onClick={onAddFilter}
-            onMouseEnter={(e) => { const b = e.currentTarget as HTMLElement; b.style.borderColor = '#8342BB'; b.style.color = '#7239A4' }}
-            onMouseLeave={(e) => { const b = e.currentTarget as HTMLElement; b.style.borderColor = '#DDDDE5'; b.style.color = '#767676' }}
+            onMouseEnter={(e) => { const b = e.currentTarget as HTMLElement; b.style.borderColor = 'var(--th-brand)'; b.style.color = 'var(--th-brand-medium)' }}
+            onMouseLeave={(e) => { const b = e.currentTarget as HTMLElement; b.style.borderColor = 'var(--th-border-strong)'; b.style.color = 'var(--th-text-secondary)' }}
           >
             <span className="material-icons" style={{ fontSize: 14 }}>add</span>
             {activeFilters?.length ? 'Add filter' : 'More filters'}

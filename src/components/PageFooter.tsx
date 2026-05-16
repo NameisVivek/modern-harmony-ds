@@ -29,10 +29,10 @@ const variantStyle = (variant: FooterAction['variant'] = 'default', disabled: bo
     opacity: disabled ? 0.4 : 1,
     transition: 'all 0.1s', border: 'none',
   }
-  if (variant === 'primary') return { ...base, background: '#8342BB', color: '#fff', boxShadow: '0 1px 2px rgba(55,23,78,0.25)' }
+  if (variant === 'primary') return { ...base, background: 'var(--th-brand)', color: '#fff', boxShadow: '0 1px 2px rgba(55,23,78,0.25)' }
   if (variant === 'destructive') return { ...base, background: '#E02F3A', color: '#fff', boxShadow: '0 1px 2px rgba(176,37,48,0.3)' }
-  if (variant === 'ghost') return { ...base, background: 'transparent', color: '#7239A4', boxShadow: 'none', fontWeight: 400 }
-  return { ...base, background: '#fff', color: '#282828', border: '1px solid #DDDDE5', boxShadow: '0 1px 2px rgba(55,23,78,0.06)' }
+  if (variant === 'ghost') return { ...base, background: 'transparent', color: 'var(--th-brand-medium)', boxShadow: 'none', fontWeight: 400 }
+  return { ...base, background: 'var(--th-bg-surface)', color: 'var(--th-text-primary)', border: '1px solid var(--th-border-strong)', boxShadow: '0 1px 2px rgba(55,23,78,0.06)' }
 }
 
 const hoverColors: Record<string, string> = {
@@ -52,7 +52,7 @@ function PgBtn({ label, icon, disabled, onClick }: { label?: string; icon?: stri
         height: 30, minWidth: label ? 30 : undefined,
         padding: label && !icon ? '0 8px' : 0,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: 'transparent', border: '1px solid #DDDDE5', borderRadius: 6,
+        background: 'transparent', border: '1px solid var(--th-border-strong)', borderRadius: 6,
         fontFamily: 'var(--font-ui)', fontSize: 12, color: disabled ? '#C4C4CF' : '#282828',
         cursor: disabled ? 'not-allowed' : 'pointer',
         transition: 'all 0.1s',
@@ -96,7 +96,7 @@ export function PageFooter({
 
   return (
     <div style={{
-      background: '#fff',
+      background: 'var(--th-bg-surface)',
       borderTop: '2px solid #8342BB',
       display: 'flex', flexDirection: 'column',
     }}>
@@ -136,9 +136,9 @@ export function PageFooter({
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
           {recordCount !== undefined && (
-            <span style={{ fontFamily: 'var(--font-ui)', fontSize: 12, color: '#5E5C75', whiteSpace: 'nowrap' }}>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: 12, color: 'var(--th-text-secondary)', whiteSpace: 'nowrap' }}>
               {showPagination ? <>{start}–{end} of </> : null}
-              <strong style={{ color: '#282828', fontWeight: 500 }}>{total || recordCount}</strong>{' '}
+              <strong style={{ color: 'var(--th-text-primary)', fontWeight: 500 }}>{total || recordCount}</strong>{' '}
               {recordLabel}
             </span>
           )}
@@ -149,7 +149,7 @@ export function PageFooter({
               <PgBtn icon="chevron_left" disabled={page === 1} onClick={() => onPageChange?.(page - 1)} />
               {pageWindow().map((p, i) =>
                 p === '...'
-                  ? <span key={`e${i}`} style={{ width: 30, textAlign: 'center', fontSize: 12, color: '#8C8C8C' }}>…</span>
+                  ? <span key={`e${i}`} style={{ width: 30, textAlign: 'center', fontSize: 12, color: 'var(--th-text-hint)' }}>…</span>
                   : (
                     <button
                       key={p}

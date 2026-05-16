@@ -146,7 +146,7 @@ function DrumWheelColumn({ items, initialValue, width, fillHeight = false, onSel
       const els = drum.querySelectorAll('.tw-item');
       els.forEach((el, k) => {
         const isSelected = (k % n) === li;
-        (el as HTMLElement).style.color = isSelected ? '#fff' : '#8C8C8C';
+        (el as HTMLElement).style.color = isSelected ? '#fff' : 'var(--th-text-hint)';
         (el as HTMLElement).style.fontWeight = isSelected ? '600' : '400';
         (el as HTMLElement).style.fontSize = isSelected ? '13px' : '12px';
         (el as HTMLElement).style.letterSpacing = isSelected ? '-0.01em' : '0';
@@ -314,7 +314,7 @@ function DrumWheelColumn({ items, initialValue, width, fillHeight = false, onSel
         top: 0,
         left: 0, right: 0,
         height: `${DRUM_ITEM_H}px`,
-        background: '#8342BB',
+        background: 'var(--th-brand)',
         borderRadius: '7px',
         pointerEvents: 'none',
         zIndex: 1,
@@ -410,7 +410,7 @@ function CalendarPanel({
   // Title text
   let titleText: React.ReactNode;
   if (view === 'days') {
-    titleText = <>{MONTHS_LONG[month]} {year} <span style={{ fontFamily: 'Material Icons', fontSize: '15px', color: '#8C8C8C', verticalAlign: 'middle' }}>expand_more</span></>;
+    titleText = <>{MONTHS_LONG[month]} {year} <span style={{ fontFamily: 'Material Icons', fontSize: '15px', color: 'var(--th-text-hint)', verticalAlign: 'middle' }}>expand_more</span></>;
   } else {
     titleText = <>{yearPage} – {yearPage + 11}</>;
   }
@@ -428,7 +428,7 @@ function CalendarPanel({
     // Prev month overflow
     for (let i = startOffset - 1; i >= 0; i--) {
       cells.push(
-        <div key={`prev-${i}`} style={{ ...dayStyle, color: '#BFBECE' }}>
+        <div key={`prev-${i}`} style={{ ...dayStyle, color: 'var(--th-icon-muted)' }}>
           {prevDays - i}
         </div>
       );
@@ -440,7 +440,7 @@ function CalendarPanel({
       const dateObj = new Date(year, month, d);
 
       let bg = 'transparent';
-      let color = '#282828';
+      let color = 'var(--th-text-primary)';
       let fontWeight: number | string = 400;
       let borderRadius = '6px';
       let showDot = false;
@@ -448,7 +448,7 @@ function CalendarPanel({
 
       if (!isRange) {
         isSelected = selectedDate ? isSameDay(selectedDate, dateObj) : false;
-        if (isSelected) { bg = '#8342BB'; color = '#fff'; fontWeight = 600; }
+        if (isSelected) { bg = 'var(--th-brand)'; color = '#fff'; fontWeight = 600; }
         else if (isToday) { showDot = true; fontWeight = 600; }
       } else {
         const rs = rangeStart ? startOfDay(rangeStart) : null;
@@ -459,11 +459,11 @@ function CalendarPanel({
         const inRange = rs && re && cur > rs && cur < re;
 
         if (isStart && isEnd) {
-          bg = '#8342BB'; color = '#fff'; fontWeight = 600; borderRadius = '6px';
+          bg = 'var(--th-brand)'; color = '#fff'; fontWeight = 600; borderRadius = '6px';
         } else if (isStart) {
-          bg = '#8342BB'; color = '#fff'; fontWeight = 600; borderRadius = '6px 0 0 6px';
+          bg = 'var(--th-brand)'; color = '#fff'; fontWeight = 600; borderRadius = '6px 0 0 6px';
         } else if (isEnd) {
-          bg = '#8342BB'; color = '#fff'; fontWeight = 600; borderRadius = '0 6px 6px 0';
+          bg = 'var(--th-brand)'; color = '#fff'; fontWeight = 600; borderRadius = '0 6px 6px 0';
         } else if (inRange) {
           bg = 'rgba(131,66,187,0.1)'; borderRadius = '0';
         } else if (isToday) {
@@ -488,7 +488,7 @@ function CalendarPanel({
           onClick={() => onDaySelect(d)}
           onMouseEnter={e => {
             if (!isSelected && bg === 'transparent') {
-              (e.currentTarget as HTMLElement).style.background = '#F0F0F4';
+              (e.currentTarget as HTMLElement).style.background = 'var(--th-bg-muted)';
             }
           }}
           onMouseLeave={e => {
@@ -503,7 +503,7 @@ function CalendarPanel({
               position: 'absolute', bottom: '4px', left: '50%',
               transform: 'translateX(-50%)',
               width: '4px', height: '4px', borderRadius: '50%',
-              background: '#8342BB', display: 'block',
+              background: 'var(--th-brand)', display: 'block',
             }} />
           )}
         </div>
@@ -515,7 +515,7 @@ function CalendarPanel({
     const rem = total % 7 === 0 ? 0 : 7 - (total % 7);
     for (let d = 1; d <= rem; d++) {
       cells.push(
-        <div key={`next-${d}`} style={{ ...dayStyle, color: '#BFBECE' }}>
+        <div key={`next-${d}`} style={{ ...dayStyle, color: 'var(--th-icon-muted)' }}>
           {d}
         </div>
       );
@@ -525,7 +525,7 @@ function CalendarPanel({
       <div style={{ padding: '0 8px 8px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', marginBottom: '2px' }}>
           {WEEKDAYS.map(wd => (
-            <div key={wd} style={{ textAlign: 'center', fontSize: '10px', fontWeight: 600, color: '#8C8C8C', padding: '4px 0', letterSpacing: '0.04em' }}>
+            <div key={wd} style={{ textAlign: 'center', fontSize: '10px', fontWeight: 600, color: 'var(--th-text-hint)', padding: '4px 0', letterSpacing: '0.04em' }}>
               {wd}
             </div>
           ))}
@@ -549,16 +549,16 @@ function CalendarPanel({
           style={{
             height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: '12px',
-            color: isSelected ? '#fff' : isCurrent ? '#8342BB' : '#282828',
+            color: isSelected ? '#fff' : isCurrent ? 'var(--th-brand)' : 'var(--th-text-primary)',
             fontWeight: isSelected || isCurrent ? 600 : 400,
-            background: isSelected ? '#8342BB' : 'transparent',
+            background: isSelected ? 'var(--th-brand)' : 'transparent',
             borderRadius: '6px',
             cursor: 'pointer',
             transition: 'background 0.1s',
           }}
           onClick={() => onYearSelect(y)}
           onMouseEnter={e => {
-            if (!isSelected) (e.currentTarget as HTMLElement).style.background = '#F0F0F4';
+            if (!isSelected) (e.currentTarget as HTMLElement).style.background = 'var(--th-bg-muted)';
           }}
           onMouseLeave={e => {
             if (!isSelected) (e.currentTarget as HTMLElement).style.background = 'transparent';
@@ -577,9 +577,9 @@ function CalendarPanel({
 
   return (
     <div style={{
-      background: '#fff',
+      background: 'var(--th-bg-surface)',
       borderRadius: '12px',
-      border: '1px solid #E5E5EC',
+      border: '1px solid var(--th-border-strong)',
       boxShadow: '0 4px 20px rgba(55,23,78,0.12), 0 1px 4px rgba(55,23,78,0.06)',
       overflow: 'hidden',
       width: showTime ? undefined : '280px',
@@ -596,9 +596,9 @@ function CalendarPanel({
             style={{
               width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center',
               background: 'transparent', border: 'none', borderRadius: '6px', cursor: 'pointer',
-              color: '#5E5C75', transition: 'background 0.1s',
+              color: 'var(--th-text-secondary)', transition: 'background 0.1s',
             }}
-            onMouseEnter={e => (e.currentTarget.style.background = '#F0F0F4')}
+            onMouseEnter={e => (e.currentTarget.style.background = 'var(--th-bg-muted)')}
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             <span style={{ fontFamily: 'Material Icons', fontSize: '18px' }}>chevron_left</span>
@@ -607,12 +607,12 @@ function CalendarPanel({
           <div
             onClick={view === 'days' ? onTitleClick : undefined}
             style={{
-              flex: 1, textAlign: 'center', fontSize: '14px', fontWeight: 600, color: '#282828',
+              flex: 1, textAlign: 'center', fontSize: '14px', fontWeight: 600, color: 'var(--th-text-primary)',
               cursor: view === 'days' ? 'pointer' : 'default',
               borderRadius: '6px', padding: '4px',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3px',
             }}
-            onMouseEnter={e => { if (view === 'days') (e.currentTarget as HTMLElement).style.background = '#F0F0F4'; }}
+            onMouseEnter={e => { if (view === 'days') (e.currentTarget as HTMLElement).style.background = 'var(--th-bg-muted)'; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
           >
             {titleText}
@@ -623,9 +623,9 @@ function CalendarPanel({
             style={{
               width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center',
               background: 'transparent', border: 'none', borderRadius: '6px', cursor: 'pointer',
-              color: '#5E5C75', transition: 'background 0.1s',
+              color: 'var(--th-text-secondary)', transition: 'background 0.1s',
             }}
-            onMouseEnter={e => (e.currentTarget.style.background = '#F0F0F4')}
+            onMouseEnter={e => (e.currentTarget.style.background = 'var(--th-bg-muted)')}
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             <span style={{ fontFamily: 'Material Icons', fontSize: '18px' }}>chevron_right</span>
@@ -642,11 +642,11 @@ function CalendarPanel({
         {/* Footer — only on days view */}
         {view === 'days' && (
           <div style={{
-            padding: '8px 12px', borderTop: '1px solid #F0F0F4',
+            padding: '8px 12px', borderTop: '1px solid var(--th-border-subtle)',
             display: 'flex', alignItems: 'center', gap: '6px',
           }}>
             {isRange && (
-              <span style={{ flex: 1, fontSize: '11px', color: '#5E5C75' }}>
+              <span style={{ flex: 1, fontSize: '11px', color: 'var(--th-text-secondary)' }}>
                 {rangeStart && rangeEnd
                   ? `${formatDate(rangeStart)} – ${formatDate(rangeEnd)}`
                   : rangeStart
@@ -658,7 +658,7 @@ function CalendarPanel({
             <button
               onClick={onClear}
               style={btnDefaultStyle}
-              onMouseEnter={e => (e.currentTarget.style.background = '#F0F0F4')}
+              onMouseEnter={e => (e.currentTarget.style.background = 'var(--th-bg-muted)')}
               onMouseLeave={e => (e.currentTarget.style.background = '#fff')}
             >
               Clear
@@ -666,8 +666,8 @@ function CalendarPanel({
             <button
               onClick={onApply}
               style={btnPrimaryStyle}
-              onMouseEnter={e => (e.currentTarget.style.background = '#7239A4')}
-              onMouseLeave={e => (e.currentTarget.style.background = '#8342BB')}
+              onMouseEnter={e => (e.currentTarget.style.background = 'var(--th-brand-medium)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'var(--th-brand)')}
             >
               Apply
             </button>
@@ -718,7 +718,7 @@ const dayStyle: React.CSSProperties = {
   alignItems: 'center',
   justifyContent: 'center',
   fontSize: '12px',
-  color: '#282828',
+  color: 'var(--th-text-primary)',
   borderRadius: '6px',
   cursor: 'pointer',
   transition: 'background 0.1s',
@@ -728,14 +728,14 @@ const dayStyle: React.CSSProperties = {
 const btnDefaultStyle: React.CSSProperties = {
   height: '26px', padding: '0 12px', borderRadius: '6px',
   fontFamily: 'var(--font-ui)', fontSize: '11px', fontWeight: 500, cursor: 'pointer',
-  background: '#fff', color: '#282828', border: '1px solid #DDDDE5',
+  background: 'var(--th-bg-surface)', color: 'var(--th-text-primary)', border: '1px solid var(--th-border-strong)',
   transition: 'background 0.1s',
 };
 
 const btnPrimaryStyle: React.CSSProperties = {
   height: '26px', padding: '0 12px', borderRadius: '6px',
   fontFamily: 'var(--font-ui)', fontSize: '11px', fontWeight: 500, cursor: 'pointer',
-  background: '#8342BB', color: '#fff', border: 'none',
+  background: 'var(--th-brand)', color: '#fff', border: 'none',
   boxShadow: '0 1px 2px rgba(55,23,78,0.2)',
   transition: 'background 0.1s',
 };
@@ -901,9 +901,9 @@ export function DatePicker({
     <div ref={containerRef} style={{ display: 'inline-flex', flexDirection: 'column', gap: '4px', fontFamily: 'var(--font-ui)', position: 'relative' }}>
       {/* Label */}
       {label && (
-        <label style={{ fontSize: '12px', fontWeight: 500, color: disabled ? '#8C8C8C' : '#282828', fontFamily: 'var(--font-ui)' }}>
+        <label style={{ fontSize: '12px', fontWeight: 500, color: disabled ? 'var(--th-text-hint)' : 'var(--th-text-primary)', fontFamily: 'var(--font-ui)' }}>
           {label}
-          {required && <span style={{ color: '#E02F3A', marginLeft: '2px' }}>*</span>}
+          {required && <span style={{ color: 'var(--th-error)', marginLeft: '2px' }}>*</span>}
         </label>
       )}
 
@@ -913,16 +913,16 @@ export function DatePicker({
         style={{
           display: 'flex', alignItems: 'center',
           height: '32px',
-          border: `1px solid ${error ? '#E02F3A' : '#DDDDE5'}`,
+          border: `1px solid ${error ? 'var(--th-error)' : 'var(--th-border-strong)'}`,
           borderRadius: '8px',
           padding: '0 0 0 10px',
-          background: disabled ? '#F0F0F4' : '#fff',
+          background: disabled ? 'var(--th-bg-muted)' : 'var(--th-bg-surface)',
           cursor: disabled ? 'not-allowed' : 'pointer',
           gap: 0,
           minWidth: '180px',
           transition: 'border-color 0.1s, box-shadow 0.1s',
           boxShadow: open ? (error ? '0 0 0 2px #fff, 0 0 0 4px rgba(224,47,58,0.25)' : '0 0 0 2px #fff, 0 0 0 4px rgba(131,66,187,0.25)') : 'none',
-          borderColor: open ? (error ? '#E02F3A' : '#8342BB') : (error ? '#E02F3A' : '#DDDDE5'),
+          borderColor: open ? (error ? 'var(--th-error)' : 'var(--th-brand)') : (error ? 'var(--th-error)' : 'var(--th-border-strong)'),
           pointerEvents: disabled ? 'none' : undefined,
         }}
       >
@@ -935,7 +935,7 @@ export function DatePicker({
           style={{
             flex: 1, border: 'none', outline: 'none',
             fontFamily: 'var(--font-ui)', fontSize: '13px',
-            color: disabled ? '#8C8C8C' : '#282828',
+            color: disabled ? 'var(--th-text-hint)' : 'var(--th-text-primary)',
             background: 'transparent', minWidth: 0,
             cursor: 'pointer',
           }}
@@ -944,13 +944,13 @@ export function DatePicker({
           width: '32px', height: '30px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           flexShrink: 0, cursor: 'pointer',
-          borderLeft: '1px solid #EBEBEB',
+          borderLeft: '1px solid var(--th-border)',
           marginLeft: '6px',
         }}>
           <span style={{
             fontFamily: 'Material Icons Outlined',
             fontSize: '16px',
-            color: disabled ? '#8C8C8C' : '#8C8C8C',
+            color: 'var(--th-text-hint)',
             fontStyle: 'normal',
             fontWeight: 'normal',
             lineHeight: 1,
@@ -962,7 +962,7 @@ export function DatePicker({
 
       {/* Error message */}
       {error && (
-        <div style={{ fontSize: '10px', color: '#E02F3A', display: 'flex', alignItems: 'center', gap: '3px' }}>
+        <div style={{ fontSize: '10px', color: 'var(--th-error)', display: 'flex', alignItems: 'center', gap: '3px' }}>
           <span style={{ fontFamily: 'Material Icons Outlined', fontSize: '12px', fontStyle: 'normal', fontWeight: 'normal', lineHeight: 1 }}>error_outline</span>
           {error}
         </div>

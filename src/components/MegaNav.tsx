@@ -55,7 +55,7 @@ const s = {
     whiteSpace: 'nowrap' as const,
   }),
   flyout: {
-    background: '#fff', borderBottom: '1px solid #EBEBEB',
+    background: 'var(--th-bg-surface)', borderBottom: '1px solid var(--th-border)',
     boxShadow: '0 8px 32px rgba(20,16,41,0.12), 0 2px 8px rgba(20,16,41,0.06)',
     padding: '28px 28px 32px',
   } as React.CSSProperties,
@@ -79,9 +79,9 @@ const s = {
     fontFamily: 'var(--font-ui)', marginTop: 4,
   } as React.CSSProperties,
   colHeader: {
-    fontSize: 10, fontWeight: 600, color: '#8C8C8C',
+    fontSize: 10, fontWeight: 600, color: 'var(--th-text-hint)',
     letterSpacing: '0.1em', textTransform: 'uppercase' as const,
-    paddingBottom: 10, borderBottom: '1px solid #EBEBEB', marginBottom: 4,
+    paddingBottom: 10, borderBottom: '1px solid var(--th-border)', marginBottom: 4,
     fontFamily: 'var(--font-ui)',
   } as React.CSSProperties,
   menuItem: (active: boolean): React.CSSProperties => ({
@@ -98,10 +98,10 @@ const s = {
   }),
   menuLabel: (active: boolean): React.CSSProperties => ({
     fontSize: 14, fontWeight: 500,
-    color: active ? '#7239A4' : '#282828', lineHeight: 1.3,
+    color: active ? 'var(--th-brand-medium)' : 'var(--th-text-primary)', lineHeight: 1.3,
     fontFamily: 'var(--font-ui)',
   }),
-  menuDesc: { fontSize: 12, color: '#8C8C8C', marginTop: 2, lineHeight: 1.4, fontFamily: 'var(--font-ui)' } as React.CSSProperties,
+  menuDesc: { fontSize: 12, color: 'var(--th-text-hint)', marginTop: 2, lineHeight: 1.4, fontFamily: 'var(--font-ui)' } as React.CSSProperties,
   overlay: {
     position: 'fixed' as const, inset: 0, zIndex: 9,
   } as React.CSSProperties,
@@ -198,12 +198,12 @@ export function MegaNav({ logo, menus, activeMenuId, onNavigate, trailingContent
                       key={item.id}
                       style={s.menuItem(isItemActive)}
                       onClick={() => { onNavigate?.(item.id); setOpenMenuId(null) }}
-                      onMouseEnter={(e) => { if (!isItemActive) (e.currentTarget as HTMLElement).style.background = '#F8F8FB' }}
+                      onMouseEnter={(e) => { if (!isItemActive) (e.currentTarget as HTMLElement).style.background = 'var(--th-bg-surface-subtle)' }}
                       onMouseLeave={(e) => { if (!isItemActive) (e.currentTarget as HTMLElement).style.background = 'transparent' }}
                     >
                       {item.icon && (
-                        <div style={s.menuIcon(item.iconBg ?? '#F0F0F4')}>
-                          <span className="material-icons" style={{ fontSize: 20, color: item.iconColor ?? '#5E5C75', fontFamily: 'Material Icons' }}>
+                        <div style={s.menuIcon(item.iconBg ?? 'var(--th-bg-muted)')}>
+                          <span className="material-icons" style={{ fontSize: 20, color: item.iconColor ?? 'var(--th-icon-neutral)', fontFamily: 'Material Icons' }}>
                             {item.icon}
                           </span>
                         </div>

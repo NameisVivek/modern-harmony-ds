@@ -19,9 +19,9 @@ const s = {
   shell: (disabled: boolean): React.CSSProperties => ({
     display: 'flex',
     alignItems: 'stretch',
-    background: '#fff',
+    background: 'var(--th-bg-surface)',
     borderRadius: 10,
-    border: '1px solid #EBEBEB',
+    border: '1px solid var(--th-border)',
     boxShadow: '0 1px 3px rgba(55,23,78,0.06)',
     overflow: 'hidden',
     opacity: disabled ? 0.5 : 1,
@@ -30,22 +30,22 @@ const s = {
   panel: { flex: 1, display: 'flex', flexDirection: 'column' as const, minWidth: 0 },
   header: {
     display: 'flex', alignItems: 'center', gap: 8,
-    padding: '10px 12px', borderBottom: '1px solid #EBEBEB',
-    background: '#F8F8FB', flexShrink: 0,
+    padding: '10px 12px', borderBottom: '1px solid var(--th-border)',
+    background: 'var(--th-bg-surface-subtle)', flexShrink: 0,
   } as React.CSSProperties,
-  title: { fontSize: 12, fontWeight: 500, color: '#282828', flex: 1, fontFamily: 'var(--font-ui)' } as React.CSSProperties,
+  title: { fontSize: 12, fontWeight: 500, color: 'var(--th-text-primary)', flex: 1, fontFamily: 'var(--font-ui)' } as React.CSSProperties,
   count: {
-    fontSize: 11, color: '#8C8C8C', background: '#EBEBEB',
+    fontSize: 11, color: 'var(--th-text-hint)', background: 'var(--th-border)',
     borderRadius: 4, padding: '1px 6px', fontFamily: 'var(--font-ui)',
   } as React.CSSProperties,
   searchWrap: {
     display: 'flex', alignItems: 'center', gap: 6,
     height: 30, padding: '0 10px', margin: 8,
-    borderRadius: 6, background: '#fff', border: '1px solid #DDDDE5', flexShrink: 0,
+    borderRadius: 6, background: 'var(--th-bg-surface)', border: '1px solid var(--th-border-strong)', flexShrink: 0,
   } as React.CSSProperties,
   searchInput: {
     flex: 1, background: 'transparent', border: 'none', outline: 'none',
-    fontFamily: 'var(--font-ui)', fontSize: 12, color: '#282828',
+    fontFamily: 'var(--font-ui)', fontSize: 12, color: 'var(--th-text-primary)',
   } as React.CSSProperties,
   list: { flex: 1, overflowY: 'auto' as const, padding: '2px 0' },
   item: (selected: boolean, alt: boolean, dragOver: boolean): React.CSSProperties => ({
@@ -55,20 +55,20 @@ const s = {
     background: dragOver ? 'rgba(131,66,187,0.1)' : selected ? 'rgba(131,66,187,0.06)' : alt ? '#F8F8FB' : '#fff',
     transition: 'background 0.1s',
   }),
-  dragHandle: { color: '#BFBECE', display: 'flex', alignItems: 'center', flexShrink: 0, cursor: 'grab' } as React.CSSProperties,
-  itemLabel: { flex: 1, fontSize: 13, color: '#282828', fontFamily: 'var(--font-ui)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const },
+  dragHandle: { color: 'var(--th-icon-muted)', display: 'flex', alignItems: 'center', flexShrink: 0, cursor: 'grab' } as React.CSSProperties,
+  itemLabel: { flex: 1, fontSize: 13, color: 'var(--th-text-primary)', fontFamily: 'var(--font-ui)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const },
   checkIcon: (visible: boolean): React.CSSProperties => ({
-    color: '#8342BB', display: 'flex', alignItems: 'center', flexShrink: 0,
+    color: 'var(--th-brand)', display: 'flex', alignItems: 'center', flexShrink: 0,
     opacity: visible ? 1 : 0, transition: 'opacity 0.1s',
   }),
   controls: {
     display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center',
     gap: 6, padding: '0 6px', flexShrink: 0,
-    background: '#F8F8FB', borderLeft: '1px solid #EBEBEB', borderRight: '1px solid #EBEBEB',
+    background: 'var(--th-bg-surface-subtle)', borderLeft: '1px solid var(--th-border)', borderRight: '1px solid var(--th-border)',
   } as React.CSSProperties,
   ctrlBtn: (enabled: boolean): React.CSSProperties => ({
     width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center',
-    background: '#fff', border: '1px solid #DDDDE5', borderRadius: 6,
+    background: 'var(--th-bg-surface)', border: '1px solid var(--th-border-strong)', borderRadius: 6,
     cursor: enabled ? 'pointer' : 'not-allowed',
     color: enabled ? '#5E5C75' : '#C4C4CF',
     boxShadow: '0 1px 2px rgba(55,23,78,0.06)',
@@ -148,7 +148,7 @@ export function PingPong({
         <span style={s.count}>{allItems.length}</span>
       </div>
       <div style={s.searchWrap}>
-        <span className="material-icons" style={{ fontSize: 14, color: '#8C8C8C', flexShrink: 0 }}>search</span>
+        <span className="material-icons" style={{ fontSize: 14, color: 'var(--th-text-hint)', flexShrink: 0 }}>search</span>
         <input style={s.searchInput} placeholder="Type to filter…" value={filter} onChange={(e) => setFilter(e.target.value)} />
       </div>
       <div

@@ -38,7 +38,7 @@ const variantBase: Record<string, React.CSSProperties> = {
     boxShadow: '0 1px 2px rgba(55,23,78,0.2), inset 0 1px 0 rgba(255,255,255,0.12)',
   },
   default: {
-    background: '#fff',
+    background: 'var(--th-bg-surface)',
     color: 'var(--dec-color-text-body)',
     border: '1px solid var(--core-cool-100)',
     boxShadow: '0 1px 2px rgba(55,23,78,0.08)',
@@ -254,7 +254,7 @@ export function Button({
       position: 'absolute',
       top: 'calc(100% + 4px)',
       right: 0,
-      background: '#fff',
+      background: 'var(--th-bg-surface)',
       borderRadius: 8,
       border: '1px solid var(--core-cool-75)',
       boxShadow: '0 4px 16px rgba(55,23,78,0.12)',

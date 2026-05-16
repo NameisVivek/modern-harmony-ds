@@ -480,7 +480,7 @@ small {
   /* text */
   --th-text-primary:       #282828;
   --th-text-secondary:     #5E5C75;
-  --th-text-hint:          #8C8C8C;
+  --th-text-hint:          #6E6E6E;
   --th-text-disabled:      #BFBECE;
 
   /* brand */
@@ -527,10 +527,37 @@ small {
   --th-nav-item-height:    40px;
   --th-page-padding:       24px;
   --th-section-gap:        16px;
+
+  /* badge semantic colors */
+  --badge-error-bg:       #FFCDD0;
+  --badge-error-text:     #B02530;
+  --badge-warning-bg:     #FFEDC0;
+  --badge-warning-text:   #7A5000;
+  --badge-high-risk-bg:   #FFE099;
+  --badge-high-risk-text: #6B4700;
+  --badge-info-bg:        #C0E0FF;
+  --badge-info-text:      #004FA3;
+  /* alert subtle backgrounds */
+  --alert-error-bg:       #FEF7F4;
+  --alert-success-bg:     var(--core-green-25);
+  --alert-info-bg:        var(--core-blue-25);
 }
 
 /* ── Dark mode overrides ─────────────────────────────────────── */
 [data-theme="dark"] {
+  /* badge semantic colors in dark mode */
+  --badge-error-bg:       rgba(255,100,110,0.15);
+  --badge-error-text:     #FF9298;
+  --badge-warning-bg:     rgba(255,200,50,0.12);
+  --badge-warning-text:   #FFD04D;
+  --badge-high-risk-bg:   rgba(255,180,0,0.12);
+  --badge-high-risk-text: #FFBB40;
+  --badge-info-bg:        rgba(57,153,228,0.12);
+  --badge-info-text:      #68ACEB;
+  /* alert subtle backgrounds in dark mode */
+  --alert-error-bg:       rgba(255,112,119,0.08);
+  --alert-success-bg:     rgba(126,235,190,0.07);
+  --alert-info-bg:        rgba(57,153,228,0.08);
   /* backgrounds */
   --th-bg-page:            #0F0E18;
   --th-bg-surface:         #1A1929;

@@ -164,7 +164,7 @@ function WidgetHeader({ title, onRefresh, action }: WidgetHeaderProps) {
 
 function SimpleWidget({ title, value, unit, change, changeDirection, icon, iconBg, iconColor, onRefresh }: SimpleKPIProps) {
   return (
-    <div style={{ ...card, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+    <div style={{ ...card, padding: 'calc(14px + var(--th-density-offset, 0px)) 16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{ fontSize: '11px', color: 'var(--dec-color-text-label)' }}>{title}</span>
         {icon && (
@@ -191,7 +191,7 @@ function SimpleWidget({ title, value, unit, change, changeDirection, icon, iconB
 
 function RatioWidget({ title, value, total, unit, percentage, barColor, labelLeft, labelRight, valueColor, annotation, annotationColor, onRefresh }: RatioKPIProps) {
   return (
-    <div style={{ ...card, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <div style={{ ...card, padding: 'calc(14px + var(--th-density-offset, 0px)) 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
       <WidgetHeader title={title} onRefresh={onRefresh} />
       <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '6px' }}>
         <span style={{ ...monoValue, fontSize: '24px', color: valueColor ?? 'var(--dec-color-text-body)' }}>{value}</span>
@@ -243,7 +243,7 @@ function SparklineWidget({ title, value, change, changeDirection, data, labelSta
   const lastY = lastPt?.[1] ?? 0;
 
   return (
-    <div style={{ ...card, padding: '12px 14px' }}>
+    <div style={{ ...card, padding: 'calc(12px + var(--th-density-offset, 0px)) 14px' }}>
       <WidgetHeader title={title} onRefresh={onRefresh} />
       <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '6px' }}>
         <span style={{ ...monoValue, fontSize: '22px' }}>{value}</span>
@@ -276,7 +276,7 @@ function SparklineWidget({ title, value, change, changeDirection, data, labelSta
 
 function MultiMetricWidget({ title, metrics, onRefresh }: MultiMetricKPIProps) {
   return (
-    <div style={{ ...card, padding: '14px 16px' }}>
+    <div style={{ ...card, padding: 'calc(14px + var(--th-density-offset, 0px)) 16px' }}>
       <WidgetHeader title={title} onRefresh={onRefresh} />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 16px' }}>
         {metrics.map((m, i) => (
@@ -294,7 +294,7 @@ function MultiMetricWidget({ title, metrics, onRefresh }: MultiMetricKPIProps) {
 
 function StatusBarsWidget({ title, items, onRefresh }: StatusBarsKPIProps) {
   return (
-    <div style={{ ...card, padding: '12px 14px' }}>
+    <div style={{ ...card, padding: 'calc(12px + var(--th-density-offset, 0px)) 14px' }}>
       <WidgetHeader title={title} onRefresh={onRefresh} />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
         {items.map((item, i) => (

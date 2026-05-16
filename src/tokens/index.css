@@ -657,6 +657,7 @@ small {
   --th-input-height:       28px;
   --th-btn-height:         28px;
   --th-list-item-height:   34px;
+  --comp-tab-height:       34px;
 }
 
 /* ── Density: Cozy ───────────────────────────────────────────── */
@@ -671,6 +672,7 @@ small {
   --th-input-height:       31px;
   --th-btn-height:         31px;
   --th-list-item-height:   40px;
+  --comp-tab-height:       37px;
 }
 
 /* ================================================================

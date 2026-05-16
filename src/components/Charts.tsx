@@ -127,7 +127,7 @@ function ChartHeader({
   return (
     <div
       style={{
-        padding: '14px 16px 10px',
+        padding: 'calc(14px + var(--th-density-offset, 0px)) 16px calc(10px + var(--th-density-offset, 0px))',
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'space-between',

@@ -106,7 +106,9 @@ export const Input: React.FC<InputProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const inputId = id ?? (label ? `input-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
 
-  const height = size === 'compact' ? '28px' : '32px';
+  const height = size === 'compact'
+    ? 'calc(28px + var(--th-density-offset, 0px))'
+    : 'calc(32px + var(--th-density-offset, 0px))';
   const hasPrefixIcon = Boolean(prefixIcon);
   const hasSuffixIcon = Boolean(suffixIcon);
   const hasPrefixText = Boolean(prefixText);

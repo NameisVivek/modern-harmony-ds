@@ -48,7 +48,7 @@ const headerStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   gap: '10px',
-  padding: '16px 20px 14px',
+  padding: 'calc(16px + var(--th-density-offset, 0px)) 20px calc(14px + var(--th-density-offset, 0px))',
   borderBottom: '1px solid var(--core-gray-75)',
   flexShrink: 0,
 };
@@ -77,7 +77,7 @@ const closeButtonStyle: React.CSSProperties = {
 };
 
 const bodyStyle: React.CSSProperties = {
-  padding: '16px 20px',
+  padding: 'calc(16px + var(--th-density-offset, 0px)) 20px',
   fontSize: '13px',
   color: 'var(--dec-color-neutral-foreground)',
   lineHeight: '1.5',
@@ -86,7 +86,7 @@ const bodyStyle: React.CSSProperties = {
 };
 
 const footerStyle: React.CSSProperties = {
-  padding: '12px 20px',
+  padding: 'calc(12px + var(--th-density-offset, 0px)) 20px',
   borderTop: '1px solid var(--core-gray-75)',
   display: 'flex',
   justifyContent: 'flex-end',

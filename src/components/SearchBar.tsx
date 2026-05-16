@@ -35,7 +35,7 @@ export interface SearchBarProps {
 const s = {
   bar: (focused: boolean, size: 'sm' | 'md'): React.CSSProperties => ({
     display: 'flex', alignItems: 'center', gap: 0,
-    height: size === 'sm' ? 28 : 34,
+    height: size === 'sm' ? 'calc(28px + var(--th-density-offset, 0px))' : 'calc(34px + var(--th-density-offset, 0px))',
     border: `1px solid ${focused ? 'var(--th-brand)' : 'var(--th-border-strong)'}`,
     borderRadius: 8, background: 'var(--th-bg-surface)', overflow: 'hidden',
     boxShadow: focused ? '0 0 0 2px #fff, 0 0 0 4px rgba(131,66,187,0.25)' : undefined,
@@ -77,7 +77,7 @@ const s = {
   divider: { height: 1, background: 'var(--th-bg-muted)' } as React.CSSProperties,
   filterBar: { display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' as const, marginTop: 8 } as React.CSSProperties,
   chip: (active: boolean): React.CSSProperties => ({
-    display: 'inline-flex', alignItems: 'center', gap: 4, height: 28, padding: '0 10px',
+    display: 'inline-flex', alignItems: 'center', gap: 4, height: 'calc(28px + var(--th-density-offset, 0px))', padding: '0 10px',
     border: `1px solid ${active ? 'var(--th-brand)' : 'var(--th-border-strong)'}`,
     borderRadius: 6,
     background: active ? 'rgba(131,66,187,0.08)' : '#fff',
@@ -87,7 +87,7 @@ const s = {
     transition: 'all 0.1s',
   }),
   chipVal: {
-    display: 'inline-flex', alignItems: 'center', height: 28,
+    display: 'inline-flex', alignItems: 'center', height: 'calc(28px + var(--th-density-offset, 0px))',
     border: '1px solid #8342BB', borderRadius: 6, overflow: 'hidden',
     background: 'rgba(131,66,187,0.06)', fontFamily: 'var(--font-ui)', fontSize: 12,
   } as React.CSSProperties,
@@ -96,7 +96,7 @@ const s = {
   chipRemove: { display: 'flex', alignItems: 'center', padding: '0 6px', cursor: 'pointer', color: 'var(--th-brand-medium)' } as React.CSSProperties,
   chipDivider: { width: 1, height: 20, background: 'var(--th-border-strong)', flexShrink: 0 } as React.CSSProperties,
   addFilter: {
-    display: 'inline-flex', alignItems: 'center', gap: 4, height: 28, padding: '0 10px',
+    display: 'inline-flex', alignItems: 'center', gap: 4, height: 'calc(28px + var(--th-density-offset, 0px))', padding: '0 10px',
     border: '1px dashed #DDDDE5', borderRadius: 6, background: 'transparent',
     fontFamily: 'var(--font-ui)', fontSize: 12, color: 'var(--th-text-secondary)', cursor: 'pointer',
   } as React.CSSProperties,

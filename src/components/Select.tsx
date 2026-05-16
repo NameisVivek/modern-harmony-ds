@@ -60,7 +60,7 @@ const css: Record<string, React.CSSProperties> = {
   trigger: {
     display: 'flex',
     alignItems: 'center',
-    minHeight: '32px',
+    minHeight: 'calc(32px + var(--th-density-offset, 0px))',
     border: '1px solid var(--core-cool-100)',
     borderRadius: 'var(--dec-crn-base)',
     padding: '4px 8px 4px 10px',

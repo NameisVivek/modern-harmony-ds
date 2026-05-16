@@ -162,7 +162,7 @@ export function DataGrid<T extends Record<string, unknown>>({
               {selectable && (
                 <th style={{
                   width: 32,
-                  height: 28,
+                  height: 'calc(28px + var(--th-density-offset, 0px))',
                   padding: '0 8px',
                   background: 'var(--th-bg-grid-header)',
                   borderBottom: '1px solid var(--th-border-strong)',
@@ -179,7 +179,7 @@ export function DataGrid<T extends Record<string, unknown>>({
                 <th
                   key={col.key}
                   style={{
-                    height: 28,
+                    height: 'calc(28px + var(--th-density-offset, 0px))',
                     padding: '0 10px',
                     fontFamily: 'var(--font-data)',
                     fontSize: 10,

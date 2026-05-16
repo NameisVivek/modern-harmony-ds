@@ -41,7 +41,9 @@ export function Segments({
   };
 
   const getItemStyle = (isActive: boolean, isDisabled: boolean): React.CSSProperties => {
-    const height = isSmall ? '24px' : '28px';
+    const height = isSmall
+      ? 'calc(24px + var(--th-density-offset, 0px))'
+      : 'calc(28px + var(--th-density-offset, 0px))';
     const padding = isSmall ? '0 10px' : '0 12px';
     const fontSize = isSmall ? '12px' : '13px';
 

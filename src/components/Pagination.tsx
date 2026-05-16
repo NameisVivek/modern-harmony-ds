@@ -25,8 +25,8 @@ function getPageNumbers(page: number, totalPages: number): (number | '...')[] {
 }
 
 const btnBase: React.CSSProperties = {
-  minWidth: '30px',
-  height: '30px',
+  minWidth: 'calc(30px + var(--th-density-offset, 0px))',
+  height: 'calc(30px + var(--th-density-offset, 0px))',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -56,8 +56,8 @@ const disabledBtn: React.CSSProperties = {
 };
 
 const dotsStyle: React.CSSProperties = {
-  minWidth: '30px',
-  height: '30px',
+  minWidth: 'calc(30px + var(--th-density-offset, 0px))',
+  height: 'calc(30px + var(--th-density-offset, 0px))',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
